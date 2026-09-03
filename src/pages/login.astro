@@ -1,0 +1,28 @@
+---
+export const prerender = false;
+import LoginForm from '../components/LoginForm.astro';
+import { safeAuthReturn } from '../lib/authReturn';
+import Layout from '../layouts/Layout.astro';
+import { resolveLang } from '../lib/i18n';
+
+const url = Astro.url;
+const lang = resolveLang(Astro);
+const error = url.searchParams.get('error');
+
+const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), `/?lang=${lang}`);
+
+---
+<Layout title={lang === 'zh' ? '登录 — Inspiration Tarot' : 'Log In — Inspiration Tarot'} noindex lang={lang}>
+  <div class="auth-page">
+    <div class="auth-hero">
+      <h1>{lang === 'zh' ? '欢迎回来' : 'Welcome back'}</h1>
+      <p class="auth-hero-sub">
+        {lang === 'zh'
+          ? '登录后继续你的塔罗探索，保存每一次解读'
+          : 'Sign in to continue your tarot journey and keep every reading'}
+      </p>
+    </div>
+
+    <LoginForm lang={lang} returnTo={returnTo} error={error} />
+  </div>
+</Layout>

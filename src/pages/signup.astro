@@ -1,0 +1,128 @@
+---
+export const prerender = false;
+import { safeAuthReturn } from '../lib/authReturn';
+import Layout from '../layouts/Layout.astro';
+import { resolveLang } from '../lib/i18n';
+
+const url = Astro.url;
+const lang = resolveLang(Astro);
+const error = url.searchParams.get('error');
+const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), `/?lang=${lang}`);
+
+const benefits = [
+  {
+    icon: '🎁',
+    zh: '注册即领：每日单张解读 3 → 6 次（未注册仅 3 次）',
+    en: 'Welcome perk: single draws doubled to 6/day (guests get 3)',
+  },
+  {
+    icon: '🎟️',
+    zh: '注册即送体验额度：三张牌阵 ×3、凯尔特十字 ×1',
+    en: 'Free trial credits: 3-card spread ×3, Celtic Cross ×1',
+  },
+  {
+    icon: '🔮',
+    zh: '解锁三张牌、凯尔特十字等专属牌阵',
+    en: 'Unlock 3-card and Celtic Cross spreads',
+  },
+  {
+    icon: '✨',
+    zh: '不限次数的每日塔罗解读',
+    en: 'Unlimited daily readings',
+  },
+  {
+    icon: '📖',
+    zh: '保存并回顾你的完整解读历史',
+    en: 'Save and revisit your full reading history',
+  },
+];
+
+const errors: Record<string, { zh: string; en: string }> = {
+  duplicate: { zh: '该邮箱已注册', en: 'That email is already registered' },
+  invalid: {
+    zh: '邮箱或密码无效（密码至少8位）',
+    en: 'Invalid email or password (password must be 8+ characters)',
+  },
+  cancelled: {
+    zh: '你取消了 Google 授权，随时可以重新尝试',
+    en: 'You cancelled Google authorization. You can try again anytime.',
+  },
+  oauth_failed: {
+    zh: 'Google 登录失败，请稍后重试',
+    en: 'Google sign-in failed. Please try again.',
+  },
+  invalid_state: {
+    zh: '登录请求已过期或无效，请重新发起登录',
+    en: 'This sign-in request was invalid or expired. Please start again.',
+  },
+  config: {
+    zh: 'Google 登录暂未配置，请先使用邮箱注册',
+    en: 'Google sign-in is not configured yet. Please use email signup.',
+  },
+};
+const errorMsg = error ? errors[error] : null;
+
+const title = lang === 'zh'
+  ? '免费注册 — 每日 AI 塔罗解读，解锁更多牌阵'
+  : 'Sign Up Free — Daily AI Tarot Readings & More Spreads';
+const description = lang === 'zh'
+  ? '免费注册即可每日 6 次 AI 塔罗单张解读，解锁三张牌阵与凯尔特十字，保存完整解读历史。'
+  : 'Create a free account for 6 daily AI tarot readings, unlock 3-card and Celtic Cross spreads, and save your full reading history.';
+---
+<Layout title={title} description={description} lang={lang}>
+  <div class="auth-page">
+    <div class="auth-hero">
+      <h1>{lang === 'zh' ? '开启你的塔罗之旅' : 'Begin your tarot journey'}</h1>
+      <p class="auth-hero-sub">
+        {lang === 'zh'
+          ? '注册账号，解锁更深入的指引与更多探索空间'
+          : 'Create an account to unlock deeper guidance and more room to explore'}
+      </p>
+      <ul class="benefit-list">
+        {benefits.map((b) => (
+          <li>
+            <span class="benefit-icon">{b.icon}</span>
+            <span>{lang === 'zh' ? b.zh : b.en}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="auth-card">
+      <h2>{lang === 'zh' ? '免费注册' : 'Sign up free'}</h2>
+
+      {errorMsg && (
+        <p class="auth-error" role="alert">
+          <span class="auth-error-icon" aria-hidden="true">!</span>
+          {lang === 'zh' ? errorMsg.zh : errorMsg.en}
+        </p>
+      )}
+
+      <div class="auth-google">
+        <a class="google-btn" href={`/api/auth/google/start?lang=${lang}&returnTo=${encodeURIComponent(returnTo)}`}>
+          <svg class="google-icon" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+          </svg>
+          <span>{lang === 'zh' ? '使用 Google 注册' : 'Sign up with Google'}</span>
+        </a>
+      </div>
+
+      <div class="auth-divider">
+        <span>{lang === 'zh' ? '或使用邮箱' : 'or use email'}</span>
+      </div>
+
+      <form method="post" action="/api/auth/signup">
+        <input type="hidden" name="returnTo" value={returnTo} />
+        <input type="hidden" name="lang" value={lang} />
+        <p><input type="email" name="email" placeholder={lang === 'zh' ? '邮箱' : 'Email'} required /></p>
+        <p><input type="password" name="password" placeholder={lang === 'zh' ? '密码（至少8位）' : 'Password (8+ characters)'} minlength="8" required /></p>
+        <button type="submit" class="explore-button auth-submit">{lang === 'zh' ? '立即注册' : 'Create account'}</button>
+      </form>
+
+      <p class="auth-switch"><a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(returnTo)}`}>{lang === 'zh' ? '已有账号？登录' : 'Already have an account? Log in'}</a></p>
+    </div>
+  </div>
+</Layout>

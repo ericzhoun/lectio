@@ -1,0 +1,12 @@
+# robots.txt for Inspiration Tarot (dramatherapy.us)
+User-agent: *
+Allow: /
+
+# Private pages — not useful in search results
+Disallow: /login
+Disallow: /account
+Disallow: /history
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://dramatherapy.us/sitemap.xml

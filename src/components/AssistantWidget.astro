@@ -1,0 +1,366 @@
+---
+// src/components/AssistantWidget.astro
+// Site-wide floating chat assistant. Thread is ephemeral (sessionStorage);
+// quota + replies come from /api/assistant/*.
+import type { Lang } from '../lib/tarot';
+
+interface Props {
+  lang: Lang;
+  loggedIn: boolean;
+}
+const { lang, loggedIn } = Astro.props;
+const zh = lang === 'zh';
+const t = {
+  bubbleLabel: zh ? '打开助手' : 'Open assistant',
+  title: zh ? '灵感助手' : 'Inspire Assistant',
+  placeholder: zh ? '随便问点什么…' : 'Ask anything…',
+  send: zh ? '发送' : 'Send',
+  minimize: zh ? '最小化助手' : 'Minimize assistant',
+  greeting: zh
+    ? '你好！我是灵感助手——可以问牌面含义、聊聊近况，或了解网站的使用方法。'
+    : "Hi! I'm the Inspire Assistant — ask about your reading, talk through what's on your mind, or learn how the site works.",
+  quotaTemplate: zh ? '今日剩余 {n} 条' : '{n} left today',
+  cappedTitle: zh ? '今日消息已用完' : "You've used today's messages",
+  cappedAnon: zh ? '注册免费账户，每天可聊 30 条。' : 'Create a free account for 30 messages a day.',
+  cappedFree: zh ? '升级 Pro，每天可聊 100 条。' : 'Upgrade to Pro for 100 messages a day.',
+  signup: zh ? '免费注册' : 'Sign up free',
+  viewPlans: zh ? '查看方案' : 'View plans',
+  error: zh ? '我暂时没能回复，请重试。' : "I couldn't respond just now. Please try again.",
+  retry: zh ? '重试' : 'Retry',
+  thinking: zh ? '思考中…' : 'Thinking…',
+};
+---
+<div id="assistant-root" data-logged-in={loggedIn ? '1' : '0'} data-lang={lang}>
+  <button type="button" id="assistant-bubble" aria-label={t.bubbleLabel}>✦</button>
+  <section id="assistant-panel" hidden aria-label={t.title}>
+    <header class="assistant-head">
+      <strong>{t.title}</strong>
+      <span id="assistant-quota" class="assistant-quota"></span>
+      <button type="button" id="assistant-minimize" aria-label={t.minimize}>−</button>
+    </header>
+    <div id="assistant-thread" class="assistant-thread"></div>
+    <div id="assistant-upsell" class="assistant-upsell" hidden>
+      <p class="assistant-upsell-title">{t.cappedTitle}</p>
+      <p id="assistant-upsell-body"></p>
+      <a id="assistant-upsell-link" class="assistant-upsell-btn" href="/signup">{t.signup}</a>
+    </div>
+    <form id="assistant-form" class="assistant-form" autocomplete="off">
+      <input id="assistant-input" type="text" placeholder={t.placeholder} maxlength="2000" />
+      <button type="submit">{t.send}</button>
+    </form>
+  </section>
+</div>
+
+<script>
+  // All strings the script needs at runtime are read from data attributes /
+  // generated here, so no server round-trip is required for i18n.
+  import { renderMarkdownLite } from '../lib/minimark';
+
+  const zh = document.getElementById('assistant-root')?.getAttribute('data-lang') === 'zh';
+  const T = {
+    greeting: zh
+      ? '你好！我是灵感助手——可以问牌面含义、聊聊近况，或了解网站的使用方法。'
+      : "Hi! I'm the Inspire Assistant — ask about your reading, talk through what's on your mind, or learn how the site works.",
+    quotaTemplate: zh ? '今日剩余 {n} 条' : '{n} left today',
+    cappedTitle: zh ? '今日消息已用完' : "You've used today's messages",
+    cappedAnon: zh ? '注册免费账户，每天可聊 30 条。' : 'Create a free account for 30 messages a day.',
+    cappedFree: zh ? '升级 Pro，每天可聊 100 条。' : 'Upgrade to Pro for 100 messages a day.',
+    signup: zh ? '免费注册' : 'Sign up free',
+    viewPlans: zh ? '查看方案' : 'View plans',
+    error: zh ? '我暂时没能回复，请重试。' : "I couldn't respond just now. Please try again.",
+    retry: zh ? '重试' : 'Retry',
+    thinking: zh ? '思考中…' : 'Thinking…',
+  };
+  const CHIPS: Record<string, string[]> = zh
+    ? {
+        '/pricing': ['Pro 包含什么？', '首月免费是怎么运作的？', '可以随时取消吗？'],
+        '/library': ['「高塔」这张牌是什么意思？', '哪张牌代表新的开始？', '逆位是什么意思？'],
+        '/': ['一次解读是怎么进行的？', '帮我抽一张牌', '你可以帮我做什么？'],
+      }
+    : {
+        '/pricing': ["What's in Pro?", 'How does the free trial work?', 'Can I cancel anytime?'],
+        '/library': ['What does The Tower mean?', 'Which card means new beginnings?', 'How do reversals work?'],
+        '/': ['How does a reading work?', 'Draw a card for me', 'What can you help with?'],
+      };
+  const DEFAULT_CHIPS = zh
+    ? ['你能帮我做什么？', '每日抽牌次数是怎么算的？', '我过去的解读在哪里看？']
+    : ['What can you help with?', 'How do daily draws work?', 'Where are my past readings?'];
+
+  const HISTORY_SENT = 10;
+  const THREAD_KEPT = 20;
+  const STORE_KEY = 'inspire-assistant-thread';
+
+  const bubble = document.getElementById('assistant-bubble') as HTMLButtonElement;
+  const panel = document.getElementById('assistant-panel') as HTMLElement;
+  const minimizeBtn = document.getElementById('assistant-minimize') as HTMLButtonElement;
+  const threadEl = document.getElementById('assistant-thread') as HTMLElement;
+  const form = document.getElementById('assistant-form') as HTMLFormElement;
+  const input = document.getElementById('assistant-input') as HTMLInputElement;
+  const quotaEl = document.getElementById('assistant-quota') as HTMLElement;
+  const upsellEl = document.getElementById('assistant-upsell') as HTMLElement;
+  const upsellBody = document.getElementById('assistant-upsell-body') as HTMLElement;
+  const upsellLink = document.getElementById('assistant-upsell-link') as HTMLAnchorElement;
+
+  interface Turn { role: 'user' | 'assistant'; content: string }
+  let thread: Turn[] = [];
+  try {
+    thread = JSON.parse(sessionStorage.getItem(STORE_KEY) ?? '[]') as Turn[];
+    thread = thread.filter((t) => t && (t.role === 'user' || t.role === 'assistant') && typeof t.content === 'string');
+  } catch { thread = []; }
+  let capped = false;
+  let busy = false;
+  let quotaLoaded = false;
+
+  const save = () => {
+    try { sessionStorage.setItem(STORE_KEY, JSON.stringify(thread.slice(-THREAD_KEPT))); } catch { /* ignore */ }
+  };
+  const scroll = () => { threadEl.scrollTop = threadEl.scrollHeight; };
+
+  function bubbleEl(role: 'user' | 'assistant' | 'error', content: string): HTMLElement {
+    const el = document.createElement('div');
+    el.className = `assistant-msg assistant-msg-${role}`;
+    // Assistant replies arrive as markdown; render them. User input and error
+    // lines are plain text and must stay textContent (no HTML from visitors).
+    if (role === 'assistant') el.innerHTML = renderMarkdownLite(content);
+    else el.textContent = content;
+    threadEl.appendChild(el);
+    scroll();
+    return el;
+  }
+
+  function addChips() {
+    const chips = CHIPS[location.pathname] ?? DEFAULT_CHIPS;
+    const row = document.createElement('div');
+    row.className = 'assistant-chips';
+    for (const text of chips) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = text;
+      b.addEventListener('click', () => { row.remove(); void send(text); });
+      row.appendChild(b);
+    }
+    threadEl.appendChild(row);
+  }
+
+  function buildContext(): { path: string; title: string; reading: unknown } {
+    const ctx: { path: string; title: string; reading: unknown } = {
+      path: location.pathname,
+      title: document.title,
+      reading: null,
+    };
+    const el = document.getElementById('inspire-reading-context');
+    if (el) {
+      try { ctx.reading = JSON.parse(el.textContent ?? 'null'); } catch { ctx.reading = null; }
+    }
+    return ctx;
+  }
+
+  function showUpsell(data: { registered?: boolean; tier?: string }) {
+    capped = true;
+    upsellEl.hidden = false;
+    if (data.registered) {
+      upsellBody.textContent = T.cappedFree;
+      upsellLink.textContent = T.viewPlans;
+      upsellLink.href = '/pricing';
+    } else {
+      upsellBody.textContent = T.cappedAnon;
+      upsellLink.textContent = T.signup;
+      upsellLink.href = `/signup?next=${encodeURIComponent(location.pathname)}`;
+    }
+    quotaEl.textContent = T.quotaTemplate.replace('{n}', '0');
+  }
+
+  async function refreshQuota() {
+    try {
+      const res = await fetch('/api/assistant/quota');
+      if (!res.ok) return;
+      const data = (await res.json()) as { ok: boolean; remaining: number; registered: boolean };
+      quotaEl.textContent = T.quotaTemplate.replace('{n}', String(data.remaining));
+      if (!data.ok) showUpsell(data);
+    } catch { /* quota display is best-effort */ }
+  }
+
+  function addErrorBubble(failedText: string) {
+    const wrap = document.createElement('div');
+    wrap.className = 'assistant-msg assistant-msg-error';
+    const span = document.createElement('span');
+    span.textContent = T.error;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = T.retry;
+    btn.addEventListener('click', () => { wrap.remove(); void send(failedText); });
+    wrap.appendChild(span);
+    wrap.appendChild(btn);
+    threadEl.appendChild(wrap);
+    scroll();
+  }
+
+  async function send(text: string) {
+    const clean = text.trim();
+    if (!clean || capped || busy) return;
+    busy = true;
+    input.value = '';
+    bubbleEl('user', clean);
+    thread.push({ role: 'user', content: clean });
+
+    const thinking = document.createElement('div');
+    thinking.className = 'assistant-msg assistant-msg-thinking';
+    thinking.textContent = T.thinking;
+    threadEl.appendChild(thinking);
+    scroll();
+
+    try {
+      const res = await fetch('/api/assistant/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: clean,
+          history: thread.slice(0, -1).slice(-HISTORY_SENT),
+          context: buildContext(),
+        }),
+      });
+
+      if (res.status === 429) {
+        const data = (await res.json().catch(() => ({}))) as { registered?: boolean; tier?: string };
+        thinking.remove();
+        thread.pop(); // not answered - allow resending after upgrade/reset
+        input.value = clean; // keep the typed message for a retry
+        showUpsell(data);
+        return;
+      }
+      if (!res.ok || !res.body) {
+        thinking.remove();
+        thread.pop();
+        addErrorBubble(clean);
+        return;
+      }
+
+      thinking.remove();
+      const el = bubbleEl('assistant', '');
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let full = '';
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        full += decoder.decode(value, { stream: true });
+        el.innerHTML = renderMarkdownLite(full);
+        scroll();
+      }
+      thread.push({ role: 'assistant', content: full });
+      save();
+      void refreshQuota();
+    } catch {
+      thinking.remove();
+      thread.pop();
+      addErrorBubble(clean);
+    } finally {
+      busy = false;
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    void send(input.value);
+  });
+
+  function openPanel() {
+    panel.hidden = false;
+    bubble.hidden = true;
+    // Rebuild the thread from state on every open so reopening never duplicates.
+    threadEl.replaceChildren();
+    if (thread.length === 0) {
+      bubbleEl('assistant', T.greeting);
+      addChips();
+    } else {
+      for (const t of thread) bubbleEl(t.role, t.content);
+    }
+    if (!quotaLoaded) {
+      quotaLoaded = true;
+      void refreshQuota();
+    }
+    input.focus();
+  }
+  function minimizePanel() {
+    panel.hidden = true;
+    bubble.hidden = false;
+    bubble.focus();
+  }
+
+  bubble.addEventListener('click', openPanel);
+  minimizeBtn.addEventListener('click', minimizePanel);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) minimizePanel();
+  });
+</script>
+
+<style>
+  #assistant-root {
+    position: fixed; left: 18px; right: 18px; bottom: 18px; z-index: 9999;
+    pointer-events: none;
+  }
+  #assistant-root [hidden] { display: none !important; }
+  #assistant-bubble {
+    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+    font-size: 22px; color: #fff; background: linear-gradient(135deg, #5b4b8a, #2e2654);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); transition: transform 0.15s ease;
+    margin-left: auto; pointer-events: auto;
+  }
+  #assistant-bubble:hover { transform: scale(1.06); }
+  #assistant-panel {
+    width: min(380px, 100%); max-height: 70dvh;
+    display: flex; flex-direction: column;
+    background: #fff; color: #222; border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.25);
+    overflow: hidden; animation: assistant-rise 0.18s ease;
+    margin-left: auto; pointer-events: auto;
+  }
+  @keyframes assistant-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    #assistant-panel, #assistant-bubble { animation: none; transition: none; }
+  }
+  .assistant-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; background: #2e2654; color: #fff;
+  }
+  .assistant-head strong { flex: 0 0 auto; }
+  .assistant-quota { flex: 1; text-align: right; font-size: 12px; opacity: 0.85; }
+  #assistant-minimize { background: none; border: none; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; }
+  .assistant-thread { flex: 1 1 auto; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .assistant-msg { max-width: 85%; padding: 8px 11px; border-radius: 12px; font-size: 14px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .assistant-msg-user { align-self: flex-end; background: #5b4b8a; color: #fff; }
+  .assistant-msg-assistant { align-self: flex-start; background: #f1eef9; color: #222; }
+  /* Rendered markdown inside assistant bubbles. */
+  .assistant-msg-assistant p { margin: 0 0 6px; }
+  .assistant-msg-assistant p:last-child { margin-bottom: 0; }
+  .assistant-msg-assistant ul, .assistant-msg-assistant ol { margin: 2px 0 6px; padding-left: 18px; }
+  .assistant-msg-assistant ul:last-child, .assistant-msg-assistant ol:last-child { margin-bottom: 0; }
+  .assistant-msg-assistant li { margin: 2px 0; }
+  .assistant-msg-assistant a { color: #5b4b8a; }
+  .assistant-msg-assistant code { background: rgba(0, 0, 0, 0.07); border-radius: 4px; padding: 0 4px; font-size: 12.5px; }
+  .assistant-msg-error { align-self: flex-start; background: #fdecea; color: #7a2b23; display: flex; gap: 8px; align-items: center; }
+  .assistant-msg-error button { border: 1px solid #7a2b23; background: none; color: #7a2b23; border-radius: 8px; padding: 2px 8px; cursor: pointer; font-size: 12px; }
+  .assistant-msg-thinking { align-self: flex-start; background: #f1eef9; color: #666; font-style: italic; }
+  .assistant-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .assistant-chips button {
+    border: 1px solid #5b4b8a; background: #fff; color: #5b4b8a;
+    border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer;
+  }
+  .assistant-chips button:hover { background: #f1eef9; }
+  .assistant-upsell { padding: 10px 12px; background: #fdf7e8; border-top: 1px solid #e8d9a8; font-size: 13px; }
+  .assistant-upsell-title { font-weight: 600; margin: 0 0 4px; }
+  .assistant-upsell-btn {
+    display: inline-block; margin-top: 8px; padding: 6px 12px; border-radius: 8px;
+    background: #5b4b8a; color: #fff; text-decoration: none; font-size: 13px;
+  }
+  .assistant-form { display: flex; gap: 8px; padding: 10px; border-top: 1px solid rgba(0, 0, 0, 0.08); }
+  .assistant-form input {
+    flex: 1; border: 1px solid rgba(0, 0, 0, 0.18); border-radius: 10px;
+    padding: 8px 10px; font-size: 14px;
+  }
+  .assistant-form button {
+    border: none; border-radius: 10px; padding: 8px 14px; cursor: pointer;
+    background: #5b4b8a; color: #fff; font-size: 14px;
+  }
+</style>

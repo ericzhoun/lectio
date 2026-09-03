@@ -1,0 +1,19 @@
+SESSION_SECRET=replace-with-a-long-random-string
+
+# Stripe (live values live in .env / wrangler secrets, never here)
+STRIPE_SECRET_KEY=sk_live_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+STRIPE_PRICE_BASIC=price_xxx
+STRIPE_PRICE_PRO=price_xxx
+STRIPE_PRICE_BASIC_ANNUAL=price_xxx
+STRIPE_PRICE_PRO_ANNUAL=price_xxx
+
+OPENAI_API_KEY=sk-proj-xxx
+
+# Google OAuth (create credentials in Google Cloud Console > APIs & Services > Credentials)
+GOOGLE_CLIENT_ID=xxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-xxx
+GOOGLE_AUTH_URL=https://accounts.google.com/o/oauth2/v2/auth
+GOOGLE_TOKEN_URL=https://oauth2.googleapis.com/token
+GOOGLE_USERINFO_URL=https://openidconnect.googleapis.com/v1/userinfo
+GOOGLE_REDIRECT_URI=https://dramatherapy.us/api/auth/google/callback

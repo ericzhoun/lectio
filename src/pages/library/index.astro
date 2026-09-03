@@ -1,0 +1,53 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { getLibraryCards } from '../../lib/tarot';
+import { resolveLang } from '../../lib/i18n';
+
+const url = Astro.url;
+const lang = resolveLang(Astro);
+const suit = url.searchParams.get('suit') ?? 'all';
+
+let cards = getLibraryCards();
+if (suit !== 'all') {
+  cards = cards.filter((c) => c.suit === suit);
+}
+
+const title = lang === 'zh'
+  ? '韦特塔罗牌库 — 78 张牌含义与解读指南'
+  : 'Tarot Card Library — All 78 Rider-Waite Cards & Meanings';
+const description = lang === 'zh'
+  ? '浏览完整的 78 张韦特塔罗牌：大阿尔卡纳、权杖、圣杯、宝剑、星币，每张附正位与逆位含义详解。'
+  : 'Browse all 78 Rider-Waite tarot cards with upright and reversed meanings. Explore Major Arcana, Wands, Cups, Swords, and Pentacles in detail.';
+
+function filterHref(s: string) {
+  return `?lang=${lang}&suit=${s}`;
+}
+---
+<Layout title={title} description={description} lang={lang}>
+  <header>
+    <h1>{lang === 'zh' ? '塔罗牌库' : 'Tarot Card Library'}</h1>
+  </header>
+
+  <div class="filters">
+    <a href={filterHref('all')} class={suit === 'all' ? 'active' : ''}>{lang === 'zh' ? '全部' : 'All'}</a>
+    <a href={filterHref('major')} class={suit === 'major' ? 'active' : ''}>{lang === 'zh' ? '大阿尔卡纳' : 'Major Arcana'}</a>
+    <a href={filterHref('wands')} class={suit === 'wands' ? 'active' : ''}>{lang === 'zh' ? '权杖' : 'Wands'}</a>
+    <a href={filterHref('cups')} class={suit === 'cups' ? 'active' : ''}>{lang === 'zh' ? '圣杯' : 'Cups'}</a>
+    <a href={filterHref('swords')} class={suit === 'swords' ? 'active' : ''}>{lang === 'zh' ? '宝剑' : 'Swords'}</a>
+    <a href={filterHref('pentacles')} class={suit === 'pentacles' ? 'active' : ''}>{lang === 'zh' ? '星币' : 'Pentacles'}</a>
+  </div>
+  <div class="count">{lang === 'zh' ? `共 ${cards.length} 张牌` : `${cards.length} cards`}</div>
+
+  <div class="grid">
+    {cards.map((card) => (
+      <a href={`/library/${card.slug}?lang=${lang}`}>
+        <div class="grid-card">
+          <img src={card.image_url} alt={`${lang === 'zh' ? card.zh : card.en} — Rider-Waite tarot card`} loading="lazy" />
+          <div class="name">{lang === 'zh' ? card.zh : card.en}</div>
+        </div>
+      </a>
+    ))}
+  </div>
+</Layout>

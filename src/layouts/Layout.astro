@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+import { env } from 'cloudflare:workers';
+import { verifySessionToken } from '../lib/session';
+import { langSwitchHref } from '../lib/i18n';
+import LoginOverlay from '../components/LoginOverlay.astro';
+import AssistantWidget from '../components/AssistantWidget.astro';
+import type { Lang } from '../lib/tarot';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang: Lang;
+  noindex?: boolean;
+}
+const { title, description = '', lang, noindex = false } = Astro.props;
+
+const sessionCookie = Astro.cookies.get('session')?.value;
+const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
+
+// Canonical URL: strip query params (including ?lang=) so search engines
+// see one URL per piece of content.
+const siteUrl = 'https://dramatherapy.us';
+const canonicalPath = Astro.url.pathname;
+const canonicalUrl = `${siteUrl}${canonicalPath}`;
+
+// Active-page highlight (same bold treatment as the language links below).
+const path = Astro.url.pathname;
+const isActive = (p: string) => path === p || path.startsWith(`${p}/`);
+
+// Alternate language URL (for hreflang).
+const altLang: Lang = lang === 'zh' ? 'en' : 'zh';
+const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO: title + meta description -->
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+
+  <!-- SEO: canonical + hreflang (avoid duplicate content across lang variants) -->
+  <link rel="canonical" href={canonicalUrl} />
+  <link rel="alternate" hreflang={lang} href={canonicalUrl} />
+  <link rel="alternate" hreflang={altLang} href={altLangUrl} />
+  <link rel="alternate" hreflang="x-default" href={`${siteUrl}${canonicalPath}`} />
+
+  <!-- SEO: opt out of indexing for private pages -->
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  {description && <meta property="og:description" content={description} />}
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={`${siteUrl}/logo.webp`} />
+  <meta property="og:site_name" content="Inspiration Tarot" />
+  <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+
+  <!-- Twitter card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content={title} />
+  {description && <meta name="twitter:description" content={description} />}
+  <meta name="twitter:image" content={`${siteUrl}/logo.webp`} />
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/webp" href="/logo.webp" />
+</head>
+<body>
+  <div class="top-nav">
+    {path !== '/' && <a href="/" style={isActive('/') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '占卜首页' : 'Reading Home'}</a>}
+    {userId ? (
+      <a href="/account" style={isActive('/account') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '账户' : 'Account'}</a>
+    ) : (
+      <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
+    )}
+    <a href="/pricing" style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '价格' : 'Pricing'}</a>
+    <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '塔罗牌库' : 'Card Library'}</a>
+    <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
+    <a href="/privacy" style={isActive('/privacy') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '隐私' : 'Privacy'}</a>
+    <a href={langSwitchHref(Astro, 'zh')} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>
+    <a href={langSwitchHref(Astro, 'en')} style={lang === 'en' ? 'font-weight: bold;' : undefined}>English</a>
+  </div>
+  <slot />
+  {!userId && <LoginOverlay lang={lang} />}
+  <script src="../scripts/authPosition.ts"></script>
+  <AssistantWidget lang={lang} loggedIn={!!userId} />
+</body>
+</html>

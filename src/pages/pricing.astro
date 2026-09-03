@@ -1,0 +1,121 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { resolveLang } from '../lib/i18n';
+
+const lang = resolveLang(Astro);
+
+const tiers = [
+  {
+    key: 'free',
+    name: { zh: '免费', en: 'Free' },
+    monthly: { zh: '$0', en: '$0' },
+    annual: { zh: '$0', en: '$0' },
+    blurb: { zh: '未注册每日 3 次单张牌；注册后每日 6 次 + 三张牌阵 ×3、凯尔特十字 ×1 体验额度', en: 'Guests: 3 single draws/day. Registered: 6/day + trial credits (3-card ×3, Celtic Cross ×1)' },
+  },
+  {
+    key: 'basic',
+    name: { zh: '基础版', en: 'Basic' },
+    monthly: { zh: '$4.99/月', en: '$4.99/mo' },
+    annual: { zh: '$2.99/月', en: '$2.99/mo' },
+    annualTotal: { zh: '$35.88/年', en: '$35.88/yr' },
+    blurb: { zh: '单张/三张牌，每日20次，历史记录', en: 'Single/3-card, 20 draws/day, history' },
+  },
+  {
+    key: 'pro',
+    name: { zh: '专业版', en: 'Pro' },
+    monthly: { zh: '$11.99/月', en: '$11.99/mo' },
+    annual: { zh: '$7.19/月', en: '$7.19/mo' },
+    annualTotal: { zh: '$86.28/年', en: '$86.28/yr' },
+    blurb: { zh: '全部牌阵，无限次数，历史记录', en: 'All spreads, unlimited draws, history' },
+  },
+];
+
+const title = lang === 'zh'
+  ? '塔罗解读价格方案 — 免费、基础版与专业版'
+  : 'Tarot Reading Plans & Pricing — Free, Basic & Pro';
+const description = lang === 'zh'
+  ? '选择适合你的塔罗解读方案：免费每日 6 次单张牌，基础版 $4.99/月含三张牌阵，专业版 $11.99/月解锁全部牌阵无限解读。月付方案首月免费试用，年付享六折优惠。'
+  : 'Choose your tarot reading plan: free tier with 6 daily single-card draws, Basic at $4.99/mo for 3-card spreads, or Pro at $11.99/mo for all spreads unlimited. First month free on monthly plans; save 40% with annual billing.';
+---
+<Layout title={title} description={description} lang={lang}>
+  <h1>{lang === 'zh' ? '塔罗解读价格方案' : 'Tarot Reading Plans & Pricing'}</h1>
+
+  <div class="billing-toggle" role="radiogroup" aria-label={lang === 'zh' ? '计费周期' : 'Billing period'}>
+    <button class="billing-toggle-btn active" data-billing="monthly" role="radio" aria-checked="true">
+      {lang === 'zh' ? '月付' : 'Monthly'}
+    </button>
+    <button class="billing-toggle-btn" data-billing="annual" role="radio" aria-checked="false">
+      {lang === 'zh' ? '年付省 40%' : 'Annual — save 40%'}
+    </button>
+  </div>
+
+  <p class="trial-note">
+    {lang === 'zh'
+      ? '月付方案首月免费试用 · 试用期内可随时取消，不产生费用'
+      : 'Monthly plans start with a free first month · cancel anytime during the trial and pay nothing'}
+  </p>
+
+  <div class="pricing-grid">
+    {tiers.map((t) => (
+      <div class="pricing-card" data-tier={t.key}>
+        <h2>{t.name[lang]}</h2>
+        <p class="price" data-price-monthly={t.monthly[lang]} data-price-annual={t.annual[lang]}>
+          {t.monthly[lang]}
+        </p>
+        {t.annualTotal && (
+          <p class="price-annual-total" hidden>
+            {lang === 'zh' ? `按年付 ${t.annualTotal[lang]}` : `Billed annually at ${t.annualTotal[lang]}`}
+          </p>
+        )}
+        {t.key !== 'free' && (
+          <span class="save-badge trial-badge" data-trial-badge>
+            {lang === 'zh' ? '首月免费' : 'First month free'}
+          </span>
+        )}
+        {t.key !== 'free' && (
+          <span class="save-badge" data-save-badge hidden>
+            {lang === 'zh' ? '省 40%' : 'Save 40%'}
+          </span>
+        )}
+        <p>{t.blurb[lang]}</p>
+        {t.key !== 'free' && (
+          <form method="post" action="/api/stripe/checkout">
+            <input type="hidden" name="tier" value={t.key} />
+            <input type="hidden" name="billing" value="monthly" data-billing-input />
+            <button type="submit">{lang === 'zh' ? '订阅' : 'Subscribe'}</button>
+          </form>
+        )}
+      </div>
+    ))}
+  </div>
+
+  <script>
+    const toggle = document.querySelector('.billing-toggle');
+    toggle?.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.billing-toggle-btn') as HTMLButtonElement | null;
+      if (!btn) return;
+      const billing = btn.dataset.billing ?? 'monthly';
+      toggle.querySelectorAll('.billing-toggle-btn').forEach((b) => {
+        b.classList.toggle('active', b === btn);
+        b.setAttribute('aria-checked', String(b === btn));
+      });
+      document.querySelectorAll('.pricing-card').forEach((card) => {
+        const priceEl = card.querySelector('.price') as HTMLElement | null;
+        const totalEl = card.querySelector('.price-annual-total') as HTMLElement | null;
+        const badge = card.querySelector('[data-save-badge]') as HTMLElement | null;
+        const trialBadge = card.querySelector('[data-trial-badge]') as HTMLElement | null;
+        const input = card.querySelector('[data-billing-input]') as HTMLInputElement | null;
+        if (priceEl) {
+          priceEl.textContent = billing === 'annual'
+            ? (priceEl.dataset.priceAnnual ?? priceEl.textContent ?? '')
+            : (priceEl.dataset.priceMonthly ?? priceEl.textContent ?? '');
+        }
+        if (totalEl) totalEl.hidden = billing !== 'annual';
+        if (badge) badge.hidden = billing !== 'annual';
+        if (trialBadge) trialBadge.hidden = billing === 'annual';
+        if (input) input.value = billing;
+      });
+    });
+  </script>
+</Layout>

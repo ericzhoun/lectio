@@ -1,0 +1,32 @@
+{
+  "name": "self-inspiring-tarot",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "node scripts/generate-sitemap.mjs",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.2.5",
+    "astro": "^7.2.8",
+    "openai": "^7.7.0",
+    "stripe": "^22.6.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@cloudflare/workers-types": "^5.20260827.1",
+    "@types/node": "^26.4.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
+  },
+  "allowScripts": {
+    "esbuild": true
+  }
+}

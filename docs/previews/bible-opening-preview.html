@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bible Opening — Design Preview · inspire</title>
+<style>
+:root{
+  --bg:#0e1220; --panel:#171c2e; --panel-border:#2a3050;
+  --gold:#e8c465; --text:#e8e9f0; --text-dim:#9aa0b8; --accent:#6c7dfa;
+  --cream-a:#f7f1de; --cream-b:#f3ead2; --ink:#3b2f1e; --ink-dim:#7a5a1e;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 80% 30%, rgba(255,255,255,.25), transparent),
+    radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1px 1px at 65% 85%, rgba(255,255,255,.2), transparent),
+    radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,.25), transparent);
+  color:var(--text);
+  line-height:1.55;
+}
+.wrap{max-width:980px;margin:0 auto;padding:28px 20px 60px}
+header{text-align:center;margin-bottom:22px}
+header h1{color:var(--gold);letter-spacing:1px;font-size:26px;margin:0 0 6px}
+header .sub{color:var(--text-dim);font-size:14px;margin:0}
+.badge{display:inline-block;font-size:11px;letter-spacing:.5px;padding:3px 9px;border-radius:10px;border:1px solid var(--panel-border);color:var(--text-dim);background:rgba(255,255,255,.03)}
+.badge.rec{border-color:rgba(232,196,101,.55);color:var(--gold);background:rgba(232,196,101,.08)}
+.panel{background:var(--panel);border:1px solid var(--panel-border);border-radius:12px;padding:20px 22px;margin:0 0 18px}
+h2.sec{color:var(--gold);font-size:17px;letter-spacing:1.5px;text-transform:uppercase;margin:36px 0 4px}
+p.sec-sub{color:var(--text-dim);font-size:13.5px;margin:0 0 14px}
+.howto{border:1px dashed rgba(232,196,101,.4);background:rgba(232,196,101,.05);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--text-dim);margin:0 0 18px}
+.howto strong{color:var(--gold)}
+
+/* intro */
+.intro .ig{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:8px 0;border-bottom:1px dashed var(--panel-border);align-items:baseline}
+.intro .ig:last-child{border-bottom:none}
+.ig-k{color:var(--gold);font-size:12px;letter-spacing:1.2px;text-transform:uppercase;font-weight:bold}
+.ig p{margin:0;font-size:14.5px}
+
+/* flow compare */
+.flowcmp{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.flowcmp{grid-template-columns:1fr}}
+.fbox{background:var(--panel);border:1px solid var(--panel-border);border-radius:12px;padding:16px 18px}
+.fbox.proposed{border-color:rgba(232,196,101,.4)}
+.fbox h4{margin:0 0 10px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim)}
+.fbox.proposed h4{color:var(--gold)}
+.fsteps{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.fstep{font-size:12.5px;background:rgba(255,255,255,.04);border:1px solid var(--panel-border);border-radius:8px;padding:5px 9px}
+.fstep.hot{border-color:rgba(232,196,101,.5);color:var(--gold);background:rgba(232,196,101,.07)}
+.farrow{color:var(--text-dim);font-size:12px}
+
+/* option cards */
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.opt-card{background:var(--panel);border:1px solid var(--panel-border);border-radius:12px;padding:18px;display:flex;flex-direction:column}
+.opt-card.recommended{border-color:rgba(232,196,101,.45);box-shadow:0 0 0 1px rgba(232,196,101,.12),0 10px 30px rgba(0,0,0,.25)}
+.opt-card.wide{grid-column:1/-1}
+.opt-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.opt-head h3{margin:0;font-size:16px;color:var(--text)}
+.opt-desc{color:var(--text-dim);font-size:13.5px;margin:0 0 10px}
+.spec-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.caption{font-size:12px;color:var(--text-dim);margin:10px 2px 0}
+
+/* stages */
+.stage3{background:#0b0f1c;border:1px solid var(--panel-border);border-radius:10px;padding:24px 12px 16px;position:relative;overflow:hidden;margin-top:auto}
+.scene3{perspective:1000px;display:flex;justify-content:flex-end;padding-right:9%}
+.stage-b{background:#0b0f1c;border:1px solid var(--panel-border);border-radius:10px;padding:22px 18px 20px;position:relative;overflow:hidden;margin-top:auto}
+.scene-b{position:relative;perspective:1100px;min-height:380px}
+
+/* 3D book (shared by A demos) */
+.book{position:relative;width:132px;height:176px;transform-style:preserve-3d}
+.book-shadow{position:absolute;left:2%;right:2%;bottom:-24px;height:20px;border-radius:50%;background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.55), transparent 72%);transform:translateZ(-12px)}
+.glow{position:absolute;inset:-50%;background:radial-gradient(closest-side, rgba(246,218,138,.55), rgba(232,196,101,.2) 46%, transparent 72%);opacity:0;transform:translateZ(-8px)}
+.pageblock{position:absolute;inset:5px 0 5px 8px;transform:translateZ(-2px);transform-style:preserve-3d}
+.page-face{position:absolute;inset:0;background:linear-gradient(90deg,#ece0ba,var(--cream-a) 30%,var(--cream-b));border:1px solid #d9c793;border-radius:4px 12px 12px 4px;box-shadow:4px 0 0 #e8dcb8,6px 0 0 #d3c393;opacity:.45;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:14px 12px}
+.pf-cross{color:#a5691f;font-size:18px;line-height:1}
+.pf-line{display:block;height:5px;border-radius:3px;background:rgba(122,90,30,.26)}
+.cover{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:left center;z-index:5}
+.cface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.cover-front{background:linear-gradient(145deg,#4a1f3d 0%,#2a1230 55%,#1d0c26 100%);border:2px solid var(--gold);border-radius:6px 14px 14px 6px;box-shadow:inset 6px 0 0 rgba(232,196,101,.14),inset 10px 0 0 rgba(0,0,0,.25),0 10px 30px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center}
+.cover-front::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:rgba(232,196,101,.35);border-radius:2px}
+.cover-cross{font-size:38px;color:var(--gold);text-shadow:0 0 18px rgba(232,196,101,.65)}
+.cover-back{transform:rotateY(180deg);background:linear-gradient(145deg,#36162c,#200e25);border:2px solid rgba(232,196,101,.4);border-radius:14px 6px 6px 14px}
+.seam{position:absolute;top:7%;bottom:7%;right:-3px;width:7px;border-radius:4px;background:linear-gradient(180deg,transparent,rgba(255,246,214,.95) 30%,rgba(255,246,214,.95) 70%,transparent);opacity:0;box-shadow:0 0 14px rgba(232,196,101,.9);transform:translateZ(2px);z-index:6}
+.spark{opacity:0;position:absolute;color:#f4e2a8;text-shadow:0 0 10px rgba(232,196,101,.9);z-index:7;font-size:14px}
+.spark.s1{top:-14px;right:-6px}
+.spark.s2{bottom:-10px;right:22%;font-size:11px}
+.leaf{position:absolute;inset:0;transform-style:preserve-3d}
+.leaf.l1{transform:translateZ(3px)}
+.leaf.l2{transform:translateZ(2px)}
+.leaf.l3{transform:translateZ(1px)}
+.leaf-rot{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d}
+.lface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:4px 12px 12px 4px;border:1px solid #d3bf8c;background:linear-gradient(90deg,#efe4c2,#f6efda);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 12px}
+.lface.back{transform:rotateY(180deg);background:linear-gradient(90deg,#e7d9b2,#efe5c6);border-radius:12px 4px 4px 12px}
+
+/* A1 — Cover Swing */
+.anim-a1 .book{animation:a1-lift 1.8s ease .15s forwards}
+@keyframes a1-lift{0%{transform:translateY(0)}45%{transform:translateY(-9px)}100%{transform:translateY(-5px)}}
+.anim-a1 .cover{animation:a1-cover 1.6s cubic-bezier(.5,.06,.28,1) .18s forwards}
+@keyframes a1-cover{0%{transform:rotateY(0)}62%{transform:rotateY(-128deg)}82%{transform:rotateY(-164deg)}100%{transform:rotateY(-158deg)}}
+.anim-a1 .glow{animation:a1-glow 1.8s ease .45s forwards}
+@keyframes a1-glow{0%{opacity:0}55%{opacity:.85}100%{opacity:.5}}
+.anim-a1 .page-face{animation:a1-page 1.35s ease .75s forwards}
+@keyframes a1-page{to{opacity:1}}
+
+/* A2 — Seam of Light */
+.anim-a2 .book{animation:a2-float 2.7s ease forwards}
+@keyframes a2-float{0%{transform:translateY(0)}30%{transform:translateY(-12px)}60%{transform:translateY(-10px)}100%{transform:translateY(-5px)}}
+.anim-a2 .glow{animation:a2-bloom 2.85s ease .22s forwards}
+@keyframes a2-bloom{0%{opacity:0;transform:translateZ(-8px) scale(.6)}45%{opacity:.35;transform:translateZ(-8px) scale(.85)}75%{opacity:.95;transform:translateZ(-8px) scale(1.05)}100%{opacity:.6;transform:translateZ(-8px) scale(1)}}
+.anim-a2 .seam{animation:a2-seam 2.25s ease .15s forwards}
+@keyframes a2-seam{0%{opacity:0;transform:translateZ(2px) scaleY(.4)}35%{opacity:1;transform:translateZ(2px) scaleY(1)}70%{opacity:.9}100%{opacity:0}}
+.anim-a2 .cover{animation:a2-cover 1.6s cubic-bezier(.45,.1,.3,1) .9s forwards}
+@keyframes a2-cover{0%{transform:rotateY(0)}55%{transform:rotateY(-120deg)}100%{transform:rotateY(-152deg)}}
+.anim-a2 .page-face{animation:a1-page 1.2s ease 1.6s forwards}
+.anim-a2 .s1{animation:a2-spark 1.65s ease 1.2s forwards}
+.anim-a2 .s2{animation:a2-spark 1.65s ease 1.58s forwards}
+@keyframes a2-spark{0%{opacity:0;transform:translateY(6px) scale(.6)}35%{opacity:1}100%{opacity:0;transform:translateY(-14px) scale(1.1)}}
+
+/* A3 — Page Cascade */
+.anim-a3 .book{animation:a1-lift 2.85s ease .15s forwards}
+.anim-a3 .cover{animation:a3-cover .75s cubic-bezier(.5,.05,.35,1) .15s forwards}
+@keyframes a3-cover{to{transform:rotateY(-166deg)}}
+.anim-a3 .glow{animation:a1-glow 2.1s ease .68s forwards}
+.anim-a3 .page-face{animation:a1-page .9s ease 2.25s forwards}
+.anim-a3 .l1 .leaf-rot{animation:leaf-turn .75s cubic-bezier(.45,.08,.4,1) .83s forwards}
+.anim-a3 .l2 .leaf-rot{animation:leaf-turn .75s cubic-bezier(.45,.08,.4,1) 1.43s forwards}
+.anim-a3 .l3 .leaf-rot{animation:leaf-turn .75s cubic-bezier(.45,.08,.4,1) 2.03s forwards}
+@keyframes leaf-turn{to{transform:rotateY(-180deg)}}
+
+/* B scene parts */
+.bbook{position:absolute;left:50%;top:0;margin-left:-66px;width:132px;height:176px;transform-style:preserve-3d;z-index:6}
+.bcover{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:left center}
+.bpage-wrap{margin:118px auto 0;max-width:640px}
+.bpage-clip{clip-path:inset(0 46% 0 46% round 10px);opacity:0}
+.bpage{position:relative;background:linear-gradient(180deg,var(--cream-a),var(--cream-b));color:var(--ink);border-radius:10px;border:1px solid #d9c793;box-shadow:0 14px 40px rgba(0,0,0,.45),inset 0 0 60px rgba(217,199,147,.35);font-family:Georgia,"Times New Roman","Songti SC","STSong",SimSun,serif;padding:30px 32px 26px}
+.bpage::after{content:"";position:absolute;top:0;bottom:0;left:-45%;width:36%;background:linear-gradient(105deg,transparent,rgba(232,196,101,.2),transparent);opacity:0;pointer-events:none}
+.bp-heading{text-align:center;font-size:17px;letter-spacing:2px;color:var(--ink-dim);margin:0 0 14px;font-weight:bold}
+.bp-alt{display:block;font-size:11.5px;letter-spacing:1px;color:#a08c5a;font-weight:normal;margin-top:3px;text-transform:uppercase}
+.bp-flow{margin:0;font-size:16px;line-height:2.02;text-align:justify}
+.vn{color:#a5691f;font-weight:bold;font-size:11px;margin-right:1px;position:relative;top:-3px;font-family:Georgia,serif}
+.v{opacity:1}
+.v.drawn{background-image:linear-gradient(180deg,rgba(232,196,101,.28),rgba(232,196,101,.42));background-repeat:no-repeat;background-size:0 100%;border-radius:4px;padding:2px 3px}
+.ptag{display:inline-block;vertical-align:2px;margin-left:6px;background:#7a5a1e;color:var(--cream-a);font-size:10.5px;line-height:1;padding:3px 8px;border-radius:9px;letter-spacing:1px;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.v.ellip{color:#b09a66;letter-spacing:2px}
+
+/* B1 — Spread Open */
+.anim-b1 .bcover{animation:b1-cover 1.2s cubic-bezier(.55,.08,.35,1) .18s forwards}
+@keyframes b1-cover{to{transform:rotateY(-165deg)}}
+.anim-b1 .bbook{animation:b1-bookout .68s ease .93s forwards}
+@keyframes b1-bookout{to{opacity:0;transform:translateY(-14px)}}
+.anim-b1 .bpage-clip{animation:b1-clip 1.2s cubic-bezier(.3,.6,.2,1) .75s forwards,b1-show .38s ease .75s forwards}
+@keyframes b1-clip{from{clip-path:inset(0 46% 0 46% round 10px)}to{clip-path:inset(0 0 0 0 round 10px)}}
+@keyframes b1-show{to{opacity:1}}
+.anim-b1 .bp-heading{opacity:0;animation:b1-head .68s ease 1.28s forwards}
+@keyframes b1-head{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.anim-b1 .bp-flow .v{opacity:0;animation:v-in .6s ease both}
+@keyframes v-in{to{opacity:1}}
+.anim-b1 .bp-flow .v:nth-of-type(1){animation-delay:1.38s}
+.anim-b1 .bp-flow .v:nth-of-type(2){animation-delay:1.5s}
+.anim-b1 .bp-flow .v:nth-of-type(3){animation-delay:1.62s}
+.anim-b1 .bp-flow .v:nth-of-type(4){animation-delay:1.74s}
+.anim-b1 .bp-flow .v:nth-of-type(5){animation-delay:1.86s}
+.anim-b1 .v.drawn{animation:v-in .6s ease 1.38s both,sweep .83s ease-out 1.88s both}
+@keyframes sweep{from{background-size:0 100%;box-shadow:inset 0 0 0 1px rgba(165,105,31,0)}to{background-size:100% 100%;box-shadow:inset 0 0 0 1px rgba(165,105,31,.25)}}
+
+/* B2 — Page Rise */
+.scene-b2{min-height:0}
+.scene-b2 .bpage-wrap{margin-top:0}
+.scene-b2 .bpage-clip{clip-path:none;opacity:0;transform:translateY(26px) scale(.97)}
+.anim-b2 .bpage-clip{animation:b2-rise .9s cubic-bezier(.2,.7,.3,1) .15s forwards}
+@keyframes b2-rise{to{opacity:1;transform:none}}
+.anim-b2 .bp-heading{opacity:0;animation:b1-head .68s ease .6s forwards}
+.anim-b2 .bp-flow .v{opacity:0;animation:v-in .6s ease both}
+.anim-b2 .bp-flow .v:nth-of-type(1){animation-delay:.75s}
+.anim-b2 .bp-flow .v:nth-of-type(2){animation-delay:.86s}
+.anim-b2 .bp-flow .v:nth-of-type(3){animation-delay:.96s}
+.anim-b2 .bp-flow .v:nth-of-type(4){animation-delay:1.07s}
+.anim-b2 .bp-flow .v:nth-of-type(5){animation-delay:1.17s}
+.anim-b2 .v.drawn{animation:v-in .6s ease .75s both,sweep .83s ease-out 1.43s both}
+.anim-b2 .bpage::after{animation:b2-sweep 1.5s ease .75s forwards}
+@keyframes b2-sweep{0%{opacity:0;transform:translateX(0)}25%{opacity:1}100%{opacity:0;transform:translateX(340%)}}
+
+/* full sequence */
+.seq-stage{position:relative;background:#0b0f1c;border:1px solid rgba(232,196,101,.35);border-radius:12px;overflow:hidden;min-height:430px}
+.seq-1{padding:34px 20px 30px;text-align:center}
+.seq-1.hide{display:none}
+.seq-2{position:absolute;inset:0;padding:26px;display:none}
+.seq-2.show{display:block}
+.seq-title{color:var(--gold);font-weight:bold;margin:0 0 16px;font-size:15px}
+.seq-note{font-size:13px;color:var(--text-dim);margin-top:14px}
+.seq-flip{background:none;border:none;cursor:pointer;color:inherit;font-family:inherit;display:inline-flex;flex-direction:column;align-items:center;gap:12px}
+.seq-flip .scene3{justify-content:center;padding-right:0}
+.seq-flip-label{font-size:16px;font-weight:bold;color:var(--gold)}
+.seq-veil{position:absolute;inset:0;opacity:0;pointer-events:none;background:radial-gradient(circle at 50% 45%, rgba(246,218,138,.28), rgba(10,8,16,.92) 58%);transition:opacity .4s}
+.seq-veil.on{opacity:1}
+.seq-2 .replay{position:absolute;right:14px;bottom:12px}
+
+.replay{background:none;border:1px solid var(--panel-border);color:var(--text-dim);border-radius:8px;padding:6px 12px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.replay:hover{border-color:rgba(232,196,101,.5);color:var(--gold)}
+.stage3 .replay{position:absolute;right:10px;bottom:10px}
+
+/* trade-off table */
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px}
+.tbl th{color:var(--gold);text-align:left;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--panel-border);padding:8px 10px}
+.tbl td{border-bottom:1px solid rgba(42,48,80,.6);padding:9px 10px;vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .dim{color:var(--text-dim)}
+.tbl .star{color:var(--gold)}
+
+/* code mapping + risks */
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.twocol{grid-template-columns:1fr}}
+.plist{margin:0;padding-left:18px;font-size:13.5px}
+.plist li{margin:7px 0}
+.plist code{background:rgba(255,255,255,.06);border:1px solid var(--panel-border);border-radius:5px;padding:1px 6px;font-size:12px}
+.rlist{margin:0;padding:0;list-style:none;font-size:13.5px}
+.rlist li{margin:9px 0;padding-left:16px;position:relative}
+.rlist li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:rgba(232,196,101,.65)}
+.rlist b{color:var(--gold)}
+
+/* decisions */
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:720px){.qgrid{grid-template-columns:1fr}}
+.qform{background:var(--panel);border:1px solid var(--panel-border);border-radius:12px;padding:18px;margin:0}
+.qform.wide{grid-column:1/-1}
+.q-title{font-size:14px;font-weight:bold;color:var(--gold);margin-bottom:10px}
+.qn{display:inline-block;background:rgba(232,196,101,.12);border:1px solid rgba(232,196,101,.4);color:var(--gold);font-size:11px;border-radius:6px;padding:2px 7px;margin-right:8px;letter-spacing:1px}
+.q-opt{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;padding:7px 9px;border-radius:8px;cursor:pointer}
+.q-opt:hover{background:rgba(255,255,255,.04)}
+.q-opt input{margin-top:3px;accent-color:var(--gold)}
+.q-opt em{color:var(--text-dim);font-style:normal;font-size:12px}
+.q-actions{margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.q-submit{background:var(--gold);color:#221a08;border:none;font-weight:bold;font-size:13px;padding:8px 18px;border-radius:18px;cursor:pointer;font-family:inherit}
+.q-submit:hover{box-shadow:0 4px 14px rgba(232,196,101,.35)}
+.q-status{font-size:12px;color:var(--text-dim)}
+.q-status.ok{color:#9fd49f}
+textarea{width:100%;min-height:70px;background:#0b0f1c;border:1px solid var(--panel-border);border-radius:8px;color:var(--text);padding:10px;font-family:inherit;font-size:13.5px;resize:vertical}
+textarea:focus{outline:1px solid rgba(232,196,101,.5)}
+
+footer{color:var(--text-dim);font-size:12px;text-align:center;margin-top:34px;line-height:1.7}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01s !important;animation-delay:0s !important;transition-duration:.01s !important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>How should the Bible open?</h1>
+  <p class="sub">Design preview for the inspire Bible-mode reveal flow · moment A (click) + moment B (arrival)</p>
+</header>
+
+<div class="howto">
+  <strong>How to review:</strong> every demo auto-plays when it scrolls into view — hit <strong>↻ Replay</strong> anytime.
+  Pick your treatments in the <strong>Decisions</strong> section at the bottom and press <strong>Queue this answer</strong>,
+  then use <strong>Send to Agent</strong> in the Lavish toolbar. Free-form annotations on anything are welcome too.
+</div>
+
+<section class="panel intro">
+  <div class="ig"><span class="ig-k">Goal</span><p>Make the Bible visibly <em>open</em> — today the most important visual beat in Bible mode doesn't exist.</p></div>
+  <div class="ig"><span class="ig-k">Today</span><p>A static closed-book button submits instantly; a "please wait…" label covers the server round-trip; the finished reading page just appears after reload.</p></div>
+  <div class="ig"><span class="ig-k">Direction (C)</span><p><strong>Both ends.</strong> The book opens at the click (Moment A) while verses are drawn, and the reading page arrives by opening (Moment B).</p></div>
+</section>
+
+<div class="flowcmp">
+  <div class="fbox">
+    <h4>Current flow</h4>
+    <div class="fsteps">
+      <span class="fstep">closed book (static)</span><span class="farrow">→</span>
+      <span class="fstep">click, instant submit</span><span class="farrow">→</span>
+      <span class="fstep">"please wait…" text</span><span class="farrow">→</span>
+      <span class="fstep">page reload</span><span class="farrow">→</span>
+      <span class="fstep">finished page</span>
+    </div>
+  </div>
+  <div class="fbox proposed">
+    <h4>Proposed flow</h4>
+    <div class="fsteps">
+      <span class="fstep">closed book (static)</span><span class="farrow">→</span>
+      <span class="fstep hot">A · book opens at the click</span><span class="farrow">→</span>
+      <span class="fstep">server draws verses (hidden)</span><span class="farrow">→</span>
+      <span class="fstep hot">B · reading page opens on arrival</span><span class="farrow">→</span>
+      <span class="fstep">reading</span>
+    </div>
+  </div>
+</div>
+
+<h2 class="sec">Moment A — the click</h2>
+<p class="sec-sub">What happens in the half-second after "Flip open the Bible" is pressed, while the server draws the verses. Three treatments.</p>
+<div class="opts">
+
+  <article class="opt-card">
+    <div class="opt-head"><h3>A1 · Cover Swing</h3><span class="badge">fastest</span></div>
+    <p class="opt-desc">The front cover swings around the spine in real 3D, gold light spills from the seam, and the first page brightens underneath. One clean tactile beat — reads as "you opened it", not as a special effect.</p>
+    <div class="spec-row"><span class="badge">~1.8s</span><span class="badge">CSS keyframes only</span><span class="badge">low risk</span></div>
+    <div class="stage3">
+      <div class="scene3" data-anim="a1" id="sc-a1">
+        <div class="book">
+          <div class="book-shadow"></div>
+          <div class="glow"></div>
+          <div class="pageblock">
+            <div class="page-face">
+              <span class="pf-cross">✦</span>
+              <span class="pf-line" style="width:74%"></span>
+              <span class="pf-line" style="width:86%"></span>
+              <span class="pf-line" style="width:52%"></span>
+            </div>
+          </div>
+          <div class="cover">
+            <div class="cface cover-front"><span class="cover-cross">✝</span></div>
+            <div class="cface cover-back"></div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="replay" data-target="sc-a1">↻ Replay</button>
+    </div>
+  </article>
+
+  <article class="opt-card">
+    <div class="opt-head"><h3>A2 · Seam of Light</h3><span class="badge">mystical</span></div>
+    <p class="opt-desc">The closed book floats up as light seeps from the page seam, blooms, then the cover swings open slowly. The most "divine" option — it trades speed for atmosphere.</p>
+    <div class="spec-row"><span class="badge">~2.7s</span><span class="badge">CSS only</span><span class="badge">glow-heavy on low-end phones</span></div>
+    <div class="stage3">
+      <div class="scene3" data-anim="a2" id="sc-a2">
+        <div class="book">
+          <div class="book-shadow"></div>
+          <div class="glow"></div>
+          <div class="pageblock">
+            <div class="page-face">
+              <span class="pf-cross">✦</span>
+              <span class="pf-line" style="width:74%"></span>
+              <span class="pf-line" style="width:86%"></span>
+              <span class="pf-line" style="width:52%"></span>
+            </div>
+          </div>
+          <div class="seam"></div>
+          <span class="spark s1">✦</span>
+          <span class="spark s2">✦</span>
+          <div class="cover">
+            <div class="cface cover-front"><span class="cover-cross">✝</span></div>
+            <div class="cface cover-back"></div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="replay" data-target="sc-a2">↻ Replay</button>
+    </div>
+  </article>
+
+  <article class="opt-card recommended">
+    <div class="opt-head"><h3>A3 · Page Cascade</h3><span class="badge rec">✓ Chosen</span> <span class="badge">ritual</span></div>
+    <p class="opt-desc">The cover opens fast, then three pages turn in a cascade before settling on the spread. The most literal "opening a real Bible" ritual — and the longest hold before navigation.</p>
+    <div class="spec-row"><span class="badge">~2.9s</span><span class="badge">most keyframes</span><span class="badge">submit lands mid-ritual by design</span></div>
+    <div class="stage3">
+      <div class="scene3" data-anim="a3" id="sc-a3">
+        <div class="book">
+          <div class="book-shadow"></div>
+          <div class="glow"></div>
+          <div class="pageblock">
+            <div class="page-face">
+              <span class="pf-cross">✦</span>
+              <span class="pf-line" style="width:74%"></span>
+              <span class="pf-line" style="width:52%"></span>
+            </div>
+            <div class="leaf l1"><div class="leaf-rot">
+              <div class="lface front"><span class="pf-line" style="width:80%"></span><span class="pf-line" style="width:60%"></span></div>
+              <div class="lface back"></div>
+            </div></div>
+            <div class="leaf l2"><div class="leaf-rot">
+              <div class="lface front"><span class="pf-line" style="width:70%"></span><span class="pf-line" style="width:84%"></span></div>
+              <div class="lface back"></div>
+            </div></div>
+            <div class="leaf l3"><div class="leaf-rot">
+              <div class="lface front"><span class="pf-line" style="width:88%"></span><span class="pf-line" style="width:56%"></span></div>
+              <div class="lface back"></div>
+            </div></div>
+          </div>
+          <div class="cover">
+            <div class="cface cover-front"><span class="cover-cross">✝</span></div>
+            <div class="cface cover-back"></div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="replay" data-target="sc-a3">↻ Replay</button>
+    </div>
+  </article>
+
+</div>
+
+<h2 class="sec">Moment B — the arrival</h2>
+<p class="sec-sub">How the cream reading page (the pending view you already have — only the entrance is new) reveals itself on load. Two treatments.</p>
+<div class="opts">
+
+  <article class="opt-card wide recommended">
+    <div class="opt-head"><h3>B1 · Spread Open</h3><span class="badge rec">✓ Chosen</span></div>
+    <p class="opt-desc">The closed book opens and dissolves into the reading page: the spread widens from the spine, the chapter heading drops in, verses fade up line by line, and the drawn verse gets a gold highlight sweep. The book literally becomes the page you read.</p>
+    <div class="spec-row"><span class="badge">~2.7s</span><span class="badge">clip-path unfold + stagger</span><span class="badge">low-medium cost</span></div>
+    <div class="stage-b">
+      <div class="scene-b" data-anim="b1" id="sc-b1">
+        <div class="bbook">
+          <div class="bcover">
+            <div class="cface cover-front"><span class="cover-cross">✝</span></div>
+            <div class="cface cover-back"></div>
+          </div>
+        </div>
+        <div class="bpage-wrap">
+          <div class="bpage-clip" data-bible-clone></div>
+        </div>
+      </div>
+      <button type="button" class="replay" data-target="sc-b1">↻ Replay</button>
+    </div>
+  </article>
+
+  <article class="opt-card wide">
+    <div class="opt-head"><h3>B2 · Page Rise</h3><span class="badge">quietest</span></div>
+    <p class="opt-desc">No book metaphor — the reading page simply rises into place with a soft gold light sweep and the same staggered text. The fastest and most conservative option; ages well and never blocks reading.</p>
+    <div class="spec-row"><span class="badge">~1.8s</span><span class="badge">simplest</span><span class="badge">very low cost</span></div>
+    <div class="stage-b">
+      <div class="scene-b scene-b2" data-anim="b2" id="sc-b2">
+        <div class="bpage-wrap">
+          <div class="bpage-clip" data-bible-clone></div>
+        </div>
+      </div>
+      <button type="button" class="replay" data-target="sc-b2">↻ Replay</button>
+    </div>
+  </article>
+
+</div>
+
+<h2 class="sec">The full sequence (C)</h2>
+<p class="sec-sub">One continuous narrative with your picks — A3 Page Cascade → golden veil → B1 Spread Open. Click the book below to play it end to end.</p>
+<div class="seq-stage" id="seq-stage">
+  <div class="seq-1" id="seq-1">
+    <p class="seq-title">Flip open the Bible to receive your verses</p>
+    <button type="button" class="seq-flip" id="seq-play">
+      <span class="scene3" data-anim="a3" id="sc-seq-a">
+        <span class="book" style="display:inline-block">
+          <span class="book-shadow"></span>
+          <span class="glow"></span>
+          <span class="pageblock">
+            <span class="page-face">
+              <span class="pf-cross">✦</span>
+              <span class="pf-line" style="width:74%"></span>
+              <span class="pf-line" style="width:86%"></span>
+              <span class="pf-line" style="width:52%"></span>
+            </span>
+            <span class="leaf l1"><span class="leaf-rot">
+              <span class="lface front"><span class="pf-line" style="width:80%"></span><span class="pf-line" style="width:60%"></span></span>
+              <span class="lface back"></span>
+            </span></span>
+            <span class="leaf l2"><span class="leaf-rot">
+              <span class="lface front"><span class="pf-line" style="width:70%"></span><span class="pf-line" style="width:84%"></span></span>
+              <span class="lface back"></span>
+            </span></span>
+            <span class="leaf l3"><span class="leaf-rot">
+              <span class="lface front"><span class="pf-line" style="width:88%"></span><span class="pf-line" style="width:56%"></span></span>
+              <span class="lface back"></span>
+            </span></span>
+          </span>
+          <span class="cover">
+            <span class="cface cover-front"><span class="cover-cross">✝</span></span>
+            <span class="cface cover-back"></span>
+          </span>
+        </span>
+      </span>
+      <span class="seq-flip-label">Flip open the Bible</span>
+    </button>
+    <p class="seq-note">Verses are free to reveal — register to read the reflection for your question</p>
+  </div>
+  <div class="seq-2" id="seq-2">
+    <div class="scene-b" data-anim="b1" id="sc-seq-b">
+      <div class="bbook">
+        <div class="bcover">
+          <div class="cface cover-front"><span class="cover-cross">✝</span></div>
+          <div class="cface cover-back"></div>
+        </div>
+      </div>
+      <div class="bpage-wrap">
+        <div class="bpage-clip" data-bible-clone></div>
+      </div>
+    </div>
+    <button type="button" class="replay" data-target="sc-seq-b">↻ Replay page</button>
+  </div>
+  <div class="seq-veil" id="seq-veil"></div>
+</div>
+<p class="caption">In the real app this hand-off happens across a page navigation; the veil is one way to stitch it. A plain jump-cut is the alternative (open question below).</p>
+
+<h2 class="sec">Trade-offs at a glance</h2>
+<div class="panel tblwrap">
+  <table class="tbl">
+    <thead><tr><th>Treatment</th><th>The beat you feel</th><th>Duration</th><th>Mobile cost</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>A1 Cover Swing</td><td class="dim">cover swings, light spills, page brightens</td><td>~1.8s</td><td class="dim">low</td><td class="dim">fastest option; one clean beat; great reduced-motion companion</td></tr>
+      <tr><td>A2 Seam of Light</td><td class="dim">float + bloom + slow swing</td><td>~2.7s</td><td class="dim">medium</td><td class="dim">most "divine"; adds the most wait; heaviest glow layers</td></tr>
+      <tr><td><span class="star">★</span> A3 Page Cascade <span class="badge rec">Chosen</span></td><td class="dim">cover + 3 turning pages</td><td>~2.9s</td><td class="dim">medium</td><td class="dim">most literal ritual; submit lands mid-ritual by design</td></tr>
+      <tr><td><span class="star">★</span> B1 Spread Open <span class="badge rec">Chosen</span></td><td class="dim">book becomes the reading page</td><td>~2.7s</td><td class="dim">low-medium</td><td class="dim">clip-path unfold + staggered text + highlight sweep</td></tr>
+      <tr><td>B2 Page Rise</td><td class="dim">page rises + gold sweep</td><td>~1.8s</td><td class="dim">very low</td><td class="dim">no book metaphor; best reduced-motion companion</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 class="sec">How it maps to the code</h2>
+<div class="twocol">
+  <div class="panel">
+    <ul class="plist">
+      <li><b>Moment A</b> → <code>index.astro</code> <code>#bible-flip-btn</code> / <code>.bible-flip-panel</code>: replace the static <code>.bible-flip-book</code> span with the 3D scene. On click, play the page cascade and submit ~1.8s later (as the second page lands) — with cinematic pacing the full ritual runs ~2.9s, so the veil and arrival unfold carry the tail. Existing zh/en labels unchanged.</li>
+      <li><b>Moment B</b> → <code>.bible-page</code> (pending + result views): add an arrival class on render; keyframes live in <code>global.css</code>. Interpret bar and reveal-gate UI untouched.</li>
+      <li><b>Reduced motion</b> → the same <code>prefers-reduced-motion</code> path swaps everything for a 200ms cross-fade.</li>
+    </ul>
+  </div>
+  <div class="panel">
+    <ul class="plist">
+      <li><b>No dependencies</b> — all effects are CSS keyframes plus ~40 lines of JS to trigger, reset and sequence them. No libraries, no images.</li>
+      <li><b>Latency masking</b> — A plays while the server draws; the "please wait…" label disappears because the animation <em>is</em> the wait.</li>
+      <li><b>Freemium flow intact</b> — anonymous visitors still see the verses free; the registration gate on 解经/reveal is untouched.</li>
+    </ul>
+  </div>
+</div>
+
+<h2 class="sec">Decisions</h2>
+<p class="sec-sub">Captured 2026-08-31: A3 + B1 + Cinematic + Light veil (pre-checked below). Change any answer and re-queue — then Send to Agent in the toolbar.</p>
+<div class="qgrid">
+
+  <form class="qform" data-lavish-question="moment-a">
+    <div class="q-title"><span class="qn">Q1</span>Moment A — click-to-open treatment</div>
+    <label class="q-opt"><input type="radio" name="moment-a" value="A1 Cover Swing"><span><strong>A1 Cover Swing</strong> — 3D swing + light spill, ~1.8s</span></label>
+    <label class="q-opt"><input type="radio" name="moment-a" value="A2 Seam of Light"><span><strong>A2 Seam of Light</strong> — glow-first mystical bloom, ~2.7s</span></label>
+    <label class="q-opt"><input type="radio" name="moment-a" value="A3 Page Cascade" checked><span><strong>A3 Page Cascade</strong> — cover + turning pages, ~2.9s <em>(✓ chosen)</em></span></label>
+    <div class="q-actions"><button type="submit" class="q-submit">Queue this answer</button><span class="q-status" aria-live="polite"></span></div>
+  </form>
+
+  <form class="qform" data-lavish-question="moment-b">
+    <div class="q-title"><span class="qn">Q2</span>Moment B — arrival treatment</div>
+    <label class="q-opt"><input type="radio" name="moment-b" value="B1 Spread Open" checked><span><strong>B1 Spread Open</strong> — book dissolves into the page, ~2.7s <em>(✓ chosen)</em></span></label>
+    <label class="q-opt"><input type="radio" name="moment-b" value="B2 Page Rise"><span><strong>B2 Page Rise</strong> — quiet rise + gold sweep, ~1.8s</span></label>
+    <div class="q-actions"><button type="submit" class="q-submit">Queue this answer</button><span class="q-status" aria-live="polite"></span></div>
+  </form>
+
+  <form class="qform" data-lavish-question="pacing">
+    <div class="q-title"><span class="qn">Q3</span>Overall pacing</div>
+    <label class="q-opt"><input type="radio" name="pacing" value="Snappy (trim each moment to ≤1s)"><span><strong>Snappy</strong> — trim each moment to ≤1s</span></label>
+    <label class="q-opt"><input type="radio" name="pacing" value="Standard (as previewed, 1.2–1.8s)"><span><strong>Standard</strong> — as previewed, 1.2–1.8s</span></label>
+    <label class="q-opt"><input type="radio" name="pacing" value="Cinematic (slow everything ~1.5x)" checked><span><strong>Cinematic</strong> — slow everything ~1.5× <em>(✓ chosen)</em></span></label>
+    <div class="q-actions"><button type="submit" class="q-submit">Queue this answer</button><span class="q-status" aria-live="polite"></span></div>
+  </form>
+
+  <form class="qform" data-lavish-question="handoff">
+    <div class="q-title"><span class="qn">Q4</span>A → B hand-off style</div>
+    <label class="q-opt"><input type="radio" name="handoff" value="Light veil between the two moments" checked><span><strong>Light veil</strong> — a soft golden fade stitches click to arrival <em>(✓ chosen)</em></span></label>
+    <label class="q-opt"><input type="radio" name="handoff" value="Plain jump-cut (page just navigates)"><span><strong>Plain jump-cut</strong> — the page just navigates, no veil</span></label>
+    <div class="q-actions"><button type="submit" class="q-submit">Queue this answer</button><span class="q-status" aria-live="polite"></span></div>
+  </form>
+
+  <form class="qform wide" data-lavish-question="notes">
+    <div class="q-title"><span class="qn">Q5</span>Anything else — glow intensity, hold-submit timing, replay guards, typography…</div>
+    <textarea name="notes" placeholder="Optional — e.g. 'less glow on A1', 'skip arrival animation on repeat visits', 'use the veil only on slow connections'…"></textarea>
+    <div class="q-actions"><button type="submit" class="q-submit">Queue this note</button><span class="q-status" aria-live="polite"></span></div>
+  </form>
+
+</div>
+
+<h2 class="sec">Risks &amp; open questions</h2>
+<div class="panel">
+  <ul class="rlist">
+    <li><b>Navigation cut.</b> The form POST navigates as soon as the server answers (~0.2–0.6s). With the chosen A3 cascade at cinematic pacing, submit ~1.8s in (as the second page lands) — the veil and arrival unfold carry the rest of the ritual on the next page.</li>
+    <li><b>Glow performance.</b> All glows animate opacity only — never <code>filter: blur()</code>. A2 is the most expensive; if low-end phones struggle, A1 degrades gracefully.</li>
+    <li><b>Repeat replays.</b> The arrival animation fires on every page load, including back/refresh. A once-per-session guard (sessionStorage) is cheap if it ever feels repetitive — see Q5.</li>
+    <li><b>Old Android WebView.</b> 3D transforms degrade to the reduced-motion fade path — acceptable.</li>
+    <li><b>Open:</b> should Moment A also apply to registered users? Recommended yes — it's the same button flow for everyone.</li>
+  </ul>
+</div>
+
+<footer>
+  Rendered with the inspire app's own design system — tokens and surfaces from <code>src/styles/global.css</code>
+  (--bg/--panel/--gold, the .bible-flip-book cover gradient, the .bible-page cream paper), not a generic framework.<br>
+  Preview artifact · generated 2026-08-31 · open directly in any browser if Lavish isn't connected.
+</footer>
+
+</div>
+
+<template id="bible-tpl">
+  <div class="bpage">
+    <h3 class="bp-heading">Psalm 23 <span class="bp-alt">The Book of Psalms · Chapter 23</span></h3>
+    <p class="bp-flow"><span class="v drawn"><sup class="vn">1</sup>The LORD is my shepherd; I shall not want.<span class="ptag">Past</span></span> <span class="v"><sup class="vn">2</sup>He maketh me to lie down in green pastures: he leadeth me beside the still waters.</span> <span class="v"><sup class="vn">3</sup>He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake.</span> <span class="v"><sup class="vn">4</sup>Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.</span> <span class="v ellip">· · ·</span></p>
+  </div>
+</template>
+
+<script>
+(function(){
+  /* clone the bible page into the three B-scene slots */
+  var tpl = document.getElementById('bible-tpl');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-bible-clone]'), function(box){
+    box.appendChild(tpl.content.cloneNode(true));
+  });
+
+  function playScene(el){
+    if(!el) return;
+    var name = el.getAttribute('data-anim');
+    el.classList.remove('anim-' + name);
+    void el.offsetWidth; /* reflow so the animation restarts */
+    el.classList.add('anim-' + name);
+  }
+
+  /* auto-play once when a scene scrolls into view */
+  var scenes = document.querySelectorAll('[data-anim]');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ playScene(en.target); io.unobserve(en.target); }
+      });
+    }, {threshold:.3});
+    Array.prototype.forEach.call(scenes, function(s){ io.observe(s); });
+  } else {
+    Array.prototype.forEach.call(scenes, playScene);
+  }
+
+  /* replay buttons */
+  Array.prototype.forEach.call(document.querySelectorAll('[data-target]'), function(btn){
+    btn.addEventListener('click', function(){
+      playScene(document.getElementById(btn.getAttribute('data-target')));
+    });
+  });
+
+  /* full sequence: A3 -> veil -> B1 */
+  var seq = document.getElementById('seq-stage');
+  var seqBtn = document.getElementById('seq-play');
+  var running = false;
+  function runSeq(){
+    if(running) return;
+    running = true;
+    if(seqBtn) seqBtn.disabled = true;
+    var a = document.getElementById('sc-seq-a');
+    var b = document.getElementById('sc-seq-b');
+    var veil = document.getElementById('seq-veil');
+    var one = document.getElementById('seq-1');
+    var two = document.getElementById('seq-2');
+    a.classList.remove('anim-a3');
+    b.classList.remove('anim-b1');
+    veil.classList.remove('on');
+    two.classList.remove('show');
+    one.classList.remove('hide');
+    void seq.offsetWidth;
+    a.classList.add('anim-a3');
+    setTimeout(function(){ veil.classList.add('on'); }, 2600);
+    setTimeout(function(){
+      one.classList.add('hide');
+      two.classList.add('show');
+      veil.classList.remove('on');
+    }, 3200);
+    setTimeout(function(){ playScene(b); }, 3300);
+    setTimeout(function(){ running = false; if(seqBtn) seqBtn.disabled = false; }, 6800);
+  }
+  if(seqBtn) seqBtn.addEventListener('click', runSeq);
+
+  /* decision forms: queue exactly one prompt per submit */
+  var QTEXT = {
+    'moment-a': 'for Moment A (click-to-open), use treatment',
+    'moment-b': 'for Moment B (arrival on the reading page), use treatment',
+    'pacing':   'overall pacing should be',
+    'handoff':  'for the A-to-B hand-off, use',
+    'notes':    'extra notes'
+  };
+  Array.prototype.forEach.call(document.querySelectorAll('form[data-lavish-question]'), function(f){
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      var q = f.getAttribute('data-lavish-question');
+      var st = f.querySelector('.q-status');
+      var val;
+      if(q === 'notes'){
+        val = (f.querySelector('textarea').value || '').trim();
+        if(!val){ st.textContent = 'Nothing written yet.'; st.classList.remove('ok'); return; }
+      } else {
+        val = (new FormData(f)).get(q);
+        if(!val){ st.textContent = 'Pick an option first.'; st.classList.remove('ok'); return; }
+      }
+      var prompt = 'Bible opening preview — ' + QTEXT[q] + ': ' + val;
+      if(window.lavish && typeof window.lavish.queuePrompt === 'function'){
+        window.lavish.queuePrompt(prompt, {
+          tag: 'choice',
+          text: prompt,
+          element: f,
+          data: { question: q, answer: val }
+        });
+        st.textContent = '✓ Queued — press "Send to Agent" in the Lavish toolbar.';
+      } else {
+        st.textContent = '✓ Selected: ' + val + ' (Lavish not connected — tell me in chat)';
+      }
+      st.classList.add('ok');
+    });
+  });
+})();
+</script>
+</body>
+</html>

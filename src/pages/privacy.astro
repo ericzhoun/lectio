@@ -1,0 +1,141 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { resolveLang } from '../lib/i18n';
+
+const lang = resolveLang(Astro);
+
+const t = {
+  title: lang === 'zh' ? '隐私政策' : 'Privacy Policy',
+  updated: lang === 'zh' ? '最后更新：2026 年 8 月 27 日' : 'Last updated: August 27, 2026',
+  intro: lang === 'zh'
+    ? 'Inspire（以下简称"本应用"）是一款 AI 辅助塔罗解读网络应用。我们重视你的隐私。本政策说明我们收集哪些信息、如何使用与保护这些信息，以及你享有的权利。使用本应用即表示你同意本政策。'
+    : 'Inspire ("the App") is an AI-assisted tarot reading web application. We respect your privacy. This policy explains what information we collect, how we use and protect it, and the rights you have. By using the App you agree to this policy.',
+  s1: lang === 'zh' ? '1. 我们收集的信息' : '1. Information We Collect',
+  s1items: lang === 'zh'
+    ? [
+        '账号信息（通过 Google 登录）：Google 用户 ID、昵称、邮箱地址、头像 URL。我们只请求基础的 openid、email、profile 权限范围，不会读取你的 Google 邮件、通讯录、文件或其他 Google 服务数据。',
+        '邮箱密码账号信息：如果你使用邮箱注册，我们会存储邮箱地址和经加盐哈希处理的密码（明文密码不可恢复）。',
+        '占卜内容：你提交的问题、抽到的牌面、AI 生成的解读文本，以及记录时间。这些内容关联你的账号，用于"历史记录"功能。',
+        '使用数据：每日抽牌次数（用于免费/付费额度控制）。',
+        '技术信息：请求 IP 地址（用于记录占卜来源与安全防护）。',
+        '订阅信息：如你购买订阅，支付由 Stripe 处理；我们仅保存套餐类型、订阅状态与 Stripe 客户/订阅标识，不保存完整支付卡号。',
+      ]
+    : [
+        'Account information (via Google Sign-In): your Google user ID, display name, email address, and profile picture URL. We only request the basic openid, email, and profile scopes — we never read your Gmail, contacts, files, or any other Google service data.',
+        'Email & password accounts: if you register with email, we store your email address and a salted, irreversible hash of your password (plain passwords cannot be recovered).',
+        'Reading content: the question you submit, the cards drawn, the AI-generated interpretation text, and the timestamp. This is associated with your account to power the reading history feature.',
+        'Usage data: your daily number of readings, used to enforce free/paid quotas.',
+        'Technical information: your IP address, recorded with readings for provenance and security.',
+        'Subscription data: payments are processed by Stripe; we store only the plan tier, subscription status, and Stripe customer/subscription identifiers. We never store full card numbers.',
+      ],
+  s2: lang === 'zh' ? '2. 我们如何使用信息' : '2. How We Use Information',
+  s2items: lang === 'zh'
+    ? [
+        '创建和验证你的账号，让你能够登录并保持登录状态；',
+        '提供塔罗解读服务并保存你的解读历史；',
+        '执行免费/付费额度与牌阵权限控制；',
+        '处理订阅与付款；',
+        '保障服务安全、防止滥用；',
+        '我们不会出售你的个人信息，也不会将其用于广告投放。',
+      ]
+    : [
+        'To create and verify your account and keep you signed in;',
+        'To provide tarot readings and save your reading history;',
+        'To enforce free/paid quotas and spread permissions;',
+        'To process subscriptions and payments;',
+        'To keep the service secure and prevent abuse;',
+        'We do not sell your personal information and do not use it for advertising.',
+      ],
+  s3: lang === 'zh' ? '3. AI 解读的处理' : '3. AI Processing of Reading Content',
+  s3body: lang === 'zh'
+    ? '为生成解读，你提交的问题与抽到的牌面会通过 OpenAI 的 API 发送给 OpenAI 进行文本生成。OpenAI 会按照其自身隐私政策处理这些请求内容；建议不要在问题中填写你不希望被处理的敏感个人信息。'
+    : 'To generate interpretations, the question you submit and the cards drawn are sent to OpenAI via its API for text generation. OpenAI processes that request content under its own privacy policy. Please avoid including sensitive personal information in your question that you would not want processed.',
+  s4: lang === 'zh' ? '4. 第三方服务' : '4. Third-Party Services',
+  s4rows: [
+    { name: 'Google', zh: '账号登录（OAuth 2.0，仅基础 openid/email/profile 权限）', en: 'Sign-in (OAuth 2.0, basic openid/email/profile scopes only)' },
+    { name: 'OpenAI', zh: '解读文本生成', en: 'Interpretation text generation' },
+    { name: 'Stripe', zh: '订阅与支付处理', en: 'Subscription & payment processing' },
+    { name: 'Cloudflare', zh: '应用托管、数据库（D1）与缓存（KV）', en: 'App hosting, database (D1) and cache (KV)' },
+  ],
+  s5: lang === 'zh' ? '5. Cookie' : '5. Cookies',
+  s5body: lang === 'zh'
+    ? '我们仅使用必要的 Cookie：登录会话 Cookie（保持登录状态，约 30 天）、语言偏好 Cookie（记住你选择的界面语言，约 1 年）、OAuth 登录过程中的一次性 state 语言 Cookie（10 分钟内自动失效），以及一个匿名客户端标识（用于未登录用户的额度控制）。我们不使用广告或追踪 Cookie。'
+    : 'We only use essential cookies: a sign-in session cookie (keeps you logged in, ~30 days), a language-preference cookie (remembers your chosen display language, ~1 year), one-time OAuth state/language cookies (expire within 10 minutes), and an anonymous client identifier (quota control for signed-out users). We do not use advertising or tracking cookies.',
+  s6: lang === 'zh' ? '6. 数据保留与删除' : '6. Data Retention & Deletion',
+  s6body: lang === 'zh'
+    ? '账号与解读记录会一直保留，直到你请求删除。你可以发送邮件至下方联系邮箱申请删除账号；我们将在 30 天内删除你的账号、解读记录与使用数据（法律要求保留的记录除外）。你也可以在 Google 账号安全设置中随时撤回对本应用的授权。'
+    : 'Account and reading records are retained until you request deletion. Email the contact address below to request account deletion; we will delete your account, readings, and usage data within 30 days (except records we must keep by law). You can also revoke this App\'s access at any time from your Google Account security settings.',
+  s7: lang === 'zh' ? '7. 数据安全' : '7. Data Security',
+  s7body: lang === 'zh'
+    ? '数据托管于 Cloudflare 基础设施；密码使用加盐 PBKDF2 哈希存储，绝不以明文保存；传输全程使用 HTTPS；凭据与密钥仅通过环境变量/密钥管理加载，不写入代码仓库。'
+    : 'Data is hosted on Cloudflare infrastructure; passwords are stored as salted PBKDF2 hashes, never in plain text; all traffic uses HTTPS; credentials and secrets are loaded only from environment variables / secret management and are never committed to the repository.',
+  s8: lang === 'zh' ? '8. 你的权利' : '8. Your Rights',
+  s8body: lang === 'zh'
+    ? '你可以访问、更正、导出或删除与你的账号相关的个人信息，也可以撤回 Google 授权或注销账号。如需行使上述权利，请通过联系邮箱与我们联系，我们将在合理期限内响应。'
+    : 'You may access, correct, export, or delete the personal information associated with your account, revoke Google authorization, or close your account. To exercise these rights, contact us via the email below and we will respond within a reasonable period.',
+  s9: lang === 'zh' ? '9. 儿童隐私' : '9. Children\'s Privacy',
+  s9body: lang === 'zh'
+    ? '本应用不面向 13 岁以下儿童，也不会有意收集其个人信息。如发现此类信息被收集，我们将及时删除。'
+    : 'The App is not directed to children under 13 and we do not knowingly collect their personal information. If we learn such information has been collected, we will delete it promptly.',
+  s10: lang === 'zh' ? '10. 政策变更' : '10. Changes to This Policy',
+  s10body: lang === 'zh'
+    ? '政策如有重大变更，我们会在本页面更新并修改"最后更新"日期。继续使用本应用即视为接受更新后的政策。'
+    : 'If we make material changes, we will update this page and the "Last updated" date. Continued use of the App after changes means you accept the updated policy.',
+  contactTitle: lang === 'zh' ? '11. 联系我们' : '11. Contact Us',
+  contactBody: lang === 'zh'
+    ? '如对本隐私政策有任何问题、请求或投诉，请联系：'
+    : 'For any questions, requests, or complaints about this privacy policy, contact:',
+};
+---
+<Layout title={t.title} lang={lang}>
+  <div class="policy-page">
+    <div class="policy-head">
+      <img src="/logo.webp" alt="Inspire" class="site-logo" width="1024" height="1024" />
+      <h1>{t.title}</h1>
+      <p class="policy-updated">{t.updated}</p>
+    </div>
+
+    <p class="policy-intro">{t.intro}</p>
+
+    <section class="policy-section">
+      <h2>{t.s1}</h2>
+      <ul>{t.s1items.map((item) => <li>{item}</li>)}</ul>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s2}</h2>
+      <ul>{t.s2items.map((item) => <li>{item}</li>)}</ul>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s3}</h2>
+      <p>{t.s3body}</p>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s4}</h2>
+      <table class="policy-table">
+        <tr><th>{lang === 'zh' ? '服务方' : 'Provider'}</th><th>{lang === 'zh' ? '用途' : 'Purpose'}</th></tr>
+        {t.s4rows.map((row) => (
+          <tr><td>{row.name}</td><td>{lang === 'zh' ? row.zh : row.en}</td></tr>
+        ))}
+      </table>
+    </section>
+
+    <section class="policy-section"><h2>{t.s5}</h2><p>{t.s5body}</p></section>
+    <section class="policy-section"><h2>{t.s6}</h2><p>{t.s6body}</p></section>
+    <section class="policy-section"><h2>{t.s7}</h2><p>{t.s7body}</p></section>
+    <section class="policy-section"><h2>{t.s8}</h2><p>{t.s8body}</p></section>
+    <section class="policy-section"><h2>{t.s9}</h2><p>{t.s9body}</p></section>
+    <section class="policy-section"><h2>{t.s10}</h2><p>{t.s10body}</p></section>
+
+    <section class="policy-section">
+      <h2>{t.contactTitle}</h2>
+      <p>
+        {t.contactBody}
+        <a href="mailto:joechenst@gmail.com">joechenst@gmail.com</a>
+      </p>
+    </section>
+  </div>
+</Layout>

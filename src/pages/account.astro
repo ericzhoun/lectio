@@ -1,0 +1,179 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { env } from 'cloudflare:workers';
+import { verifySessionToken } from '../lib/session';
+import { resolveTier, QUOTA } from '../lib/entitlements';
+import { getSubscription } from '../lib/subscriptions';
+import { getCreditBalance } from '../lib/credits';
+import { getTodayUsage } from '../lib/usage';
+import { getUserById } from '../lib/users';
+import { getReadingCtaState } from '../lib/cta';
+import { resolveLang } from '../lib/i18n';
+
+const url = Astro.url;
+const lang = resolveLang(Astro);
+
+const sessionCookie = Astro.cookies.get('session')?.value;
+const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
+if (!userId) return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`);
+
+const user = await getUserById(userId);
+const isGoogleUser = Boolean(user?.googleId);
+const tier = await resolveTier(userId);
+const sub = tier !== 'free' ? await getSubscription(userId) : null;
+const usedToday = await getTodayUsage(userId);
+const quota = QUOTA[tier];
+const creditBalance = tier === 'free' ? await getCreditBalance(userId) : null;
+const welcome = url.searchParams.get('welcome') === '1';
+const cta = getReadingCtaState({ tier, usedToday, quota, creditBalance });
+
+const fmtDate = (iso: string | null | undefined): string => {
+  if (!iso) return '—';
+  const d = new Date(iso.includes('T') ? iso : iso.replace(' ', 'T') + 'Z');
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' });
+};
+---
+<Layout title={lang === 'zh' ? '账户 — Inspiration Tarot' : 'Account — Inspiration Tarot'} noindex lang={lang}>
+  {welcome && (
+    <div class="auth-welcome">
+      <p role="status">
+        {lang === 'zh'
+          ? '🎉 注册成功！每日单张解读已升至 6 次，三张牌阵 ×3、凯尔特十字 ×1 体验额度已到账'
+          : '🎉 Account created! Daily single draws are now 6/day, and your trial credits (3-card ×3, Celtic Cross ×1) are ready.'}
+      </p>
+      <a class="reading-cta-button" href={`/?lang=${lang}`}>
+        {lang === 'zh' ? '开始第一次解读' : 'Start your first reading'}
+      </a>
+    </div>
+  )}
+
+  <section class="reading-cta">
+    <h2 class="reading-cta-title">
+      {lang === 'zh' ? '准备好今天的解读了吗？' : "Ready for today's reading?"}
+    </h2>
+    {cta.exhausted ? (
+      <>
+        <p class="reading-cta-status">
+          {lang === 'zh'
+            ? '今日次数已用完 — 订阅后可继续解读'
+            : "You've used today's draws — subscribe to keep going"}
+        </p>
+        <a class="reading-cta-button" href={`/pricing?lang=${lang}`}>
+          {lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}
+        </a>
+      </>
+    ) : (
+      <>
+        <p class="reading-cta-status">
+          {cta.remaining === null
+            ? (lang === 'zh' ? '今日解读次数不限' : 'Unlimited draws today')
+            : (lang === 'zh'
+                ? `今日剩余 ${cta.remaining} / ${quota} 次`
+                : `${cta.remaining} of ${quota} draws left today`)}
+        </p>
+        {cta.hasTrialCredits && creditBalance && (
+          <p class="reading-cta-status">
+            {lang === 'zh'
+              ? `另有体验额度：三张牌阵 ×${creditBalance['3card']} · 凯尔特十字 ×${creditBalance.celtic_cross}`
+              : `Plus trial credits: 3-card ×${creditBalance['3card']} · Celtic Cross ×${creditBalance.celtic_cross}`}
+          </p>
+        )}
+        <a class="reading-cta-button" href={`/?lang=${lang}`}>
+          {lang === 'zh' ? '开始解读' : 'Start your reading'}
+        </a>
+      </>
+    )}
+  </section>
+
+  <div class="profile-card">
+    <div class="profile-head">
+      {user?.avatarUrl ? (
+        <img class="profile-avatar" src={user.avatarUrl} alt="" width="64" height="64" referrerpolicy="no-referrer" />
+      ) : (
+        <div class="profile-avatar profile-avatar-fallback" aria-hidden="true">
+          {(user?.name ?? user?.email ?? '?').slice(0, 1).toUpperCase()}
+        </div>
+      )}
+      <div class="profile-id">
+        <h1>{user?.name ?? user?.email ?? 'Account'}</h1>
+        <p class="profile-email">{user?.email}</p>
+      </div>
+    </div>
+
+    <dl class="profile-meta">
+      <div>
+        <dt>{lang === 'zh' ? '登录方式' : 'Sign-in method'}</dt>
+        <dd>
+          {isGoogleUser ? (
+            <span class="badge-google">
+              <svg viewBox="0 0 48 48" width="12" height="12" aria-hidden="true">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+              </svg>
+              Google
+            </span>
+          ) : (
+            <span class="badge-password">{lang === 'zh' ? '邮箱密码' : 'Email & password'}</span>
+          )}
+        </dd>
+      </div>
+      <div>
+        <dt>{lang === 'zh' ? '当前套餐' : 'Current plan'}</dt>
+        <dd><strong>{tier}</strong></dd>
+      </div>
+      {sub && (sub.status === 'trialing' || sub.status === 'active') && sub.currentPeriodEnd && (
+        <div>
+          <dt>{lang === 'zh' ? '订阅状态' : 'Subscription status'}</dt>
+          <dd>
+            {sub.status === 'trialing'
+              ? (lang === 'zh'
+                  ? `首月免费试用中 · ${fmtDate(sub.currentPeriodEnd)} 开始扣费`
+                  : `First month free — billing starts ${fmtDate(sub.currentPeriodEnd)}`)
+              : (lang === 'zh'
+                  ? `生效中 · ${fmtDate(sub.currentPeriodEnd)} 续期`
+                  : `Active — renews ${fmtDate(sub.currentPeriodEnd)}`)}
+          </dd>
+        </div>
+      )}
+      <div>
+        <dt>{lang === 'zh' ? '今日已用' : 'Used today'}</dt>
+        <dd>{usedToday} / {quota === Infinity ? (lang === 'zh' ? '无限' : 'unlimited') : quota}</dd>
+      </div>
+      {tier === 'free' && creditBalance && (
+        <div>
+          <dt>{lang === 'zh' ? '多牌阵体验额度' : 'Multi-card trial credits'}</dt>
+          <dd>
+            {lang === 'zh'
+              ? `三张牌阵 ×${creditBalance['3card']} · 凯尔特十字 ×${creditBalance.celtic_cross}`
+              : `3-card ×${creditBalance['3card']} · Celtic Cross ×${creditBalance.celtic_cross}`}
+          </dd>
+        </div>
+      )}
+      <div>
+        <dt>{lang === 'zh' ? '注册时间' : 'Member since'}</dt>
+        <dd>{fmtDate(user?.createdAt)}</dd>
+      </div>
+      <div>
+        <dt>{lang === 'zh' ? '上次登录' : 'Last login'}</dt>
+        <dd>{fmtDate(user?.lastLoginAt)}</dd>
+      </div>
+    </dl>
+
+    <div class="profile-actions">
+      <a class="explore-button" href={`/?lang=${lang}`}>{lang === 'zh' ? '开始解读' : 'Start reading'}</a>
+      {tier !== 'free' && (
+        <form method="post" action="/api/stripe/portal">
+          <button type="submit" class="explore-button">{lang === 'zh' ? '管理订阅' : 'Manage subscription'}</button>
+        </form>
+      )}
+      <a class="explore-button" href={`/history?lang=${lang}`}>{lang === 'zh' ? '查看历史记录' : 'View history'}</a>
+      <form method="post" action="/api/auth/logout">
+        <button type="submit" class="reset-button">{lang === 'zh' ? '登出' : 'Log out'}</button>
+      </form>
+    </div>
+  </div>
+</Layout>
