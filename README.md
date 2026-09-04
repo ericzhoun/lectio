@@ -42,14 +42,21 @@ Bindings live in `wrangler.jsonc`:
 - `SESSION` — KV namespace `lectio-session`
 - `ASSETS` — static assets from `./dist`
 
+Vars in `wrangler.jsonc`: `GOOGLE_REDIRECT_URI` - pinned so `/api/auth/google/start` and
+`/api/auth/google/callback` always send Google an identical `redirect_uri`; deriving it from the
+request URL can differ by scheme and makes the token exchange fail.
+
 Secrets (see `.dev.vars.example`): `OPENAI_API_KEY`, `SESSION_SECRET`, the `STRIPE_*` keys and
-price ids, and the `GOOGLE_*` OAuth values.
+price ids, and the `GOOGLE_*` OAuth values. `SESSION_SECRET` is required - Google sign-in fails at
+the last step without it.
 
 ## Project structure
 
 - `src/lib/reading.ts` — languages, layouts (Daily Word / Lectio Divina / Deep Lectio), starter questions
-- `src/lib/scripture.ts` — the 78-verse deck, draw + rebuild logic, chapter-context pages, verse library helpers
+- `src/lib/scripture.ts` — the 148-verse deck, draw + rebuild logic, chapter-context pages, verse library helpers
 - `src/lib/bibleChapters.json` — chapter context text (WEB + 和合本, both public domain)
+- `scripts/fetch-bible-context.mjs` — regenerates `bibleChapters.json` from api.getbible.net; run it
+  after adding deck verses, then re-run `npm test`
 - `src/lib/openai.ts` — LLM reflection + follow-up question generation
 - `src/lib/db.ts` — D1 reading log
 - `src/pages/index.astro` — the reading flow (question, layout picker, results)
@@ -76,7 +83,7 @@ welcome-credit columns are keyed by them.
   Reflect button: anonymous visitors get a registration prompt on click, registered ones generate
   the reflection (spending a trial credit). Works with email and Google sign-in.
   Details: `docs/2026-08-31-draw-to-reveal.md`.
-- **Verse library** — all 78 passages, filterable by testament, with both language texts and themes.
+- **Verse library** — all 148 passages, filterable by testament, with both language texts and themes.
 - **Registration perks**: registered free users get 6 Daily Word readings/day (anonymous: 3) plus
   one-time trial credits for Lectio Divina (×3) and Deep Lectio (×1).
 - **First month free**: monthly Basic/Pro subscriptions start with a 30-day Stripe free trial
