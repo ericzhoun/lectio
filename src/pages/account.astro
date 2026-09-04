@@ -35,13 +35,13 @@ const fmtDate = (iso: string | null | undefined): string => {
   return d.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', { dateStyle: 'medium', timeStyle: 'short' });
 };
 ---
-<Layout title={lang === 'zh' ? '账户 — Inspiration Tarot' : 'Account — Inspiration Tarot'} noindex lang={lang}>
+<Layout title={lang === 'zh' ? '账户 — Lectio' : 'Account — Lectio'} noindex lang={lang}>
   {welcome && (
     <div class="auth-welcome">
       <p role="status">
         {lang === 'zh'
-          ? '🎉 注册成功！每日单张解读已升至 6 次，三张牌阵 ×3、凯尔特十字 ×1 体验额度已到账'
-          : '🎉 Account created! Daily single draws are now 6/day, and your trial credits (3-card ×3, Celtic Cross ×1) are ready.'}
+          ? '🎉 注册成功！每日经文默想已升至 6 次，圣言诵读 ×3、深度诵读 ×1 体验额度已到账'
+          : '🎉 Account created! Daily Word readings are now 6/day, and your trial credits (Lectio Divina ×3, Deep Lectio ×1) are ready.'}
       </p>
       <a class="reading-cta-button" href={`/?lang=${lang}`}>
         {lang === 'zh' ? '开始第一次解读' : 'Start your first reading'}
@@ -76,8 +76,8 @@ const fmtDate = (iso: string | null | undefined): string => {
         {cta.hasTrialCredits && creditBalance && (
           <p class="reading-cta-status">
             {lang === 'zh'
-              ? `另有体验额度：三张牌阵 ×${creditBalance['3card']} · 凯尔特十字 ×${creditBalance.celtic_cross}`
-              : `Plus trial credits: 3-card ×${creditBalance['3card']} · Celtic Cross ×${creditBalance.celtic_cross}`}
+              ? `另有体验额度：圣言诵读 ×${creditBalance['3card']} · 深度诵读 ×${creditBalance.celtic_cross}`
+              : `Plus trial credits: Lectio Divina ×${creditBalance['3card']} · Deep Lectio ×${creditBalance.celtic_cross}`}
           </p>
         )}
         <a class="reading-cta-button" href={`/?lang=${lang}`}>
@@ -145,11 +145,11 @@ const fmtDate = (iso: string | null | undefined): string => {
       </div>
       {tier === 'free' && creditBalance && (
         <div>
-          <dt>{lang === 'zh' ? '多牌阵体验额度' : 'Multi-card trial credits'}</dt>
+          <dt>{lang === 'zh' ? '多节经文体验额度' : 'Multi-verse trial credits'}</dt>
           <dd>
             {lang === 'zh'
-              ? `三张牌阵 ×${creditBalance['3card']} · 凯尔特十字 ×${creditBalance.celtic_cross}`
-              : `3-card ×${creditBalance['3card']} · Celtic Cross ×${creditBalance.celtic_cross}`}
+              ? `圣言诵读 ×${creditBalance['3card']} · 深度诵读 ×${creditBalance.celtic_cross}`
+              : `Lectio Divina ×${creditBalance['3card']} · Deep Lectio ×${creditBalance.celtic_cross}`}
           </dd>
         </div>
       )}

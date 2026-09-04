@@ -5,7 +5,7 @@ import { verifySessionToken } from '../lib/session';
 import { langSwitchHref } from '../lib/i18n';
 import LoginOverlay from '../components/LoginOverlay.astro';
 import AssistantWidget from '../components/AssistantWidget.astro';
-import type { Lang } from '../lib/tarot';
+import type { Lang } from '../lib/reading';
 
 interface Props {
   title: string;
@@ -20,7 +20,7 @@ const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSI
 
 // Canonical URL: strip query params (including ?lang=) so search engines
 // see one URL per piece of content.
-const siteUrl = 'https://dramatherapy.us';
+const siteUrl = 'https://3livescapture.com';
 const canonicalPath = Astro.url.pathname;
 const canonicalUrl = `${siteUrl}${canonicalPath}`;
 
@@ -57,7 +57,7 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
   {description && <meta property="og:description" content={description} />}
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:image" content={`${siteUrl}/logo.webp`} />
-  <meta property="og:site_name" content="Inspiration Tarot" />
+  <meta property="og:site_name" content="Lectio" />
   <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
 
   <!-- Twitter card -->
@@ -78,7 +78,7 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
       <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
     )}
     <a href="/pricing" style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '价格' : 'Pricing'}</a>
-    <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '塔罗牌库' : 'Card Library'}</a>
+    <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '经文库' : 'Verse Library'}</a>
     <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
     <a href="/privacy" style={isActive('/privacy') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '隐私' : 'Privacy'}</a>
     <a href={langSwitchHref(Astro, 'zh')} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>

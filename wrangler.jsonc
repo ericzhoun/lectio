@@ -1,6 +1,6 @@
 {
 	"$schema": "./node_modules/wrangler/config-schema.json",
-	"name": "inspire",
+	"name": "lectio",
 	"compatibility_date": "2026-08-27",
 	"compatibility_flags": [
 		"nodejs_compat"
@@ -9,6 +9,11 @@
 		"binding": "ASSETS",
 		"directory": "./dist"
 	},
+	"vars": {
+		// Pinned so /start and /callback always send Google the identical redirect_uri;
+		// deriving it from the request URL can differ by scheme and breaks token exchange.
+		"GOOGLE_REDIRECT_URI": "https://3livescapture.com/api/auth/google/callback"
+	},
 	"observability": {
 		"enabled": true,
 		"redact_query_string": false
@@ -16,20 +21,20 @@
 	"d1_databases": [
 		{
 			"binding": "DB",
-			"database_name": "inspire-readings",
-			"database_id": "2873b281-1d7c-4a82-8649-a91d912bbb0f"
+			"database_name": "lectio-readings",
+			"database_id": "b31145ba-04a6-4fc9-bc01-744f1224e3d8"
 		}
 	],
 	"kv_namespaces": [
 		{
 			"binding": "SESSION",
-			"id": "8c7ba8cc166749d49512d17cd856b45c"
+			"id": "f8cfe6b42b2c473587f061c683777705"
 		}
 	],
 	"routes": [
 		{
-			"pattern": "dramatherapy.us",
-			"zone_name": "dramatherapy.us",
+			"pattern": "3livescapture.com",
+			"zone_name": "3livescapture.com",
 			"custom_domain": true,
 			"enabled": true,
 			"previews_enabled": false

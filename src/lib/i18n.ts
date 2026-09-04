@@ -1,6 +1,6 @@
 // Language resolution and persistence.
 // Priority: explicit ?lang= param (persisted to cookie) > lang cookie > 'en'.
-import type { Lang } from './tarot';
+import type { Lang } from './reading';
 
 const LANG_COOKIE = 'lang';
 const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;

@@ -2,26 +2,24 @@
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import { getLibraryCards } from '../../lib/tarot';
+import { getLibraryVerses } from '../../lib/scripture';
 import { resolveLang } from '../../lib/i18n';
 
 const { slug } = Astro.params;
 const lang = resolveLang(Astro);
 
-const cards = getLibraryCards();
-const card = cards.find((c) => c.slug === slug);
+const verse = getLibraryVerses().find((v) => v.slug === slug);
 
-if (!card) {
+if (!verse) {
   return new Response(null, { status: 404 });
 }
 
-const cardName = lang === 'zh' ? card.zh : card.en;
 const title = lang === 'zh'
-  ? `${card.zh}（${card.en}）— 塔罗牌含义与解读`
-  : `${card.en} Tarot Card — Meaning & Interpretation`;
+  ? `${verse.refZh}（${verse.refEn}）— 经文默想`
+  : `${verse.refEn} — Scripture for Reflection`;
 const description = lang === 'zh'
-  ? `${card.zh}塔罗牌详解：正位含义 — ${card.meaning_zh.upright}；逆位含义 — ${card.meaning_zh.reversed}`
-  : `${card.en} tarot card: upright — ${card.meaning_en.upright}; reversed — ${card.meaning_en.reversed}`;
+  ? `${verse.refZh}：${verse.textZh}`
+  : `${verse.refEn}: ${verse.textEn}`;
 ---
 <Layout title={title} description={description} lang={lang}>
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -29,46 +27,44 @@ const description = lang === 'zh'
     "@type": "Article",
     "headline": title,
     "description": description,
-    "image": `https://dramatherapy.us${card.image_url}`,
     "inLanguage": lang === 'zh' ? 'zh' : 'en',
     "about": {
       "@type": "Thing",
-      "name": card.en,
-      "alternateName": card.zh,
-      "description": `Rider-Waite tarot card: ${card.en}`
+      "name": verse.refEn,
+      "alternateName": verse.refZh,
+      "description": verse.themeEn
     },
     "isPartOf": {
       "@type": "WebSite",
-      "name": "Inspiration Tarot",
-      "url": "https://dramatherapy.us"
+      "name": "Lectio",
+      "url": "https://3livescapture.com"
     }
   })}>
   </script>
 
-  <a class="back-link" href={`/library?lang=${lang}`}>&larr; {lang === 'zh' ? '返回牌库' : 'Back to Library'}</a>
+  <a class="back-link" href={`/library?lang=${lang}`}>&larr; {lang === 'zh' ? '返回经文库' : 'Back to Library'}</a>
 
   <header>
-    <h1>{lang === 'zh' ? card.zh : card.en}</h1>
-    <p>{lang === 'zh' ? card.en : card.zh}</p>
+    <h1>{lang === 'zh' ? verse.refZh : verse.refEn}</h1>
+    <p>{lang === 'zh' ? verse.refEn : verse.refZh}</p>
   </header>
 
-  <div class="detail-images">
-    <figure>
-      <img src={card.image_url} alt={`${card.en} tarot card upright — Rider-Waite deck`} />
-      <figcaption>{lang === 'zh' ? '正位' : 'Upright'}</figcaption>
-    </figure>
-    <figure>
-      <img src={card.image_url} alt={`${card.en} tarot card reversed — Rider-Waite deck`} class="reversed-img" />
-      <figcaption>{lang === 'zh' ? '逆位' : 'Reversed'}</figcaption>
-    </figure>
+  <div class="meaning-block">
+    <h3>{lang === 'zh' ? '经文' : 'The Passage'}</h3>
+    <blockquote class="verse-text">{lang === 'zh' ? verse.textZh : verse.textEn}</blockquote>
+  </div>
+  <div class="meaning-block">
+    <h3>{lang === 'zh' ? '对照' : 'In the other language'}</h3>
+    <blockquote class="verse-text">{lang === 'zh' ? verse.textEn : verse.textZh}</blockquote>
+  </div>
+  <div class="meaning-block">
+    <h3>{lang === 'zh' ? '主题' : 'Theme'}</h3>
+    <p><span class="tag">{lang === 'zh' ? verse.themeZh : verse.themeEn}</span></p>
   </div>
 
-  <div class="meaning-block">
-    <h3>{lang === 'zh' ? '正位含义' : 'Upright Meaning'}</h3>
-    <p>{lang === 'zh' ? card.meaning_zh.upright : card.meaning_en.upright}</p>
-  </div>
-  <div class="meaning-block">
-    <h3>{lang === 'zh' ? '逆位含义' : 'Reversed Meaning'}</h3>
-    <p>{lang === 'zh' ? card.meaning_zh.reversed : card.meaning_en.reversed}</p>
-  </div>
+  <p class="library-cta">
+    <a class="upsell-button" href={`/?lang=${lang}`}>
+      {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
+    </a>
+  </p>
 </Layout>

@@ -163,7 +163,7 @@ describe('POST /api/assistant/chat', () => {
       messages: Array<{ role: string; content: string }>;
     };
     expect(call.messages[0].role).toBe('system');
-    expect(call.messages[0].content).toContain('Inspire Assistant');
+    expect(call.messages[0].content).toContain('Lectio Assistant');
     // system + last 10 history turns + the new user message
     expect(call.messages.length).toBe(12);
     expect(call.messages.at(-1)!.content).toBe('final');

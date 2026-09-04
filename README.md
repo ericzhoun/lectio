@@ -1,6 +1,10 @@
-# Tarot Reading Web Application
+# Lectio
 
-An Astro (SSR, Node adapter) web application for Tarot card reading and interpretation using OpenAI's GPT models.
+An Astro (SSR, Cloudflare Workers adapter) web application for **Lectio Divina** — slow, prayerful
+scripture reading — with AI-assisted reflections from OpenAI's models.
+
+Lectio is contemplative reading, not divination. Verses arrive unchosen; the practice is to read
+them, reflect on what catches, respond honestly, and rest.
 
 ## Requirements
 
@@ -14,10 +18,7 @@ An Astro (SSR, Node adapter) web application for Tarot card reading and interpre
 npm install
 ```
 
-2. Set environment variables:
-```bash
-export OPENAI_API_KEY="your-api-key-here"
-```
+2. Copy `.dev.vars.example` to `.dev.vars` and fill in your values.
 
 3. Run the dev server:
 ```bash
@@ -28,46 +29,75 @@ npm run dev
 
 ```bash
 npm run build
-node ./dist/server/entry.mjs
+npx wrangler deploy
 ```
 
-The server listens on `PORT` (default `4321`) and `HOST` (default `0.0.0.0`).
+Deploys the `lectio` Worker to `3livescapture.com`.
 
-### Environment Variables
+### Bindings and environment
 
-- `OPENAI_API_KEY`: your OpenAI API key
-- `TAROT_DB_PATH`: optional override for the SQLite reading-log path (default: `tarot.db` in the project root)
+Bindings live in `wrangler.jsonc`:
+
+- `DB` — D1 database `lectio-readings` (reading log; tables self-create on first use)
+- `SESSION` — KV namespace `lectio-session`
+- `ASSETS` — static assets from `./dist`
+
+Secrets (see `.dev.vars.example`): `OPENAI_API_KEY`, `SESSION_SECRET`, the `STRIPE_*` keys and
+price ids, and the `GOOGLE_*` OAuth values.
 
 ## Project structure
 
-- `src/lib/tarot.ts` — deck data, spreads (single / three-card / Celtic Cross), draw logic, card library helpers
-- `src/lib/openai.ts` — LLM interpretation + follow-up question generation
-- `src/lib/db.ts` — SQLite reading log (better-sqlite3)
-- `src/pages/index.astro` — the reading flow (question, spread picker, results)
-- `src/pages/library/` — the 78-card browsable library
-- `public/images/` — Rider-Waite (韦特) card images, WebP
+- `src/lib/reading.ts` — languages, layouts (Daily Word / Lectio Divina / Deep Lectio), starter questions
+- `src/lib/scripture.ts` — the 78-verse deck, draw + rebuild logic, chapter-context pages, verse library helpers
+- `src/lib/bibleChapters.json` — chapter context text (WEB + 和合本, both public domain)
+- `src/lib/openai.ts` — LLM reflection + follow-up question generation
+- `src/lib/db.ts` — D1 reading log
+- `src/pages/index.astro` — the reading flow (question, layout picker, results)
+- `src/pages/library/` — the browsable verse library
+
+## Layouts
+
+Layout keys are stable (`single` / `3card` / `celtic_cross`) because entitlements, quotas, and the
+welcome-credit columns are keyed by them.
+
+| Key | Verses | Name | Positions |
+| --- | --- | --- | --- |
+| `single` | 1 | Daily Word | The Word for Today |
+| `3card` | 3 | Lectio Divina | Lectio · Read, Meditatio · Reflect, Oratio · Respond |
+| `celtic_cross` | 10 | Deep Lectio | A ten-step contemplative path |
 
 ## Features
 
-- Draw Tarot cards with named spreads: single card, three-card (past/present/future), Celtic Cross
-- **Draw and read before signing up**: anonymous visitors pick cards from a visual fan (3-card or 10-card Celtic Cross) or flip open the Bible — the Bible flip renders a real Bible page with the drawn verses highlighted inside their chapters (neighbouring verses included, WEB + 和合本, public domain). The question-based reading unlocks via the 解经/Interpret button: anonymous visitors get a registration prompt on click, registered ones generate the reading (spending a trial credit). Works with email and Google sign-in
-- **Bible verse readings**: draw random scripture verses (single, three, or ten) in place of tarot cards, with the same spread positions (past/present/future for 3 verses; Celtic Cross positions for 10). 78-verse deck (CUV 中文和合本 + World English Bible, both public domain) with AI reflections per verse; switch via the Tarot / Bible Verses mode tabs on the home page (`?mode=bible` deep-links straight to Bible mode)
-- AI-powered per-card and overall interpretations, in Chinese or English
-- Support for reversed cards
-- Browsable 78-card library with upright/reversed meanings
-- Registration perks: registered free users get 6 single draws/day (anonymous: 3) plus one-time trial credits for the 3-card (×3) and Celtic Cross (×1) spreads — Bible verse readings share the same quotas and tier gates. Anonymous visitors can draw multi-card spreads (tarot or Bible) without an account; registering reveals the reading and consumes the matching trial credit. Details: `docs/2026-08-31-draw-to-reveal.md`.
-- **First month free**: monthly Basic/Pro subscriptions start with a 30-day Stripe free trial (payment method collected, nothing charged until the trial ends; full plan features during the trial; one trial per account). Details: `docs/2026-09-01-first-month-free-trial.md`.
+- **Receive a scripture reading** in one of three layouts, in Chinese or English, with an AI
+  reflection per verse plus an overall reflection.
+- **Read before signing up**: anonymous visitors open the Bible on a multi-verse layout and get a
+  real Bible page with the received verses highlighted inside their chapters (neighbouring verses
+  included, WEB + 和合本, both public domain). The question-based reflection unlocks via the
+  Reflect button: anonymous visitors get a registration prompt on click, registered ones generate
+  the reflection (spending a trial credit). Works with email and Google sign-in.
+  Details: `docs/2026-08-31-draw-to-reveal.md`.
+- **Verse library** — all 78 passages, filterable by testament, with both language texts and themes.
+- **Registration perks**: registered free users get 6 Daily Word readings/day (anonymous: 3) plus
+  one-time trial credits for Lectio Divina (×3) and Deep Lectio (×1).
+- **First month free**: monthly Basic/Pro subscriptions start with a 30-day Stripe free trial
+  (payment method collected, nothing charged until the trial ends; full plan features during the
+  trial; one trial per account). Details: `docs/2026-09-01-first-month-free-trial.md`.
 
 ## Google sign-in
 
-Login and signup pages support Google OAuth alongside email/password. A Google sign-in with a verified email matching an existing password account links to that account; a new email registers a new account.
+Login and signup pages support Google OAuth alongside email/password. A Google sign-in with a
+verified email matching an existing password account links to that account; a new email registers a
+new account.
 
-Setup, required secrets, D1 schema, and rollback: see `docs/google-login-deployment.md`. Verification evidence: see `docs/google-login-run-check-report.md`.
+Setup, required secrets, D1 schema, and rollback: see `docs/google-login-deployment.md`.
+Verification evidence: see `docs/google-login-run-check-report.md`.
 
 ## Authentication
 
-- Email & password (existing) and **Google sign-in** (added 2026-08).
-- Google OAuth flow: `/api/auth/google/start` -> `/api/auth/google/callback`, session via signed `session` cookie.
-- Requires env vars `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` (see `.dev.vars.example` / `docs/google-login-deployment.md`); until set, the Google button shows a graceful "not configured" message.
-- User records live in D1 `users` (`google_id`, `name`, `avatar_url`, `created_at`, `last_login_at`); Google sign-in with an existing verified email links to that account (no duplicates).
-- Docs: `docs/google-login-deployment.md` (deploy/rollback), `docs/google-login-run-check-report.md` (verification results).
+- Email & password, and **Google sign-in**.
+- Google OAuth flow: `/api/auth/google/start` -> `/api/auth/google/callback`, session via signed
+  `session` cookie.
+- Requires env vars `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` (see `.dev.vars.example`); until
+  set, the Google button shows a graceful "not configured" message.
+- User records live in D1 `users` (`google_id`, `name`, `avatar_url`, `created_at`,
+  `last_login_at`); Google sign-in with an existing verified email links to that account.

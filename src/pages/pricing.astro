@@ -11,7 +11,7 @@ const tiers = [
     name: { zh: '免费', en: 'Free' },
     monthly: { zh: '$0', en: '$0' },
     annual: { zh: '$0', en: '$0' },
-    blurb: { zh: '未注册每日 3 次单张牌；注册后每日 6 次 + 三张牌阵 ×3、凯尔特十字 ×1 体验额度', en: 'Guests: 3 single draws/day. Registered: 6/day + trial credits (3-card ×3, Celtic Cross ×1)' },
+    blurb: { zh: '未注册每日 3 次每日经文；注册后每日 6 次 + 圣言诵读 ×3、深度诵读 ×1 体验额度', en: 'Guests: 3 Daily Word readings/day. Registered: 6/day + trial credits (Lectio Divina ×3, Deep Lectio ×1)' },
   },
   {
     key: 'basic',
@@ -19,7 +19,7 @@ const tiers = [
     monthly: { zh: '$4.99/月', en: '$4.99/mo' },
     annual: { zh: '$2.99/月', en: '$2.99/mo' },
     annualTotal: { zh: '$35.88/年', en: '$35.88/yr' },
-    blurb: { zh: '单张/三张牌，每日20次，历史记录', en: 'Single/3-card, 20 draws/day, history' },
+    blurb: { zh: '每日经文 / 圣言诵读，每日 20 次，历史记录', en: 'Daily Word + Lectio Divina, 20 readings/day, history' },
   },
   {
     key: 'pro',
@@ -27,19 +27,19 @@ const tiers = [
     monthly: { zh: '$11.99/月', en: '$11.99/mo' },
     annual: { zh: '$7.19/月', en: '$7.19/mo' },
     annualTotal: { zh: '$86.28/年', en: '$86.28/yr' },
-    blurb: { zh: '全部牌阵，无限次数，历史记录', en: 'All spreads, unlimited draws, history' },
+    blurb: { zh: '全部布局，无限次数，历史记录', en: 'All layouts, unlimited readings, history' },
   },
 ];
 
 const title = lang === 'zh'
-  ? '塔罗解读价格方案 — 免费、基础版与专业版'
-  : 'Tarot Reading Plans & Pricing — Free, Basic & Pro';
+  ? 'Lectio 价格方案 — 免费、基础版与专业版'
+  : 'Lectio Plans & Pricing — Free, Basic & Pro';
 const description = lang === 'zh'
-  ? '选择适合你的塔罗解读方案：免费每日 6 次单张牌，基础版 $4.99/月含三张牌阵，专业版 $11.99/月解锁全部牌阵无限解读。月付方案首月免费试用，年付享六折优惠。'
-  : 'Choose your tarot reading plan: free tier with 6 daily single-card draws, Basic at $4.99/mo for 3-card spreads, or Pro at $11.99/mo for all spreads unlimited. First month free on monthly plans; save 40% with annual billing.';
+  ? '选择适合你的方案：免费每日 6 次每日经文，基础版 $4.99/月含圣言诵读，专业版 $11.99/月解锁全部布局无限默想。月付方案首月免费试用，年付享六折优惠。'
+  : 'Choose your Lectio plan: free tier with 6 Daily Word readings a day, Basic at $4.99/mo for Lectio Divina, or Pro at $11.99/mo for every layout unlimited. First month free on monthly plans; save 40% with annual billing.';
 ---
 <Layout title={title} description={description} lang={lang}>
-  <h1>{lang === 'zh' ? '塔罗解读价格方案' : 'Tarot Reading Plans & Pricing'}</h1>
+  <h1>{lang === 'zh' ? '价格方案' : 'Plans & Pricing'}</h1>
 
   <div class="billing-toggle" role="radiogroup" aria-label={lang === 'zh' ? '计费周期' : 'Billing period'}>
     <button class="billing-toggle-btn active" data-billing="monthly" role="radio" aria-checked="true">

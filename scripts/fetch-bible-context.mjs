@@ -12,7 +12,7 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const src = readFileSync(new URL('../src/lib/bible.ts', import.meta.url), 'utf8');
+const src = readFileSync(new URL('../src/lib/scripture.ts', import.meta.url), 'utf8');
 
 // ---- 1. Extract the deck's English references ------------------------------
 const enRefs = [...src.matchAll(/ref: '([A-Za-z0-9 :\-]+?)',/g)].map((m) => m[1]);

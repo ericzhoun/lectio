@@ -1,5 +1,5 @@
 ---
-import type { Lang } from '../lib/tarot';
+import type { Lang } from '../lib/reading';
 interface Props { lang: Lang; returnTo: string; error?: string | null; headingId?: string; }
 const { lang, returnTo, error = null, headingId } = Astro.props;
 const errors: Record<string, { zh: string; en: string }> = {

@@ -18,8 +18,8 @@ public/sitemap.xml
 !.dev.vars.example
 
 # local runtime data
-tarot.db
-tarot.db-journal
+lectio.db
+lectio.db-journal
 .e2e/
 
 # logs

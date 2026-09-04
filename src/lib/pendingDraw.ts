@@ -1,11 +1,11 @@
 // Signed cookie for the anonymous "draw now, register to reveal" flow.
 //
-// When an unregistered visitor draws a multi-card spread (tarot cards or
-// Bible verses), the draw is stored in an HMAC-signed cookie (same secret as
-// the session cookie). The visitor sees the cards / verses but not the
-// reading; after they register or log in, the home page verifies the cookie,
-// generates the question-based interpretation, and clears the cookie. The
-// signature prevents tampering with the drawn items.
+// When an unregistered visitor receives a multi-verse layout, the draw is
+// stored in an HMAC-signed cookie (same secret as the session cookie). The
+// visitor sees the verses but not the reflection; after they register or log
+// in, the home page verifies the cookie, generates the question-based
+// reflection, and clears the cookie. The signature prevents tampering with
+// the drawn verses.
 import { toBase64Url, fromBase64Url, hmacKey } from './session';
 
 export const PENDING_DRAW_COOKIE = 'pending_draw';
@@ -13,26 +13,17 @@ export const PENDING_DRAW_COOKIE = 'pending_draw';
 export const PENDING_DRAW_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 /** Keep the cookie payload small; questions longer than this are truncated. */
 export const PENDING_QUESTION_MAX_CHARS = 300;
-/** Largest gated spread: Celtic Cross (10 cards / 10 verses). */
+/** Largest gated layout: Deep Lectio (10 verses). */
 export const PENDING_DRAW_MAX_ITEMS = 10;
 
-export type PendingDrawMode = 'tarot' | 'bible';
 export type PendingDrawSpread = '3card' | 'celtic_cross';
-
-export interface PendingDrawCard {
-  en: string;
-  reversed: boolean;
-}
 
 export interface PendingDraw {
   v: 1;
-  mode: PendingDrawMode;
   spread: PendingDrawSpread;
   question: string;
-  /** Tarot mode: drawn card identities + orientations. */
-  cards?: PendingDrawCard[];
-  /** Bible mode: drawn verse identities (English refs are unique keys). */
-  verses?: string[];
+  /** Drawn verse identities (English refs are unique keys). */
+  verses: string[];
   /** Issue time (ms since epoch), used for expiry. */
   ts: number;
 }
@@ -99,23 +90,12 @@ function isPendingDraw(value: unknown): value is PendingDraw {
   if (typeof value !== 'object' || value === null) return false;
   const d = value as Record<string, unknown>;
   if (d.v !== 1 || !isValidSpread(d.spread)) return false;
-  if (d.mode !== 'tarot' && d.mode !== 'bible') return false;
   if (typeof d.question !== 'string' || d.question.length > PENDING_QUESTION_MAX_CHARS) return false;
   if (typeof d.ts !== 'number' || !Number.isFinite(d.ts)) return false;
 
   const itemCountOk = (n: unknown) =>
     typeof n === 'number' && Number.isInteger(n) && n >= 1 && n <= PENDING_DRAW_MAX_ITEMS;
 
-  if (d.mode === 'tarot') {
-    if (!Array.isArray(d.cards) || !itemCountOk(d.cards.length) || d.verses !== undefined) return false;
-    return d.cards.every(
-      (c) =>
-        typeof c === 'object' &&
-        c !== null &&
-        typeof (c as PendingDrawCard).en === 'string' &&
-        typeof (c as PendingDrawCard).reversed === 'boolean'
-    );
-  }
-  if (!Array.isArray(d.verses) || !itemCountOk(d.verses.length) || d.cards !== undefined) return false;
+  if (!Array.isArray(d.verses) || !itemCountOk(d.verses.length)) return false;
   return d.verses.every((r) => typeof r === 'string' && r.length > 0 && r.length <= 64);
 }

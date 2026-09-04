@@ -67,7 +67,12 @@ export async function exchangeCodeForToken(p: TokenExchangeParams): Promise<{ ac
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
   });
-  if (!res.ok) throw new Error(`Google token exchange failed: HTTP ${res.status}`);
+  if (!res.ok) {
+    // Google's error body names the actual cause (invalid_client, redirect_uri_mismatch,
+    // invalid_grant) and contains no secrets, so surface it to make failures diagnosable.
+    const detail = await res.text().catch(() => '');
+    throw new Error(`Google token exchange failed: HTTP ${res.status} ${detail}`);
+  }
   const data = (await res.json()) as { access_token?: string; id_token?: string; error?: string };
   if (!data.access_token) {
     throw new Error(`Google token exchange failed: ${data.error ?? 'missing access_token'}`);

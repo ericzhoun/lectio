@@ -48,11 +48,9 @@ export function evaluateEntitlement({
       const limit = registered ? REGISTERED_DAILY_DRAWS : ANON_DAILY_DRAWS;
       return todayCount >= limit ? { ok: false, reason: 'quota' } : { ok: true };
     }
-    // Multi-card spreads: both use the "draw now, register to reveal" flow —
-    // the visitor may draw (gated: no interpretation until they register, at
-    // which point revealing spends a welcome credit). The gate is mode-
-    // agnostic: index.astro renders card fans for tarot and the Bible flip
-    // for Bible mode, keyed by the shared spread keys.
+    // Multi-verse layouts use the "read now, register to reveal" flow — the
+    // visitor receives the verses (gated: no reflection until they register,
+    // at which point revealing spends a welcome credit).
     if (!registered) {
       return spreadKey === '3card' || spreadKey === 'celtic_cross'
         ? { ok: true, gated: true }

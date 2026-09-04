@@ -12,14 +12,14 @@ const error = url.searchParams.get('error');
 const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), `/?lang=${lang}`);
 
 ---
-<Layout title={lang === 'zh' ? '登录 — Inspiration Tarot' : 'Log In — Inspiration Tarot'} noindex lang={lang}>
+<Layout title={lang === 'zh' ? '登录 — Lectio' : 'Log In — Lectio'} noindex lang={lang}>
   <div class="auth-page">
     <div class="auth-hero">
       <h1>{lang === 'zh' ? '欢迎回来' : 'Welcome back'}</h1>
       <p class="auth-hero-sub">
         {lang === 'zh'
-          ? '登录后继续你的塔罗探索，保存每一次解读'
-          : 'Sign in to continue your tarot journey and keep every reading'}
+          ? '登录后继续你的圣言诵读，保存每一次默想'
+          : 'Sign in to continue your reading practice and keep every reflection'}
       </p>
     </div>
 

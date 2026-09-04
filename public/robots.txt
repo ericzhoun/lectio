@@ -1,4 +1,4 @@
-# robots.txt for Inspiration Tarot (dramatherapy.us)
+# robots.txt for Lectio (3livescapture.com)
 User-agent: *
 Allow: /
 
@@ -9,4 +9,4 @@ Disallow: /history
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://dramatherapy.us/sitemap.xml
+Sitemap: https://3livescapture.com/sitemap.xml

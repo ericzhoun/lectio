@@ -2,51 +2,52 @@
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import { getLibraryCards } from '../../lib/tarot';
+import { getLibraryVerses } from '../../lib/scripture';
 import { resolveLang } from '../../lib/i18n';
 
 const url = Astro.url;
 const lang = resolveLang(Astro);
-const suit = url.searchParams.get('suit') ?? 'all';
+const testament = url.searchParams.get('testament') ?? 'all';
 
-let cards = getLibraryCards();
-if (suit !== 'all') {
-  cards = cards.filter((c) => c.suit === suit);
+let verses = getLibraryVerses();
+if (testament === 'old' || testament === 'new') {
+  verses = verses.filter((v) => v.testament === testament);
 }
 
 const title = lang === 'zh'
-  ? '韦特塔罗牌库 — 78 张牌含义与解读指南'
-  : 'Tarot Card Library — All 78 Rider-Waite Cards & Meanings';
+  ? '经文库 — 圣言诵读常用经文与主题'
+  : 'Verse Library — Scripture for Lectio Divina';
 const description = lang === 'zh'
-  ? '浏览完整的 78 张韦特塔罗牌：大阿尔卡纳、权杖、圣杯、宝剑、星币，每张附正位与逆位含义详解。'
-  : 'Browse all 78 Rider-Waite tarot cards with upright and reversed meanings. Explore Major Arcana, Wands, Cups, Swords, and Pentacles in detail.';
+  ? '浏览 Lectio 的完整经文库：旧约与新约的常用默想经文，附中英对照原文与主题。'
+  : "Browse Lectio's full verse library: passages from the Old and New Testament for contemplative reading, with English and Chinese text and themes.";
 
-function filterHref(s: string) {
-  return `?lang=${lang}&suit=${s}`;
+function filterHref(t: string) {
+  return `?lang=${lang}&testament=${t}`;
 }
 ---
 <Layout title={title} description={description} lang={lang}>
   <header>
-    <h1>{lang === 'zh' ? '塔罗牌库' : 'Tarot Card Library'}</h1>
+    <h1>{lang === 'zh' ? '经文库' : 'Verse Library'}</h1>
   </header>
 
   <div class="filters">
-    <a href={filterHref('all')} class={suit === 'all' ? 'active' : ''}>{lang === 'zh' ? '全部' : 'All'}</a>
-    <a href={filterHref('major')} class={suit === 'major' ? 'active' : ''}>{lang === 'zh' ? '大阿尔卡纳' : 'Major Arcana'}</a>
-    <a href={filterHref('wands')} class={suit === 'wands' ? 'active' : ''}>{lang === 'zh' ? '权杖' : 'Wands'}</a>
-    <a href={filterHref('cups')} class={suit === 'cups' ? 'active' : ''}>{lang === 'zh' ? '圣杯' : 'Cups'}</a>
-    <a href={filterHref('swords')} class={suit === 'swords' ? 'active' : ''}>{lang === 'zh' ? '宝剑' : 'Swords'}</a>
-    <a href={filterHref('pentacles')} class={suit === 'pentacles' ? 'active' : ''}>{lang === 'zh' ? '星币' : 'Pentacles'}</a>
+    <a href={filterHref('all')} class={testament === 'all' ? 'active' : ''}>{lang === 'zh' ? '全部' : 'All'}</a>
+    <a href={filterHref('old')} class={testament === 'old' ? 'active' : ''}>{lang === 'zh' ? '旧约' : 'Old Testament'}</a>
+    <a href={filterHref('new')} class={testament === 'new' ? 'active' : ''}>{lang === 'zh' ? '新约' : 'New Testament'}</a>
   </div>
-  <div class="count">{lang === 'zh' ? `共 ${cards.length} 张牌` : `${cards.length} cards`}</div>
+  <div class="count">
+    {lang === 'zh' ? `共 ${verses.length} 节经文` : `${verses.length} verse${verses.length !== 1 ? 's' : ''}`}
+  </div>
 
-  <div class="grid">
-    {cards.map((card) => (
-      <a href={`/library/${card.slug}?lang=${lang}`}>
-        <div class="grid-card">
-          <img src={card.image_url} alt={`${lang === 'zh' ? card.zh : card.en} — Rider-Waite tarot card`} loading="lazy" />
-          <div class="name">{lang === 'zh' ? card.zh : card.en}</div>
-        </div>
+  <div class="verse-grid">
+    {verses.map((v) => (
+      <a class="verse-grid-item" href={`/library/${v.slug}?lang=${lang}`}>
+        <h3 class="verse-ref">
+          {lang === 'zh' ? v.refZh : v.refEn}
+          <span class="verse-ref-alt">{lang === 'zh' ? v.refEn : v.refZh}</span>
+        </h3>
+        <blockquote class="verse-text">{lang === 'zh' ? v.textZh : v.textEn}</blockquote>
+        <span class="tag">{lang === 'zh' ? v.themeZh : v.themeEn}</span>
       </a>
     ))}
   </div>

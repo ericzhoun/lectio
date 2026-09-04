@@ -2,7 +2,7 @@
 // src/components/AssistantWidget.astro
 // Site-wide floating chat assistant. Thread is ephemeral (sessionStorage);
 // quota + replies come from /api/assistant/*.
-import type { Lang } from '../lib/tarot';
+import type { Lang } from '../lib/reading';
 
 interface Props {
   lang: Lang;
@@ -12,13 +12,13 @@ const { lang, loggedIn } = Astro.props;
 const zh = lang === 'zh';
 const t = {
   bubbleLabel: zh ? '打开助手' : 'Open assistant',
-  title: zh ? '灵感助手' : 'Inspire Assistant',
+  title: zh ? 'Lectio 助手' : 'Lectio Assistant',
   placeholder: zh ? '随便问点什么…' : 'Ask anything…',
   send: zh ? '发送' : 'Send',
   minimize: zh ? '最小化助手' : 'Minimize assistant',
   greeting: zh
-    ? '你好！我是灵感助手——可以问牌面含义、聊聊近况，或了解网站的使用方法。'
-    : "Hi! I'm the Inspire Assistant — ask about your reading, talk through what's on your mind, or learn how the site works.",
+    ? '你好！我是 Lectio 助手 - 可以问经文的意思、聊聊近况，或了解网站的使用方法。'
+    : "Hi! I'm the Lectio Assistant - ask about your verses, talk through what's on your mind, or learn how the site works.",
   quotaTemplate: zh ? '今日剩余 {n} 条' : '{n} left today',
   cappedTitle: zh ? '今日消息已用完' : "You've used today's messages",
   cappedAnon: zh ? '注册免费账户，每天可聊 30 条。' : 'Create a free account for 30 messages a day.',
@@ -59,8 +59,8 @@ const t = {
   const zh = document.getElementById('assistant-root')?.getAttribute('data-lang') === 'zh';
   const T = {
     greeting: zh
-      ? '你好！我是灵感助手——可以问牌面含义、聊聊近况，或了解网站的使用方法。'
-      : "Hi! I'm the Inspire Assistant — ask about your reading, talk through what's on your mind, or learn how the site works.",
+      ? '你好！我是 Lectio 助手 - 可以问经文的意思、聊聊近况，或了解网站的使用方法。'
+      : "Hi! I'm the Lectio Assistant - ask about your verses, talk through what's on your mind, or learn how the site works.",
     quotaTemplate: zh ? '今日剩余 {n} 条' : '{n} left today',
     cappedTitle: zh ? '今日消息已用完' : "You've used today's messages",
     cappedAnon: zh ? '注册免费账户，每天可聊 30 条。' : 'Create a free account for 30 messages a day.',
@@ -74,8 +74,8 @@ const t = {
   const CHIPS: Record<string, string[]> = zh
     ? {
         '/pricing': ['Pro 包含什么？', '首月免费是怎么运作的？', '可以随时取消吗？'],
-        '/library': ['「高塔」这张牌是什么意思？', '哪张牌代表新的开始？', '逆位是什么意思？'],
-        '/': ['一次解读是怎么进行的？', '帮我抽一张牌', '你可以帮我做什么？'],
+        '/library': ['这节经文在讲什么？', '哪些经文适合在焦虑时读？', '旧约和新约有什么不同？'],
+        '/': ['一次圣言诵读是怎么进行的？', '什么是 Lectio Divina？', '你可以帮我做什么？'],
       }
     : {
         '/pricing': ["What's in Pro?", 'How does the free trial work?', 'Can I cancel anytime?'],
@@ -83,7 +83,7 @@ const t = {
         '/': ['How does a reading work?', 'Draw a card for me', 'What can you help with?'],
       };
   const DEFAULT_CHIPS = zh
-    ? ['你能帮我做什么？', '每日抽牌次数是怎么算的？', '我过去的解读在哪里看？']
+    ? ['你能帮我做什么？', '每日默想次数是怎么算的？', '我过去的默想在哪里看？']
     : ['What can you help with?', 'How do daily draws work?', 'Where are my past readings?'];
 
   const HISTORY_SENT = 10;
@@ -148,7 +148,7 @@ const t = {
       title: document.title,
       reading: null,
     };
-    const el = document.getElementById('inspire-reading-context');
+    const el = document.getElementById('lectio-reading-context');
     if (el) {
       try { ctx.reading = JSON.parse(el.textContent ?? 'null'); } catch { ctx.reading = null; }
     }

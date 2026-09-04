@@ -9,16 +9,16 @@ const t = {
   title: lang === 'zh' ? '隐私政策' : 'Privacy Policy',
   updated: lang === 'zh' ? '最后更新：2026 年 8 月 27 日' : 'Last updated: August 27, 2026',
   intro: lang === 'zh'
-    ? 'Inspire（以下简称"本应用"）是一款 AI 辅助塔罗解读网络应用。我们重视你的隐私。本政策说明我们收集哪些信息、如何使用与保护这些信息，以及你享有的权利。使用本应用即表示你同意本政策。'
-    : 'Inspire ("the App") is an AI-assisted tarot reading web application. We respect your privacy. This policy explains what information we collect, how we use and protect it, and the rights you have. By using the App you agree to this policy.',
+    ? 'Lectio（以下简称"本应用"）是一款 AI 辅助的圣言诵读（Lectio Divina）网络应用。我们重视你的隐私。本政策说明我们收集哪些信息、如何使用与保护这些信息，以及你享有的权利。使用本应用即表示你同意本政策。'
+    : 'Lectio ("the App") is an AI-assisted Lectio Divina (contemplative scripture reading) web application. We respect your privacy. This policy explains what information we collect, how we use and protect it, and the rights you have. By using the App you agree to this policy.',
   s1: lang === 'zh' ? '1. 我们收集的信息' : '1. Information We Collect',
   s1items: lang === 'zh'
     ? [
         '账号信息（通过 Google 登录）：Google 用户 ID、昵称、邮箱地址、头像 URL。我们只请求基础的 openid、email、profile 权限范围，不会读取你的 Google 邮件、通讯录、文件或其他 Google 服务数据。',
         '邮箱密码账号信息：如果你使用邮箱注册，我们会存储邮箱地址和经加盐哈希处理的密码（明文密码不可恢复）。',
-        '占卜内容：你提交的问题、抽到的牌面、AI 生成的解读文本，以及记录时间。这些内容关联你的账号，用于"历史记录"功能。',
-        '使用数据：每日抽牌次数（用于免费/付费额度控制）。',
-        '技术信息：请求 IP 地址（用于记录占卜来源与安全防护）。',
+        '默想内容：你提交的问题、领受的经文、AI 生成的默想文本，以及记录时间。这些内容关联你的账号，用于"历史记录"功能。',
+        '使用数据：每日默想次数（用于免费/付费额度控制）。',
+        '技术信息：请求 IP 地址（用于记录来源与安全防护）。',
         '订阅信息：如你购买订阅，支付由 Stripe 处理；我们仅保存套餐类型、订阅状态与 Stripe 客户/订阅标识，不保存完整支付卡号。',
       ]
     : [
@@ -33,15 +33,15 @@ const t = {
   s2items: lang === 'zh'
     ? [
         '创建和验证你的账号，让你能够登录并保持登录状态；',
-        '提供塔罗解读服务并保存你的解读历史；',
-        '执行免费/付费额度与牌阵权限控制；',
+        '提供经文默想服务并保存你的默想历史；',
+        '执行免费/付费额度与布局权限控制；',
         '处理订阅与付款；',
         '保障服务安全、防止滥用；',
         '我们不会出售你的个人信息，也不会将其用于广告投放。',
       ]
     : [
         'To create and verify your account and keep you signed in;',
-        'To provide tarot readings and save your reading history;',
+        'To provide scripture readings and save your reading history;',
         'To enforce free/paid quotas and spread permissions;',
         'To process subscriptions and payments;',
         'To keep the service secure and prevent abuse;',
@@ -49,7 +49,7 @@ const t = {
       ],
   s3: lang === 'zh' ? '3. AI 解读的处理' : '3. AI Processing of Reading Content',
   s3body: lang === 'zh'
-    ? '为生成解读，你提交的问题与抽到的牌面会通过 OpenAI 的 API 发送给 OpenAI 进行文本生成。OpenAI 会按照其自身隐私政策处理这些请求内容；建议不要在问题中填写你不希望被处理的敏感个人信息。'
+    ? '为生成默想，你提交的问题与领受的经文会通过 OpenAI 的 API 发送给 OpenAI 进行文本生成。OpenAI 会按照其自身隐私政策处理这些请求内容；建议不要在问题中填写你不希望被处理的敏感个人信息。'
     : 'To generate interpretations, the question you submit and the cards drawn are sent to OpenAI via its API for text generation. OpenAI processes that request content under its own privacy policy. Please avoid including sensitive personal information in your question that you would not want processed.',
   s4: lang === 'zh' ? '4. 第三方服务' : '4. Third-Party Services',
   s4rows: [
@@ -91,7 +91,7 @@ const t = {
 <Layout title={t.title} lang={lang}>
   <div class="policy-page">
     <div class="policy-head">
-      <img src="/logo.webp" alt="Inspire" class="site-logo" width="1024" height="1024" />
+      <img src="/logo.webp" alt="Lectio" class="site-logo" width="512" height="512" />
       <h1>{t.title}</h1>
       <p class="policy-updated">{t.updated}</p>
     </div>

@@ -4,7 +4,7 @@ import type { D1Database } from '@cloudflare/workers-types';
 const CREATE_TABLE_SQL = `CREATE TABLE IF NOT EXISTS drawing_sessions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   question TEXT NOT NULL,
-  cards TEXT NOT NULL,
+  verses TEXT NOT NULL,
   interpretation TEXT NOT NULL,
   ip_address TEXT,
   user_id TEXT,
@@ -19,11 +19,10 @@ async function ensureTable(db: D1Database): Promise<void> {
   initialized = true;
 }
 
-/** Minimal shape both tarot cards and Bible verses satisfy when logging. */
+/** Minimal shape a drawn verse satisfies when logging. */
 export interface LoggedItem {
   en: string;
   zh?: string;
-  reversed?: boolean;
 }
 
 export async function logReading(
@@ -31,8 +30,7 @@ export async function logReading(
   items: LoggedItem[],
   interpretation: string,
   ipAddress: string | null,
-  userId: string | null,
-  mode: 'tarot' | 'bible' = 'tarot'
+  userId: string | null
 ): Promise<void> {
   const db = env.DB;
   if (!db) {
@@ -41,17 +39,12 @@ export async function logReading(
   }
   try {
     await ensureTable(db);
-    const cardsStr = items
-      .map((c) => {
-        if (mode === 'bible') return c.zh ? `${c.en} / ${c.zh}` : c.en;
-        return `${c.en}(${c.reversed ? '逆位' : '正位'})`;
-      })
-      .join(',');
+    const versesStr = items.map((c) => (c.zh ? `${c.en} / ${c.zh}` : c.en)).join(',');
     await db
       .prepare(
-        'INSERT INTO drawing_sessions (question, cards, interpretation, ip_address, user_id) VALUES (?, ?, ?, ?, ?)'
+        'INSERT INTO drawing_sessions (question, verses, interpretation, ip_address, user_id) VALUES (?, ?, ?, ?, ?)'
       )
-      .bind(question, cardsStr, interpretation, ipAddress, userId)
+      .bind(question, versesStr, interpretation, ipAddress, userId)
       .run();
   } catch (e) {
     console.error('Error logging reading:', e);
@@ -61,14 +54,14 @@ export async function logReading(
 export async function getReadingsForUser(
   userId: string,
   limit = 50
-): Promise<Array<{ id: number; question: string; cards: string; interpretation: string; timestamp: string }>> {
+): Promise<Array<{ id: number; question: string; verses: string; interpretation: string; timestamp: string }>> {
   const db = env.DB;
   await ensureTable(db);
   const result = await db
     .prepare(
-      'SELECT id, question, cards, interpretation, timestamp FROM drawing_sessions WHERE user_id = ? ORDER BY timestamp DESC LIMIT ?'
+      'SELECT id, question, verses, interpretation, timestamp FROM drawing_sessions WHERE user_id = ? ORDER BY timestamp DESC LIMIT ?'
     )
     .bind(userId, limit)
-    .all<{ id: number; question: string; cards: string; interpretation: string; timestamp: string }>();
+    .all<{ id: number; question: string; verses: string; interpretation: string; timestamp: string }>();
   return result.results ?? [];
 }

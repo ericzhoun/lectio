@@ -13,21 +13,21 @@ const benefits = [
   {
     icon: '🎁',
     zh: '注册即领：每日单张解读 3 → 6 次（未注册仅 3 次）',
-    en: 'Welcome perk: single draws doubled to 6/day (guests get 3)',
+    en: 'Welcome perk: Daily Word readings doubled to 6/day (guests get 3)',
   },
   {
     icon: '🎟️',
-    zh: '注册即送体验额度：三张牌阵 ×3、凯尔特十字 ×1',
-    en: 'Free trial credits: 3-card spread ×3, Celtic Cross ×1',
+    zh: '注册即送体验额度：圣言诵读 ×3、深度诵读 ×1',
+    en: 'Free trial credits: Lectio Divina ×3, Deep Lectio ×1',
   },
   {
     icon: '🔮',
-    zh: '解锁三张牌、凯尔特十字等专属牌阵',
-    en: 'Unlock 3-card and Celtic Cross spreads',
+    zh: '解锁圣言诵读、深度诵读等完整布局',
+    en: 'Unlock the Lectio Divina and Deep Lectio layouts',
   },
   {
     icon: '✨',
-    zh: '不限次数的每日塔罗解读',
+    zh: '不限次数的每日经文默想',
     en: 'Unlimited daily readings',
   },
   {
@@ -63,16 +63,16 @@ const errors: Record<string, { zh: string; en: string }> = {
 const errorMsg = error ? errors[error] : null;
 
 const title = lang === 'zh'
-  ? '免费注册 — 每日 AI 塔罗解读，解锁更多牌阵'
-  : 'Sign Up Free — Daily AI Tarot Readings & More Spreads';
+  ? '免费注册 — 每日经文默想，解锁完整布局'
+  : 'Sign Up Free — Daily Scripture Readings & Deeper Layouts';
 const description = lang === 'zh'
-  ? '免费注册即可每日 6 次 AI 塔罗单张解读，解锁三张牌阵与凯尔特十字，保存完整解读历史。'
-  : 'Create a free account for 6 daily AI tarot readings, unlock 3-card and Celtic Cross spreads, and save your full reading history.';
+  ? '免费注册即可每日 6 次经文默想，解锁圣言诵读与深度诵读布局，保存完整默想历史。'
+  : 'Create a free account for 6 scripture readings a day, unlock the Lectio Divina and Deep Lectio layouts, and keep your full reading history.';
 ---
 <Layout title={title} description={description} lang={lang}>
   <div class="auth-page">
     <div class="auth-hero">
-      <h1>{lang === 'zh' ? '开启你的塔罗之旅' : 'Begin your tarot journey'}</h1>
+      <h1>{lang === 'zh' ? '开启你的圣言诵读' : 'Begin your Lectio practice'}</h1>
       <p class="auth-hero-sub">
         {lang === 'zh'
           ? '注册账号，解锁更深入的指引与更多探索空间'

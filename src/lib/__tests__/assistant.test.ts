@@ -57,33 +57,31 @@ describe('buildSystemPrompt', () => {
     expect(p).toContain('No page context');
   });
 
-  it('embeds page and reading context with positions, reversals and interpretations', () => {
+  it('embeds page and reading context with positions and reflections', () => {
     const ctx: PageContext = {
       path: '/',
-      title: 'Inspiration Tarot',
+      title: 'Lectio',
       reading: {
-        mode: 'tarot',
-        spread: 'Three-Card',
+        spread: 'Lectio Divina',
         question: 'Will my move go well?',
-        items: [{ name: 'The Tower', position: 'Future', reversed: true, interp: 'upheaval clears the way' }],
+        items: [{ name: 'Romans 8:28 (罗马书 8:28)', position: 'Oratio · Respond', interp: 'all things work together' }],
       },
     };
     const p = buildSystemPrompt({ lang: 'en', context: ctx, grounding: '' });
-    expect(p).toContain('/  ("Inspiration Tarot")');
-    expect(p).toContain('The Tower');
-    expect(p).toContain('[Future]');
-    expect(p).toContain('[Reversed]');
-    expect(p).toContain('upheaval clears the way');
-    expect(p).toContain('never invent draws');
+    expect(p).toContain('/  ("Lectio")');
+    expect(p).toContain('Romans 8:28');
+    expect(p).toContain('[Oratio · Respond]');
+    expect(p).toContain('all things work together');
+    expect(p).toContain('never invent them');
   });
 
-  it('marks hidden interpretations instead of pretending they exist', () => {
+  it('marks hidden reflections instead of pretending they exist', () => {
     const ctx: PageContext = {
       path: '/',
       title: 't',
-      reading: { mode: 'bible', spread: 'Single', question: '', items: [{ name: 'Psalm 23:1', position: '', reversed: false, interp: '' }] },
+      reading: { spread: 'Daily Word', question: '', items: [{ name: 'Psalm 23:1', position: '', interp: '' }] },
     };
     const p = buildSystemPrompt({ lang: 'en', context: ctx, grounding: '' });
-    expect(p).toContain('(no interpretation shown)');
+    expect(p).toContain('(no reflection shown)');
   });
 });

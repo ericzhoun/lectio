@@ -57,7 +57,6 @@ function sanitizeContext(raw: unknown): PageContext | null {
   if (readingRaw && typeof readingRaw === 'object') {
     const itemsRaw = Array.isArray(readingRaw.items) ? readingRaw.items.slice(0, 12) : [];
     reading = {
-      mode: readingRaw.mode === 'bible' ? 'bible' : 'tarot',
       spread: typeof readingRaw.spread === 'string' ? readingRaw.spread.slice(0, 100) : '',
       question: typeof readingRaw.question === 'string' ? readingRaw.question.slice(0, 500) : '',
       items: itemsRaw.map((it) => {
@@ -65,7 +64,6 @@ function sanitizeContext(raw: unknown): PageContext | null {
         return {
           name: typeof o.name === 'string' ? o.name.slice(0, 200) : '',
           position: typeof o.position === 'string' ? o.position.slice(0, 100) : '',
-          reversed: o.reversed === true,
           interp: typeof o.interp === 'string' ? o.interp.slice(0, 1000) : '',
         };
       }),

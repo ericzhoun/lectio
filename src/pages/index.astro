@@ -2,17 +2,13 @@
 export const prerender = false;
 
 import Layout from '../layouts/Layout.astro';
-import {
-  getTarotDeck, drawCards, drawCardsFromNames, rebuildDrawnCards,
-  sanitizeDeckOrder, sanitizePickedIndices, SPREADS, DEFAULT_QUESTIONS,
-  type DrawnCard, type Lang,
-} from '../lib/tarot';
+import { SPREADS, DEFAULT_QUESTIONS, type Lang } from '../lib/reading';
 import {
   PENDING_DRAW_COOKIE, createPendingDrawToken, verifyPendingDrawToken,
   type PendingDrawSpread,
 } from '../lib/pendingDraw';
-import { drawVerses, rebuildDrawnVerses, buildBiblePages, BIBLE_SPREADS, type DrawnVerse, type Mode } from '../lib/bible';
-import { generateInterpretation, generateFollowUpQuestions, generateBibleInterpretation } from '../lib/openai';
+import { drawVerses, rebuildDrawnVerses, buildBiblePages, type DrawnVerse } from '../lib/scripture';
+import { generateInterpretation, generateFollowUpQuestions } from '../lib/openai';
 import { logReading } from '../lib/db';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../lib/session';
@@ -32,19 +28,16 @@ const loggedInUserId = sessionCookie ? await verifySessionToken(sessionCookie, e
 
 let question = '';
 let isDefaultQuestion = false;
-let cards: DrawnCard[] | null = null;
 let verses: DrawnVerse[] | null = null;
 let interpretation = '';
 let followUpQuestions: string[] = [];
 let spreadKey = url.searchParams.get('spread') ?? 'single';
 if (!(spreadKey in SPREADS)) spreadKey = 'single';
-let mode: Mode = url.searchParams.get('mode') === 'bible' ? 'bible' : 'tarot';
 let error: string | null = null;
 let upsellReason: 'quota' | 'spread_locked' | 'no_credits' | null = null;
-// "Draw now, register to reveal" state: cards that have been drawn but whose
-// interpretation is still locked (anonymous visitor, or a registered visitor
-// whose reveal is not possible yet).
-let pendingCards: DrawnCard[] | null = null;
+// "Read now, register to reveal" state: verses that have been received but
+// whose reflection is still locked (anonymous visitor, or a registered
+// visitor whose reveal is not possible yet).
 let pendingVerses: DrawnVerse[] | null = null;
 let pendingSpreadKey: '3card' | 'celtic_cross' | null = null;
 // Pending gate state. Object holder on purpose: every assignment happens
@@ -56,34 +49,24 @@ const pendingGateState: {
 const registered = loggedInUserId !== null;
 
 // Pending draw cookie (read before the POST branch — the reveal flow needs it).
-// A pending draw is an anonymous draw whose interpretation is still locked:
-// the drawn items are shown (cards, or Bible verses inside their chapter),
-// and the 解经/解读 button starts the reveal (registration for anonymous
-// visitors, or the interpretation itself for registered ones).
+// A pending draw is an anonymous reading whose reflection is still locked:
+// the verses are shown inside their chapter, and the 解经 button starts the
+// reveal (registration for anonymous visitors, or the reflection itself for
+// registered ones).
 const pendingToken = Astro.cookies.get(PENDING_DRAW_COOKIE)?.value;
 const pendingDrawData = await verifyPendingDrawToken(pendingToken, env.SESSION_SECRET);
 const clearPending = () => Astro.cookies.delete(PENDING_DRAW_COOKIE, { path: '/' });
-const pendingSpreadMeta = pendingDrawData
-  ? (pendingDrawData.mode === 'bible' ? BIBLE_SPREADS[pendingDrawData.spread] : SPREADS[pendingDrawData.spread])
-  : undefined;
+const pendingSpreadMeta = pendingDrawData ? SPREADS[pendingDrawData.spread] : undefined;
 
-// Rebuild the drawn items for display (card faces or verse texts), with
-// position labels in the current language. Returns null for a corrupt
-// payload (wrong item count, unknown names/refs).
-const rebuildPending = (): { cards: DrawnCard[]; verses: DrawnVerse[] } | null => {
+// Rebuild the drawn verses for display, with position labels in the current
+// language. Returns null for a corrupt payload (wrong count, unknown refs).
+const rebuildPending = (): DrawnVerse[] | null => {
   if (!pendingDrawData || !pendingSpreadMeta) return null;
-  if (pendingDrawData.mode === 'bible') {
-    const rebuilt = rebuildDrawnVerses(pendingDrawData.verses ?? []);
-    if (rebuilt.length !== pendingSpreadMeta.number) return null;
-    const positions = pendingSpreadMeta.positions[lang];
-    rebuilt.forEach((v, i) => { v.position = positions[i] ?? ''; });
-    return { cards: [], verses: rebuilt };
-  }
-  const rebuilt = rebuildDrawnCards(getTarotDeck(), pendingDrawData.cards ?? [], lang);
+  const rebuilt = rebuildDrawnVerses(pendingDrawData.verses);
   if (rebuilt.length !== pendingSpreadMeta.number) return null;
   const positions = pendingSpreadMeta.positions[lang];
-  rebuilt.forEach((c, i) => { c.position = positions[i] ?? ''; });
-  return { cards: rebuilt, verses: [] };
+  rebuilt.forEach((v, i) => { v.position = positions[i] ?? ''; });
+  return rebuilt;
 };
 
 // Run the reveal (button-driven): generate the question-based interpretation
@@ -103,71 +86,43 @@ const applyReveal = async (): Promise<void> => {
       revealEntitlement.reason === 'no_credits' ? 'credits'
       : revealEntitlement.reason === 'quota' ? 'quota'
       : 'locked';
-    pendingCards = pending.cards.length > 0 ? pending.cards : null;
-    pendingVerses = pending.verses.length > 0 ? pending.verses : null;
+    pendingVerses = pending;
     pendingSpreadKey = pendingDrawData.spread;
     question = pendingDrawData.question;
     isDefaultQuestion = false;
     return;
   }
   try {
-    if (pendingDrawData.mode === 'bible') {
-      const rebuilt = pending.verses;
-      const interp = await generateBibleInterpretation(pendingDrawData.question, rebuilt, lang, pendingDrawData.spread);
-      rebuilt.forEach((v, i) => {
-        v.interp_text = interp.cards[i]?.text ?? '';
-        v.tags = interp.cards[i]?.tags ?? [];
-      });
-      interpretation = interp.summary;
-      const followUpContext = interpretation || rebuilt.map((v) => v.interp_text).join(' ');
-      followUpQuestions = await generateFollowUpQuestions(pendingDrawData.question, followUpContext, lang);
-      const ipHeader = Astro.request.headers.get('x-forwarded-for');
-      const ipAddress = ipHeader
-        ? ipHeader.split(',')[0].trim()
-        : Astro.request.headers.get('cf-connecting-ip');
-      await logReading(
-        pendingDrawData.question,
-        rebuilt.map((v) => ({ en: v.refEn, zh: v.refZh })),
-        interpretation,
-        ipAddress,
-        loggedInUserId,
-        'bible'
-      );
-      await recordDraw(loggedInUserId, pendingDrawData.spread, true);
-      question = pendingDrawData.question;
-      isDefaultQuestion = false;
-      verses = rebuilt;
-      spreadKey = pendingDrawData.spread;
-      mode = 'bible';
-    } else {
-      const rebuilt = pending.cards;
-      const interp = await generateInterpretation(pendingDrawData.question, rebuilt, lang, pendingDrawData.spread);
-      rebuilt.forEach((c, i) => {
-        c.interp_text = interp.cards[i]?.text ?? '';
-        c.tags = interp.cards[i]?.tags ?? [];
-      });
-      interpretation = interp.summary;
-      const followUpContext = interpretation || rebuilt.map((c) => c.interp_text).join(' ');
-      followUpQuestions = await generateFollowUpQuestions(pendingDrawData.question, followUpContext, lang);
-      const ipHeader = Astro.request.headers.get('x-forwarded-for');
-      const ipAddress = ipHeader
-        ? ipHeader.split(',')[0].trim()
-        : Astro.request.headers.get('cf-connecting-ip');
-      await logReading(pendingDrawData.question, rebuilt, interpretation, ipAddress, loggedInUserId);
-      await recordDraw(loggedInUserId, pendingDrawData.spread, true);
-      question = pendingDrawData.question;
-      isDefaultQuestion = false;
-      cards = rebuilt;
-      spreadKey = pendingDrawData.spread;
-      mode = 'tarot';
-    }
+    const interp = await generateInterpretation(pendingDrawData.question, pending, lang, pendingDrawData.spread);
+    pending.forEach((v, i) => {
+      v.interp_text = interp.cards[i]?.text ?? '';
+      v.tags = interp.cards[i]?.tags ?? [];
+    });
+    interpretation = interp.summary;
+    const followUpContext = interpretation || pending.map((v) => v.interp_text).join(' ');
+    followUpQuestions = await generateFollowUpQuestions(pendingDrawData.question, followUpContext, lang);
+    const ipHeader = Astro.request.headers.get('x-forwarded-for');
+    const ipAddress = ipHeader
+      ? ipHeader.split(',')[0].trim()
+      : Astro.request.headers.get('cf-connecting-ip');
+    await logReading(
+      pendingDrawData.question,
+      pending.map((v) => ({ en: v.refEn, zh: v.refZh })),
+      interpretation,
+      ipAddress,
+      loggedInUserId
+    );
+    await recordDraw(loggedInUserId, pendingDrawData.spread, true);
+    question = pendingDrawData.question;
+    isDefaultQuestion = false;
+    verses = pending;
+    spreadKey = pendingDrawData.spread;
     clearPending();
   } catch (e) {
-    // Interpretation failed (e.g. LLM outage) — keep the pending cookie so a
+    // Reflection failed (e.g. LLM outage) — keep the pending cookie so a
     // reload can retry without spending the credit again.
     console.error('Reveal interpretation failed:', e);
-    pendingCards = pending.cards.length > 0 ? pending.cards : null;
-    pendingVerses = pending.verses.length > 0 ? pending.verses : null;
+    pendingVerses = pending;
     pendingSpreadKey = pendingDrawData.spread;
     pendingGateState.gate = 'retry';
     question = pendingDrawData.question;
@@ -200,64 +155,24 @@ if (Astro.request.method === 'POST') {
 
     spreadKey = String(form.get('spread') ?? 'single');
     if (!(spreadKey in SPREADS)) spreadKey = 'single';
-    mode = String(form.get('mode') ?? 'tarot') === 'bible' ? 'bible' : 'tarot';
 
     const entitlementUserId = loggedInUserId ?? userId;
     const entitlement = await canDraw(entitlementUserId, spreadKey, registered);
+    const spread = SPREADS[spreadKey] ?? SPREADS.single;
 
     if (!entitlement.ok) {
       upsellReason = entitlement.reason;
-    } else if (entitlement.gated && mode === 'tarot') {
-      // Anonymous 3-card "draw now, register to reveal" flow. The cards are
-      // drawn immediately (honoring the visitor's fan picks when valid) and
-      // stored in a signed cookie. No interpretation is generated and no
-      // quota/credit is spent here — the reveal after registration spends one
-      // of the account's welcome credits.
-      const deck = getTarotDeck();
-      const spread = SPREADS[spreadKey];
-      const allowReversed = form.get('reversed') === 'on';
-      const order = sanitizeDeckOrder(String(form.get('deck_order') ?? ''), deck);
-      const picks = sanitizePickedIndices(String(form.get('picked') ?? ''), deck.length, spread.number);
-      const drawn = order && picks
-        ? drawCardsFromNames(deck, picks.map((i) => order[i]), allowReversed, lang)
-        : drawCards(deck, spread.number, allowReversed, lang);
-      if (drawn.length > 0) {
-        const token = await createPendingDrawToken(
-          {
-            v: 1,
-            mode: 'tarot',
-            spread: spreadKey as PendingDrawSpread,
-            question,
-            cards: drawn.map((c) => ({ en: c.en, reversed: c.reversed })),
-            ts: Date.now(),
-          },
-          env.SESSION_SECRET
-        );
-        Astro.cookies.set(PENDING_DRAW_COOKIE, token, {
-          path: '/',
-          httpOnly: true,
-          sameSite: 'lax',
-          secure: true,
-          maxAge: 60 * 60 * 24 * 7,
-        });
-        const positions = spread.positions[lang];
-        drawn.forEach((c, i) => { c.position = positions[i] ?? ''; });
-        pendingCards = drawn;
-        pendingSpreadKey = spreadKey as PendingDrawSpread;
-        pendingGateState.gate = 'action';
-      }
     } else if (entitlement.gated) {
-      // Anonymous Bible "flip to reveal" flow: draw the verses now and show
-      // the scripture for free; the question-based reading stays locked until
-      // registration. The reveal afterwards consumes a trial credit.
-      const spread = BIBLE_SPREADS[spreadKey];
+      // Anonymous "open the Bible to reveal" flow: draw the verses now and
+      // show the scripture for free; the question-based reflection stays
+      // locked until registration. The reveal afterwards consumes a trial
+      // credit. No quota is spent here.
       const drawnVerses = drawVerses(spread.number);
       const positions = spread.positions[lang];
       drawnVerses.forEach((v, i) => { v.position = positions[i] ?? ''; });
       const token = await createPendingDrawToken(
         {
           v: 1,
-          mode: 'bible',
           spread: spreadKey as PendingDrawSpread,
           question,
           verses: drawnVerses.map((v) => v.refEn),
@@ -275,13 +190,12 @@ if (Astro.request.method === 'POST') {
       pendingVerses = drawnVerses;
       pendingSpreadKey = spreadKey as PendingDrawSpread;
       pendingGateState.gate = 'action';
-    } else if (mode === 'bible') {
-      const spread = BIBLE_SPREADS[spreadKey] ?? BIBLE_SPREADS.single;
+    } else {
       const drawnVerses = drawVerses(spread.number);
       const positions = spread.positions[lang];
       drawnVerses.forEach((v, i) => { v.position = positions[i] ?? ''; });
 
-      const interp = await generateBibleInterpretation(question, drawnVerses, lang, spreadKey);
+      const interp = await generateInterpretation(question, drawnVerses, lang, spreadKey);
       drawnVerses.forEach((v, i) => {
         v.interp_text = interp.cards[i]?.text ?? '';
         v.tags = interp.cards[i]?.tags ?? [];
@@ -297,30 +211,8 @@ if (Astro.request.method === 'POST') {
         verses.map((v) => ({ en: v.refEn, zh: v.refZh })),
         interpretation,
         ipAddress,
-        entitlementUserId,
-        'bible'
+        entitlementUserId
       );
-      await recordDraw(entitlementUserId, spreadKey, registered);
-    } else {
-      const deck = getTarotDeck();
-      const spread = SPREADS[spreadKey];
-      const allowReversed = form.get('reversed') === 'on';
-      cards = drawCards(deck, spread.number, allowReversed, lang);
-
-      const positions = spread.positions[lang];
-      cards.forEach((c, i) => { c.position = positions[i] ?? ''; });
-
-      const interp = await generateInterpretation(question, cards, lang, spreadKey);
-      cards.forEach((c, i) => {
-        c.interp_text = interp.cards[i]?.text ?? '';
-        c.tags = interp.cards[i]?.tags ?? [];
-      });
-      interpretation = interp.summary;
-
-      const followUpContext = interpretation || cards.map((c) => c.interp_text).join(' ');
-      followUpQuestions = await generateFollowUpQuestions(question, followUpContext, lang);
-
-      await logReading(question, cards, interpretation, ipAddress, entitlementUserId);
       await recordDraw(entitlementUserId, spreadKey, registered);
     }
   }
@@ -340,87 +232,47 @@ if (Astro.request.method === 'POST') {
 }
 
 // Pending view setup: when a valid pending draw exists and no fresh reading
-// is being shown, render the drawn items with the 解经/解读 action. The
-// reveal itself is button-driven — anonymous visitors get the registration
-// modal on click; registered ones submit the reveal form.
-if (pendingDrawData && pendingSpreadMeta && !cards && !verses && !pendingGateState.gate) {
+// is being shown, render the verses with the 解经 action. The reveal itself is
+// button-driven — anonymous visitors get the registration modal on click;
+// registered ones submit the reveal form.
+if (pendingDrawData && pendingSpreadMeta && !verses && !pendingGateState.gate) {
   const pending = rebuildPending();
   if (pending) {
-    pendingCards = pending.cards.length > 0 ? pending.cards : null;
-    pendingVerses = pending.verses.length > 0 ? pending.verses : null;
+    pendingVerses = pending;
     pendingSpreadKey = pendingDrawData.spread;
     pendingGateState.gate = 'action';
     question = pendingDrawData.question;
     isDefaultQuestion = false;
-    mode = pendingDrawData.mode;
     spreadKey = pendingDrawData.spread;
   } else {
     clearPending();
   }
 }
-// Visual "pick cards" fan + Bible flip for anonymous visitors (daily-
-// reflection style). The shuffled deck order is embedded in the form; the
-// visitor's picks index into it, so the cards they choose are the cards they
-// get. Bible mode needs no picking — one flip draws the verses.
-const showFan = !registered && !pendingCards && !pendingVerses;
-const showBibleFlip = showFan;
-// Shuffled deck order for the fan: the visitor's picks index into it, so the
-// cards they choose are the cards they get.
-const fanOrder = showFan
-  ? (() => {
-      const names = getTarotDeck().map((c) => c.en);
-      for (let i = names.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [names[i], names[j]] = [names[j], names[i]];
-      }
-      return names;
-    })()
-  : [];
-// Slot position labels per multi-card spread, consumed by the fan script.
-const fanPositionData = {
-  '3card': SPREADS['3card'].positions[lang],
-  celtic_cross: SPREADS['celtic_cross'].positions[lang],
-};
 
-// Copy for the pending (locked) view, mode-aware.
-const pendingIsBible = pendingVerses !== null;
-const pendingCount = pendingIsBible ? pendingVerses!.length : pendingCards?.length ?? 0;
-const pendingTitle = pendingIsBible
-  ? (lang === 'zh' ? '你翻到的经文' : 'Your Bible verses')
-  : pendingCount === 10
-    ? (lang === 'zh' ? '你的十张牌' : 'Your ten cards')
-    : (lang === 'zh' ? '你的三张牌' : 'Your three cards');
-const pendingSpreadName = pendingSpreadKey
-  ? (pendingIsBible ? BIBLE_SPREADS[pendingSpreadKey]?.name[lang] : SPREADS[pendingSpreadKey]?.name[lang])
-  : null;
+// The "open the Bible" panel is the anonymous entry point into a multi-verse
+// layout: one gesture receives the verses, registration reveals the reading.
+const showOpenPanel = !registered && !pendingVerses;
+
+// Copy for the pending (locked) view.
+const pendingCount = pendingVerses?.length ?? 0;
+const pendingTitle = lang === 'zh' ? '你领受的经文' : 'The verses you received';
+const pendingSpreadName = pendingSpreadKey ? SPREADS[pendingSpreadKey]?.name[lang] : null;
 const gateCopy = {
-  title: pendingIsBible
-    ? (lang === 'zh' ? '经文已翻开 — 免费注册即可查看解读' : 'Your verses are ready — register free to reveal the reading')
-    : (lang === 'zh' ? '完整解读已就绪 — 免费注册即可揭晓' : 'Your full reading is ready — register free to reveal it'),
-  text: pendingIsBible
-    ? (lang === 'zh'
-        ? '注册后即可查看这些经文如何回应你的问题，新账号还赠送体验额度。'
-        : "Register to see what these verses say about your question — new accounts get free welcome credits.")
-    : (lang === 'zh'
-        ? '注册后立即查看每张牌的含义与整体解读，新账号还赠送体验额度。'
-        : "Register to reveal every card's meaning and the overall reading — new accounts get free welcome credits."),
-  modalText: pendingIsBible
-    ? (lang === 'zh' ? '免费注册账号，看看这些经文想对你说什么。' : 'Create a free account to see what these verses are saying to you.')
-    : (lang === 'zh' ? '免费注册账号，立即揭晓牌卡想对你说的话。' : 'Create a free account to reveal what your cards are telling you.'),
-  modalReveal: pendingIsBible
-    ? (lang === 'zh' ? '查看针对问题的经文解读' : 'Reveal the reading for your question')
-    : (lang === 'zh' ? '揭晓本次抽牌的完整解读' : 'Reveal the full reading'),
+  modalText: lang === 'zh'
+    ? '免费注册账号，看看这些经文想对你说什么。'
+    : 'Create a free account to see what these verses are saying to you.',
+  modalReveal: lang === 'zh'
+    ? '查看针对问题的经文默想'
+    : 'Reveal the reflection for your question',
 };
 
-// "Real Bible page" context for the pending Bible view: drawn verses embedded
-// in their chapters with neighbouring verses. Position labels for the tags.
-const biblePages = pendingIsBible && pendingVerses ? buildBiblePages(pendingVerses) : [];
+// "Real Bible page" context for the pending view: verses embedded in their
+// chapters with neighbouring verses. Position labels for the tags.
+const biblePages = pendingVerses ? buildBiblePages(pendingVerses) : [];
 const pendingPositionLabels = pendingSpreadKey
-  ? ((pendingIsBible ? BIBLE_SPREADS[pendingSpreadKey] : SPREADS[pendingSpreadKey])?.positions[lang] ?? [])
+  ? (SPREADS[pendingSpreadKey]?.positions[lang] ?? [])
   : [];
-const pendingButtonLabel = lang === 'zh'
-  ? (pendingIsBible ? '解经' : '解读')
-  : 'Interpret';
+const pendingButtonLabel = lang === 'zh' ? '默想' : 'Reflect';
 
 const currentTier: Tier = await resolveTier(loggedInUserId ?? Astro.cookies.get('user_id')?.value ?? '');
 
@@ -444,8 +296,7 @@ interface SpreadCardView {
   goto: string;
 }
 
-// Same tier/quota gates for tarot and Bible verse spreads — access is keyed
-// by spread key, which both modes share.
+// Tier/quota gates, keyed by layout key.
 const buildSpreadView = (
   key: string,
   s: { number: number; name: Record<Lang, string>; description: Record<Lang, string> }
@@ -458,13 +309,13 @@ const buildSpreadView = (
     if (key !== 'single') {
       if (!registered) {
         if (key === '3card' || key === 'celtic_cross') {
-          // Draw-to-reveal: anonymous visitors may draw (cards or verses);
-          // registering reveals the reading.
+          // Read-to-reveal: anonymous visitors may receive the verses;
+          // registering reveals the reflection.
           locked = false;
-          badge = lang === 'zh' ? '免费' : 'Free draw';
+          badge = lang === 'zh' ? '免费' : 'Free';
           badgeTrial = true;
         } else {
-          // Anonymous visitors: registering unlocks trial credits for this spread.
+          // Anonymous visitors: registering unlocks trial credits for this layout.
           locked = true;
           badge = SPREAD_ACCESS.basic.includes(key) ? 'Basic' : 'Pro';
           goto = '/signup';
@@ -497,60 +348,56 @@ const buildSpreadView = (
   };
 };
 
-const tarotSpreadViews: SpreadCardView[] = Object.entries(SPREADS).map(([key, s]) => buildSpreadView(key, s));
-const bibleSpreadViews: SpreadCardView[] = Object.entries(BIBLE_SPREADS).map(([key, s]) => buildSpreadView(key, s));
+const spreadViews: SpreadCardView[] = Object.entries(SPREADS).map(([key, s]) => buildSpreadView(key, s));
 
-const resultCount = cards?.length ?? verses?.length ?? 0;
-const isBible = mode === 'bible';
+const resultCount = verses?.length ?? 0;
 
 // Assistant widget context: what reading is currently on screen (design:
 // docs/superpowers/specs/2026-09-01-web-assistant-design.md, section 3).
 // Hidden interpretations (gated draws) are passed as '' - the assistant is
 // instructed not to invent them.
-const hasReading = !!(cards || verses);
-const assistantReading = hasReading
+const assistantReading = verses
   ? {
-      mode,
-      spread: (mode === 'bible' ? BIBLE_SPREADS[spreadKey] : SPREADS[spreadKey])?.name?.[lang] ?? spreadKey,
+      spread: SPREADS[spreadKey]?.name?.[lang] ?? spreadKey,
       question: isDefaultQuestion ? '' : question,
-      items: (mode === 'bible' ? verses ?? [] : cards ?? []).map((c) =>
-        'refEn' in c
-          ? { name: `${c.refEn} (${c.refZh})`, position: c.position ?? '', reversed: false, interp: c.interp_text ?? '' }
-          : { name: `${c.en} (${c.zh})`, position: c.position ?? '', reversed: c.reversed === true, interp: c.interp_text ?? '' }
-      ),
+      items: verses.map((v) => ({
+        name: `${v.refEn} (${v.refZh})`,
+        position: v.position ?? '',
+        interp: v.interp_text ?? '',
+      })),
     }
   : null;
 const assistantContextJson = JSON.stringify(assistantReading).replace(/</g, '\\u003c');
 
 const title = lang === 'zh'
-  ? '自我启发 韦特塔罗 — AI 塔罗牌在线解读'
-  : 'Inspiration Tarot — Free AI Tarot Card Reading Online';
+  ? 'Lectio 圣言诵读 — 每日经文默想'
+  : 'Lectio — Daily Scripture Reading and Reflection';
 const description = lang === 'zh'
-  ? '免费 AI 塔罗牌在线解读：支持单张牌、三张牌阵、凯尔特十字等经典牌阵，帮你探索事业、感情与人生方向。中英双语可用。'
-  : 'Get a free AI-powered tarot reading online. Choose from single card, 3-card spread, or Celtic Cross. Explore love, career, and life guidance — available in English and Chinese.';
+  ? '以圣言诵读（Lectio Divina）的方式领受经文：诵读、默想、祈祷、默观。为你的问题带来一节经文与温柔的默想陪伴，中英双语。'
+  : 'Lectio Divina online: receive a scripture passage and sit with it through reading, reflection, response, and rest. Gentle, question-led reflection in English and Chinese.';
 ---
 <Layout title={title} description={description} lang={lang}>
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Inspiration Tarot",
-    "alternateName": "自我启发 韦特塔罗",
-    "url": "https://dramatherapy.us",
+    "name": "Lectio",
+    "alternateName": "Lectio 圣言诵读",
+    "url": "https://3livescapture.com",
     "description": description,
     "inLanguage": [lang, lang === 'zh' ? 'en' : 'zh'],
-    "applicationCategory": "EntertainmentApplication",
+    "applicationCategory": "LifestyleApplication",
     "offers": [
-      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "description": "3–6 single-card tarot readings per day, plus trial credits for multi-card spreads" },
-      { "@type": "Offer", "name": "Basic", "price": "4.99", "priceCurrency": "USD", "description": "Single and 3-card tarot spreads, 20 readings per day, full history" },
-      { "@type": "Offer", "name": "Pro", "price": "11.99", "priceCurrency": "USD", "description": "All tarot spreads including Celtic Cross, unlimited readings, full history" }
+      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "description": "3–6 Daily Word readings per day, plus trial credits for the longer layouts" },
+      { "@type": "Offer", "name": "Basic", "price": "4.99", "priceCurrency": "USD", "description": "Daily Word and Lectio Divina layouts, 20 readings per day, full history" },
+      { "@type": "Offer", "name": "Pro", "price": "11.99", "priceCurrency": "USD", "description": "All layouts including Deep Lectio, unlimited readings, full history" }
     ]
   })}>
   </script>
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Inspiration Tarot",
-    "url": "https://dramatherapy.us",
+    "name": "Lectio",
+    "url": "https://3livescapture.com",
     "inLanguage": ["en", "zh"]
   })}>
   </script>
@@ -558,25 +405,25 @@ const description = lang === 'zh'
   <div class="loading-overlay" id="loading-overlay">
     <div class="loading-content">
       <div class="loading-spinner"></div>
-      <p id="loading-text">{lang === 'zh' ? '正在解读您的问题，请稍候...' : 'Processing your question, please wait...'}</p>
+      <p id="loading-text">{lang === 'zh' ? '正在为你领受经文，请稍候...' : 'Receiving your verses, please wait...'}</p>
     </div>
   </div>
 
   <header>
-    <img src="/logo.webp" alt="Inspiration Tarot — AI tarot card reading app" class="site-logo" width="1024" height="1024" />
-    <h1>{lang === 'zh' ? '自我启发 韦特塔罗 — AI 在线塔罗解读' : 'Inspiration Tarot — AI Tarot Card Reading'}</h1>
+    <img src="/logo.webp" alt="Lectio — daily scripture reading and reflection" class="site-logo" width="512" height="512" />
+    <h1>{lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Scripture Reading'}</h1>
   </header>
 
-  <form method="post" id="tarot-form">
+  <form method="post" id="reading-form">
     <div class="suggested-questions">
       <h4>{lang === 'zh' ? '常见话题：' : 'Popular Topics:'}</h4>
       {(lang === 'zh'
-        ? ['最近在事业上会遇到什么机遇？', '我的感情生活会有什么变化？', '接下来这段时间需要注意什么？', '我该如何提升自己的能量？']
+        ? ['我该如何面对工作中的这段压力？', '我想在这段关系里学会更好地去爱。', '接下来这段时间，我需要放下什么？', '我该如何在忙碌中安静下来？']
         : [
-            'What career opportunities will I encounter soon?',
-            'How will my love life change?',
-            'What should I be aware of in the coming period?',
-            'How can I enhance my energy?',
+            'How do I face this season of pressure at work?',
+            'I want to learn to love better in this relationship.',
+            'What do I need to let go of in the coming weeks?',
+            'How can I find stillness in a busy life?',
           ]
       ).map((q) => (
         <div class="follow-up-question" data-question={q}>{q}</div>
@@ -594,16 +441,6 @@ const description = lang === 'zh'
       />
     </div>
 
-    <div class="mode-tabs" id="mode-tabs">
-      <button type="button" class={`mode-tab ${mode === 'tarot' ? 'active' : ''}`} data-mode="tarot">
-        {lang === 'zh' ? '🃏 塔罗牌' : '🃏 Tarot'}
-      </button>
-      <button type="button" class={`mode-tab ${mode === 'bible' ? 'active' : ''}`} data-mode="bible">
-        {lang === 'zh' ? '📖 圣经经文' : '📖 Bible Verses'}
-      </button>
-    </div>
-    <input type="hidden" name="mode" id="mode-input" value={mode} />
-
     <p class="quota-line">
       {registered
         ? (lang === 'zh'
@@ -614,8 +451,8 @@ const description = lang === 'zh'
             : `Used today: ${usedToday} / ${ANON_DAILY_DRAWS} · register free for 6/day`)}
     </p>
 
-    <div class={`spread-picker ${mode === 'tarot' ? '' : 'hidden'}`} data-mode="tarot" id="spread-picker-tarot">
-      {tarotSpreadViews.map((v) => (
+    <div class="spread-picker" id="spread-picker">
+      {spreadViews.map((v) => (
         <div
           class={`spread-option ${spreadKey === v.key ? 'selected' : ''} ${v.locked ? 'locked' : ''}`}
           data-spread={v.key}
@@ -629,39 +466,7 @@ const description = lang === 'zh'
         </div>
       ))}
     </div>
-    <div class={`spread-picker ${mode === 'bible' ? '' : 'hidden'}`} data-mode="bible" id="spread-picker-bible">
-      {bibleSpreadViews.map((v) => (
-        <div
-          class={`spread-option ${spreadKey === v.key ? 'selected' : ''} ${v.locked ? 'locked' : ''}`}
-          data-spread={v.key}
-          data-locked={v.locked ? 'true' : 'false'}
-          data-goto={v.locked ? v.goto : undefined}
-        >
-          <div class="spread-number">{v.number}</div>
-          <div class="spread-name">{v.name}</div>
-          <div class="spread-desc">{v.desc}</div>
-          {v.badge && <span class={`tier-badge ${v.badgeTrial ? 'trial-badge' : ''}`}>{v.badge}</span>}
-        </div>
-      ))}
-    </div>
-    {showFan && (
-      <div class="card-fan-wrap hidden" id="card-fan-wrap" data-positions={JSON.stringify(fanPositionData)}>
-        <p class="fan-title">{lang === 'zh' ? '从牌堆中选出你的牌' : 'Choose your cards from the deck'}</p>
-        <div class="fan-slots" id="fan-slots"></div>
-        <div class="card-fan" id="card-fan" aria-label={lang === 'zh' ? '塔罗牌堆，点击选牌' : 'Tarot deck, tap to choose cards'}></div>
-        <p
-          class="fan-hint"
-          id="fan-hint"
-          data-text-start={lang === 'zh' ? '点击一张牌，把它放进牌阵' : 'Tap a card to place it in the spread'}
-          data-text-count={lang === 'zh' ? '已选 {n}/{t} 张' : '{n}/{t} chosen'}
-          data-text-all={lang === 'zh' ? '已选满 {t} 张 — 点击「开始探索」继续' : 'All {t} chosen — press Explore to continue'}
-        ></p>
-        <button type="button" class="fan-reshuffle" id="fan-reshuffle">
-          {lang === 'zh' ? '🔄 换一批牌' : '🔄 Shuffle'}
-        </button>
-      </div>
-    )}
-    {showBibleFlip && (
+    {showOpenPanel && (
       <div class="bible-flip-panel hidden" id="bible-flip-panel">
         <p class="bible-flip-title">{lang === 'zh' ? '翻开圣经，领受经文' : 'Flip open the Bible to receive your verses'}</p>
         <button type="submit" class="bible-flip-btn" id="bible-flip-btn">
@@ -695,8 +500,7 @@ const description = lang === 'zh'
         </p>
       </div>
     )}
-    {showBibleFlip && <div class="bible-veil" id="bible-veil" aria-hidden="true"></div>}
-    {showFan && <input type="hidden" name="deck_order" id="deck-order-input" value={JSON.stringify(fanOrder)} />}
+    {showOpenPanel && <div class="bible-veil" id="bible-veil" aria-hidden="true"></div>}
     <input type="hidden" name="spread" id="spread-input" value={spreadKey} />
     <input type="hidden" name="picked" id="picked-input" value="" />
 
@@ -704,11 +508,12 @@ const description = lang === 'zh'
     <button type="button" class="settings-toggle" id="settings-toggle">⚙️ {lang === 'zh' ? '设置' : 'Settings'}</button>
 
     <div class="settings-menu" id="settings-menu">
-      <p id="reversed-setting">
-        <label><input type="checkbox" name="reversed" /> {lang === 'zh' ? '允许逆位' : 'Allow reversed cards'}</label>
-      </p>
       <p>
-        <span class="bible-note">{lang === 'zh' ? '圣经模式：随机抽取经文，无逆位设置' : 'Bible mode: random verses, no reversals'}</span>
+        <span class="bible-note">
+          {lang === 'zh'
+            ? '经文随机领受，不作占卜之用 — 请以默想的心阅读。'
+            : 'Verses arrive unbidden. This is contemplative reading, not fortune-telling.'}
+        </span>
       </p>
     </div>
   </form>
@@ -719,11 +524,11 @@ const description = lang === 'zh'
 
   {!registered && (
     <div class="register-perk">
-      <p class="register-perk-title">{lang === 'zh' ? '免费注册，解锁更多解读' : 'Register free, read more'}</p>
+      <p class="register-perk-title">{lang === 'zh' ? '免费注册，默想更多经文' : 'Register free, read more'}</p>
       <ul>
-        <li>{lang === 'zh' ? '每日单张解读 3 → 6 次' : 'Single-card draws: 3 → 6 per day'}</li>
-        <li>{lang === 'zh' ? '三张牌阵体验额度 ×3' : '3-card spread trial credits ×3'}</li>
-        <li>{lang === 'zh' ? '凯尔特十字（10 张牌）体验额度 ×1' : 'Celtic Cross (10 cards) trial credit ×1'}</li>
+        <li>{lang === 'zh' ? '每日经文默想 3 → 6 次' : 'Daily Word readings: 3 → 6 per day'}</li>
+        <li>{lang === 'zh' ? '圣言诵读（三节经文）体验额度 ×3' : 'Lectio Divina (3 verses) trial credits ×3'}</li>
+        <li>{lang === 'zh' ? '深度诵读（十节经文）体验额度 ×1' : 'Deep Lectio (10 verses) trial credit ×1'}</li>
       </ul>
       <a class="upsell-button" href={`/signup?lang=${lang}`}>
         {lang === 'zh' ? '立即免费注册' : 'Create free account'}
@@ -736,17 +541,17 @@ const description = lang === 'zh'
       <p class="upsell-message">
         {upsellReason === 'spread_locked'
           ? (lang === 'zh'
-              ? '此牌阵为订阅功能 — 免费注册可用体验额度试用'
-              : 'This spread is a paid feature — register free to try it with welcome credits')
+              ? '此布局为订阅功能 — 免费注册可用体验额度试用'
+              : 'This layout is a paid feature — register free to try it with welcome credits')
           : upsellReason === 'no_credits'
             ? (lang === 'zh'
-                ? '多牌阵体验额度已用完，升级订阅即可继续使用'
-                : 'Your trial credits are used up — subscribe to keep using multi-card spreads')
+                ? '多节经文体验额度已用完，升级订阅即可继续使用'
+                : 'Your trial credits are used up — subscribe to keep using the longer layouts')
             : (registered
-                ? (lang === 'zh' ? '今日免费次数已用完' : "You've used today's free draws")
+                ? (lang === 'zh' ? '今日免费次数已用完' : "You've used today's free readings")
                 : (lang === 'zh'
-                    ? '今日 3 次免费解读已用完 — 注册后每天 6 次'
-                    : "You've used today's 3 free draws — register for 6 per day"))}
+                    ? '今日 3 次免费默想已用完 — 注册后每天 6 次'
+                    : "You've used today's 3 free readings — register for 6 per day"))}
       </p>
       <div class="upsell-actions">
         {!registered && upsellReason !== 'no_credits' && (
@@ -761,7 +566,7 @@ const description = lang === 'zh'
     </div>
   )}
 
-  {(pendingCards || pendingVerses) && !cards && !verses && (
+  {pendingVerses && !verses && (
     <>
       <div class="result-header">
         <h2>{pendingTitle}</h2>
@@ -769,14 +574,11 @@ const description = lang === 'zh'
         <p class="result-spread">
           {pendingSpreadName}
           &middot;
-          {pendingIsBible
-            ? (lang === 'zh' ? `${pendingCount} 节经文` : `${pendingCount} verse${pendingCount !== 1 ? 's' : ''}`)
-            : (lang === 'zh' ? `${pendingCount} 张牌` : `${pendingCount} card${pendingCount !== 1 ? 's' : ''}`)}
+          {lang === 'zh' ? `${pendingCount} 节经文` : `${pendingCount} verse${pendingCount !== 1 ? 's' : ''}`}
         </p>
       </div>
       <section>
-        {pendingIsBible ? (
-          <div class="bible-arrive" id="bible-arrive">
+        <div class="bible-arrive" id="bible-arrive">
             <div class="bible-arrive-clip">
               <div class="bible-arrive-book" aria-hidden="true">
                 <span class="bible-cover">
@@ -807,30 +609,10 @@ const description = lang === 'zh'
             ))}
             </div>
             </div>
-          </div>
-        ) : (
-          <div class="cards cards-pending">
-            {pendingCards!.map((card) => (
-              <div class={`card ${card.reversed ? 'reversed' : ''}`}>
-                <div class="card-media">
-                  <img src={card.image_url} alt={`${lang === 'zh' ? card.zh : card.en} tarot card${card.reversed ? ' reversed' : ''}`} />
-                  <span class="status-label">
-                    {card.reversed ? (lang === 'zh' ? '逆位' : 'Reversed') : (lang === 'zh' ? '正位' : 'Upright')}
-                  </span>
-                </div>
-                <div class="card-body">
-                  {card.position && <span class="position-label">{card.position}</span>}
-                  <h3>{lang === 'zh' ? card.zh : card.en}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-        {pendingIsBible && (
-          <script is:inline>
-            document.querySelectorAll('.bible-arrive').forEach(function (el) { el.classList.add('arrive'); });
-          </script>
-        )}
+        </div>
+        <script is:inline>
+          document.querySelectorAll('.bible-arrive').forEach(function (el) { el.classList.add('arrive'); });
+        </script>
       </section>
       <section class="interpret-bar">
         {pendingGateState.gate === 'action' && (
@@ -842,8 +624,8 @@ const description = lang === 'zh'
               </button>
               <p class="interpret-hint">
                 {lang === 'zh'
-                  ? '基于你的问题生成完整解读'
-                  : 'Generates the full reading for your question'}
+                  ? '基于你的问题写下完整默想'
+                  : 'Writes the full reflection for your question'}
               </p>
             </form>
           ) : (
@@ -852,7 +634,7 @@ const description = lang === 'zh'
                 <span class="interpret-star" aria-hidden="true">✦</span> {pendingButtonLabel}
               </button>
               <p class="interpret-hint">
-                {lang === 'zh' ? '免费注册后即可解读' : 'Register free to interpret'}
+                {lang === 'zh' ? '免费注册后即可默想' : 'Register free to reflect'}
               </p>
             </div>
           )
@@ -862,8 +644,8 @@ const description = lang === 'zh'
             <h3 class="reveal-gate-title">🔑 {lang === 'zh' ? '体验额度已用完' : 'Trial credits used up'}</h3>
             <p class="reveal-gate-text">
               {lang === 'zh'
-                ? '免费体验额度已用完，升级订阅即可解读这次抽牌。'
-                : 'Your free trial credits are used up — subscribe to interpret this reading.'}
+                ? '免费体验额度已用完，升级订阅即可默想这次的经文。'
+                : 'Your free trial credits are used up — subscribe to reflect on this reading.'}
             </p>
             <div class="upsell-actions">
               <a class="upsell-button" href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}</a>
@@ -875,8 +657,8 @@ const description = lang === 'zh'
             <h3 class="reveal-gate-title">⏳ {lang === 'zh' ? '今日次数已用完' : 'Daily limit reached'}</h3>
             <p class="reveal-gate-text">
               {lang === 'zh'
-                ? '今天的解读次数已用完，明天回来即可解读这次抽牌的结果。'
-                : "You've used today's draws — come back tomorrow to interpret this reading."}
+                ? '今天的默想次数已用完，明天回来即可继续这次的经文。'
+                : "You've used today's readings — come back tomorrow to reflect on this one."}
             </p>
             <div class="upsell-actions">
               <a class="upsell-button" href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '升级立即解读' : 'Upgrade to interpret now'}</a>
@@ -885,21 +667,21 @@ const description = lang === 'zh'
         )}
         {pendingGateState.gate === 'retry' && (
           <>
-            <h3 class="reveal-gate-title">⚠️ {lang === 'zh' ? '解读生成失败' : 'Could not generate the reading'}</h3>
+            <h3 class="reveal-gate-title">⚠️ {lang === 'zh' ? '默想生成失败' : 'Could not write the reflection'}</h3>
             <p class="reveal-gate-text">
               {lang === 'zh'
-                ? '生成解读时出现问题，你的抽牌已保存 — 刷新页面即可重试。'
-                : 'Something went wrong while interpreting your draw. It is saved — reload the page to try again.'}
+                ? '生成默想时出现问题，你领受的经文已保存 — 刷新页面即可重试。'
+                : 'Something went wrong while writing the reflection. Your verses are saved — reload the page to try again.'}
             </p>
           </>
         )}
         {pendingGateState.gate === 'locked' && (
           <>
-            <h3 class="reveal-gate-title">👑 {lang === 'zh' ? '此牌阵需要 Pro 订阅' : 'This spread needs Pro'}</h3>
+            <h3 class="reveal-gate-title">👑 {lang === 'zh' ? '此布局需要 Pro 订阅' : 'This layout needs Pro'}</h3>
             <p class="reveal-gate-text">
               {lang === 'zh'
-                ? '你抽的牌已保存 — 升级到 Pro 即可解读这次抽牌。'
-                : 'Your draw is saved — upgrade to Pro to interpret this reading.'}
+                ? '你领受的经文已保存 — 升级到 Pro 即可默想这次的经文。'
+                : 'Your verses are saved — upgrade to Pro to reflect on this reading.'}
             </p>
             <div class="upsell-actions">
               <a class="upsell-button" href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}</a>
@@ -907,7 +689,7 @@ const description = lang === 'zh'
           </>
         )}
         {pendingGateState.gate === 'action' && (
-          <p class="gate-redraw"><a href={`/?lang=${lang}`}>{lang === 'zh' ? '重新抽一次' : 'Draw again'}</a></p>
+          <p class="gate-redraw"><a href={`/?lang=${lang}`}>{lang === 'zh' ? '重新领受' : 'Read again'}</a></p>
         )}
       </section>
 
@@ -915,15 +697,15 @@ const description = lang === 'zh'
         <div class="gate-modal-backdrop" id="gate-modal" role="dialog" aria-modal="true" aria-labelledby="gate-modal-title">
           <div class="gate-modal">
             <button type="button" class="gate-modal-close" id="gate-modal-close" aria-label={lang === 'zh' ? '关闭' : 'Close'}>&times;</button>
-            <div class="gate-modal-icon" aria-hidden="true">🔮</div>
-            <h3 id="gate-modal-title">{lang === 'zh' ? '你的解读已就绪' : 'Your reading is ready'}</h3>
+            <div class="gate-modal-icon" aria-hidden="true">✝</div>
+            <h3 id="gate-modal-title">{lang === 'zh' ? '你的默想已就绪' : 'Your reflection is ready'}</h3>
             <p>{gateCopy.modalText}</p>
             <ul class="gate-perks">
               <li>{gateCopy.modalReveal}</li>
-              <li>{lang === 'zh' ? '注册即送体验额度：三张牌阵 ×3、凯尔特十字 ×1' : 'Welcome credits: 3-card ×3, Celtic Cross ×1'}</li>
-              <li>{lang === 'zh' ? '每日单张解读 3 → 6 次' : 'Single draws: 3 → 6 per day'}</li>
+              <li>{lang === 'zh' ? '注册即送体验额度：圣言诵读 ×3、深度诵读 ×1' : 'Welcome credits: Lectio Divina ×3, Deep Lectio ×1'}</li>
+              <li>{lang === 'zh' ? '每日经文默想 3 → 6 次' : 'Daily Word readings: 3 → 6 per day'}</li>
             </ul>
-            <a class="upsell-button" href={`/signup?lang=${lang}`}>{lang === 'zh' ? '免费注册，揭晓解读' : 'Sign up free to reveal'}</a>
+            <a class="upsell-button" href={`/signup?lang=${lang}`}>{lang === 'zh' ? '免费注册，查看默想' : 'Sign up free to reveal'}</a>
             <a class="upsell-button upsell-button-secondary" href={`/login?lang=${lang}`}>{lang === 'zh' ? '已有账号，登录' : 'Log in'}</a>
             <button type="button" class="gate-modal-later" id="gate-modal-later">{lang === 'zh' ? '稍后再说' : 'Maybe later'}</button>
           </div>
@@ -932,57 +714,16 @@ const description = lang === 'zh'
     </>
   )}
 
-  {cards && !isBible && (
-    <>
-      {assistantReading && (
-        <script type="application/json" id="inspire-reading-context" set:html={assistantContextJson} />
-      )}
-      <div class="result-header">
-        <h2>{lang === 'zh' ? '塔罗解读' : 'Tarot Reading'}</h2>
-        <p class="result-question">&ldquo;{question}&rdquo;</p>
-        <p class="result-spread">
-          {SPREADS[spreadKey]?.name[lang]}
-          &middot;
-          {lang === 'zh' ? `${cards.length} 张牌` : `${cards.length} card${cards.length !== 1 ? 's' : ''}`}
-        </p>
-      </div>
-      <section>
-        <div class="cards">
-          {cards.map((card) => (
-            <div class={`card ${card.reversed ? 'reversed' : ''}`}>
-              <div class="card-media">
-                <img src={card.image_url} alt={`${lang === 'zh' ? card.zh : card.en} tarot card${card.reversed ? ' reversed' : ''}`} />
-                <span class="status-label">
-                  {card.reversed ? (lang === 'zh' ? '逆位' : 'Reversed') : (lang === 'zh' ? '正位' : 'Upright')}
-                </span>
-              </div>
-              <div class="card-body">
-                {card.position && <span class="position-label">{card.position}</span>}
-                <h3>{lang === 'zh' ? card.zh : card.en}</h3>
-                <p>{card.interp_text || card.meaning}</p>
-                {card.tags && card.tags.length > 0 && (
-                  <div class="tags">
-                    {card.tags.map((tag) => <span class="tag">{tag}</span>)}
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    </>
-  )}
-
   {verses && (
     <>
       {assistantReading && (
-        <script type="application/json" id="inspire-reading-context" set:html={assistantContextJson} />
+        <script type="application/json" id="lectio-reading-context" set:html={assistantContextJson} />
       )}
       <div class="result-header">
-        <h2>{lang === 'zh' ? '经文解读' : 'Bible Verse Reading'}</h2>
+        <h2>{lang === 'zh' ? '经文默想' : 'Your Reflection'}</h2>
         <p class="result-question">&ldquo;{question}&rdquo;</p>
         <p class="result-spread">
-          {BIBLE_SPREADS[spreadKey]?.name[lang]}
+          {SPREADS[spreadKey]?.name[lang]}
           &middot;
           {lang === 'zh' ? `${verses.length} 节经文` : `${verses.length} verse${verses.length !== 1 ? 's' : ''}`}
         </p>
@@ -1012,7 +753,7 @@ const description = lang === 'zh'
 
   {resultCount > 1 && (
     <section>
-      <h2>{lang === 'zh' ? '整体解读' : 'Overall Interpretation'}</h2>
+      <h2>{lang === 'zh' ? '整体默想' : 'Overall Reflection'}</h2>
       <div class="interpretation">{interpretation}</div>
     </section>
   )}
@@ -1033,26 +774,8 @@ const description = lang === 'zh'
       document.querySelectorAll('.spread-option').forEach((el) => {
         el.classList.toggle('selected', (el as HTMLElement).dataset.spread === key);
       });
-      updateDrawPanels();
+      updateOpenPanel();
     }
-
-    function setMode(mode: string) {
-      const input = document.getElementById('mode-input') as HTMLInputElement | null;
-      if (input) input.value = mode;
-      document.querySelectorAll('.mode-tab').forEach((el) => {
-        el.classList.toggle('active', (el as HTMLElement).dataset.mode === mode);
-      });
-      document.querySelectorAll('.spread-picker').forEach((el) => {
-        el.classList.toggle('hidden', (el as HTMLElement).dataset.mode !== mode);
-      });
-      const reversedSetting = document.getElementById('reversed-setting') as HTMLElement | null;
-      if (reversedSetting) reversedSetting.style.display = mode === 'bible' ? 'none' : '';
-      updateDrawPanels();
-    }
-
-    document.querySelectorAll('.mode-tab').forEach((el) => {
-      el.addEventListener('click', () => setMode((el as HTMLElement).dataset.mode || 'tarot'));
-    });
 
     document.querySelectorAll('.spread-option').forEach((el) => {
       el.addEventListener('click', () => {
@@ -1076,7 +799,7 @@ const description = lang === 'zh'
         input.classList.remove('default-question');
       }
       showLoading();
-      (document.getElementById('tarot-form') as HTMLFormElement | null)?.submit();
+      (document.getElementById('reading-form') as HTMLFormElement | null)?.submit();
     }
 
     document.querySelectorAll<HTMLElement>('.follow-up-question').forEach((el) => {
@@ -1095,197 +818,24 @@ const description = lang === 'zh'
       if (overlay) overlay.style.display = 'flex';
     }
 
-    document.getElementById('tarot-form')?.addEventListener('submit', showLoading);
+    document.getElementById('reading-form')?.addEventListener('submit', showLoading);
 
-    // ---- Pick-cards fan + Bible flip (anonymous draw-to-reveal flow) ----
-    const fanWrap = document.getElementById('card-fan-wrap');
-    const fanEl = document.getElementById('card-fan');
-    const slotsEl = document.getElementById('fan-slots');
-    const deckOrderInput = document.getElementById('deck-order-input') as HTMLInputElement | null;
-    const pickedInput = document.getElementById('picked-input') as HTMLInputElement | null;
-    const fanHint = document.getElementById('fan-hint');
+    // ---- Open-the-Bible panel (anonymous read-to-reveal flow) ----
+    // Only the multi-verse layouts go through the gated panel; the single
+    // Daily Word submits straight from the Explore button.
     const biblePanel = document.getElementById('bible-flip-panel');
-    const FAN_SIZE = 24;
-    let fanPicked: number[] = [];
-    let slotSpread = '';
-
-    function fanDeckOrder(): string[] {
-      if (!deckOrderInput?.value) return [];
-      try {
-        const arr = JSON.parse(deckOrderInput.value);
-        return Array.isArray(arr) ? (arr as string[]) : [];
-      } catch {
-        return [];
-      }
-    }
-
-    function fanCardImage(name: string): string {
-      const slug = name.toLowerCase().replace(/ /g, '_').replace(/'/g, '').replace(/-/g, '_');
-      return '/images/' + slug + '.webp';
-    }
-
-    function fanPositionMap(): Record<string, string[]> {
-      if (!fanWrap?.dataset.positions) return {};
-      try {
-        const parsed: unknown = JSON.parse(fanWrap.dataset.positions);
-        return parsed && typeof parsed === 'object' ? (parsed as Record<string, string[]>) : {};
-      } catch {
-        return {};
-      }
-    }
-
-    function currentMode(): string {
-      return (document.getElementById('mode-input') as HTMLInputElement | null)?.value ?? 'tarot';
-    }
+    const MULTI_SPREADS = ['3card', 'celtic_cross'];
 
     function currentSpread(): string {
       return (document.getElementById('spread-input') as HTMLInputElement | null)?.value ?? 'single';
     }
 
-    function fanSlotCount(): number {
-      return fanPositionMap()[currentSpread()]?.length ?? 3;
+    function updateOpenPanel() {
+      if (!biblePanel) return;
+      biblePanel.classList.toggle('hidden', !MULTI_SPREADS.includes(currentSpread()));
     }
 
-    function buildSlots() {
-      if (!slotsEl) return;
-      const spread = currentSpread();
-      const labels = fanPositionMap()[spread] ?? [];
-      slotSpread = spread;
-      fanPicked = [];
-      slotsEl.innerHTML = '';
-      slotsEl.classList.toggle('celtic', labels.length > 3);
-      labels.forEach((label, i) => {
-        const slot = document.createElement('div');
-        slot.className = 'fan-slot';
-        slot.dataset.slot = String(i);
-        slot.innerHTML =
-          '<div class="fan-slot-flip"><div class="fan-slot-back"><span class="fan-slot-star">\u2726</span></div><div class="fan-slot-face"></div></div>' +
-          '<span class="fan-slot-label"></span>';
-        const labelEl = slot.querySelector<HTMLElement>('.fan-slot-label');
-        if (labelEl) labelEl.textContent = labels.length > 3 ? (i + 1) + '. ' + label : label;
-        slotsEl.appendChild(slot);
-      });
-      fanWrap?.querySelectorAll<HTMLElement>('.fan-card.picked').forEach((el) => el.classList.remove('picked'));
-      renderFanSlots();
-      updateFanState();
-    }
-
-    function renderFanSlots() {
-      if (!slotsEl) return;
-      const order = fanDeckOrder();
-      slotsEl.querySelectorAll<HTMLElement>('.fan-slot').forEach((slot, i) => {
-        const face = slot.querySelector<HTMLElement>('.fan-slot-face');
-        const flip = slot.querySelector<HTMLElement>('.fan-slot-flip');
-        if (!face || !flip) return;
-        if (i < fanPicked.length) {
-          const name = order[fanPicked[i]] ?? '';
-          if (face.dataset.name !== name) {
-            face.innerHTML = '';
-            const img = document.createElement('img');
-            img.src = fanCardImage(name);
-            img.alt = '';
-            face.appendChild(img);
-            face.dataset.name = name;
-          }
-          flip.classList.add('flipped');
-          slot.classList.add('filled');
-        } else {
-          face.innerHTML = '';
-          delete face.dataset.name;
-          flip.classList.remove('flipped');
-          slot.classList.remove('filled');
-        }
-      });
-    }
-
-    function updateFanState() {
-      if (pickedInput) pickedInput.value = fanPicked.join(',');
-      if (!fanHint) return;
-      const total = fanSlotCount();
-      const start = fanHint.dataset.textStart ?? '';
-      const count = fanHint.dataset.textCount ?? '';
-      const all = fanHint.dataset.textAll ?? '';
-      fanHint.textContent =
-        fanPicked.length === 0 ? start
-        : fanPicked.length >= total ? all.replace('{t}', String(total))
-        : count.replace('{n}', String(fanPicked.length)).replace('{t}', String(total));
-      document.querySelector('.explore-button')?.classList.toggle('ready', fanPicked.length >= total);
-    }
-
-    function dealFan() {
-      if (!fanEl) return;
-      const order = fanDeckOrder();
-      const pool = order.map((_, i) => i);
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      const shown = pool.slice(0, FAN_SIZE);
-      fanEl.innerHTML = '';
-      const mid = (shown.length - 1) / 2;
-      shown.forEach((deckIdx, i) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'fan-card' + (fanPicked.includes(deckIdx) ? ' picked' : '');
-        btn.dataset.deckIdx = String(deckIdx);
-        const d = i - mid;
-        btn.style.transform = 'rotate(' + (d * 1.6).toFixed(2) + 'deg) translateY(' + (d * d * 0.9).toFixed(1) + 'px)';
-        fanEl.appendChild(btn);
-      });
-    }
-
-    function updateDrawPanels() {
-      const spread = currentSpread();
-      const multi = !!fanPositionMap()[spread];
-      if (fanWrap) {
-        const show = currentMode() === 'tarot' && multi;
-        fanWrap.classList.toggle('hidden', !show);
-        if (show && slotSpread !== spread) buildSlots();
-      }
-      if (biblePanel) {
-        biblePanel.classList.toggle('hidden', !(currentMode() === 'bible' && multi));
-      }
-    }
-
-    if (fanWrap && fanEl && deckOrderInput) {
-      dealFan();
-      buildSlots();
-      updateDrawPanels();
-
-      fanEl.addEventListener('click', (e) => {
-        const btn = (e.target as HTMLElement).closest<HTMLElement>('.fan-card');
-        if (!btn) return;
-        const deckIdx = Number(btn.dataset.deckIdx);
-        const total = fanSlotCount();
-        if (Number.isNaN(deckIdx) || fanPicked.includes(deckIdx) || fanPicked.length >= total) return;
-        fanPicked.push(deckIdx);
-        btn.classList.add('picked');
-        renderFanSlots();
-        updateFanState();
-        if (fanPicked.length === total) {
-          document.querySelector('.explore-button')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      });
-
-      slotsEl?.addEventListener('click', (e) => {
-        const slot = (e.target as HTMLElement).closest<HTMLElement>('.fan-slot');
-        if (!slot || !slot.dataset.slot) return;
-        const i = Number(slot.dataset.slot);
-        if (Number.isNaN(i) || i >= fanPicked.length) return;
-        const removed = fanPicked.splice(i, 1)[0];
-        const btn = fanEl?.querySelector<HTMLElement>('.fan-card[data-deck-idx="' + removed + '"]');
-        if (btn) btn.classList.remove('picked');
-        renderFanSlots();
-        updateFanState();
-      });
-
-      document.getElementById('fan-reshuffle')?.addEventListener('click', () => {
-        fanPicked = [];
-        dealFan();
-        renderFanSlots();
-        updateFanState();
-      });
-    }
+    updateOpenPanel();
 
     if (biblePanel) {
       const flipBtn = document.getElementById('bible-flip-btn');
@@ -1302,7 +852,7 @@ const description = lang === 'zh'
         if (flipStatus) {
           flipStatus.textContent = document.documentElement.lang === 'zh'
             ? '正在翻开圣经，请稍候...'
-            : 'Flipping open the Bible, please wait...';
+            : 'Opening the Bible, please wait...';
         }
         // Hold the submit until the second page lands so the cascade is not
         // cut by navigation; the veil then masks the page swap.
@@ -1313,7 +863,7 @@ const description = lang === 'zh'
       });
     }
 
-    // ---- Interpret (解经/解读) → registration gate modal ----
+    // ---- Reflect (默想) → registration gate modal ----
     const gateModal = document.getElementById('gate-modal');
     if (gateModal) {
       // The modal opens only when the visitor presses the interpret button —
@@ -1334,8 +884,8 @@ const description = lang === 'zh'
       const text = document.getElementById('loading-text');
       if (text) {
         text.textContent = document.documentElement.lang === 'zh'
-          ? '正在生成解读，请稍候...'
-          : 'Interpreting your reading, please wait...';
+          ? '正在写下默想，请稍候...'
+          : 'Writing your reflection, please wait...';
       }
     });
   </script>

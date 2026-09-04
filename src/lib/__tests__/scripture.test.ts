@@ -1,12 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { BIBLE_SPREADS, BIBLE_VERSES, drawVerses, rebuildDrawnVerses, buildBiblePages, type DrawnVerse } from '../bible';
-import { SPREADS } from '../tarot';
+import {
+  BIBLE_VERSES, drawVerses, rebuildDrawnVerses, buildBiblePages,
+  getLibraryVerses, verseSlug, type DrawnVerse,
+} from '../scripture';
+import { SPREADS } from '../reading';
 
-describe('bible verse deck', () => {
-  it('has 78 unique English references (mirroring the 78-card tarot deck)', () => {
-    expect(BIBLE_VERSES).toHaveLength(78);
+describe('scripture verse deck', () => {
+  it('has 148 unique English references', () => {
+    expect(BIBLE_VERSES).toHaveLength(148);
     const refs = new Set(BIBLE_VERSES.map((v) => v.en.ref));
-    expect(refs.size).toBe(78);
+    expect(refs.size).toBe(148);
   });
 
   it('has non-empty ref, text, and theme in both languages', () => {
@@ -34,7 +37,7 @@ describe('drawVerses', () => {
   });
 
   it('clamps the count to the deck size', () => {
-    expect(drawVerses(100)).toHaveLength(78);
+    expect(drawVerses(200)).toHaveLength(148);
   });
 
   it('carries through both languages and themes', () => {
@@ -129,21 +132,39 @@ describe('buildBiblePages', () => {
   });
 });
 
-describe('BIBLE_SPREADS', () => {
-  it('shares keys, card counts, and position labels with the tarot spreads', () => {
-    for (const key of Object.keys(SPREADS)) {
-      expect(BIBLE_SPREADS[key]).toBeDefined();
-      expect(BIBLE_SPREADS[key].number).toBe(SPREADS[key].number);
-      expect(BIBLE_SPREADS[key].positions.en).toEqual(SPREADS[key].positions.en);
-      expect(BIBLE_SPREADS[key].positions.zh).toEqual(SPREADS[key].positions.zh);
+describe('layouts', () => {
+  it('gives every layout as many positions as it draws verses', () => {
+    for (const [key, spread] of Object.entries(SPREADS)) {
+      expect(spread.positions.en, key).toHaveLength(spread.number);
+      expect(spread.positions.zh, key).toHaveLength(spread.number);
     }
   });
 
-  it('uses the Celtic Cross positions for the 10-verse layout', () => {
-    expect(BIBLE_SPREADS.celtic_cross.number).toBe(10);
-    expect(BIBLE_SPREADS.celtic_cross.positions.en).toEqual([
-      'Present Situation', 'Challenge', 'Distant Past', 'Recent Past', 'Best Outcome',
-      'Near Future', 'Your Attitude', 'External Influences', 'Hopes and Fears', 'Final Outcome',
-    ]);
+  it('never draws more verses than the deck holds', () => {
+    for (const spread of Object.values(SPREADS)) {
+      expect(spread.number).toBeLessThanOrEqual(BIBLE_VERSES.length);
+    }
+  });
+});
+
+describe('verse library', () => {
+  it('exposes every deck verse with a unique slug', () => {
+    const library = getLibraryVerses();
+    expect(library).toHaveLength(BIBLE_VERSES.length);
+    expect(new Set(library.map((v) => v.slug)).size).toBe(BIBLE_VERSES.length);
+  });
+
+  it('slugs references URL-safely', () => {
+    expect(verseSlug('John 3:16')).toBe('john-3-16');
+    expect(verseSlug('1 Peter 5:7')).toBe('1-peter-5-7');
+    expect(verseSlug('Psalm 23:1-3')).toBe('psalm-23-1-3');
+  });
+
+  it('splits testaments at Matthew', () => {
+    const library = getLibraryVerses();
+    const john = library.find((v) => v.refEn.startsWith('John 3:16'));
+    const psalm = library.find((v) => v.bookEn === 'Psalms' || v.bookEn === 'Psalm');
+    expect(john?.testament).toBe('new');
+    if (psalm) expect(psalm.testament).toBe('old');
   });
 });

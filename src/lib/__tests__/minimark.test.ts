@@ -29,11 +29,11 @@ describe('renderMarkdownLite - blocks', () => {
 
   it('renders dash bullets and ordered lists including "1)" style', () => {
     expect(renderMarkdownLite('- a\n- b')).toBe('<ul><li>a</li><li>b</li></ul>');
-    expect(renderMarkdownLite('1) Choose Tarot\n2) Enter your question')).toBe(
-      '<ol><li>Choose Tarot</li><li>Enter your question</li></ol>'
+    expect(renderMarkdownLite('1) Choose a layout\n2) Enter your question')).toBe(
+      '<ol><li>Choose a layout</li><li>Enter your question</li></ol>'
     );
-    expect(renderMarkdownLite('3. Pick a spread\n4. Draw')).toBe(
-      '<ol><li>Pick a spread</li><li>Draw</li></ol>'
+    expect(renderMarkdownLite('3. Pick a layout\n4. Read')).toBe(
+      '<ol><li>Pick a layout</li><li>Read</li></ol>'
     );
   });
 
@@ -44,15 +44,15 @@ describe('renderMarkdownLite - blocks', () => {
 
   it('formats the full sample assistant reply without leaving markdown syntax', () => {
     const reply =
-      'Welcome 😊 On the Inspiration Tarot homepage (/), you can do a quick reading right away.\n\n' +
+      'Welcome 😊 On the Lectio homepage (/), you can do a quick reading right away.\n\n' +
       '**How to use it (simple steps):**\n\n' +
-      "1) Choose whether you want **Tarot** or **Bible-verse**.\n" +
+      "1) Choose whether you want **Daily Word** or a longer layout.\n" +
       '2) Enter your **question or intention**.\n\n' +
-      '**Free plan note:** as a guest, you can do **3 single-card draws per day**.';
+      '**Free plan note:** as a guest, you can do **3 Daily Word readings per day**.';
     const html = renderMarkdownLite(reply);
     expect(html).toContain('<strong>How to use it (simple steps):</strong>');
     expect(html).toContain('<ol>');
-    expect(html).toContain('<strong>Tarot</strong>');
+    expect(html).toContain('<strong>Daily Word</strong>');
     expect(html).not.toContain('**');
     expect(html).not.toContain('1)');
   });

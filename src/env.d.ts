@@ -11,7 +11,7 @@ declare namespace Cloudflare {
     STRIPE_PRICE_PRO: string;
     STRIPE_PRICE_BASIC_ANNUAL: string;
     STRIPE_PRICE_PRO_ANNUAL: string;
-    // Optional: Inspire-specific billing portal configuration id
+    // Optional: Lectio-specific billing portal configuration id
     STRIPE_PORTAL_CONFIG_ID: string;
     GOOGLE_CLIENT_ID: string;
     GOOGLE_CLIENT_SECRET: string;

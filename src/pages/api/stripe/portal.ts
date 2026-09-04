@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ cookies, redirect, url }) => {
 
   const stripe = getStripeClient(env.STRIPE_SECRET_KEY);
   // The account-wide default portal configuration is shared with other products, so use
-  // the Inspire-specific one when STRIPE_PORTAL_CONFIG_ID is set.
+  // the Lectio-specific one when STRIPE_PORTAL_CONFIG_ID is set.
   const configuration = env.STRIPE_PORTAL_CONFIG_ID || undefined;
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: sub.stripeCustomerId,

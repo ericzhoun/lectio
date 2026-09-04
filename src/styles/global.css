@@ -43,25 +43,6 @@ header h1 { color: var(--gold); letter-spacing: 1px; }
 form { background: var(--panel); border: 1px solid var(--panel-border); padding: 18px; border-radius: 10px; }
 form p { margin-bottom: 10px; }
 
-.cards { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
-.card {
-  display: flex; gap: 20px;
-  border: 1px solid var(--panel-border); border-radius: 10px; padding: 20px;
-  background: var(--panel);
-}
-.card-media { flex: 0 0 auto; text-align: center; }
-.card-media img { width: 130px; height: auto; border-radius: 6px; display: block; border: 2px solid var(--accent); }
-.card.reversed .card-media img { border-color: #c96bd6; transform: rotate(180deg); }
-.card-body { flex: 1 1 auto; min-width: 0; }
-.card-body h3 { margin: 0 0 8px; font-size: 19px; }
-.card-body p { margin: 0 0 10px; line-height: 1.6; color: var(--text); }
-
-.status-label {
-  display: inline-block; background: var(--pill-bg); color: var(--text-dim);
-  font-size: 12px; padding: 3px 10px; border-radius: 10px; margin-top: 8px;
-}
-.card.reversed .status-label { background: #3a2545; color: #d8a6e6; }
-
 .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tag { background: var(--pill-bg); color: var(--text-dim); font-size: 12px; padding: 3px 10px; border-radius: 10px; }
 
@@ -192,7 +173,6 @@ form p { margin-bottom: 10px; }
 .detail-images figure { margin: 0; text-align: center; }
 .detail-images img { max-width: 220px; height: auto; border-radius: 8px; border: 1px solid var(--panel-border); }
 .detail-images figcaption { font-size: 13px; color: var(--text-dim); margin-top: 6px; }
-.detail-images .reversed-img { transform: rotate(180deg); }
 .meaning-block { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
 .meaning-block h3 { margin-top: 0; color: var(--gold); }
 
@@ -232,8 +212,6 @@ form p { margin-bottom: 10px; }
 }
 
 @media (max-width: 560px) {
-  .card { flex-direction: column; align-items: center; text-align: center; }
-  .card-media img { width: 160px; }
   .tags { justify-content: center; }
 }
 
@@ -411,16 +389,6 @@ form p { margin-bottom: 10px; }
 }
 .pricing-card button:hover { background: #5566e0; }
 
-/* ── Mode tabs: Tarot / Bible verses ───────────────────────────── */
-.mode-tabs { display: flex; gap: 10px; justify-content: center; margin: 4px 0 14px; }
-.mode-tab {
-  background: var(--pill-bg); color: var(--text-dim);
-  border: 1px solid var(--panel-border); border-radius: 20px;
-  padding: 8px 20px; cursor: pointer; font-size: 15px; transition: all 0.2s;
-}
-.mode-tab:hover { color: var(--text); border-color: var(--accent); }
-.mode-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
 .spread-picker.hidden { display: none; }
 .bible-note { font-size: 12px; color: var(--text-dim); }
 
@@ -436,74 +404,7 @@ form p { margin-bottom: 10px; }
   line-height: 1.7; color: var(--text);
 }
 
-/* ---------- Pick-three-cards fan (anonymous draw-to-reveal flow) ---------- */
-.card-fan-wrap { margin: 18px auto 6px; max-width: 760px; }
-.card-fan-wrap.hidden { display: none; }
-.fan-title { text-align: center; color: var(--gold); font-weight: bold; margin: 0 0 14px; font-size: 15px; }
-.fan-slots { display: flex; justify-content: center; gap: 22px; margin-bottom: 22px; }
-.fan-slot { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; }
-.fan-slot-flip {
-  position: relative; width: 96px; height: 158px;
-  perspective: 700px; transition: transform 0.2s;
-}
-.fan-slot:hover .fan-slot-flip { transform: translateY(-3px); }
-.fan-slot-back, .fan-slot-face {
-  position: absolute; inset: 0; border-radius: 8px;
-  backface-visibility: hidden; -webkit-backface-visibility: hidden;
-  border: 2px solid var(--panel-border);
-  display: flex; align-items: center; justify-content: center;
-}
-.fan-slot-back {
-  background: linear-gradient(135deg, #232a45 0%, #171c2e 100%);
-  box-shadow: inset 0 0 0 3px rgba(232, 196, 101, 0.18), 0 4px 14px rgba(0,0,0,0.45);
-}
-.fan-slot-star { color: var(--gold); font-size: 26px; text-shadow: 0 0 12px rgba(232,196,101,0.6); }
-.fan-slot-face {
-  background: var(--panel); border-color: var(--accent);
-  transform: rotateY(180deg); overflow: hidden;
-}
-.fan-slot-face img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.fan-slot-flip.flipped .fan-slot-back { display: none; }
-.fan-slot-flip.flipped .fan-slot-face { transform: rotateY(0deg); animation: fanFlipIn 0.5s ease; }
-.fan-slot-flip:not(.flipped) .fan-slot-face { display: none; }
-@keyframes fanFlipIn { 0% { transform: rotateY(90deg) scale(0.85); opacity: 0.4; } 100% { transform: rotateY(0deg) scale(1); opacity: 1; } }
-.fan-slot-label { font-size: 12px; color: var(--text-dim); }
-.fan-slot.filled .fan-slot-label { color: var(--gold); }
-.card-fan {
-  display: flex; justify-content: center; align-items: flex-start;
-  min-height: 132px; padding: 6px 4px 10px;
-  overflow-x: auto; overflow-y: hidden; scrollbar-width: thin;
-}
-.fan-card {
-  flex: 0 0 auto; width: 58px; height: 100px; margin-left: -34px;
-  border-radius: 7px; border: 2px solid var(--panel-border);
-  background: linear-gradient(135deg, #232a45 0%, #171c2e 100%);
-  box-shadow: inset 0 0 0 3px rgba(232, 196, 101, 0.16), 0 3px 10px rgba(0,0,0,0.45);
-  cursor: pointer; position: relative; transition: border-color 0.15s, box-shadow 0.15s;
-}
-.fan-card:first-child { margin-left: 0; }
-.fan-card::after {
-  content: "✦"; position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--gold); font-size: 20px; text-shadow: 0 0 10px rgba(232,196,101,0.55);
-  pointer-events: none;
-}
-.fan-card:hover { border-color: var(--gold); z-index: 5; box-shadow: inset 0 0 0 3px rgba(232,196,101,0.3), 0 6px 16px rgba(0,0,0,0.5); }
-.fan-card.picked { border-color: var(--accent); opacity: 0.55; box-shadow: inset 0 0 0 3px rgba(108,125,250,0.25), 0 2px 6px rgba(0,0,0,0.4); z-index: 1; }
-.fan-hint { text-align: center; font-size: 13px; color: var(--text-dim); margin: 12px 0 8px; }
-.fan-reshuffle {
-  display: block; margin: 0 auto; background: none; border: 1px solid var(--panel-border);
-  color: var(--text-dim); font-size: 13px; padding: 6px 14px; border-radius: 14px; cursor: pointer;
-}
-.fan-reshuffle:hover { color: var(--text); border-color: var(--accent); }
-.explore-button.ready { animation: explorePulse 1.6s ease infinite; }
-@keyframes explorePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(108, 125, 250, 0.45); }
-  50% { box-shadow: 0 0 0 10px rgba(108, 125, 250, 0); }
-}
-
 /* ---------- Locked reading (draw-to-reveal gate) ---------- */
-.cards-pending .card { border: 1px solid var(--panel-border); }
 .reveal-gate {
   margin: 24px auto 10px; max-width: 640px; text-align: center;
   background: var(--panel); border: 1px solid var(--panel-border);
@@ -559,27 +460,7 @@ form p { margin-bottom: 10px; }
 }
 .gate-modal-later:hover { color: var(--text); }
 
-@media (max-width: 560px) {
-  .fan-slot-flip { width: 72px; height: 120px; }
-  .fan-slot { gap: 6px; }
-  .fan-slots { gap: 12px; }
-  .fan-card { width: 50px; height: 86px; margin-left: -28px; }
-  .card-fan { min-height: 116px; }
-}
-
-/* ---------- Celtic Cross fan slots (10-card draw-to-reveal) ---------- */
-.fan-slots.celtic {
-  display: grid;
-  grid-template-columns: repeat(5, 76px);
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 22px;
-}
-.fan-slots.celtic .fan-slot-flip { width: 72px; height: 118px; }
-.fan-slots.celtic .fan-slot-label { font-size: 10.5px; line-height: 1.25; text-align: center; min-height: 26px; }
-.fan-slots.celtic .fan-slot-star { font-size: 18px; }
-
-/* ---------- Bible flip panel + opening scene (Moment A: page cascade) ---------- */
+/* ---------- Open-the-Bible panel + opening scene (page cascade) ---------- */
 .bible-flip-panel { margin: 18px auto 6px; max-width: 640px; text-align: center; }
 .bible-flip-panel.hidden { display: none; }
 .bible-flip-title { color: var(--gold); font-weight: bold; margin: 0 0 16px; font-size: 15px; }
@@ -746,10 +627,7 @@ form p { margin-bottom: 10px; }
 }
 
 @media (max-width: 560px) {
-  .fan-slots.celtic { grid-template-columns: repeat(5, 56px); gap: 8px; }
-  .fan-slots.celtic .fan-slot-flip { width: 52px; height: 88px; }
-  .fan-slots.celtic .fan-slot-label { font-size: 9px; min-height: 30px; }
-  .bible-book, .bible-arrive-book { width: 120px; height: 164px; margin-left: -60px; }
+        .bible-book, .bible-arrive-book { width: 120px; height: 164px; margin-left: -60px; }
 }
 
 /* ---------- Bible page (pending view: verses in chapter context) ---------- */
