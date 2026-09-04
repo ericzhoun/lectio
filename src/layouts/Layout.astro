@@ -71,7 +71,7 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
 </head>
 <body>
   <div class="top-nav">
-    {path !== '/' && <a href="/" style={isActive('/') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '占卜首页' : 'Reading Home'}</a>}
+    {path !== '/' && <a href="/" style={isActive('/') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '首页' : 'Reading Home'}</a>}
     {userId ? (
       <a href="/account" style={isActive('/account') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '账户' : 'Account'}</a>
     ) : (
