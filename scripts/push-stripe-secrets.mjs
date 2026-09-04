@@ -18,7 +18,11 @@ for (const line of fs.readFileSync('.env', 'utf8').split(/\r?\n/)) {
   if (eq > 0) env[t.slice(0, eq).trim()] = unquote(t.slice(eq + 1));
 }
 
-const keys = ['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET', 'STRIPE_PRICE_BASIC', 'STRIPE_PRICE_PRO'];
+const keys = [
+  'STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET',
+  'STRIPE_PRICE_BASIC', 'STRIPE_PRICE_PRO',
+  'STRIPE_PRICE_BASIC_ANNUAL', 'STRIPE_PRICE_PRO_ANNUAL',
+];
 
 // Guard: refuse to push an unfilled placeholder or a test key into production.
 const sk = env.STRIPE_SECRET_KEY ?? '';

@@ -5,6 +5,22 @@ import { resolveLang } from '../lib/i18n';
 
 const lang = resolveLang(Astro);
 
+// Checkout outcomes bounce back here; without a visible message a failed
+// Subscribe click looks like the button did nothing at all.
+const notices: Record<string, { zh: string; en: string }> = {
+  invalid_tier: {
+    zh: '结账暂时无法开始，请稍后重试或联系我们',
+    en: 'Checkout could not be started. Please try again later or contact us.',
+  },
+  cancelled: {
+    zh: '你已取消结账，随时可以重新订阅',
+    en: 'Checkout cancelled. You can subscribe again anytime.',
+  },
+};
+const noticeKey = Astro.url.searchParams.get('error')
+  ?? (Astro.url.searchParams.get('checkout') === 'cancelled' ? 'cancelled' : null);
+const notice = noticeKey ? notices[noticeKey] ?? null : null;
+
 const tiers = [
   {
     key: 'free',
@@ -40,6 +56,13 @@ const description = lang === 'zh'
 ---
 <Layout title={title} description={description} lang={lang}>
   <h1>{lang === 'zh' ? '价格方案' : 'Plans & Pricing'}</h1>
+
+  {notice && (
+    <p class="auth-error" role="alert">
+      <span class="auth-error-icon" aria-hidden="true">!</span>
+      {lang === 'zh' ? notice.zh : notice.en}
+    </p>
+  )}
 
   <div class="billing-toggle" role="radiogroup" aria-label={lang === 'zh' ? '计费周期' : 'Billing period'}>
     <button class="billing-toggle-btn active" data-billing="monthly" role="radio" aria-checked="true">
@@ -91,6 +114,18 @@ const description = lang === 'zh'
   </div>
 
   <script>
+    // The notice describes the click that brought you here, not the page you are
+    // on now. Drop the param so a reload or a shared link starts clean.
+    if (location.search) {
+      const params = new URLSearchParams(location.search);
+      if (params.has('error') || params.has('checkout')) {
+        params.delete('error');
+        params.delete('checkout');
+        const qs = params.toString();
+        history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+      }
+    }
+
     const toggle = document.querySelector('.billing-toggle');
     toggle?.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest('.billing-toggle-btn') as HTMLButtonElement | null;
