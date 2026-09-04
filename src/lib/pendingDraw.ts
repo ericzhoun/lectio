@@ -6,7 +6,7 @@
 // in, the home page verifies the cookie, generates the question-based
 // reflection, and clears the cookie. The signature prevents tampering with
 // the drawn verses.
-import { toBase64Url, fromBase64Url, hmacKey } from './session';
+import { signJsonToken, readJsonToken } from './session';
 
 export const PENDING_DRAW_COOKIE = 'pending_draw';
 /** Pending draws expire after 7 days. */
@@ -36,47 +36,14 @@ export async function createPendingDrawToken(
   draw: PendingDraw,
   secret: string
 ): Promise<string> {
-  if (!secret) throw new Error('SESSION_SECRET is required');
-  const payload = { ...draw, question: truncateQuestion(draw.question) };
-  const encoded = toBase64Url(new TextEncoder().encode(JSON.stringify(payload)));
-  const key = await hmacKey(secret);
-  const sig = await crypto.subtle.sign(
-    'HMAC',
-    key,
-    new TextEncoder().encode(encoded)
-  );
-  return `${encoded}.${toBase64Url(new Uint8Array(sig))}`;
+  return signJsonToken({ ...draw, question: truncateQuestion(draw.question) }, secret);
 }
 
 export async function verifyPendingDrawToken(
   token: string | undefined | null,
   secret: string
 ): Promise<PendingDraw | null> {
-  if (!secret || !token) return null;
-  const parts = token.split('.');
-  if (parts.length !== 2) return null;
-  const [encoded, sigB64] = parts;
-
-  const key = await hmacKey(secret);
-  let valid = false;
-  try {
-    valid = await crypto.subtle.verify(
-      'HMAC',
-      key,
-      fromBase64Url(sigB64) as BufferSource,
-      new TextEncoder().encode(encoded)
-    );
-  } catch {
-    return null;
-  }
-  if (!valid) return null;
-
-  let data: unknown;
-  try {
-    data = JSON.parse(new TextDecoder().decode(fromBase64Url(encoded)));
-  } catch {
-    return null;
-  }
+  const data = await readJsonToken(token, secret);
   if (!isPendingDraw(data)) return null;
   if (Date.now() - data.ts > PENDING_DRAW_TTL_MS) return null;
   return data;

@@ -9,7 +9,10 @@ import {
 } from '../lib/pendingDraw';
 import { drawVerses, rebuildDrawnVerses, buildBiblePages, type DrawnVerse } from '../lib/scripture';
 import { generateInterpretation, generateFollowUpQuestions } from '../lib/openai';
-import { logReading } from '../lib/db';
+import { logReading, getReadingRendering, saveReadingRendering } from '../lib/db';
+import {
+  LAST_READING_COOKIE, createLastReadingToken, verifyLastReadingToken,
+} from '../lib/lastReading';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../lib/session';
 import {
@@ -69,6 +72,35 @@ const rebuildPending = (): DrawnVerse[] | null => {
   return rebuilt;
 };
 
+// Remember the finished reading: the signed cookie carries its identity, and
+// the language-specific reflection is cached so switching languages (or a
+// reload) costs at most one regeneration per language and never a credit.
+const rememberReading = async (
+  id: string,
+  spread: string,
+  q: string,
+  drawn: DrawnVerse[],
+  summary: string,
+  followUps: string[]
+): Promise<void> => {
+  const token = await createLastReadingToken(
+    { v: 1, id, spread, question: q, verses: drawn.map((v) => v.refEn), ts: Date.now() },
+    env.SESSION_SECRET
+  );
+  Astro.cookies.set(LAST_READING_COOKIE, token, {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: true,
+    maxAge: 60 * 60 * 24 * 7,
+  });
+  await saveReadingRendering(id, lang, {
+    summary,
+    cards: drawn.map((v) => ({ text: v.interp_text ?? '', tags: v.tags ?? [] })),
+    followUps,
+  });
+};
+
 // Run the reveal (button-driven): generate the question-based interpretation
 // for the pending draw, spend the matching credit, log, and clear the cookie.
 // Failure modes set a gate variant (credits / quota / locked / retry) and
@@ -118,6 +150,10 @@ const applyReveal = async (): Promise<void> => {
     verses = pending;
     spreadKey = pendingDrawData.spread;
     clearPending();
+    await rememberReading(
+      crypto.randomUUID(), pendingDrawData.spread, pendingDrawData.question,
+      pending, interpretation, followUpQuestions
+    );
   } catch (e) {
     // Reflection failed (e.g. LLM outage) — keep the pending cookie so a
     // reload can retry without spending the credit again.
@@ -190,6 +226,8 @@ if (Astro.request.method === 'POST') {
       pendingVerses = drawnVerses;
       pendingSpreadKey = spreadKey as PendingDrawSpread;
       pendingGateState.gate = 'action';
+      // The pending draw is now the reading on screen; drop the previous one.
+      Astro.cookies.delete(LAST_READING_COOKIE, { path: '/' });
     } else {
       const drawnVerses = drawVerses(spread.number);
       const positions = spread.positions[lang];
@@ -214,6 +252,9 @@ if (Astro.request.method === 'POST') {
         entitlementUserId
       );
       await recordDraw(entitlementUserId, spreadKey, registered);
+      await rememberReading(
+        crypto.randomUUID(), spreadKey, question, verses, interpretation, followUpQuestions
+      );
     }
   }
 } else {
@@ -246,6 +287,64 @@ if (pendingDrawData && pendingSpreadMeta && !verses && !pendingGateState.gate) {
     spreadKey = pendingDrawData.spread;
   } else {
     clearPending();
+  }
+}
+
+// Restore the last finished reading on a GET. The reading itself is produced
+// inside a POST, so without this a reload — or the nav language switch, which
+// is a plain GET — would drop the visitor back on an empty form. The verses
+// are rebuilt from their refs in the active language; the reflection is taken
+// from the per-language cache, and generated once per language on a miss. No
+// credit and no quota are spent: the reading was already paid for.
+const startingOver = url.searchParams.get('new') === '1';
+if (startingOver) Astro.cookies.delete(LAST_READING_COOKIE, { path: '/' });
+
+const canRestore =
+  Astro.request.method !== 'POST' && !startingOver &&
+  !verses && !pendingVerses && !pendingGateState.gate && !error && !upsellReason;
+
+if (canRestore) {
+  const last = await verifyLastReadingToken(
+    Astro.cookies.get(LAST_READING_COOKIE)?.value,
+    env.SESSION_SECRET
+  );
+  const lastSpread = last ? SPREADS[last.spread] : undefined;
+  const restored = last ? rebuildDrawnVerses(last.verses) : [];
+  if (last && lastSpread && restored.length === lastSpread.number) {
+    const positions = lastSpread.positions[lang];
+    restored.forEach((v, i) => { v.position = positions[i] ?? ''; });
+
+    let rendering = await getReadingRendering(last.id, lang);
+    if (!rendering) {
+      try {
+        const interp = await generateInterpretation(last.question, restored, lang, last.spread);
+        const followUpContext = interp.summary || interp.cards.map((c) => c.text).join(' ');
+        rendering = {
+          summary: interp.summary,
+          cards: interp.cards,
+          followUps: await generateFollowUpQuestions(last.question, followUpContext, lang),
+        };
+        await saveReadingRendering(last.id, lang, rendering);
+      } catch (e) {
+        // Re-rendering failed (e.g. LLM outage). Show the verses anyway —
+        // losing the reflection is better than losing the reading.
+        console.error('Re-rendering reading in ' + lang + ' failed:', e);
+        rendering = null;
+      }
+    }
+
+    restored.forEach((v, i) => {
+      v.interp_text = rendering?.cards[i]?.text ?? '';
+      v.tags = rendering?.cards[i]?.tags ?? [];
+    });
+    verses = restored;
+    interpretation = rendering?.summary ?? '';
+    followUpQuestions = rendering?.followUps ?? [];
+    question = last.question;
+    isDefaultQuestion = false;
+    spreadKey = last.spread;
+  } else if (last) {
+    Astro.cookies.delete(LAST_READING_COOKIE, { path: '/' });
   }
 }
 
@@ -726,6 +825,9 @@ const description = lang === 'zh'
           {SPREADS[spreadKey]?.name[lang]}
           &middot;
           {lang === 'zh' ? `${verses.length} 节经文` : `${verses.length} verse${verses.length !== 1 ? 's' : ''}`}
+        </p>
+        <p class="result-again">
+          <a href={`/?new=1&lang=${lang}`}>{lang === 'zh' ? '重新领受' : 'Read again'}</a>
         </p>
       </div>
       <section>

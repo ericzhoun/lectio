@@ -149,6 +149,9 @@ form p { margin-bottom: 10px; }
 .result-header h2 { color: var(--gold); font-size: 28px; margin-bottom: 6px; }
 .result-header .result-question { font-style: italic; color: var(--text); margin: 6px 0; }
 .result-header .result-spread { color: var(--text-dim); font-size: 14px; }
+.result-header .result-again { margin: 10px 0 0; font-size: 13px; }
+.result-header .result-again a { color: var(--text-dim); }
+.result-header .result-again a:hover { color: var(--text); }
 
 /* Card library */
 .filters { text-align: center; margin: 15px 0; }

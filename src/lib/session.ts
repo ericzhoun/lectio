@@ -44,3 +44,40 @@ export async function verifySessionToken(token: string, secret: string): Promise
   const valid = await crypto.subtle.verify('HMAC', key, fromBase64Url(sigB64) as BufferSource, new TextEncoder().encode(payload));
   return valid ? userId : null;
 }
+
+// ---- Signed JSON cookies -------------------------------------------------
+// Generic HMAC-signed `<base64url(json)>.<base64url(sig)>` tokens, shared by
+// the pending-draw and last-reading cookies.
+
+export async function signJsonToken(payload: unknown, secret: string): Promise<string> {
+  if (!secret) throw new Error('SESSION_SECRET is required');
+  const encoded = toBase64Url(new TextEncoder().encode(JSON.stringify(payload)));
+  const key = await hmacKey(secret);
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(encoded));
+  return `${encoded}.${toBase64Url(new Uint8Array(sig))}`;
+}
+
+/** Verify the signature and return the decoded payload, or null. */
+export async function readJsonToken(
+  token: string | undefined | null,
+  secret: string
+): Promise<unknown | null> {
+  if (!secret || !token) return null;
+  const parts = token.split('.');
+  if (parts.length !== 2) return null;
+  const [encoded, sigB64] = parts;
+
+  const key = await hmacKey(secret);
+  try {
+    const valid = await crypto.subtle.verify(
+      'HMAC',
+      key,
+      fromBase64Url(sigB64) as BufferSource,
+      new TextEncoder().encode(encoded)
+    );
+    if (!valid) return null;
+    return JSON.parse(new TextDecoder().decode(fromBase64Url(encoded)));
+  } catch {
+    return null;
+  }
+}
