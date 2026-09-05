@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  easterSunday, adventFirstSunday, liturgicalYear, sundayOnOrBefore, addDays,
+  easterSunday, adventFirstSunday, liturgicalYear, sundayOnOrBefore, addDays, officeYear,
 } from '../liturgicalCalendar';
 
 describe('easterSunday', () => {
@@ -53,5 +53,21 @@ describe('addDays', () => {
     expect(addDays('2026-12-31', 1)).toBe('2027-01-01');
     expect(addDays('2026-03-01', -1)).toBe('2026-02-28');
     expect(addDays('2024-03-01', -1)).toBe('2024-02-29');
+  });
+});
+
+describe('officeYear', () => {
+  it('runs Year One into odd civil years and Year Two into even ones', () => {
+    // Advent 2026 begins the year running through 2027, which is odd: Year One.
+    expect(officeYear('2026-11-29')).toBe(1);
+    expect(officeYear('2027-06-01')).toBe(1);
+    // Advent 2027 begins the year running through 2028: Year Two.
+    expect(officeYear('2027-11-28')).toBe(2);
+    expect(officeYear('2028-06-01')).toBe(2);
+  });
+
+  it('changes at Advent, not at New Year', () => {
+    expect(officeYear('2026-11-28')).toBe(2);
+    expect(officeYear('2026-11-29')).toBe(1);
   });
 });

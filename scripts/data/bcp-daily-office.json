@@ -6084,7 +6084,11 @@
       "psalmsEvening": "103",
       "ot": "Zech. 9:9-12**",
       "epistle": "1 Tim. 6:12-16**",
-      "gospel": null
+      "gospel": null,
+      "evening": [
+        "Zech. 12:9-11; 13:1, 7-9***",
+        "Luke 19:41-48***"
+      ]
     },
     "Maundy Thursday": {
       "psalmsMorning": "102",
@@ -6098,7 +6102,10 @@
       "psalmsEvening": "40:1-14(15-19), 54",
       "ot": "Lam. 3:1-9, 19-33",
       "epistle": "1 Pet. 1:10-20",
-      "gospel": "John 13:36-38**"
+      "gospel": "John 13:36-38**",
+      "evening": [
+        "John 19:38-42***"
+      ]
     },
     "Holy Saturday": {
       "psalmsMorning": "95* & 88",
@@ -6112,7 +6119,13 @@
       "psalmsEvening": "113, 114,  or  118",
       "ot": "Exod. 12:1-14**",
       "epistle": null,
-      "gospel": "John 1:1-18**"
+      "gospel": "John 1:1-18**",
+      "evening": [
+        "Isa. 51:9-11***",
+        "Luke 24:13-35,",
+        "or",
+        "John 20:19-23***"
+      ]
     },
     "Eve of Ascension": {
       "psalmsMorning": null,
@@ -6155,6 +6168,248 @@
       "ot": "Job 38:1-11, 42:1-5",
       "epistle": "Rev. 19:4-16",
       "gospel": "John 1:29-34"
+    }
+  },
+  "holyDays": {
+    "11-30": {
+      "label": "St. Andrew",
+      "psalmsMorning": "34",
+      "psalmsEvening": "96,100",
+      "ot": "Isaiah 49:1-6",
+      "epistle": null,
+      "gospel": "1 Corinthians 4:1-16"
+    },
+    "12-21": {
+      "label": "St. Thomas",
+      "psalmsMorning": "23,121",
+      "psalmsEvening": "27",
+      "ot": "Job 42:1-6",
+      "epistle": null,
+      "gospel": "1 Peter 1:3-9"
+    },
+    "12-26": {
+      "label": "St. Stephen",
+      "psalmsMorning": "28,30",
+      "psalmsEvening": "118",
+      "ot": "2 Chronicles 24:17-22",
+      "epistle": null,
+      "gospel": "Acts 6:1-7"
+    },
+    "12-27": {
+      "label": "St. John",
+      "psalmsMorning": "97,98",
+      "psalmsEvening": "145",
+      "ot": "Proverbs 8:22-30",
+      "epistle": null,
+      "gospel": "John 13:20-35"
+    },
+    "12-28": {
+      "label": "Holy Innocents",
+      "psalmsMorning": "2,26",
+      "psalmsEvening": "19,126",
+      "ot": "Isaiah 49:13-23",
+      "epistle": null,
+      "gospel": "Matthew 18:1-14"
+    },
+    "01-18": {
+      "label": "Confession of St. Peter",
+      "psalmsMorning": "66,67",
+      "psalmsEvening": "118",
+      "ot": "Ezekiel 3:4-11",
+      "epistle": null,
+      "gospel": "Acts 10:34-44"
+    },
+    "01-25": {
+      "label": "Conversion of St. Paul",
+      "psalmsMorning": "19",
+      "psalmsEvening": "119:89-112",
+      "ot": "Isaiah 45:18-25",
+      "epistle": null,
+      "gospel": "Philippians 3:4b-11"
+    },
+    "02-02": {
+      "label": "The Presentation",
+      "psalmsMorning": "42,43",
+      "psalmsEvening": "48,87",
+      "ot": "1 Samuel 2:1-10",
+      "epistle": null,
+      "gospel": "John 8:31-36"
+    },
+    "02-24": {
+      "label": "St. Matthias",
+      "psalmsMorning": "80",
+      "psalmsEvening": "33",
+      "ot": "1 Samuel 16:1-13",
+      "epistle": null,
+      "gospel": "1 John 2:18-25"
+    },
+    "03-19": {
+      "label": "St. Joseph",
+      "psalmsMorning": "132",
+      "psalmsEvening": "34",
+      "ot": "Isaiah 63:7-16",
+      "epistle": null,
+      "gospel": "Matthew 1:18-25"
+    },
+    "03-25": {
+      "label": "The Annunciation",
+      "psalmsMorning": "85,87",
+      "psalmsEvening": "110:1-5(6-7),132",
+      "ot": "Isaiah 52:7-12",
+      "epistle": null,
+      "gospel": "Hebrews 2:5-10"
+    },
+    "04-25": {
+      "label": "St. Mark",
+      "psalmsMorning": "145",
+      "psalmsEvening": "67,96",
+      "ot": "Ecclesiasticus 2:1-11",
+      "epistle": null,
+      "gospel": "Acts 12:25--13:3"
+    },
+    "05-01": {
+      "label": "SS. Philip & James",
+      "psalmsMorning": "119:137-160",
+      "psalmsEvening": "139",
+      "ot": "Job 23:1-12",
+      "epistle": null,
+      "gospel": "John 1:43-51"
+    },
+    "05-31": {
+      "label": "The Visitation",
+      "psalmsMorning": "72",
+      "psalmsEvening": "146,147",
+      "ot": "1 Samuel 1:1-20",
+      "epistle": null,
+      "gospel": "Hebrews 3:1-6"
+    },
+    "06-11": {
+      "label": "St. Barnabas",
+      "psalmsMorning": "15,67",
+      "psalmsEvening": "19,146",
+      "ot": "Ecclesiasticus 31:3-11",
+      "epistle": null,
+      "gospel": "Acts 4:32-37"
+    },
+    "06-24": {
+      "label": "Nativity of St. John the Baptist",
+      "psalmsMorning": "82,98",
+      "psalmsEvening": "80",
+      "ot": "Malachi 3:1-5",
+      "epistle": null,
+      "gospel": "John 3:22-30"
+    },
+    "06-29": {
+      "label": "SS. Peter &Paul",
+      "psalmsMorning": "66",
+      "psalmsEvening": "97,138",
+      "ot": "Ezekiel 2:1-7",
+      "epistle": null,
+      "gospel": "Acts 11:1-18"
+    },
+    "07-04": {
+      "label": "Independence Day",
+      "psalmsMorning": "33",
+      "psalmsEvening": "107:1-32",
+      "ot": "Ecclesiasticus 10:1-8,12-18",
+      "epistle": null,
+      "gospel": "James 5:7-10"
+    },
+    "07-22": {
+      "label": "St. Mary Magdalene",
+      "psalmsMorning": "116",
+      "psalmsEvening": "30,149",
+      "ot": "Zephaniah 3:14-20",
+      "epistle": null,
+      "gospel": "Mark 15:47--16:7"
+    },
+    "07-25": {
+      "label": "St. James",
+      "psalmsMorning": "34",
+      "psalmsEvening": "33",
+      "ot": "Jeremiah 16:14-21",
+      "epistle": null,
+      "gospel": "Mark 1:14-20"
+    },
+    "08-06": {
+      "label": "The Transfiguration",
+      "psalmsMorning": "2,24",
+      "psalmsEvening": "72",
+      "ot": "Exodus 24:12-18",
+      "epistle": null,
+      "gospel": "2 Corinthians 4:1-6"
+    },
+    "08-15": {
+      "label": "St. Mary the Virgin",
+      "psalmsMorning": "113,115",
+      "psalmsEvening": "45,",
+      "ot": "1 Samuel 2:1-10",
+      "epistle": null,
+      "gospel": "John 2:1-12"
+    },
+    "08-24": {
+      "label": "St. Bartholomew",
+      "psalmsMorning": "86",
+      "psalmsEvening": "15,67",
+      "ot": "Genesis 28:10-17",
+      "epistle": null,
+      "gospel": "John 1:43-51"
+    },
+    "09-14": {
+      "label": "Holy Cross Day",
+      "psalmsMorning": "66",
+      "psalmsEvening": "118",
+      "ot": "Numbers 21:4-9",
+      "epistle": null,
+      "gospel": "John 3:11-17"
+    },
+    "09-21": {
+      "label": "St. Matthew",
+      "psalmsMorning": "119:41-64",
+      "psalmsEvening": "19,112",
+      "ot": "Isaiah 8:11-20",
+      "epistle": null,
+      "gospel": "Romans 10:1-15"
+    },
+    "09-29": {
+      "label": "St. Michael & All Angels",
+      "psalmsMorning": "8,148",
+      "psalmsEvening": "34, 150,",
+      "ot": "Job 38:1-7",
+      "epistle": null,
+      "gospel": "Hebrews 1:1-14"
+    },
+    "10-18": {
+      "label": "St. Luke",
+      "psalmsMorning": "103",
+      "psalmsEvening": "67,96",
+      "ot": "Ezekiel 47:1-12",
+      "epistle": null,
+      "gospel": "Luke 1:1-4"
+    },
+    "10-23": {
+      "label": "St. James of Jerusalem",
+      "psalmsMorning": "119:145-168",
+      "psalmsEvening": "122,125",
+      "ot": "Jeremiah 11:18-23",
+      "epistle": null,
+      "gospel": "Matthew 10:16-22"
+    },
+    "10-28": {
+      "label": "SS. Simon & Jude",
+      "psalmsMorning": "66",
+      "psalmsEvening": "116,117",
+      "ot": "Isaiah 28:9-16",
+      "epistle": null,
+      "gospel": "Ephesians 4:1-16"
+    },
+    "11-01": {
+      "label": "All Saints' Day",
+      "psalmsMorning": "111,112",
+      "psalmsEvening": "148,150",
+      "ot": "2 Esdras 2:42-47",
+      "epistle": null,
+      "gospel": "Hebrews 11:32--12:2"
     }
   }
 }

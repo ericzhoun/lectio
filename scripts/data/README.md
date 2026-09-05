@@ -46,7 +46,8 @@ day has its own readings, where the RCL's free tables are Sunday-centred.
     }
   },
   "dated": { "12-29": { ...readings } },
-  "named": { "Christmas Day": { ...readings } }
+  "named": { "Christmas Day": { ...readings } },
+  "holyDays": { "12-26": { "label": "St. Stephen", ...readings } }
 }
 ```
 
@@ -65,3 +66,16 @@ In the Christmas and Epiphany seasons the BCP keys days by date rather than by w
 weekdays are displaced by a named holy day (Christmas Eve, Ash Wednesday, Palm Sunday, the Triduum,
 Easter Day, Ascension Day). Those readings live in `dated` and `named`; the generator layers them
 over the weekly table. Propers 1 and 2 have no Sunday, because those Sundays fall before Pentecost.
+
+Two further wrinkles, both found by generating the table and looking at what came out:
+
+- A **principal feast prints two reading rows**, morning and evening, and the gospel is sometimes
+  only in the evening one. Palm Sunday's morning row is Zechariah and 1 Timothy; its gospel,
+  Luke 19:41-48, is in the evening row. The second row is captured as `evening`.
+- The seasonal tables have **no December 26, 27 or 28**, because those days belong to St Stephen,
+  St John and Holy Innocents. Those come from the separate Holy Days page into `holyDays`, and are
+  used *only* to fill a gap, never to override the weekly table. Promoting every holy day over the
+  daily cycle would be a change of behaviour, not a fix.
+
+With both handled, every day in the generated window has its own readings and none carries its
+predecessor's. `buildLectionary.test.ts` asserts that.

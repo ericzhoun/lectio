@@ -68,3 +68,12 @@ export function liturgicalYear(day: string): LiturgicalYear {
   const cycle = (['C', 'A', 'B'] as const)[endingYear % 3];
   return { endingYear, cycle };
 }
+
+/**
+ * The BCP Daily Office runs a two-year cycle. Year One begins at the Advent
+ * preceding an odd-numbered civil year, Year Two before an even one.
+ */
+export function officeYear(day: string): 1 | 2 {
+  const { endingYear } = liturgicalYear(day);
+  return endingYear % 2 === 1 ? 1 : 2;
+}

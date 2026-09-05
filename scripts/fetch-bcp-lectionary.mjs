@@ -128,7 +128,7 @@ function parseDatedLabel(label) {
 }
 
 async function fetchPage(name) {
-  const res = await fetch(`${BASE}/${name}.htm`, { redirect: 'follow' });
+  const res = await fetch(`${BASE}/${encodeURIComponent(name)}.htm`, { redirect: 'follow' });
   if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
   return res.text();
 }
@@ -139,6 +139,9 @@ function parsePage(html, out) {
   let currentWeek = null;
   let pendingLabel = null; // a weekday or dated row awaiting its readings row
   let pendingPsalms = null;
+  // Principal feasts print a second readings row (evening), where the gospel
+  // often lives. Keep a handle on the entry just stored so it can be attached.
+  let lastStored = null;
 
   for (const row of rows) {
     const cells = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) => m[1]);
@@ -193,12 +196,63 @@ function parsePage(html, out) {
       } else {
         out.named[pendingLabel] = readings;
       }
+      lastStored = readings;
       pendingLabel = null;
+      continue;
+    }
+
+    // A further readings row with no label belongs to the entry just stored:
+    // the evening set of a principal feast.
+    if (lastStored && !pendingLabel && /\d+:\d+/.test(right)) {
+      lastStored.evening = splitColumns(right).map((c) => orNull(c)).filter(Boolean);
+      lastStored = null;
     }
   }
 }
 
-const out = { provenance: {}, weeks: {}, dated: {}, named: {} };
+/**
+ * The Holy Days page has its own three-column shape: a label carrying a date,
+ * then Morning Prayer and Evening Prayer, each as psalms, an Old Testament
+ * reading and a New Testament reading.
+ *
+ * These are used only to fill genuine gaps in the seasonal tables (the BCP
+ * prints no Dec 26-28, because those days belong to St Stephen, St John and
+ * Holy Innocents). They deliberately do not override the weekly table.
+ */
+function parseHolyDays(html, out) {
+  const rows = [...html.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map((m) => m[1]);
+
+  for (const row of rows) {
+    const cells = [...row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/g)].map((m) => cellText(m[1]));
+    if (cells.length !== 3) continue;
+
+    const label = tidy(cells[0]);
+    const date = label.match(
+      /(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d+)$/i
+    );
+    if (!date) continue;
+
+    const morning = splitColumns(cells[1]);
+    const evening = splitColumns(cells[2]);
+    if (morning.length < 3) continue;
+
+    const month = new Date(`${date[1]} 1, 2000`).getMonth() + 1;
+    const key = `${String(month).padStart(2, '0')}-${String(Number(date[2])).padStart(2, '0')}`;
+
+    out.holyDays[key] = {
+      label: tidy(label.replace(date[0], '')).replace(/\s+/g, ' ').trim(),
+      psalmsMorning: orNull(morning[0]),
+      psalmsEvening: orNull(evening[0] ?? ''),
+      ot: orNull(morning[1]),
+      epistle: null,
+      // The third morning reading is the day's New Testament lesson, which for
+      // most of these days is a gospel.
+      gospel: orNull(morning[2]),
+    };
+  }
+}
+
+const out = { provenance: {}, weeks: {}, dated: {}, named: {}, holyDays: {} };
 
 for (const page of PAGES) {
   process.stdout.write(`fetching ${page}... `);
@@ -206,6 +260,10 @@ for (const page of PAGES) {
   parsePage(html, out);
   process.stdout.write('ok\n');
 }
+
+process.stdout.write('fetching Holy Days... ');
+parseHolyDays(await fetchPage('Holy Days'), out);
+process.stdout.write('ok' + String.fromCharCode(10));
 
 // `seen` is parser bookkeeping, not data.
 for (const week of Object.values(out.weeks)) delete week.seen;
@@ -225,6 +283,7 @@ writeFileSync(target, `${JSON.stringify(out, null, 2)}\n`);
 const weekCount = Object.keys(out.weeks).length;
 const datedCount = Object.keys(out.dated).length;
 const namedCount = Object.keys(out.named).length;
+const holyCount = Object.keys(out.holyDays).length;
 process.stdout.write(`wrote ${weekCount} weeks, ${datedCount} dated days, ${namedCount} named days\n`);
 
 // Report gaps rather than silently shipping them. Some are expected: in the
