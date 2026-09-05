@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest';
+// The generator is plain JS, so its return type is asserted here rather than
+// inferred. `lectionary.ts` is the module that owns this shape.
 import { buildDays } from '../../../scripts/build-lectionary.mjs';
+import type { LectionaryDay } from '../lectionary';
 
-const days = buildDays(2026, 2030);
+const days = buildDays(2026, 2030) as Record<string, LectionaryDay>;
 
 describe('buildDays', () => {
   it('emits an entry for every day in the window', () => {
