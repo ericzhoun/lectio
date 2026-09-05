@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add a dated daily scripture reading, drawn from the Revised Common Lectionary and staged through the six movements of Lectio Divina, where the model responds to what the user writes.
+**Goal:** Add a dated daily scripture reading, drawn from the 1979 BCP Daily Office Lectionary and staged through the six movements of Lectio Divina, where the model responds to what the user writes.
 
-**Architecture:** A build-time generator expands RCL source tables into a dated JSON file committed to the repo, so no external call happens at request time. `/today` redirects into one server-rendered page per step; each step POSTs to itself, saves to D1, and redirects to the next. Three of the six steps take user writing and call the model; the rest are silent by design.
+**Architecture:** A build-time generator expands the 1979 BCP Daily Office Lectionary tables into a dated JSON file committed to the repo, so no external call happens at request time. Chapter text lives in KV, since a daily lectionary reads across the whole Bible. `/today` redirects into one server-rendered page per step; each step POSTs to itself, saves to D1, and redirects to the next. Three of the six steps take user writing and call the model; the rest are silent by design.
 
 **Tech Stack:** Astro 7 (SSR, `@astrojs/cloudflare`), Cloudflare Workers + D1, TypeScript, vitest, OpenAI SDK.
 
@@ -33,15 +33,16 @@
 - `src/lib/dailySession.ts` - D1 tables, session upsert, step entries, the furthest-step guard.
 - `src/lib/dailyReflection.ts` - the per-step model contract.
 - `src/lib/dailySteps.ts` - the step list, order, and per-step copy in both languages.
-- `scripts/build-lectionary.mjs` - expands vendored RCL source into `lectionaryDays.json`.
-- `scripts/data/rcl-source.json` - vendored RCL reference tables, committed with provenance.
+- `scripts/build-lectionary.mjs` - expands the vendored BCP tables into `lectionaryDays.json`.
+- `scripts/fetch-bcp-lectionary.mjs` - fetches and parses the BCP Daily Office Lectionary pages.
+- `scripts/data/bcp-daily-office.json` - vendored BCP tables, committed with provenance.
+- `scripts/upload-bible-kv.mjs` - uploads chapter text to the CHAPTERS KV namespace.
 - `src/pages/today/index.astro` - entry point; resolves day, ensures session, redirects.
 - `src/pages/today/[step].astro` - all six step screens.
 - `src/pages/today/amen.astro` - closing summary, also serves past days.
 - `src/components/DailyProgress.astro` - the step rail and percent complete.
 
 **Modified:**
-- `scripts/fetch-bible-context.mjs` - additionally fetch chapters the lectionary window needs.
 - `src/lib/db.ts` - nothing structural; new tables live in `dailySession.ts` following the same pattern.
 - `src/pages/history/index.astro` - list daily sessions beside draws.
 - `package.json` - add the lectionary build to `prebuild`.
@@ -221,98 +222,196 @@ git commit -m "feat: liturgical date math for the daily lectionary"
 
 ---
 
-### Task 2: Vendor the RCL source table
+### Task 2: Vendor the BCP Daily Office Lectionary
 
-The generator needs reference data. This task only lands the source file and its provenance, so a reviewer can check licensing independently of any code.
+**Source decision, revised 2026-09-04.** The Revised Common Lectionary tables turned out to be a
+copyrighted compilation (Consultation on Common Texts / Augsburg Fortress, 2005), republished by
+Vanderbilt "by permission" that we do not hold. We use the **Daily Office Lectionary of the 1979 US
+Book of Common Prayer**, which is public domain, and which is a true two-year daily cycle.
 
 **Files:**
-- Create: `scripts/data/rcl-source.json`
+- Create: `scripts/fetch-bcp-lectionary.mjs`
+- Create: `scripts/data/bcp-daily-office.json`
 - Create: `scripts/data/README.md`
 
 **Interfaces:**
-- Produces: `scripts/data/rcl-source.json` with this exact shape, consumed by Task 3.
+- Produces: `scripts/data/bcp-daily-office.json`, consumed by Task 3:
 
 ```jsonc
 {
-  "provenance": { "source": "...", "url": "...", "retrieved": "2026-09-04", "terms": "..." },
-  "sundays": {
-    // key: liturgical day id, stable across years
-    "proper17": {
-      "title": { "en": "Proper 17", "zh": "常年期" },
-      "A": { "first": "Exodus 3:1-15", "psalm": "Psalm 105:1-6", "gospel": "Matthew 16:21-28" },
-      "B": { "first": "Song of Solomon 2:8-13", "psalm": "Psalm 45:1-2", "gospel": "Mark 7:1-8" },
-      "C": { "first": "Jeremiah 2:4-13", "psalm": "Psalm 81:1", "gospel": "Luke 14:1, 7-14" }
-    }
+  "provenance": {
+    "source": "The Daily Office Lectionary, The Book of Common Prayer (1979), pp. 936-1001",
+    "url": "http://www.bcponline.org/DOLectionary/",
+    "retrieved": "2026-09-04",
+    "terms": "The Episcopal Church has never claimed copyright in the Book of Common Prayer; the English text is in the public domain."
   },
-  "placement": {
-    // how each Sunday id is located in the year
-    "proper17": { "rule": "sundayBetween", "from": "08-28", "to": "09-03" },
-    "easter": { "rule": "easterOffset", "offset": 0 },
-    "advent1": { "rule": "adventOffset", "offset": 0 }
+  "weeks": {
+    // key: a stable week id
+    "proper17": {
+      "label": "Proper 17",
+      "placement": { "rule": "sundayClosestTo", "month": 8, "day": 31 },
+      "1": {                       // office Year One
+        "sunday": { "psalmsMorning": "148, 149, 150", "psalmsEvening": "114, 115",
+                    "ot": "1 Kings 8:22-30(31-40)", "epistle": "1 Tim. 4:7b-16",
+                    "gospel": "John 8:47-59" }
+        // ... monday through saturday
+      },
+      "2": { /* office Year Two, same shape */ }
+    }
   }
 }
 ```
 
-- [ ] **Step 1: Obtain the source table**
+Placement rules, all of which appear in the source text itself:
+- `{ "rule": "sundayClosestTo", "month": M, "day": D }` - the Propers.
+- `{ "rule": "adventWeek", "week": N }` - Advent 1-4.
+- `{ "rule": "epiphanyWeek", "week": N }` - Epiphany 1-8, and `"last"` for Last Epiphany.
+- `{ "rule": "lentWeek", "week": N }` - Lent 1-5, plus `"holyWeek"`.
+- `{ "rule": "easterWeek", "week": N }` - Easter 1-7.
+- `{ "rule": "fixedDate", "month": M, "day": D }` - the Christmas and Epiphany dated days.
 
-The Revised Common Lectionary reference tables are published by the Consultation on Common Texts and republished by the Vanderbilt Divinity Library. Download the tables for years A, B and C.
+- [ ] **Step 1: Write the fetcher**
 
-**Before committing, confirm the redistribution terms of the specific source you used and record them verbatim in `provenance.terms`.** Only the scripture *references* are needed here, never any translation's text. If the terms of your chosen source do not permit redistribution, find another source; do not proceed with an unclear license.
+Create `scripts/fetch-bcp-lectionary.mjs`. It fetches the six season pages, parses the tables, and
+writes `scripts/data/bcp-daily-office.json`. Pages:
 
-- [ ] **Step 2: Convert to the shape above**
+```
+http://www.bcponline.org/DOLectionary/Advent.htm
+http://www.bcponline.org/DOLectionary/Christmas.htm
+http://www.bcponline.org/DOLectionary/Epiphany.htm
+http://www.bcponline.org/DOLectionary/Lent.htm
+http://www.bcponline.org/DOLectionary/Easter.htm
+http://www.bcponline.org/DOLectionary/Pentecost.htm
+```
 
-Write the conversion however you like - it is a one-time job and the script is not a deliverable. What is committed is `scripts/data/rcl-source.json`, hand-checked.
+Each page prints Year One in full, then a page-break marker (`936 Daily Office Year One`), then Year
+Two in the same shape. Within a year, the structure repeats per week:
 
-Cover, at minimum: Advent 1-4, Christmas Day, Epiphany, Baptism of the Lord, Lent 1-5, Palm Sunday, Easter, Easter 2-7, Pentecost, Trinity, Propers 1-29, Christ the King. Every entry needs all three cycles and a `placement` rule.
+```
+**Week of 1 Advent**                       <- or: **Proper 17** _Week of the Sunday closest to August 31_
+_Sunday_    | 146, 147      v      111, 112, 113
+            | Isa. 1:1-9      2 Pet. 3:1-10      Matt. 25:1-13
+_Monday_    | 1, 2, 3      v      4, 7
+            | Isa. 1:10-20      1 Thess. 1:1-10      Luke 20:1-8
+```
+
+So: a weekday row carries morning psalms, a literal `v` separator, then evening psalms; the row
+below it carries OT, epistle and gospel, separated by runs of whitespace. Parse the placement rule
+out of the heading's italic gloss ("Week of the Sunday closest to August 31") rather than hardcoding
+a table of dates.
+
+This script is run by hand, not in `prebuild` - the source is a fixed historical document, not a
+feed. Fetch politely, one page at a time.
+
+- [ ] **Step 2: Run it and check the output**
+
+Run: `node scripts/fetch-bcp-lectionary.mjs`
+
+Then verify the shape:
+
+```bash
+node -e "
+const d=require('./scripts/data/bcp-daily-office.json');
+const ids=Object.keys(d.weeks);
+const days=['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+const bad=[];
+for (const id of ids) for (const y of ['1','2']) for (const day of days) {
+  const r=d.weeks[id]?.[y]?.[day];
+  if (!r || !r.gospel || !r.ot) bad.push(id+' Y'+y+' '+day);
+}
+console.log({weeks: ids.length, incomplete: bad.slice(0,10), incompleteCount: bad.length});
+"
+```
+
+Expected: roughly 60 weeks, and `incompleteCount` 0. A handful of gaps in the Christmas and Epiphany
+dated days is expected and fine - those are keyed by date, not weekday; exclude them from the check
+rather than inventing readings.
 
 - [ ] **Step 3: Write the provenance note**
 
-Create `scripts/data/README.md` recording where `rcl-source.json` came from, when, the licence, and the instruction that it is regenerated by hand rather than by a script.
+Create `scripts/data/README.md` recording the source, the date retrieved, the public-domain basis,
+and that the file is regenerated by running the fetcher rather than edited by hand.
 
-- [ ] **Step 4: Verify the file parses and is complete**
+Record the licensing reasoning explicitly, including why the RCL was rejected. A future reader must
+be able to see that the choice was deliberate.
 
-Run:
-
-```bash
-node -e "const d=require('./scripts/data/rcl-source.json');const ids=Object.keys(d.sundays);const missingPlacement=ids.filter(i=>!d.placement[i]);const missingCycle=ids.filter(i=>!d.sundays[i].A||!d.sundays[i].B||!d.sundays[i].C);console.log({count:ids.length,missingPlacement,missingCycle});"
-```
-
-Expected: a count of at least 60, and both arrays empty.
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add scripts/data/rcl-source.json scripts/data/README.md
-git commit -m "chore: vendor Revised Common Lectionary reference tables"
+git add scripts/fetch-bcp-lectionary.mjs scripts/data/bcp-daily-office.json scripts/data/README.md
+git commit -m "chore: vendor the BCP Daily Office Lectionary tables"
 ```
 
 ---
 
 ### Task 3: Generate the dated day table
 
-Expands the source table into one entry per calendar day for a rolling window. Weekdays inherit from their Sunday: the RCL's daily readings are keyed to the adjacent Sunday, so a weekday's focus passage is that Sunday's gospel until we have a fuller daily table. This keeps the passage stable for a week at a time, which is defensible practice, and the entry shape does not change if a true daily table is added later.
-
 **Files:**
 - Create: `scripts/build-lectionary.mjs`
 - Create: `src/lib/lectionaryDays.json` (generated output, committed)
+- Modify: `src/lib/liturgicalCalendar.ts` (add `officeYear`)
 - Test: `src/lib/__tests__/buildLectionary.test.ts`
+- Test: `src/lib/__tests__/liturgicalCalendar.test.ts` (extend)
 - Modify: `package.json` (the `prebuild` script)
 
 **Interfaces:**
-- Consumes: `scripts/data/rcl-source.json` from Task 2; `easterSunday`, `adventFirstSunday`, `sundayOnOrBefore`, `addDays`, `liturgicalYear` from Task 1.
-- Produces: `src/lib/lectionaryDays.json`, a flat object keyed `'YYYY-MM-DD'`, each value matching `LectionaryDay` as defined in Task 4:
+- Consumes: `scripts/data/bcp-daily-office.json` from Task 2; `easterSunday`, `adventFirstSunday`,
+  `sundayOnOrBefore`, `addDays`, `weekdayIndex` from Task 1.
+- Produces: `officeYear(day: string): 1 | 2` in `liturgicalCalendar.ts`, and
+  `src/lib/lectionaryDays.json` keyed `'YYYY-MM-DD'` with values matching `LectionaryDay` (Task 4).
 
-```jsonc
-{ "2026-09-04": {
-    "season": "ordinary", "week": 22, "weekday": "friday",
-    "title": { "en": "Friday, Week 22 in Ordinary Time", "zh": "常年期第二十二周 星期五" },
-    "readings": { "first": "Colossians 1:15-20", "psalm": "Psalm 100", "gospel": "Luke 5:33-39" },
-    "focus": "gospel" } }
+- [ ] **Step 1: Write the failing test for the office year**
+
+Append to `src/lib/__tests__/liturgicalCalendar.test.ts`:
+
+```ts
+describe('officeYear', () => {
+  it('runs Year One into odd civil years and Year Two into even ones', () => {
+    // Advent 2026 begins the year running through 2027, which is odd: Year One.
+    expect(officeYear('2026-11-29')).toBe(1);
+    expect(officeYear('2027-06-01')).toBe(1);
+    // Advent 2027 begins the year running through 2028: Year Two.
+    expect(officeYear('2027-11-28')).toBe(2);
+    expect(officeYear('2028-06-01')).toBe(2);
+  });
+
+  it('changes at Advent, not at New Year', () => {
+    expect(officeYear('2026-11-28')).toBe(2);
+    expect(officeYear('2026-11-29')).toBe(1);
+  });
+});
 ```
 
-- [ ] **Step 1: Write the failing test**
+Add `officeYear` to the import at the top of that file.
 
-Create `src/lib/__tests__/buildLectionary.test.ts`. It runs the generator in-process rather than shelling out, so export the builder as well as running it from the CLI.
+- [ ] **Step 2: Run it and watch it fail**
+
+Run: `npx vitest run src/lib/__tests__/liturgicalCalendar.test.ts`
+Expected: FAIL - `officeYear is not a function`.
+
+- [ ] **Step 3: Implement `officeYear`**
+
+Append to `src/lib/liturgicalCalendar.ts`:
+
+```ts
+/**
+ * The BCP Daily Office runs a two-year cycle. Year One begins at the Advent
+ * preceding an odd-numbered civil year, Year Two before an even one.
+ */
+export function officeYear(day: string): 1 | 2 {
+  const { endingYear } = liturgicalYear(day);
+  return endingYear % 2 === 1 ? 1 : 2;
+}
+```
+
+- [ ] **Step 4: Run it and watch it pass**
+
+Run: `npx vitest run src/lib/__tests__/liturgicalCalendar.test.ts`
+Expected: PASS.
+
+- [ ] **Step 5: Write the failing generator test**
+
+Create `src/lib/__tests__/buildLectionary.test.ts`:
 
 ```ts
 import { describe, it, expect } from 'vitest';
@@ -337,18 +436,28 @@ describe('buildDays', () => {
     }
   });
 
-  it('places Easter and Advent correctly', () => {
-    expect(days['2026-04-05'].season).toBe('easter');
-    expect(days['2026-04-05'].title.en).toContain('Easter');
-    expect(days['2026-11-29'].season).toBe('advent');
-    expect(days['2026-11-29'].week).toBe(1);
+  it('gives each weekday its own readings', () => {
+    // A true daily lectionary: consecutive days differ.
+    expect(days['2026-09-04'].readings.gospel)
+      .not.toBe(days['2026-09-03'].readings.gospel);
   });
 
-  it('carries a weekday to its preceding Sunday reading', () => {
-    // 2026-09-04 is a Friday; 2026-08-30 is the Sunday it inherits from.
-    expect(days['2026-09-04'].readings).toEqual(days['2026-08-30'].readings);
-    expect(days['2026-09-04'].weekday).toBe('friday');
-    expect(days['2026-08-30'].weekday).toBe('sunday');
+  it('places Easter and Advent correctly', () => {
+    expect(days['2026-04-05'].season).toBe('easter');
+    expect(days['2026-11-29'].season).toBe('advent');
+    expect(days['2026-11-29'].week).toBe('1 Advent');
+  });
+
+  it('alternates the office year at Advent', () => {
+    expect(days['2026-11-28'].officeYear).toBe(2);
+    expect(days['2026-11-29'].officeYear).toBe(1);
+  });
+
+  it('places a Proper on the Sunday closest to its date', () => {
+    // Proper 17 is the week of the Sunday closest to August 31.
+    // In 2026 that Sunday is August 30.
+    expect(days['2026-08-30'].week).toBe('Proper 17');
+    expect(days['2026-09-04'].week).toBe('Proper 17');
   });
 
   it('is deterministic', () => {
@@ -357,162 +466,77 @@ describe('buildDays', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [ ] **Step 6: Run it and watch it fail**
 
 Run: `npx vitest run src/lib/__tests__/buildLectionary.test.ts`
 Expected: FAIL - cannot resolve `scripts/build-lectionary.mjs`.
 
-- [ ] **Step 3: Write the generator**
+- [ ] **Step 7: Write the generator**
 
-Create `scripts/build-lectionary.mjs`. Export `buildDays` for the test; run it from the CLI when invoked directly.
+Create `scripts/build-lectionary.mjs`, exporting `buildDays(fromYear, toYear)` and running from the
+CLI when invoked directly. It must:
 
-```js
-// Expands the vendored RCL tables into one dated entry per calendar day.
-// Deterministic: same inputs, byte-identical output. Regenerate with
-//   node scripts/build-lectionary.mjs
-import { readFileSync, writeFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-import {
-  easterSunday, adventFirstSunday, sundayOnOrBefore, addDays, liturgicalYear,
-} from '../src/lib/liturgicalCalendar.ts';
+1. For each liturgical year touching the window, resolve every week id in the source to its Sunday:
+   - `sundayClosestTo` - the Sunday nearest that month/day, ties going later.
+   - `adventWeek` - `adventFirstSunday(year)` plus `7 * (week - 1)`.
+   - `easterWeek` / `lentWeek` / `holyWeek` - offsets from `easterSunday(year)`.
+   - `epiphanyWeek` - Sundays following January 6; "Last Epiphany" is the Sunday before Ash
+     Wednesday, so it must be placed after the Lent anchor and win over any Epiphany week it collides
+     with.
+2. Walk every date in the window, find the week whose Sunday is `sundayOnOrBefore(date)`, take that
+   week's readings for `officeYear(date)` and the date's weekday.
+3. Emit the `LectionaryDay` entry, with `focus: 'gospel'`.
 
-const here = dirname(fileURLToPath(import.meta.url));
-const SOURCE = JSON.parse(readFileSync(join(here, 'data/rcl-source.json'), 'utf8'));
-const OUT = join(here, '../src/lib/lectionaryDays.json');
+Season is derived from the week id prefix, as in the earlier draft. Titles are composed from the
+week label and the weekday name in each language.
 
-const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-const WEEKDAY_ZH = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+Duplicate the five date helpers from `liturgicalCalendar.ts` into the script rather than importing
+the `.ts` file, so `node scripts/build-lectionary.mjs` runs without type stripping. They are small
+and they are stable; the generator test guards them.
 
-/** Resolve every Sunday id to its date within one civil year. */
-function placeSundays(year) {
-  const placed = new Map(); // date -> sunday id
-  for (const [id, rule] of Object.entries(SOURCE.placement)) {
-    let date;
-    if (rule.rule === 'easterOffset') {
-      date = addDays(easterSunday(year), rule.offset);
-    } else if (rule.rule === 'adventOffset') {
-      date = addDays(adventFirstSunday(year), rule.offset);
-    } else if (rule.rule === 'sundayBetween') {
-      // The Sunday falling in the inclusive window from..to.
-      const from = `${year}-${rule.from}`;
-      const to = `${year}-${rule.to}`;
-      date = sundayOnOrBefore(to);
-      if (date < from) continue; // no Sunday in the window this year
-    } else {
-      throw new Error(`unknown placement rule for ${id}: ${rule.rule}`);
-    }
-    // Later rules never overwrite earlier ones; the source order is the priority order.
-    if (!placed.has(date)) placed.set(date, id);
-  }
-  return placed;
-}
+Where a date falls in a gap (the days between Christmas and Epiphany, which the source keys by date
+rather than by weekday), take the dated entry if one exists and otherwise carry the preceding week.
+Never emit a day with no readings.
 
-function seasonFor(id) {
-  if (id.startsWith('advent')) return 'advent';
-  if (id.startsWith('christmas') || id === 'epiphany') return 'christmas';
-  if (id.startsWith('lent') || id === 'palmSunday') return 'lent';
-  if (id === 'easter' || id.startsWith('easter')) return 'easter';
-  return 'ordinary';
-}
-
-function weekFor(id) {
-  const m = id.match(/(\d+)$/);
-  return m ? Number(m[1]) : 1;
-}
-
-function titleFor(sunday, weekdayIndex, lang) {
-  const base = sunday.title[lang];
-  if (weekdayIndex === 0) return base;
-  return lang === 'en'
-    ? `${WEEKDAYS[weekdayIndex][0].toUpperCase()}${WEEKDAYS[weekdayIndex].slice(1)}, ${base}`
-    : `${base} ${WEEKDAY_ZH[weekdayIndex]}`;
-}
-
-export function buildDays(fromYear, toYear) {
-  // Place Sundays for one year either side of the window so January and
-  // December inherit correctly.
-  const placed = new Map();
-  for (let y = fromYear - 1; y <= toYear + 1; y++) {
-    for (const [date, id] of placeSundays(y)) placed.set(date, id);
-  }
-
-  const out = {};
-  let day = `${fromYear}-01-01`;
-  const end = `${toYear}-12-31`;
-  while (day <= end) {
-    const sundayDate = sundayOnOrBefore(day);
-    const id = placed.get(sundayDate);
-    if (!id) throw new Error(`no lectionary Sunday placed for ${sundayDate}`);
-    const sunday = SOURCE.sundays[id];
-    if (!sunday) throw new Error(`placement references unknown Sunday id: ${id}`);
-    const { cycle } = liturgicalYear(day);
-    const readings = sunday[cycle];
-    const weekdayIndex = WEEKDAYS.indexOf(
-      WEEKDAYS[(new Date(`${day}T00:00:00Z`)).getUTCDay()]
-    );
-    out[day] = {
-      season: seasonFor(id),
-      week: weekFor(id),
-      weekday: WEEKDAYS[weekdayIndex],
-      title: {
-        en: titleFor(sunday, weekdayIndex, 'en'),
-        zh: titleFor(sunday, weekdayIndex, 'zh'),
-      },
-      readings,
-      focus: 'gospel',
-    };
-    day = addDays(day, 1);
-  }
-  return out;
-}
-
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const thisYear = new Date().getUTCFullYear();
-  const days = buildDays(thisYear, thisYear + 4);
-  writeFileSync(OUT, `${JSON.stringify(days, null, 2)}\n`);
-  console.log(`wrote ${Object.keys(days).length} days to ${OUT}`);
-}
-```
-
-Note the `.ts` import: vitest resolves it, and the CLI path needs Node's type stripping, which 22.12 provides behind `--experimental-strip-types`. If the bare `node scripts/build-lectionary.mjs` invocation fails on the import, the fix is to inline the five date helpers into the script rather than to add a build step - they are small, and duplicating them is cheaper than a toolchain.
-
-- [ ] **Step 4: Run test to verify it passes**
+- [ ] **Step 8: Run the test and watch it pass**
 
 Run: `npx vitest run src/lib/__tests__/buildLectionary.test.ts`
-Expected: PASS, 5 tests. If the "every entry has a resolvable focus" test fails, `rcl-source.json` is missing a gospel for some cycle - fix the data, not the test.
+Expected: PASS, 7 tests.
 
-- [ ] **Step 5: Generate the committed output**
+- [ ] **Step 9: Generate the committed output**
 
 Run: `node scripts/build-lectionary.mjs`
 Expected: `wrote 1826 days to .../src/lib/lectionaryDays.json`
 
-- [ ] **Step 6: Wire into prebuild**
+- [ ] **Step 10: Add the coverage guard and wire into prebuild**
 
-In `package.json`, change:
+In the CLI block, after writing:
 
-```json
-"prebuild": "node scripts/generate-sitemap.mjs",
+```js
+  const today = new Date().toISOString().slice(0, 10);
+  const remaining = Object.keys(days).filter((d) => d > today).length;
+  if (remaining < 180) {
+    console.error(`lectionary window has only ${remaining} days left; extend the range`);
+    process.exit(1);
+  }
 ```
 
-to:
+In `package.json`:
 
 ```json
 "prebuild": "node scripts/build-lectionary.mjs && node scripts/generate-sitemap.mjs",
 ```
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 11: Commit**
 
 ```bash
-git add scripts/build-lectionary.mjs src/lib/lectionaryDays.json src/lib/__tests__/buildLectionary.test.ts package.json
-git commit -m "feat: generate dated lectionary day table"
+git add scripts/build-lectionary.mjs src/lib/lectionaryDays.json src/lib/liturgicalCalendar.ts src/lib/__tests__/buildLectionary.test.ts src/lib/__tests__/liturgicalCalendar.test.ts package.json
+git commit -m "feat: generate the dated daily office lectionary table"
 ```
 
 ---
 
 ### Task 4: Lectionary reader and fallback
-
-The runtime view of the generated table. Kept separate from the generator so the app never imports build code.
 
 **Files:**
 - Create: `src/lib/lectionary.ts`
@@ -523,12 +547,13 @@ The runtime view of the generated table. Kept separate from the generator so the
 - Produces:
 
 ```ts
-export type Season = 'advent' | 'christmas' | 'lent' | 'easter' | 'ordinary';
-export type ReadingSlot = 'first' | 'psalm' | 'gospel';
+export type Season = 'advent' | 'christmas' | 'epiphany' | 'lent' | 'easter' | 'pentecost';
+export type ReadingSlot = 'psalmsMorning' | 'psalmsEvening' | 'ot' | 'epistle' | 'gospel';
 export interface LectionaryDay {
   season: Season;
-  week: number;
+  week: string;
   weekday: string;
+  officeYear: 1 | 2;
   title: Record<Lang, string>;
   readings: Record<ReadingSlot, string>;
   focus: ReadingSlot;
@@ -546,7 +571,7 @@ Create `src/lib/__tests__/lectionary.test.ts`:
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { getLectionaryDay, focusReference, windowRemainingDays } from '../lectionary';
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => { vi.restoreAllMocks(); });
 
 describe('getLectionaryDay', () => {
   it('returns the generated entry for a date in the window', () => {
@@ -554,6 +579,7 @@ describe('getLectionaryDay', () => {
     expect(day.title.en).toBeTruthy();
     expect(day.title.zh).toBeTruthy();
     expect(day.readings.gospel).toBeTruthy();
+    expect([1, 2]).toContain(day.officeYear);
   });
 
   it('falls back rather than throwing for a date outside the window', () => {
@@ -583,7 +609,7 @@ describe('windowRemainingDays', () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [ ] **Step 2: Run it and watch it fail**
 
 Run: `npx vitest run src/lib/__tests__/lectionary.test.ts`
 Expected: FAIL - cannot resolve `../lectionary`.
@@ -597,13 +623,14 @@ Create `src/lib/lectionary.ts`:
 import days from './lectionaryDays.json';
 import type { Lang } from './reading';
 
-export type Season = 'advent' | 'christmas' | 'lent' | 'easter' | 'ordinary';
-export type ReadingSlot = 'first' | 'psalm' | 'gospel';
+export type Season = 'advent' | 'christmas' | 'epiphany' | 'lent' | 'easter' | 'pentecost';
+export type ReadingSlot = 'psalmsMorning' | 'psalmsEvening' | 'ot' | 'epistle' | 'gospel';
 
 export interface LectionaryDay {
   season: Season;
-  week: number;
+  week: string;
   weekday: string;
+  officeYear: 1 | 2;
   title: Record<Lang, string>;
   readings: Record<ReadingSlot, string>;
   focus: ReadingSlot;
@@ -614,13 +641,16 @@ const TABLE = days as Record<string, LectionaryDay>;
 // Used when the generated window does not cover the requested day. A reader
 // should still get scripture; a 500 on the daily page is never acceptable.
 const FALLBACK: LectionaryDay = {
-  season: 'ordinary',
-  week: 1,
+  season: 'pentecost',
+  week: 'Proper 1',
   weekday: 'sunday',
+  officeYear: 1,
   title: { en: 'A Word for Today', zh: '今日的话' },
   readings: {
-    first: 'Isaiah 55:1-3',
-    psalm: 'Psalm 23',
+    psalmsMorning: 'Psalm 63',
+    psalmsEvening: 'Psalm 103',
+    ot: 'Isaiah 55:1-3',
+    epistle: 'Romans 8:31-39',
     gospel: 'John 15:1-11',
   },
   focus: 'gospel',
@@ -650,55 +680,78 @@ export function windowRemainingDays(today: string): number {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [ ] **Step 4: Run it and watch it pass**
 
 Run: `npx vitest run src/lib/__tests__/lectionary.test.ts`
 Expected: PASS, 5 tests.
 
-- [ ] **Step 5: Add the coverage guard to the build**
-
-Append to `scripts/build-lectionary.mjs`, inside the CLI block after writing:
-
-```js
-  const today = new Date().toISOString().slice(0, 10);
-  const remaining = Object.keys(days).filter((d) => d > today).length;
-  if (remaining < 180) {
-    console.error(`lectionary window has only ${remaining} days left; extend the range`);
-    process.exit(1);
-  }
-```
-
-- [ ] **Step 6: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
-git add src/lib/lectionary.ts src/lib/__tests__/lectionary.test.ts scripts/build-lectionary.mjs
+git add src/lib/lectionary.ts src/lib/__tests__/lectionary.test.ts
 git commit -m "feat: lectionary reader with out-of-window fallback"
 ```
 
 ---
 
-### Task 5: Passage text coverage
+### Task 5: Passage text from KV
 
-The reader resolves a reference like `Luke 5:33-39` to text. `bibleChapters.json` currently only holds chapters the 148-verse deck touches, so it must grow. **Measure before choosing where the data lives.**
+A two-year daily lectionary reads across effectively the whole Bible, so the bundled
+`bibleChapters.json` approach does not carry over: both translations in full are several megabytes,
+which does not belong in a Worker bundle. Chapter text for the daily flow lives in KV.
+
+The existing deck flow keeps its bundled `bibleChapters.json` untouched.
 
 **Files:**
-- Modify: `scripts/fetch-bible-context.mjs`
+- Create: `scripts/upload-bible-kv.mjs`
 - Create: `src/lib/passage.ts`
+- Modify: `src/lib/scripture.ts` (export and complete `BOOK_NR`)
+- Modify: `wrangler.jsonc` (add the `CHAPTERS` KV binding)
 - Test: `src/lib/__tests__/passage.test.ts`
 
 **Interfaces:**
-- Consumes: `getLectionaryDay`, `focusReference` from Task 4; the existing chapter store.
-- Produces: `resolvePassage(ref: string, lang: Lang): { ref: string; text: string } | null` and `parseReference(ref: string): { book: string; chapter: number; from: number; to: number } | null`.
+- Consumes: `getLectionaryDay`, `focusReference` from Task 4.
+- Produces:
+```ts
+export function parseReference(ref: string): ParsedReference | null;
+export async function resolvePassage(ref: string, lang: Lang, kv?: KVNamespace): Promise<ResolvedPassage | null>;
+```
 
-- [ ] **Step 1: Write the failing test**
+Note `resolvePassage` is **async** here, unlike the earlier draft. Every caller in Tasks 11-13 must
+await it.
+
+- [ ] **Step 1: Export and complete the book-number map**
+
+`src/lib/scripture.ts:90` holds `BOOK_NR`, a book-name to getbible-number map. It is module-private
+and **incomplete** - it was only ever built for the 148-verse deck. Add the missing books:
+
+```ts
+  'Song of Solomon': 22, Habakkuk: 35, Haggai: 37, '2 John': 63, '3 John': 64,
+```
+
+Change the declaration to `export const BOOK_NR`. Nothing else in `scripture.ts` changes.
+
+The BCP abbreviates ("Isa.", "1 Thess.", "Matt.", "2 Pet."), so `passage.ts` also needs an
+abbreviation map. Put it in `passage.ts`, not `scripture.ts` - the deck has no abbreviations.
+
+- [ ] **Step 2: Write the failing test**
 
 Create `src/lib/__tests__/passage.test.ts`:
 
 ```ts
 import { describe, it, expect } from 'vitest';
 import { parseReference, resolvePassage } from '../passage';
-import { getLectionaryDay, focusReference } from '../lectionary';
-import lectionaryDays from '../lectionaryDays.json';
+
+// A KV stand-in holding two chapters, keyed as the uploader writes them.
+const kv = {
+  get: async (key: string) => {
+    const fixtures: Record<string, unknown> = {
+      'en:42:5': { verses: Array.from({ length: 40 }, (_, i) => `Luke 5 verse ${i + 1}.`) },
+      'zh:42:5': { verses: Array.from({ length: 40 }, (_, i) => `路加五章第${i + 1}节。`) },
+    };
+    return fixtures[key] ?? null;
+  },
+} as any;
 
 describe('parseReference', () => {
   it('parses a verse range', () => {
@@ -719,136 +772,91 @@ describe('parseReference', () => {
     });
   });
 
+  it('expands the abbreviations the BCP uses', () => {
+    expect(parseReference('Matt. 25:1-13')?.book).toBe('Matthew');
+    expect(parseReference('1 Thess. 1:1-10')?.book).toBe('1 Thessalonians');
+    expect(parseReference('Isa. 1:1-9')?.book).toBe('Isaiah');
+    expect(parseReference('2 Pet. 3:1-10')?.book).toBe('2 Peter');
+  });
+
+  it('takes the contiguous span of a comma range', () => {
+    // 'Job 19:1-7, 14-27' becomes 19:1-27; a few extra verses are harmless
+    // in a contemplative reading, and a second grammar is not worth it.
+    expect(parseReference('Job 19:1-7, 14-27')).toEqual({
+      book: 'Job', chapter: 19, from: 1, to: 27,
+    });
+  });
+
+  it('drops optional-verse brackets', () => {
+    expect(parseReference('1 Kings 8:22-30(31-40)')).toEqual({
+      book: '1 Kings', chapter: 8, from: 22, to: 40,
+    });
+  });
+
   it('returns null for junk', () => {
     expect(parseReference('not a reference')).toBeNull();
   });
 });
 
 describe('resolvePassage', () => {
-  it('returns joined verse text in both languages', () => {
-    const en = resolvePassage('Luke 5:33-39', 'en');
-    const zh = resolvePassage('Luke 5:33-39', 'zh');
-    expect(en?.text.length).toBeGreaterThan(50);
-    expect(zh?.text.length).toBeGreaterThan(20);
+  it('joins the verse range in both languages', async () => {
+    const en = await resolvePassage('Luke 5:33-39', 'en', kv);
+    const zh = await resolvePassage('Luke 5:33-39', 'zh', kv);
+    expect(en?.text).toContain('Luke 5 verse 33.');
+    expect(en?.text).toContain('Luke 5 verse 39.');
+    expect(en?.text).not.toContain('verse 40.');
+    expect(zh?.text).toContain('第33节');
   });
 
-  it('resolves every focus reading in the generated window', () => {
-    const unresolved: string[] = [];
-    for (const day of Object.keys(lectionaryDays)) {
-      const ref = focusReference(getLectionaryDay(day));
-      if (!resolvePassage(ref, 'en')) unresolved.push(`${day}: ${ref}`);
-    }
-    expect(unresolved).toEqual([]);
+  it('returns null when the chapter is not in the store', async () => {
+    expect(await resolvePassage('Obadiah 1:1-3', 'en', kv)).toBeNull();
+  });
+
+  it('returns null rather than half a passage when the range overruns', async () => {
+    expect(await resolvePassage('Luke 5:38-45', 'en', kv)).toBeNull();
   });
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [ ] **Step 3: Run it and watch it fail**
 
 Run: `npx vitest run src/lib/__tests__/passage.test.ts`
 Expected: FAIL - cannot resolve `../passage`.
 
-- [ ] **Step 3: Extend the chapter fetcher**
+- [ ] **Step 4: Write the implementation**
 
-Read `scripts/fetch-bible-context.mjs` first and follow its existing structure. Add a second source of required chapters: import `src/lib/lectionaryDays.json`, collect every `readings[focus]`, parse each to a book and chapter, and union that set with the chapters the deck already needs. Do not change how it fetches or how it writes.
+Create `src/lib/passage.ts`. Keys are `<lang>:<bookNumber>:<chapter>` holding `{ verses: string[] }`,
+zero-indexed. Reads go through a per-request `Map` cache so a page rendering the same chapter twice
+hits KV once.
 
-Run it: `node scripts/fetch-bible-context.mjs`
+- [ ] **Step 5: Write the uploader**
 
-- [ ] **Step 4: Measure the result and decide**
+Create `scripts/upload-bible-kv.mjs`: fetch WEB and 和合本 from api.getbible.net for every chapter
+the lectionary window needs, and write them to the `CHAPTERS` namespace with
+`wrangler kv key put --binding CHAPTERS`. Batch the writes; this is a one-time job that runs by hand,
+not in `prebuild`.
 
-Run: `ls -l src/lib/bibleChapters.json`
+Add the binding to `wrangler.jsonc` alongside `SESSION`, and document it in the README bindings
+section.
 
-If the file is **under 3 MB**, keep the bundled import and continue to Step 5.
-
-If it is **3 MB or larger**, stop and move chapter text to KV before continuing: add a `CHAPTERS` KV binding in `wrangler.jsonc`, upload the chapters from the script, and have `resolvePassage` become async, reading from KV with an in-request cache. This is a real fork in the plan. It is cheap now and expensive after the pages are written, which is why it is measured here rather than assumed.
-
-Record which branch you took in the commit message.
-
-- [ ] **Step 5: Export and complete the book-number map**
-
-`src/lib/scripture.ts:90` holds `BOOK_NR`, a book-name to getbible-number map. It is module-private and **incomplete** - it was only ever built for the 148-verse deck. These entries are missing and the lectionary needs them:
-
-```ts
-  'Song of Solomon': 22, Habakkuk: 35, Haggai: 37, '2 John': 63, '3 John': 64,
-```
-
-Add them, and change the declaration to `export const BOOK_NR`. Nothing else in `scripture.ts` changes.
-
-`scripts/fetch-bible-context.mjs:25` has its own copy of the same map. Add the same five entries there too, or the fetcher will throw `Unknown book` on the lectionary chapters.
-
-- [ ] **Step 6: Write the implementation**
-
-Chapter data is keyed `'<bookNumber>:<chapter>'` with zero-indexed verse arrays: `{ en: string[]; zh: string[] }`. See `src/lib/scripture.ts:157`.
-
-Create `src/lib/passage.ts`:
-
-```ts
-// Resolve a lectionary reference like 'Luke 5:33-39' to public-domain text.
-import bibleChapters from './bibleChapters.json';
-import { BOOK_NR } from './scripture';
-import type { Lang } from './reading';
-
-export interface ParsedReference {
-  book: string;
-  chapter: number;
-  from: number;
-  to: number;
-}
-
-export interface ResolvedPassage {
-  ref: string;
-  text: string;
-}
-
-// Book names may carry a leading numeral and internal spaces ('Song of Solomon',
-// '1 Corinthians'), so the book group is non-greedy up to the chapter number.
-const REFERENCE_RE = /^\s*((?:[1-3]\s+)?[A-Za-z][A-Za-z\s]*?)\s+(\d+):(\d+)(?:\s*-\s*(\d+))?\s*$/;
-
-const CHAPTERS = bibleChapters as Record<string, { en: string[]; zh: string[] }>;
-
-export function parseReference(ref: string): ParsedReference | null {
-  const m = REFERENCE_RE.exec(ref);
-  if (!m) return null;
-  const from = Number(m[3]);
-  const to = m[4] ? Number(m[4]) : from;
-  if (to < from) return null;
-  return { book: m[1].trim().replace(/\s+/g, ' '), chapter: Number(m[2]), from, to };
-}
-
-export function resolvePassage(ref: string, lang: Lang): ResolvedPassage | null {
-  const parsed = parseReference(ref);
-  if (!parsed) return null;
-
-  const nr = BOOK_NR[parsed.book];
-  if (!nr) return null;
-
-  const chapter = CHAPTERS[`${nr}:${parsed.chapter}`];
-  if (!chapter) return null;
-
-  const verses = lang === 'zh' ? chapter.zh : chapter.en;
-  // Verse numbers are 1-based; the stored arrays are 0-indexed.
-  const slice = verses.slice(parsed.from - 1, parsed.to);
-  // A short slice means the range runs past the end of the chapter. Render
-  // nothing rather than half a passage - the caller has a fallback.
-  if (slice.length !== parsed.to - parsed.from + 1) return null;
-  if (slice.some((v) => !v)) return null;
-
-  return { ref, text: slice.join(' ') };
-}
-```
-
-Lectionary references sometimes carry a comma-separated range (`Luke 14:1, 7-14`). `parseReference` returns null for those, so the "resolves every focus reading" test will list them. Fix them in `rcl-source.json` by widening to the contiguous span (`Luke 14:1-14`) rather than complicating the parser - a couple of extra verses in a contemplative reading is not a problem worth a second grammar.
-
-- [ ] **Step 7: Run tests to verify they pass**
+- [ ] **Step 6: Run the tests and watch them pass**
 
 Run: `npx vitest run src/lib/__tests__/passage.test.ts`
-Expected: PASS, 6 tests. The "resolves every focus reading" test is the important one - if it lists unresolved references, the fetcher missed chapters, `BOOK_NR` is still missing a book, or a reference in `rcl-source.json` uses a comma range.
+Expected: PASS, 10 tests.
+
+- [ ] **Step 7: Verify every gospel in the window resolves**
+
+This cannot be a unit test any more, because it needs the real KV. Add
+`scripts/check-lectionary-coverage.mjs`, run against the deployed namespace, listing every focus
+reference in the window that fails to parse or fails to resolve. Run it after the upload and fix
+what it reports - a missing chapter means the uploader missed it, a parse failure means the
+abbreviation map is short a book.
 
 - [ ] **Step 8: Commit**
 
 ```bash
-git add scripts/fetch-bible-context.mjs src/lib/bibleChapters.json src/lib/scripture.ts src/lib/passage.ts src/lib/__tests__/passage.test.ts
-git commit -m "feat: resolve lectionary references to passage text"
+git add scripts/upload-bible-kv.mjs scripts/check-lectionary-coverage.mjs src/lib/passage.ts src/lib/scripture.ts src/lib/__tests__/passage.test.ts wrangler.jsonc README.md
+git commit -m "feat: resolve lectionary references to passage text from KV"
 ```
 
 ---
@@ -1932,7 +1940,7 @@ const step: Step = stepParam;
 const lang = resolveLang(Astro);
 const day = resolveActiveDay(Astro);
 const entry = getLectionaryDay(day);
-const passage = resolvePassage(focusReference(entry), lang);
+const passage = await resolvePassage(focusReference(entry), lang);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
@@ -2365,7 +2373,7 @@ const session = await getSession(userId, day);
 if (!session) return Astro.redirect('/today');
 
 const entry = getLectionaryDay(day);
-const passage = resolvePassage(focusReference(entry), session.lang);
+const passage = await resolvePassage(focusReference(entry), session.lang);
 const entries = await getStepEntries(userId, day);
 ---
 
@@ -2472,7 +2480,7 @@ git commit -m "feat: link the daily reading from navigation and homepage"
 
 ## Notes for the executor
 
-- **Task 5 Step 4 is a real decision point.** Measure the file, then take the branch the measurement indicates. Do not carry on with a bundled 10 MB JSON because the plan's happy path assumed it would be small.
-- **Task 2 requires a licensing judgement** that the plan cannot make for you. If the terms of your source are unclear, stop and ask rather than committing the file.
-- The `zh` liturgical titles in `rcl-source.json` are authored by hand. If your Chinese is not good enough to write them well, flag it rather than machine-translating a liturgical calendar.
+- **`resolvePassage` is async.** Every caller in Tasks 11 and 13 must await it, and the step pages are already async, so this costs nothing but attention.
+- **Task 5 needs a real KV namespace** before the daily pages can render anything. Create it and run the uploader before starting Task 11, or you will be debugging blank passages.
+- The `zh` liturgical titles are authored by hand in the generator. If your Chinese is not good enough to write them well, flag it rather than machine-translating a liturgical calendar.
 - Contemplatio has no model call and no textarea. If you find yourself adding either, re-read the spec.
