@@ -91,11 +91,15 @@ an even one. This is a separate, simpler cycle from the Sunday A/B/C one and doe
 References resolve through the existing getbible-derived chapter data (WEB for `en`,
 和合本 for `zh`). `bibleChapters.json` currently covers only chapters touched by the 148-verse deck.
 
-A two-year daily lectionary reads across effectively the whole Bible, so the bundled-import approach
-does not survive this change: both translations in full run to several megabytes, past what belongs
-in a Worker bundle. **Chapter text moves to KV.** A new `CHAPTERS` KV namespace holds one entry per
-book and chapter; `resolvePassage` becomes async and reads from KV with a per-request cache. The
-existing deck flow keeps its bundled `bibleChapters.json` and is not touched.
+**Revised again, on measurement.** An earlier draft of this section moved chapter text to KV, on the
+assumption that a daily lectionary reads across the whole Bible. Measuring the generated table
+showed otherwise: the six steps walk exactly one focus reading per day, always the gospel, and those
+span **91 chapters across 8 books**. Adding them takes `bibleChapters.json` from 628 KB to 876 KB,
+which is comfortably bundleable, so the deck's existing store is reused and no KV namespace is
+introduced. `resolvePassage` stays synchronous.
+
+`scripts/fetch-bible-context.mjs` gains a second input: the chapters the lectionary window needs,
+including both chapters of any reading that crosses a boundary.
 
 ### "Today"
 
@@ -258,5 +262,5 @@ mocked.
 ## Open items for implementation
 
 - Author the `zh` liturgical day titles in the generator.
-- Decide how the deck flow and the daily flow share book-name to book-number mapping once chapter
-  text lives in KV; today `BOOK_NR` is private to `scripture.ts` and incomplete.
+- `BOOK_NR` is now exported from `scripture.ts` and shared by both flows. If a third consumer
+  appears, move it and the abbreviation map into a module of their own.

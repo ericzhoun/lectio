@@ -4,7 +4,7 @@
 
 **Goal:** Add a dated daily scripture reading, drawn from the 1979 BCP Daily Office Lectionary and staged through the six movements of Lectio Divina, where the model responds to what the user writes.
 
-**Architecture:** A build-time generator expands the 1979 BCP Daily Office Lectionary tables into a dated JSON file committed to the repo, so no external call happens at request time. Chapter text lives in KV, since a daily lectionary reads across the whole Bible. `/today` redirects into one server-rendered page per step; each step POSTs to itself, saves to D1, and redirects to the next. Three of the six steps take user writing and call the model; the rest are silent by design.
+**Architecture:** A build-time generator expands the 1979 BCP Daily Office Lectionary tables into a dated JSON file committed to the repo, so no external call happens at request time. Chapter text stays in the existing bundled store: the focus reading is always the gospel, which spans only 91 chapters. `/today` redirects into one server-rendered page per step; each step POSTs to itself, saves to D1, and redirects to the next. Three of the six steps take user writing and call the model; the rest are silent by design.
 
 **Tech Stack:** Astro 7 (SSR, `@astrojs/cloudflare`), Cloudflare Workers + D1, TypeScript, vitest, OpenAI SDK.
 
@@ -694,7 +694,7 @@ git commit -m "feat: lectionary reader with out-of-window fallback"
 
 ---
 
-### Task 5: Passage text from KV
+### Task 5: Passage text
 
 A two-year daily lectionary reads across effectively the whole Bible, so the bundled
 `bibleChapters.json` approach does not carry over: both translations in full are several megabytes,
@@ -800,8 +800,8 @@ describe('parseReference', () => {
 
 describe('resolvePassage', () => {
   it('joins the verse range in both languages', async () => {
-    const en = await resolvePassage('Luke 5:33-39', 'en', kv);
-    const zh = await resolvePassage('Luke 5:33-39', 'zh', kv);
+    const en = resolvePassage('Luke 5:33-39', 'en', kv);
+    const zh = resolvePassage('Luke 5:33-39', 'zh', kv);
     expect(en?.text).toContain('Luke 5 verse 33.');
     expect(en?.text).toContain('Luke 5 verse 39.');
     expect(en?.text).not.toContain('verse 40.');
@@ -809,11 +809,11 @@ describe('resolvePassage', () => {
   });
 
   it('returns null when the chapter is not in the store', async () => {
-    expect(await resolvePassage('Obadiah 1:1-3', 'en', kv)).toBeNull();
+    expect(resolvePassage('Obadiah 1:1-3', 'en', kv)).toBeNull();
   });
 
   it('returns null rather than half a passage when the range overruns', async () => {
-    expect(await resolvePassage('Luke 5:38-45', 'en', kv)).toBeNull();
+    expect(resolvePassage('Luke 5:38-45', 'en', kv)).toBeNull();
   });
 });
 ```
@@ -1940,7 +1940,7 @@ const step: Step = stepParam;
 const lang = resolveLang(Astro);
 const day = resolveActiveDay(Astro);
 const entry = getLectionaryDay(day);
-const passage = await resolvePassage(focusReference(entry), lang);
+const passage = resolvePassage(focusReference(entry), lang);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
@@ -2373,7 +2373,7 @@ const session = await getSession(userId, day);
 if (!session) return Astro.redirect('/today');
 
 const entry = getLectionaryDay(day);
-const passage = await resolvePassage(focusReference(entry), session.lang);
+const passage = resolvePassage(focusReference(entry), session.lang);
 const entries = await getStepEntries(userId, day);
 ---
 
@@ -2480,7 +2480,6 @@ git commit -m "feat: link the daily reading from navigation and homepage"
 
 ## Notes for the executor
 
-- **`resolvePassage` is async.** Every caller in Tasks 11 and 13 must await it, and the step pages are already async, so this costs nothing but attention.
-- **Task 5 needs a real KV namespace** before the daily pages can render anything. Create it and run the uploader before starting Task 11, or you will be debugging blank passages.
+- **`resolvePassage` is synchronous.** The KV plan was dropped after measuring what the daily flow actually reads; do not await it.
 - The `zh` liturgical titles are authored by hand in the generator. If your Chinese is not good enough to write them well, flag it rather than machine-translating a liturgical calendar.
 - Contemplatio has no model call and no textarea. If you find yourself adding either, re-read the spec.
