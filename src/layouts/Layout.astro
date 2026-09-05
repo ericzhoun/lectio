@@ -77,6 +77,7 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
     ) : (
       <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
     )}
+    <a href="/today" style={isActive('/today') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '今日' : 'Today'}</a>
     <a href="/pricing" style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '价格' : 'Pricing'}</a>
     <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '经文库' : 'Verse Library'}</a>
     <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
@@ -86,6 +87,22 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
   </div>
   <slot />
   {!userId && <LoginOverlay lang={lang} />}
+  <script is:inline>
+    // The server can only know the reader's local day if the browser tells it
+    // which zone they are in. A daily practice that rolls over at the wrong
+    // local hour is worse than no daily practice.
+    (function () {
+      try {
+        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (tz && document.cookie.indexOf('tz=') === -1) {
+          document.cookie =
+            'tz=' + encodeURIComponent(tz) + ';path=/;max-age=31536000;samesite=lax';
+        }
+      } catch (e) {
+        /* no zone available; the server falls back to UTC */
+      }
+    })();
+  </script>
   <script src="../scripts/authPosition.ts"></script>
   <AssistantWidget lang={lang} loggedIn={!!userId} />
 </body>

@@ -1,0 +1,365 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import DailyProgress from '../../components/DailyProgress.astro';
+import { env } from 'cloudflare:workers';
+import { verifySessionToken } from '../../lib/session';
+import { resolveLang } from '../../lib/i18n';
+import { resolveActiveDay } from '../../lib/localDay';
+import { getLectionaryDay, focusReference } from '../../lib/lectionary';
+import { resolvePassage } from '../../lib/passage';
+import { isStep, nextStep, STEP_COPY, WRITING_STEPS, type Step } from '../../lib/dailySteps';
+import {
+  ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
+} from '../../lib/dailySession';
+import { handleStepSubmit, STEP_TEXT_MAX_CHARS } from '../../lib/dailySubmit';
+import type { WritingStep } from '../../lib/dailyReflection';
+
+const stepParam = Astro.params.step;
+if (!isStep(stepParam)) return Astro.redirect('/today');
+const step: Step = stepParam;
+
+const lang = resolveLang(Astro);
+const day = resolveActiveDay(Astro);
+const entry = getLectionaryDay(day);
+const passage = resolvePassage(focusReference(entry), lang);
+
+const sessionCookie = Astro.cookies.get('session')?.value;
+const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
+
+// Anonymous readers may take the first two steps. Meditatio asks them to sign
+// in, because from there on they are writing something worth keeping.
+const ANON_STEPS: Step[] = ['silencio', 'lectio'];
+if (!userId && !ANON_STEPS.includes(step)) {
+  const returnTo = encodeURIComponent(`/today/${step}`);
+  return Astro.redirect(`/login?lang=${lang}&returnTo=${returnTo}`);
+}
+
+const isWriting = (WRITING_STEPS as readonly Step[]).includes(step);
+
+let reached: Step = 'silencio';
+if (userId) {
+  const session = (await getSession(userId, day)) ?? (await ensureSession(userId, day, lang));
+  reached = session.reachedStep;
+  // No jumping ahead: nobody lands on Oratio without having read.
+  if (!canOpenStep(reached, step)) return Astro.redirect(`/today/${reached}`);
+}
+
+let submitError: 'empty' | null = null;
+
+if (Astro.request.method === 'POST' && userId && passage && isWriting) {
+  const form = await Astro.request.formData();
+  const userText = String(form.get('step_text') ?? '');
+  const result = await handleStepSubmit({
+    userId, day, step: step as WritingStep, userText, passage, lang,
+  });
+  if (result.error === 'empty') submitError = 'empty';
+  // Redirect after POST so a refresh never resubmits.
+  else return Astro.redirect(`/today/${step}?saved=1`);
+}
+
+const entries = userId ? await getStepEntries(userId, day) : [];
+const priorText = (s: Step) => entries.find((e) => e.step === s)?.userText ?? '';
+const myEntry = entries.find((e) => e.step === step) ?? null;
+const saved = Astro.url.searchParams.get('saved') === '1';
+
+// Arriving at a silent step is all it takes to have taken it. A writing step
+// advances on submit instead, which handleStepSubmit does.
+if (userId && !isWriting) {
+  await advanceTo(userId, day, step);
+  const refreshed = await getSession(userId, day);
+  reached = refreshed?.reachedStep ?? reached;
+}
+
+const copy = STEP_COPY[step];
+const next = nextStep(step);
+const advanceHref = next ? `/today/${next}` : '/today/amen';
+const continueLabel = lang === 'zh' ? '继续' : 'Continue';
+---
+
+<Layout title={`${copy.name[lang]} · ${entry.title[lang]}`} lang={lang} noindex={true}>
+  <article class="daily">
+    <header>
+      <p class="day">{entry.title[lang]}</p>
+      <h1>{copy.name[lang]}</h1>
+      <p class="prompt">{copy.prompt[lang]}</p>
+    </header>
+
+    <DailyProgress reached={reached} current={step} lang={lang} />
+
+    {step === 'silencio' && (
+      <section class="silence">
+        <div class="timer" data-seconds="60" aria-live="polite"></div>
+        <a class="advance" href={advanceHref}>{lang === 'zh' ? '开始' : 'Begin'}</a>
+      </section>
+    )}
+
+    {step === 'lectio' && (
+      <section class="reading">
+        <div class="controls" role="group" aria-label={lang === 'zh' ? '字体大小' : 'Text size'}>
+          <button type="button" data-scale="-1" aria-label={lang === 'zh' ? '缩小字体' : 'Smaller text'}>A-</button>
+          <button type="button" data-scale="0" aria-label={lang === 'zh' ? '默认字体' : 'Default text size'}>A</button>
+          <button type="button" data-scale="1" aria-label={lang === 'zh' ? '放大字体' : 'Larger text'}>A+</button>
+        </div>
+        {passage ? (
+          <>
+            <p class="ref">{passage.ref}</p>
+            <p class="text">{passage.text}</p>
+            <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
+          </>
+        ) : (
+          <p class="text">
+            {lang === 'zh' ? '今天的经文暂时无法显示。' : "Today's passage could not be loaded."}
+          </p>
+        )}
+        <a class="advance" href={advanceHref}>{continueLabel}</a>
+      </section>
+    )}
+
+    {step === 'contemplatio' && (
+      <section class="rest">
+        {priorText('oratio') && <blockquote class="own-words mine">{priorText('oratio')}</blockquote>}
+        <div class="timer" data-seconds="120" aria-live="polite"></div>
+        <a class="advance" href={advanceHref}>{continueLabel}</a>
+      </section>
+    )}
+
+    {isWriting && (
+      <section class="writing">
+        {step === 'meditatio' && passage && <p class="text passage-again">{passage.text}</p>}
+        {step !== 'meditatio' && priorText('meditatio') && (
+          <blockquote class="own-words">{priorText('meditatio')}</blockquote>
+        )}
+
+        {saved && myEntry ? (
+          <>
+            <blockquote class="own-words mine">{myEntry.userText}</blockquote>
+            {myEntry.aiText
+              ? <p class="reply">{myEntry.aiText}</p>
+              : <p class="reply muted">{copy.prompt[lang]}</p>}
+            <a class="advance ready" href={advanceHref}>{continueLabel}</a>
+          </>
+        ) : (
+          <form method="post">
+            <label for="step_text">{copy.prompt[lang]}</label>
+            {/* A textarea's value is its children, never a value attribute. */}
+            <textarea
+              id="step_text"
+              name="step_text"
+              rows="5"
+              maxlength={STEP_TEXT_MAX_CHARS}
+              required
+            >{myEntry?.userText ?? ''}</textarea>
+            {submitError === 'empty' && (
+              <p class="error">{lang === 'zh' ? '请先写下一点什么。' : 'Write something first.'}</p>
+            )}
+            <button type="submit">{continueLabel}</button>
+          </form>
+        )}
+      </section>
+    )}
+  </article>
+</Layout>
+
+<script>
+  // Count down, then bring the advance link forward. Never disabled: a reader
+  // who is ready before the timer is ready.
+  document.querySelectorAll<HTMLElement>('.timer').forEach((el) => {
+    let left = Number(el.dataset.seconds ?? 60);
+    const render = () => { el.textContent = String(left); };
+    render();
+    const id = setInterval(() => {
+      left -= 1;
+      render();
+      if (left <= 0) {
+        clearInterval(id);
+        el.textContent = '';
+        el.closest('section')?.classList.add('ready');
+      }
+    }, 1000);
+  });
+
+  const reading = document.querySelector<HTMLElement>('.reading');
+  if (reading) {
+    let scale = 1;
+    reading.querySelectorAll<HTMLButtonElement>('[data-scale]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const step = Number(btn.dataset.scale);
+        scale = step === 0 ? 1 : Math.min(1.6, Math.max(0.85, scale + step * 0.15));
+        reading.style.setProperty('--reading-scale', String(scale));
+      });
+    });
+  }
+</script>
+
+<style>
+  .daily {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  .daily header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .day {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin: 0 0 0.4rem;
+    letter-spacing: 0.03em;
+  }
+
+  .daily h1 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin: 0 0 0.6rem;
+    letter-spacing: 0.04em;
+  }
+
+  .prompt {
+    margin: 0;
+    opacity: 0.75;
+    line-height: 1.6;
+  }
+
+  .text {
+    font-size: calc(1.05rem * var(--reading-scale, 1));
+    line-height: 1.9;
+    margin: 1.5rem 0;
+  }
+
+  .passage-again {
+    font-size: 1rem;
+    opacity: 0.75;
+    border-left: 2px solid currentColor;
+    padding-left: 1rem;
+  }
+
+  .ref {
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin: 0;
+  }
+
+  .twice {
+    font-size: 0.85rem;
+    opacity: 0.55;
+    font-style: italic;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.35rem;
+  }
+
+  .controls button {
+    background: none;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .silence,
+  .rest {
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .timer {
+    font-size: 2rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.35;
+    min-height: 2.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .own-words {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid currentColor;
+    opacity: 0.6;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .own-words.mine {
+    opacity: 0.9;
+    font-style: normal;
+  }
+
+  .reply {
+    line-height: 1.8;
+    margin: 1.5rem 0;
+  }
+
+  .reply.muted {
+    opacity: 0.6;
+    font-style: italic;
+  }
+
+  .writing label {
+    display: block;
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .writing textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.85rem;
+    font: inherit;
+    line-height: 1.7;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    resize: vertical;
+  }
+
+  .writing button {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    font: inherit;
+    cursor: pointer;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+  }
+
+  .error {
+    color: #b3261e;
+    font-size: 0.9rem;
+  }
+
+  .advance {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    text-decoration: none;
+    color: inherit;
+    /* Dimmed until the timer finishes, but never blocked. */
+    opacity: 0.35;
+    transition: opacity 0.6s ease;
+  }
+
+  section.ready .advance,
+  .advance.ready,
+  .reading .advance {
+    opacity: 1;
+  }
+
+  .advance:hover {
+    opacity: 1;
+  }
+</style>

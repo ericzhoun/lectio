@@ -513,6 +513,14 @@ const description = lang === 'zh'
     <h1>{lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Scripture Reading'}</h1>
   </header>
 
+  <p class="today-entry">
+    {lang === 'zh'
+      ? '或者跟随教会年历，一步一步读今天的经文。'
+      : "Or follow the church calendar and walk today's passage, one step at a time."}
+    {' '}
+    <a href="/today">{lang === 'zh' ? '今日诵读' : "Today's reading"}</a>
+  </p>
+
   <form method="post" id="reading-form">
     <div class="suggested-questions">
       <h4>{lang === 'zh' ? '常见话题：' : 'Popular Topics:'}</h4>

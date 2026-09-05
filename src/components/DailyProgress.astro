@@ -1,0 +1,103 @@
+---
+import { STEP_ORDER, STEP_COPY, stepIndex, progressPercent, type Step } from '../lib/dailySteps';
+import type { Lang } from '../lib/reading';
+
+interface Props {
+  reached: Step;
+  current: Step;
+  lang: Lang;
+}
+const { reached, current, lang } = Astro.props;
+const percent = progressPercent(reached);
+const reachedIndex = stepIndex(reached);
+---
+
+<nav class="daily-progress" aria-label={lang === 'zh' ? '圣言诵读的步骤' : 'Lectio Divina steps'}>
+  <ol>
+    {STEP_ORDER.map((step) => {
+      const index = stepIndex(step);
+      const state = step === current ? 'current' : index < reachedIndex ? 'done' : index > reachedIndex ? 'locked' : 'done';
+      return (
+        <li class={state}>
+          {index <= reachedIndex ? (
+            <a href={`/today/${step}`} aria-current={step === current ? 'step' : undefined}>
+              {STEP_COPY[step].name[lang]}
+            </a>
+          ) : (
+            <span>{STEP_COPY[step].name[lang]}</span>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+  <div
+    class="bar"
+    role="progressbar"
+    aria-valuenow={percent}
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-label={lang === 'zh' ? '进度' : 'Progress'}
+  >
+    <div class="fill" style={`width: ${percent}%`}></div>
+  </div>
+</nav>
+
+<style>
+  .daily-progress {
+    margin: 0 auto 2.5rem;
+    max-width: 34rem;
+  }
+
+  .daily-progress ol {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 1rem;
+    margin: 0 0 0.9rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+  }
+
+  .daily-progress a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.7;
+  }
+
+  .daily-progress a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  .daily-progress .current a {
+    opacity: 1;
+    font-weight: 600;
+  }
+
+  /* A step not yet reached is shown, but plainly out of reach. */
+  .daily-progress .locked span {
+    opacity: 0.3;
+  }
+
+  .bar {
+    height: 2px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .fill {
+    height: 100%;
+    background: currentColor;
+    opacity: 0.45;
+    transition: width 0.4s ease;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .bar {
+      background: rgba(255, 255, 255, 0.15);
+    }
+  }
+</style>

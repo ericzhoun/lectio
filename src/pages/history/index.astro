@@ -6,6 +6,8 @@ import { verifySessionToken } from '../../lib/session';
 import { resolveTier } from '../../lib/entitlements';
 import { getReadingsForUser } from '../../lib/db';
 import { resolveLang } from '../../lib/i18n';
+import { listSessions } from '../../lib/dailySession';
+import { getLectionaryDay } from '../../lib/lectionary';
 
 const lang = resolveLang(Astro);
 
@@ -14,21 +16,65 @@ const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSI
 if (!userId) return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`);
 
 const tier = await resolveTier(userId);
-if (tier === 'free') return Astro.redirect(`/pricing?lang=${lang}`);
 
-const readings = await getReadingsForUser(userId);
+// The daily reading is free and ungated, so its history is too. Only the
+// question-driven draw history stays behind the paid tiers.
+const readings = tier === 'free' ? [] : await getReadingsForUser(userId);
+const days = await listSessions(userId);
 ---
 <Layout title={lang === 'zh' ? '历史记录 — Lectio' : 'Reading History — Lectio'} noindex lang={lang}>
   <h1>{lang === 'zh' ? '历史记录' : 'History'}</h1>
-  {readings.length === 0 && <p>{lang === 'zh' ? '暂无记录' : 'No readings yet'}</p>}
-  <ul class="history-list">
-    {readings.map((r) => (
-      <li>
-        <p class="history-date">{r.timestamp}</p>
-        <p class="history-question">{r.question}</p>
-        <p class="history-verses">{r.verses}</p>
-        <p class="history-interp">{r.interpretation}</p>
-      </li>
-    ))}
-  </ul>
+
+  <section class="daily-history">
+    <h2>{lang === 'zh' ? '每日诵读' : 'Daily reading'}</h2>
+    {days.length === 0 && (
+      <p>
+        {lang === 'zh' ? '还没有开始每日诵读。' : 'No daily readings yet.'}
+        {' '}
+        <a href="/today">{lang === 'zh' ? '今天就开始' : 'Begin today'}</a>
+      </p>
+    )}
+    <ul class="history-list">
+      {days.map((d) => (
+        <li>
+          <p class="history-date">{d.day}</p>
+          <p class="history-question">
+            <a href={`/today/amen?day=${d.day}`}>{getLectionaryDay(d.day).title[lang]}</a>
+          </p>
+          <p class="history-verses">
+            {d.completedAt
+              ? (lang === 'zh' ? '已完成' : 'Completed')
+              : (lang === 'zh' ? '未完成' : 'Unfinished')}
+          </p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="draw-history">
+    <h2>{lang === 'zh' ? '经文解读' : 'Readings'}</h2>
+    {tier === 'free' ? (
+      <p>
+        {lang === 'zh'
+          ? '经文解读的历史记录属于付费方案。'
+          : 'Draw history is part of the paid plans.'}
+        {' '}
+        <a href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看价格' : 'See pricing'}</a>
+      </p>
+    ) : (
+      <>
+        {readings.length === 0 && <p>{lang === 'zh' ? '暂无记录' : 'No readings yet'}</p>}
+        <ul class="history-list">
+          {readings.map((r) => (
+            <li>
+              <p class="history-date">{r.timestamp}</p>
+              <p class="history-question">{r.question}</p>
+              <p class="history-verses">{r.verses}</p>
+              <p class="history-interp">{r.interpretation}</p>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+  </section>
 </Layout>

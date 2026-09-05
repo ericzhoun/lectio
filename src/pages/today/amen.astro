@@ -1,0 +1,134 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { env } from 'cloudflare:workers';
+import { verifySessionToken } from '../../lib/session';
+import { resolveLang } from '../../lib/i18n';
+import { resolveActiveDay } from '../../lib/localDay';
+import { getLectionaryDay, focusReference } from '../../lib/lectionary';
+import { resolvePassage } from '../../lib/passage';
+import { STEP_COPY } from '../../lib/dailySteps';
+import { getSession, getStepEntries } from '../../lib/dailySession';
+
+const lang = resolveLang(Astro);
+const sessionCookie = Astro.cookies.get('session')?.value;
+const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
+if (!userId) {
+  return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent('/today')}`);
+}
+
+// `day` reaches the database, so it is validated rather than trusted.
+const requested = Astro.url.searchParams.get('day');
+const day = /^\d{4}-\d{2}-\d{2}$/.test(requested ?? '') ? requested! : resolveActiveDay(Astro);
+
+const session = await getSession(userId, day);
+if (!session) return Astro.redirect('/today');
+
+const entry = getLectionaryDay(day);
+const passage = resolvePassage(focusReference(entry), session.lang);
+const entries = await getStepEntries(userId, day);
+const finished = Boolean(session.completedAt);
+---
+
+<Layout title={`${entry.title[lang]} · Amen`} lang={lang} noindex={true}>
+  <article class="amen">
+    <header>
+      <p class="day">{entry.title[lang]}</p>
+      <h1>{finished ? 'Amen' : (lang === 'zh' ? '未完成' : 'Unfinished')}</h1>
+      {passage && <p class="ref">{passage.ref}</p>}
+    </header>
+
+    {passage && <p class="text">{passage.text}</p>}
+
+    {entries.length === 0 && (
+      <p class="empty">
+        {lang === 'zh' ? '这一天还没有写下什么。' : 'Nothing was written on this day.'}
+      </p>
+    )}
+
+    {entries.map((e) => (
+      <section>
+        <h2>{STEP_COPY[e.step].name[lang]}</h2>
+        <blockquote class="own-words mine">{e.userText}</blockquote>
+        {e.aiText && <p class="reply">{e.aiText}</p>}
+      </section>
+    ))}
+
+    <nav class="after">
+      {!finished && <a href="/today">{lang === 'zh' ? '继续今天的诵读' : 'Continue today'}</a>}
+      <a href="/history">{lang === 'zh' ? '查看过往' : 'See past days'}</a>
+    </nav>
+  </article>
+</Layout>
+
+<style>
+  .amen {
+    max-width: 38rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  .amen header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .day {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin: 0 0 0.4rem;
+    letter-spacing: 0.03em;
+  }
+
+  .amen h1 {
+    font-size: 1.6rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+    letter-spacing: 0.08em;
+  }
+
+  .ref {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin: 0;
+  }
+
+  .text {
+    line-height: 1.9;
+    margin: 0 0 2.5rem;
+    opacity: 0.85;
+  }
+
+  .amen h2 {
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+    margin: 2rem 0 0.5rem;
+  }
+
+  .own-words {
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+    border-left: 2px solid currentColor;
+    line-height: 1.7;
+  }
+
+  .reply {
+    line-height: 1.8;
+    opacity: 0.75;
+  }
+
+  .empty {
+    opacity: 0.6;
+    font-style: italic;
+  }
+
+  .after {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    font-size: 0.9rem;
+  }
+</style>

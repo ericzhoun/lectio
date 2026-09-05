@@ -91,6 +91,15 @@ form p { margin-bottom: 10px; }
 }
 .follow-up-question:hover { background: var(--accent); }
 
+.today-entry {
+  text-align: center;
+  margin: 0 auto 20px;
+  max-width: 34rem;
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
 .suggested-questions { margin-top: 10px; margin-bottom: 15px; }
 .suggested-questions h4 { margin-bottom: 8px; font-size: 14px; color: var(--text-dim); }
 

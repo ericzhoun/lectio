@@ -1,0 +1,37 @@
+---
+export const prerender = false;
+
+import { env } from 'cloudflare:workers';
+import { verifySessionToken } from '../../lib/session';
+import { resolveLang } from '../../lib/i18n';
+import { resolveLocalDay, DAY_COOKIE } from '../../lib/localDay';
+import { ensureSession, getSession } from '../../lib/dailySession';
+
+const lang = resolveLang(Astro);
+const day = resolveLocalDay(Astro);
+
+// Pin the day for the rest of this sitting, so crossing midnight mid-session
+// does not split a reader's words across two days. Six hours is longer than
+// any session and short enough that tomorrow starts fresh.
+Astro.cookies.set(DAY_COOKIE, day, {
+  path: '/',
+  httpOnly: true,
+  sameSite: 'lax',
+  maxAge: 6 * 60 * 60,
+});
+
+const sessionCookie = Astro.cookies.get('session')?.value;
+const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
+
+// Anonymous readers start at the beginning; they are asked to sign in at
+// Meditatio, where they would otherwise be writing into nothing.
+if (!userId) return Astro.redirect('/today/silencio');
+
+const existing = await getSession(userId, day);
+if (!existing) await ensureSession(userId, day, lang);
+
+// A finished day opens at its summary rather than starting over.
+if (existing?.completedAt) return Astro.redirect('/today/amen');
+
+return Astro.redirect(`/today/${existing?.reachedStep ?? 'silencio'}`);
+---
