@@ -43,7 +43,8 @@ Bindings live in `wrangler.jsonc`:
 - `AI` — Workers AI, used by `/api/tts` for the open-source MeloTTS model that reads the daily
   passage aloud. The endpoint takes `?day=YYYY-MM-DD&lang=en|zh` and resolves the text itself, so it
   will only ever speak the lectionary; responses are cached, and a day is synthesized once for all
-  readers
+  readers. Readings longer than one model call are split at sentence boundaries and the MP3 parts
+  joined, so a long gospel is read to the end rather than cut off
 
 Vars in `wrangler.jsonc`: `GOOGLE_REDIRECT_URI` - pinned so `/api/auth/google/start` and
 `/api/auth/google/callback` always send Google an identical `redirect_uri`; deriving it from the

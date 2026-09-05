@@ -18,7 +18,9 @@ vi.mock('cloudflare:workers', () => ({
 }));
 
 import { GET } from '../../pages/api/tts';
-import { TTS_MODEL } from '../tts';
+import { TTS_CHUNK_MAX_CHARS, TTS_TEXT_MAX_CHARS, TTS_MODEL } from '../tts';
+import { focusReference, getLectionaryDay } from '../lectionary';
+import { resolvePassage } from '../passage';
 
 /** A day the built lectionary table certainly covers. */
 const DAY = Object.keys(
@@ -38,24 +40,26 @@ beforeEach(() => {
 });
 
 describe('GET /api/tts', () => {
-  it('speaks the day\'s passage as audio/mpeg', async () => {
+  it("speaks the day's passage as audio/mpeg", async () => {
     const res = await call(`?day=${DAY}&lang=en`);
     expect(res.status).toBe(200);
     expect(res.headers.get('Content-Type')).toBe('audio/mpeg');
-    expect(new Uint8Array(await res.arrayBuffer())).toEqual(
-      new Uint8Array([0x49, 0x44, 0x33]),
-    );
-    const [[model, input]] = store.runs as [[string, { prompt: string; lang: string }]];
-    expect(model).toBe(TTS_MODEL);
-    expect(input.lang).toBe('en');
-    expect(input.prompt.length).toBeGreaterThan(0);
+    const runs = store.runs as [string, { prompt: string; lang: string }][];
+    expect(runs.length).toBeGreaterThan(0);
+    expect(runs.every(([model]) => model === TTS_MODEL)).toBe(true);
+    expect(runs.every(([, i]) => i.lang === 'en' && i.prompt.length > 0)).toBe(true);
+    // One clip, however many calls it took to say it.
+    expect(new Uint8Array(await res.arrayBuffer()).length).toBe(3 * runs.length);
   });
 
   it('reads Chinese when asked, and English for anything else', async () => {
-    await call(`?day=${DAY}&lang=zh`);
-    await call(`?day=${DAY}&lang=fr`);
-    const langs = (store.runs as [string, { lang: string }][]).map(([, i]) => i.lang);
-    expect(langs).toEqual(['zh', 'en']);
+    const langsFor = async (query: string) => {
+      store.runs = [];
+      await call(query);
+      return [...new Set((store.runs as [string, { lang: string }][]).map(([, i]) => i.lang))];
+    };
+    expect(await langsFor(`?day=${DAY}&lang=zh`)).toEqual(['zh']);
+    expect(await langsFor(`?day=${DAY}&lang=fr`)).toEqual(['en']);
   });
 
   // The point of taking a day rather than text: nobody can bill the account
@@ -89,8 +93,38 @@ describe('GET /api/tts', () => {
     };
     await call(`?day=${DAY}&lang=en`);
     // 'lang=fr' normalizes to 'en', so it must land on the same cache entry.
+    const afterFirst = store.runs.length;
+    expect(afterFirst).toBeGreaterThan(0);
     const second = await call(`?day=${DAY}&lang=fr`);
     expect(second.status).toBe(200);
-    expect(store.runs).toHaveLength(1);
+    expect(store.runs).toHaveLength(afterFirst);
+  });
+
+  // Most English gospel readings are longer than one model call, and used to be
+  // cut off at 1000 characters with no sign to the listener.
+  it('reads a long passage right to the end, across as many calls as it takes', async () => {
+    const long = Object.keys(
+      (await import('../lectionaryDays.json')).default as Record<string, unknown>,
+    ).find((d) => (resolvePassage(focusReference(getLectionaryDay(d)), 'en')?.text?.length ?? 0)
+      > TTS_CHUNK_MAX_CHARS)!;
+    const spoken = resolvePassage(focusReference(getLectionaryDay(long)), 'en')!.text
+      .replace(/\s+/g, ' ').trim();
+
+    const res = await call(`?day=${long}&lang=en`);
+    expect(res.status).toBe(200);
+    const prompts = (store.runs as [string, { prompt: string }][]).map(([, i]) => i.prompt);
+    expect(prompts.length).toBeGreaterThan(1);
+    expect(prompts.every((p) => p.length <= TTS_CHUNK_MAX_CHARS)).toBe(true);
+    expect(prompts.join(' ')).toBe(spoken);
+  });
+
+  it('has a ceiling no lectionary reading reaches, so none is ever cut short', async () => {
+    const days = Object.keys(
+      (await import('../lectionaryDays.json')).default as Record<string, unknown>,
+    );
+    const longest = Math.max(...days.flatMap((d) => (['en', 'zh'] as const).map(
+      (lang) => resolvePassage(focusReference(getLectionaryDay(d)), lang)?.text?.length ?? 0,
+    )));
+    expect(longest).toBeLessThanOrEqual(TTS_TEXT_MAX_CHARS);
   });
 });

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
-  decodeTtsAudio, resolveTtsLang, sanitizeTtsText, synthesizeSpeech, TTS_MODEL, TTS_TEXT_MAX_CHARS,
+  chunkTtsText, decodeTtsAudio, resolveTtsLang, sanitizeTtsText, synthesizeSpeech,
+  TTS_CHUNK_MAX_CHARS, TTS_MODEL, TTS_TEXT_MAX_CHARS,
 } from '../tts';
 
 describe('resolveTtsLang', () => {
@@ -65,5 +66,65 @@ describe('synthesizeSpeech', () => {
     const out = await synthesizeSpeech(ai, 'In the beginning', 'en');
     expect(calls).toEqual([[TTS_MODEL, { prompt: 'In the beginning', lang: 'en' }]]);
     expect(Array.from(out)).toEqual([0x49, 0x44, 0x33]);
+  });
+});
+
+describe('chunkTtsText', () => {
+  it('leaves a short reading in one piece', () => {
+    expect(chunkTtsText('In the beginning was the Word.', 100)).toEqual([
+      'In the beginning was the Word.',
+    ]);
+  });
+
+  it('breaks at the end of a sentence, keeping the punctuation', () => {
+    expect(chunkTtsText('One two. Three four. Five six.', 22)).toEqual([
+      'One two. Three four.',
+      'Five six.',
+    ]);
+  });
+
+  it('falls back to a clause, then a space, when no sentence ends in range', () => {
+    expect(chunkTtsText('alpha, beta gamma delta', 14)).toEqual(['alpha,', 'beta gamma', 'delta']);
+  });
+
+  it('splits unspaced text on length rather than dropping it', () => {
+    expect(chunkTtsText('这是一段没有标点的文字', 4)).toEqual([
+      '这是一段', '没有标点', '的文字',
+    ]);
+  });
+
+  // The bug this replaced: three quarters of the English gospel readings are
+  // longer than one chunk, and every one of them was cut off mid-sentence.
+  it('never loses a character of a passage-length reading', () => {
+    const text = Array.from({ length: 400 }, (_, i) => `Verse number ${i}.`).join(' ');
+    const chunks = chunkTtsText(text);
+    expect(chunks.every((c) => c.length <= TTS_CHUNK_MAX_CHARS)).toBe(true);
+    expect(chunks.length).toBeGreaterThan(1);
+    expect(chunks.join(' ')).toBe(text);
+  });
+});
+
+describe('synthesizeSpeech over several chunks', () => {
+  it('speaks every chunk in order and joins the audio', async () => {
+    const prompts: string[] = [];
+    const ai = {
+      run: async (_model: string, input: { prompt: string }) => {
+        prompts.push(input.prompt);
+        // One distinct byte per call, so the join order is visible.
+        return new Uint8Array([prompts.length]);
+      },
+    } as unknown as Ai;
+
+    const text = `${'a'.repeat(900)}. ${'b'.repeat(900)}.`;
+    const out = await synthesizeSpeech(ai, text, 'en');
+    expect(prompts).toHaveLength(2);
+    expect(prompts.join(' ')).toBe(text);
+    expect(Array.from(out)).toEqual([1, 2]);
+  });
+});
+
+describe('TTS_TEXT_MAX_CHARS', () => {
+  it('leaves room for the longest reading in the lectionary', () => {
+    expect(TTS_TEXT_MAX_CHARS).toBeGreaterThan(3814);
   });
 });
