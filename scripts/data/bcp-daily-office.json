@@ -1,0 +1,6160 @@
+{
+  "provenance": {
+    "source": "The Daily Office Lectionary, The Book of Common Prayer (1979), pp. 936-1001",
+    "url": "https://www.bcponline.org/DOLectionary/",
+    "retrieved": "2026-09-05",
+    "terms": "The Episcopal Church has never claimed copyright in the Book of Common Prayer; the English text is in the public domain."
+  },
+  "weeks": {
+    "advent1": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Isa. 1:1-9",
+          "epistle": "2 Pet. 3:1-10",
+          "gospel": "Matt. 25:1-13"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Isa. 1:10-20",
+          "epistle": "1 Thess. 1:1-10",
+          "gospel": "Luke 20:1-8"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10,11",
+          "ot": "Isa. 1:21-31",
+          "epistle": "1 Thess. 2:1-12",
+          "gospel": "Luke 20:9-18"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Isa. 2:1-11",
+          "epistle": "1 Thess. 2:13-20",
+          "gospel": "Luke 20:19-26"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Isa. 2:12-22",
+          "epistle": "1 Thess. 3:1-13",
+          "gospel": "Luke 20:27-40"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Isa. 3:8-15",
+          "epistle": "1 Thess. 4:1-12",
+          "gospel": "Luke 20:41--21:4"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, \r\n\t\t117",
+          "ot": "Isa. 4:2-6",
+          "epistle": "1 Thess. 4:13-18",
+          "gospel": "Luke 21:5-19"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Amos 1:1-5, 13--2:8",
+          "epistle": "1 Thess. 5:1-11",
+          "gospel": "Luke 21:5-19"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Amos 2:6-16",
+          "epistle": "2 Pet. 1:1-11",
+          "gospel": "Matt. 21:1-11"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10,11",
+          "ot": "Amos 3:1-11",
+          "epistle": "2 Pet. 1:12-21",
+          "gospel": "Matt. 21:12-22"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Amos 3:12--4:5",
+          "epistle": "2 Pet. 3:1-10",
+          "gospel": "Matt. 21:23-32"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Amos 4:6-13",
+          "epistle": "2 Pet. 3:11-18",
+          "gospel": "Matt. 21:33-46"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Amos 5:1-17",
+          "epistle": "Jude 1-16",
+          "gospel": "Matt. 22:1-14"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, \r\n\t\t117",
+          "ot": "Amos 5:18-27",
+          "epistle": "Jude 17-25",
+          "gospel": "Matt. 22:15-22"
+        }
+      },
+      "label": "Week of 1 Advent",
+      "placement": {
+        "rule": "adventWeek",
+        "week": 1
+      }
+    },
+    "advent2": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Isa. 5:1-7",
+          "epistle": "2 Pet. 3:11-18",
+          "gospel": "Luke 7:28-35"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Isa. 5:8-12, 18-23",
+          "epistle": "1 Thess. 5:1-11",
+          "gospel": "Luke 21:20-28"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Isa. 5:13-17, 24-25",
+          "epistle": "1 Thess. 5:12-28",
+          "gospel": "Luke 21:29-38"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Isa. 6:1-13",
+          "epistle": "2 Thess. 1:1-12",
+          "gospel": "John 7:53--8:11"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Isa. 7:1-9",
+          "epistle": "2 Thess. 2:1-12",
+          "gospel": "Luke 22:1-13"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Isa. 7:10-25",
+          "epistle": "2 Thess. 2:13--3:5",
+          "gospel": "Luke 22:14-30"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Isa. 8:1-15",
+          "epistle": "2 Thess. 3:6-18",
+          "gospel": "Luke 22:31-38"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Amos 6:1-14",
+          "epistle": "2 Thess. 1:5-12",
+          "gospel": "Luke 1:57-67"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Amos 7:1-9",
+          "epistle": "Rev. 1:1-8",
+          "gospel": "Matt. 22:23-33"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Amos 7:10-17",
+          "epistle": "Rev. 1:9-16",
+          "gospel": "Matt. 22:34-46"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Amos 8:1-14",
+          "epistle": "Rev. 1:17--2:7",
+          "gospel": "Matt. 23:1-12"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Amos 9:1-10",
+          "epistle": "Rev. 2:8-17",
+          "gospel": "Matt. 23:13-26"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Haggai 1:1-15",
+          "epistle": "Rev. 2:18-29",
+          "gospel": "Matt. 23:27-39"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Haggai 2:1-9",
+          "epistle": "Rev. 3:1-6",
+          "gospel": "Matt. 24:1-14"
+        }
+      },
+      "label": "Week of 2 Advent",
+      "placement": {
+        "rule": "adventWeek",
+        "week": 2
+      }
+    },
+    "advent3": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Isa. 13:6-13",
+          "epistle": "Heb. 12:18-29",
+          "gospel": "John 3:22-30"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Isa. 8:16--9:1",
+          "epistle": "2 Pet. 1:1-11",
+          "gospel": "Luke 22:39-53"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Isa. 9:1-7",
+          "epistle": "2 Pet. 1:12-21",
+          "gospel": "Luke 22:54-69"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Isa. 9:8-17",
+          "epistle": "2 Pet. 2:1-10a",
+          "gospel": "Mark 1:1-8"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  \r\n\t\t33",
+          "ot": "Isa. 9:18--10:4",
+          "epistle": "2 Pet. 2:10b-16",
+          "gospel": "Matt. 3:1-12"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Isa. 10:5-19",
+          "epistle": "2 Pet. 2:17-22",
+          "gospel": "Matt. 11:2-15"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Isa. 10:20-27",
+          "epistle": "Jude 17-25",
+          "gospel": "Luke 3:1-9"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Amos 9:11-15",
+          "epistle": "2 Thess. 2:1-3, 13-17",
+          "gospel": "John 5:30-47"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Zech. 1:7-17",
+          "epistle": "Rev. 3:7-13",
+          "gospel": "Matt. 24:15-31"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Zech. 2:1-13",
+          "epistle": "Rev. 3:14-22",
+          "gospel": "Matt. 24:32-44"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Zech. 3:1-10",
+          "epistle": "Rev. 4:1-8",
+          "gospel": "Matt. 24:45-51"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  \r\n\t\t33",
+          "ot": "Zech. 4:1-14",
+          "epistle": "Rev. 4:9--5:5",
+          "gospel": "Matt. 25:1-13"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Zech. 7:8--8:8",
+          "epistle": "Rev. 5:6-14",
+          "gospel": "Matt. 25:14-30"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Zech. 8:9-17",
+          "epistle": "Rev. 6:1-17",
+          "gospel": "Matt. 25:31-46"
+        }
+      },
+      "label": "Week of 3 Advent",
+      "placement": {
+        "rule": "adventWeek",
+        "week": 3
+      }
+    },
+    "advent4": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Isa. 42:1-12",
+          "epistle": "Eph. 6:10-20",
+          "gospel": "John 3:16-21"
+        },
+        "monday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "112, 115",
+          "ot": "Isa. 11:1-9",
+          "epistle": "Rev. 20:1-10",
+          "gospel": "John 5:30-47"
+        },
+        "tuesday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "116, 117",
+          "ot": "Isa 11:10-16",
+          "epistle": "Rev. 20:11--21:8",
+          "gospel": "Luke 1:5-25"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "111, 113",
+          "ot": "Isa. 28:9-22",
+          "epistle": "Rev. 21:9-21",
+          "gospel": "Luke 1:26-38"
+        },
+        "thursday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "146, 147",
+          "ot": "Isa. 29:13-24",
+          "epistle": "Rev. 21:22--22:5",
+          "gospel": "Luke 1:39-48a(48b-56)"
+        },
+        "friday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "148, 150",
+          "ot": "Isa. 33:17-22",
+          "epistle": "Rev. 22:6-11, 18-20",
+          "gospel": "Luke 1:57-66"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Gen. 3:8-15",
+          "epistle": "Rev. 12:1-10",
+          "gospel": "John 3:16-21"
+        },
+        "monday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "112, 115",
+          "ot": "Zeph. 3:14-20",
+          "epistle": "Titus 1:1-16",
+          "gospel": "Luke 1:1-25"
+        },
+        "tuesday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "116, 117",
+          "ot": "1 Samuel 2:1b-10",
+          "epistle": "Titus 2:1-10",
+          "gospel": "Luke 1:26-38"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "111, 113",
+          "ot": "2 Samuel 7:1-17",
+          "epistle": "Titus 2:11--3:8a",
+          "gospel": "Luke 1:39-48a(48b-56)"
+        },
+        "thursday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "146, 147",
+          "ot": "2 Samuel 7:18-29",
+          "epistle": "Gal. 3:1-14",
+          "gospel": "Luke 1:57-66"
+        },
+        "friday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "148, 150",
+          "ot": "Baruch 4:21-29",
+          "epistle": "Gal 3:15-22",
+          "gospel": "Luke 1:67-80"
+        }
+      },
+      "label": "Week of 4 Advent",
+      "placement": {
+        "rule": "adventWeek",
+        "week": 4
+      }
+    },
+    "christmas-day-and-following": {
+      "1": {},
+      "2": {},
+      "label": "Christmas Day and Following",
+      "placement": null
+    },
+    "the-epiphany-and-following": {
+      "1": {},
+      "2": {},
+      "label": "The Epiphany and Following",
+      "placement": null
+    },
+    "epiphany1": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Isa. 40:1-11",
+          "epistle": "Heb, 1:1-12",
+          "gospel": "John 1:1-7, 19-20, 29-34"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Isa. 40:12-23",
+          "epistle": "Eph. 1:1-14",
+          "gospel": "Mark 1:1-13"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Isa. 40:25-31",
+          "epistle": "Eph. 1:15-23",
+          "gospel": "Mark 1:14-28"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Isa. 41:1-16",
+          "epistle": "Eph. 2:1-10",
+          "gospel": "Mark 1:29-45"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Isa. 41:17-29",
+          "epistle": "Eph. 2:11-22",
+          "gospel": "Mark 2:1-12"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Isa. 42:(1-9)10-17",
+          "epistle": "Eph. 3:1-13",
+          "gospel": "Mark 2:13-22"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, \r\n\t\t117",
+          "ot": "Isa. 43:1-13",
+          "epistle": "Eph. 3:14-21",
+          "gospel": "Mark 2:23--3:6"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Gen. 1:1--2:3",
+          "epistle": "Eph. 1:3-14",
+          "gospel": "John 1:29-34"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Gen. 2:4-9(10-15)16-25",
+          "epistle": "Heb 1:1-14",
+          "gospel": "John 1:1-18"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Gen. 3:1-24",
+          "epistle": "Heb. 2:1-10",
+          "gospel": "John 1:19-28"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Gen 4:1-16",
+          "epistle": "Heb. 2:11-18",
+          "gospel": "John 1:(29-34)35-42"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Gen 4:17-26",
+          "epistle": "Heb. 3:1-11",
+          "gospel": "John 1:43-51"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Gen. 6:1-8",
+          "epistle": "Heb. 3:12-19",
+          "gospel": "John 2:1-12"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, \r\n\t\t117",
+          "ot": "Gen. 6:9-22",
+          "epistle": "Heb. 4:1-13",
+          "gospel": "John 2:13-22"
+        }
+      },
+      "label": "Week of 1 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 1
+      }
+    },
+    "epiphany2": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Isa. 43:14--44:5",
+          "epistle": "Heb. 6:17--7:10",
+          "gospel": "John 4:27-42"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Isa. 44:6-8, 21-23",
+          "epistle": "Eph. 4:1-16",
+          "gospel": "Mark 3:7-19a"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Isa. 44:9-20",
+          "epistle": "Eph. 4:17-32",
+          "gospel": "Mark 3:19b-35"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Isa. 44:24--45:7",
+          "epistle": "Eph. 5:1-14",
+          "gospel": "Mark 4:1-20"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Isa. 45:5-17",
+          "epistle": "Eph. 5:15-33",
+          "gospel": "Mark 4:21-34"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Isa. 45:18-25",
+          "epistle": "Eph. 6:1-9",
+          "gospel": "Mark 4:35-41"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Isa. 46:1-13",
+          "epistle": "Eph. 6:10-24",
+          "gospel": "Mark 5:1-20"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Gen. 7:1-10, 17-23",
+          "epistle": "Eph. 4:1-16",
+          "gospel": "Mark 3:7-19"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Gen. 8:6-22",
+          "epistle": "Heb. 4:14--5:6",
+          "gospel": "John 2:23--3:15"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Gen. 9:1-17",
+          "epistle": "Heb. 5:7-14",
+          "gospel": "John 3:16-21"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Gen. 9:18-29",
+          "epistle": "Heb. 6:1-12",
+          "gospel": "John 3:22-36"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Gen. 11:1-9",
+          "epistle": "Heb. 6:13-20",
+          "gospel": "John 4:1-15"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Gen. 11:27--12:8",
+          "epistle": "Heb. 7:1-17",
+          "gospel": "John 4:16-26"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Gen. 12:9--13:1",
+          "epistle": "Heb. 7:18-28",
+          "gospel": "John 4:27-42"
+        }
+      },
+      "label": "Week of 2 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 2
+      }
+    },
+    "epiphany3": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Isa. 47:1-15",
+          "epistle": "Heb. 10:19-31",
+          "gospel": "John 5:2-18"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Isa. 48:1-11",
+          "epistle": "Gal. 1:1-17",
+          "gospel": "Mark 5:21-43"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47,48",
+          "ot": "Isa. 48:12-21",
+          "epistle": "Gal. 1:18--2:10",
+          "gospel": "Mark 6:1-13"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Isa. 49:1-12",
+          "epistle": "Gal. 2:11-21",
+          "gospel": "Mark 6:13-29"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  \r\n\t\t118",
+          "ot": "Isa. 49:13-23",
+          "epistle": "Gal. 3:1-14",
+          "gospel": "Mark 6:30-46"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Isa. 50:1-11",
+          "epistle": "Gal. 3:15-22",
+          "gospel": "Mark 6:47-56"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, \r\n\t\t139:1-17(18-23)",
+          "ot": "Isa. 51:1-8",
+          "epistle": "Gal. 3:23-29",
+          "gospel": "Mark 7:1-23"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Gen. 13:2-18",
+          "epistle": "Gal. 2:1-10",
+          "gospel": "Mark 7:31-37"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Gen. 14:(1-7)8-24",
+          "epistle": "Heb. 8:1-13",
+          "gospel": "John 4:43-54"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Gen. 15:1-11, 17-21",
+          "epistle": "Heb. 9:1-14",
+          "gospel": "John 5:1-18"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Gen. 16:1-14",
+          "epistle": "Heb. 9:15-28",
+          "gospel": "John 5:19-29"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  118",
+          "ot": "Gen. 16:15--17:14",
+          "epistle": "Heb. 10:1-10",
+          "gospel": "John 5:30-47"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Gen. 17:15-27",
+          "epistle": "Heb. 10:11-25",
+          "gospel": "John 6:1-15"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Gen. 18:1-16",
+          "epistle": "Heb. 10:26-39",
+          "gospel": "John 6:16-27"
+        }
+      },
+      "label": "Week of 3 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 3
+      }
+    },
+    "epiphany4": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Isa. 51:9-16",
+          "epistle": "Heb. 11:8-16",
+          "gospel": "John 7:14-31"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Isa. 51:17-23",
+          "epistle": "Gal. 4:1-11",
+          "gospel": "Mark 7:24-37"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Isa. 52:1-12",
+          "epistle": "Gal. 4:12-20",
+          "gospel": "Mark 8:1-10"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Isa. 54:1-10(11-17)",
+          "epistle": "Gal. 4:21-31",
+          "gospel": "Mark 8:11-26"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Isa. 55:1-13",
+          "epistle": "Gal. 5:1-15",
+          "gospel": "Mark 8:27--9:1"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Isa. 56:1-8",
+          "epistle": "Gal. 5:16-24",
+          "gospel": "Mark 9:2-13"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Isa. 57:3-13",
+          "epistle": "Gal. 5:25--6:10",
+          "gospel": "Mark 9:14-29"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Gen. 18:16-33",
+          "epistle": "Gal. 5:13-25",
+          "gospel": "Mark 8:22-30"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Gen. 19:1-17(18-23)24-29",
+          "epistle": "Heb. 11:1-12",
+          "gospel": "John 6:27-40"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Gen. 21:1-21",
+          "epistle": "Heb. 11:13-22",
+          "gospel": "John 6:41-51"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Gen. 22:1-18",
+          "epistle": "Heb. 11:23-31",
+          "gospel": "John 6:52-59"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Gen. 23:1-20",
+          "epistle": "Heb. 11:32--12:2",
+          "gospel": "John 6:60-71"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Gen. 24:1-27",
+          "epistle": "Heb. 12:3-11",
+          "gospel": "John 7:1-13"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Gen. 24:28-38, 49-51",
+          "epistle": "Heb. 12:12-29",
+          "gospel": "John 7:14-36"
+        }
+      },
+      "label": "Week of 4 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 4
+      }
+    },
+    "epiphany5": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Isa. 57:14-21",
+          "epistle": "Heb. 12:1-6",
+          "gospel": "John 7:37-46"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Isa. 58:1-12",
+          "epistle": "Gal. 6:11-18",
+          "gospel": "Mark 9:30-41"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Isa. 59:1-15a",
+          "epistle": "2 Tim. 1:1-14",
+          "gospel": "Mark 9:42-50"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Isa. 59:15b-21",
+          "epistle": "2 Tim. 1:15--2:13",
+          "gospel": "Mark 10:1-16"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  146, 147",
+          "psalmsEvening": "85, 86",
+          "ot": "Isa. 60:1-17",
+          "epistle": "2 Tim. 2:14-26",
+          "gospel": "Mark 10:17-31"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "Isa. 61:1-9",
+          "epistle": "2 Tim. 3:1-17",
+          "gospel": "Mark 10:32-45"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Isa. 61:10--62:5",
+          "epistle": "2 Tim. 4:1-8",
+          "gospel": "Mark 10:46-52"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Gen. 24:50-67",
+          "epistle": "2 Tim. 2:14-21",
+          "gospel": "Mark 10:13-22"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Gen. 25:19-34",
+          "epistle": "Heb. 13:1-16",
+          "gospel": "John 7:37-52"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Gen. 26:1-6, 12-33",
+          "epistle": "Heb. 13:17-25",
+          "gospel": "John 7:53--8:11"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Gen. 27:1-29",
+          "epistle": "Rom. 12:1-8",
+          "gospel": "John 8:12-20"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  146, 147",
+          "psalmsEvening": "85, 86",
+          "ot": "Gen. 27:30-45",
+          "epistle": "Rom. 12:9-21",
+          "gospel": "John 8:21-32"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "Gen. 27:46--28:4, 10-22",
+          "epistle": "Rom. 13:1-14",
+          "gospel": "John 8:33-47"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Gen. 29:1-20",
+          "epistle": "Rom. 14:1-23",
+          "gospel": "John 8:47-59"
+        }
+      },
+      "label": "Week of 5 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 5
+      }
+    },
+    "epiphany6": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Isa. 62:6-12",
+          "epistle": "1 John 2:3-11",
+          "gospel": "John 8:12-19"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Isa. 63:1-6",
+          "epistle": "1 Tim. 1:1-17",
+          "gospel": "Mark 11:1-11"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Isa. 63:7-14",
+          "epistle": "1 Tim. 1:18--2:8",
+          "gospel": "Mark 11:12-26"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Isa. 63:15--64:9",
+          "epistle": "1 Tim. 3:1-16",
+          "gospel": "Mark 11:27--12:12"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Isa. 65:1-12",
+          "epistle": "1 Tim. 4:1-16",
+          "gospel": "Mark 12:13-27"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Isa. 65:17-25",
+          "epistle": "1 Tim. 5:17-22(23-25)",
+          "gospel": "Mark 12:28-34"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Isa. 66:1-6",
+          "epistle": "1 Tim. 6:6-21",
+          "gospel": "Mark 12:35-44"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Gen. 29:20-35",
+          "epistle": "1 Tim. 3:14--4:10",
+          "gospel": "Mark 10:23-31"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Gen. 30:1-24",
+          "epistle": "1 John 1:1-10",
+          "gospel": "John 9:1-17"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Gen. 31:1-24",
+          "epistle": "1 John 2:1-11",
+          "gospel": "John 9:18-41"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Gen. 31:25-50",
+          "epistle": "1 John 2:12-17",
+          "gospel": "John 10:1-18"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Gen. 32:3-21",
+          "epistle": "1 John 2:18-29",
+          "gospel": "John 10:19-30"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Gen. 32:22--33:17",
+          "epistle": "1 John 3:1-10",
+          "gospel": "John 10:31-42"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Gen. 35:1-20",
+          "epistle": "1 John 3:11-18",
+          "gospel": "John 11:1-16"
+        }
+      },
+      "label": "Week of 6 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 6
+      }
+    },
+    "epiphany7": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Isa. 66:7-14",
+          "epistle": "1 John 3:4-10",
+          "gospel": "John 10:7-16"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Ruth 1:1-14",
+          "epistle": "2 Cor. 1:1-11",
+          "gospel": "Matt. 5:1-12"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Ruth 1:15-22",
+          "epistle": "2 Cor. 1:12-22",
+          "gospel": "Matt. 5:13-20"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Ruth 2:1-13",
+          "epistle": "2",
+          "gospel": "Cor. 1:23--2:17"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Ruth 2:14-23",
+          "epistle": "2 Cor. 3:1-18",
+          "gospel": "Matt. 5:27-37"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Ruth 3:1-18",
+          "epistle": "2 Cor. 4:1-12",
+          "gospel": "Matt. 5:38-48"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Ruth 4:1-17",
+          "epistle": "2 Cor. 4:13--5:10",
+          "gospel": "Matt. 6:1-6"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Prov. 1:20-33",
+          "epistle": "2 Cor. 5:11-21",
+          "gospel": "Mark 10:35-45"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Prov. 3:11-20",
+          "epistle": "1 John 3:18--4:6",
+          "gospel": "John 11:17-29"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Prov. 4:1-27",
+          "epistle": "1 John 4:7-21",
+          "gospel": "John 11:30-44"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Prov. 6:1-19",
+          "epistle": "1 John 5:1-12",
+          "gospel": "John 11:45-54"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Prov. 7:1-27",
+          "epistle": "1 John 5:13-21",
+          "gospel": "John 11:55--12:8"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Prov. 8:1-21",
+          "epistle": "Philemon 1-25",
+          "gospel": "John 12:9-19"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Prov. 8:22-36",
+          "epistle": "2 Tim. 1:1-14",
+          "gospel": "John 12:20-26"
+        }
+      },
+      "label": "Week of 7 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 7
+      }
+    },
+    "epiphany8": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Deut. 4:1-9",
+          "epistle": "2 Tim. 4:1-8",
+          "gospel": "John 12:1-8"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Deut. 4:9-14",
+          "epistle": "2 Cor. 10:1-18",
+          "gospel": "Matt. 6:7-15"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Deut. 4:15-24",
+          "epistle": "2 Cor. 11:1-21a",
+          "gospel": "Matt. 6:16-23"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Deut. 4:23-31",
+          "epistle": "2 Cor. 11:21b-33",
+          "gospel": "Matt. 6:24-34"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Deut. 4:32-40",
+          "epistle": "2 Cor. 12:1-10",
+          "gospel": "Matt. 7:1-12"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Deut. 5:1-22",
+          "epistle": "2 Cor. 12:11-21",
+          "gospel": "Matt. 7:13-21"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, \r\n\t\t117",
+          "ot": "Deut. 5:22-33",
+          "epistle": "2 Cor. 13:1-14",
+          "gospel": "Matt. 7:22-29"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Prov. 9:1-12",
+          "epistle": "2 Cor. 9:6b-15",
+          "gospel": "Mark 10:46-52"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Prov. 10:1-12",
+          "epistle": "2 Tim. 1:15--2:13",
+          "gospel": "John 12:27-36a"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Prov. 15:16-33",
+          "epistle": "2 Tim. 2:14-26",
+          "gospel": "John 12:36b-50"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Prov. 17:1-20",
+          "epistle": "2 Tim. 3:1-17",
+          "gospel": "John 13:1-20"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Prov. 21:30--22:6",
+          "epistle": "2 Tim. 4:1-8",
+          "gospel": "John 13:21-30"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Prov. 23:19-21, 29--24:2",
+          "epistle": "2 Tim. 4:9-22",
+          "gospel": "John 13:31-38"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "Prov. 25:15-28",
+          "epistle": "Phil. 1:1-11",
+          "gospel": "John 18:1-14"
+        }
+      },
+      "label": "Week of 8 Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": 8
+      }
+    },
+    "epiphanylast": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Deut. 6:1-9",
+          "epistle": "Heb. 12:18-29",
+          "gospel": "John 12:24-32"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Deut. 6:10-15",
+          "epistle": "Heb. 1:1-14",
+          "gospel": "John 1:1-18"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Deut. 6:16-25",
+          "epistle": "Heb. 2:1-10",
+          "gospel": "John 1:19-28"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Deut. 7:6-11",
+          "epistle": "Titus 1:1-16",
+          "gospel": "John 1:29-34"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 31",
+          "psalmsEvening": "35",
+          "ot": "Deut. 7:12-16",
+          "epistle": "Titus 2:1-15",
+          "gospel": "John 1:35-42"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Deut. 7:17-26",
+          "epistle": "Titus 3:1-15",
+          "gospel": "John 1:43-51"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Ecclus. 48:1-11",
+          "epistle": "2 Cor. 3:7-18",
+          "gospel": "Luke 9:18-27"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Prov. 27:1-6, 10-12",
+          "epistle": "Phil. 2:1-13",
+          "gospel": "John 18:15-18, 25-27"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Prov. 30:1-4, 24-33",
+          "epistle": "Phil. 3:1-11",
+          "gospel": "John 18:28-38"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Hab. 3:1-10(11-15)16-18",
+          "epistle": "Phil. 3:12-21",
+          "gospel": "John 17:1-8"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 31",
+          "psalmsEvening": "35",
+          "ot": "Ezek. 18:1-4, 25-32",
+          "epistle": "Phil. 4:1-9",
+          "gospel": "John 17:9-19"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Ezek. 39:21-29",
+          "epistle": "Phil. 4:10-20",
+          "gospel": "John 17:20-26"
+        }
+      },
+      "label": "Week of Last Epiphany",
+      "placement": {
+        "rule": "epiphanyWeek",
+        "week": "last"
+      }
+    },
+    "lent1": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Deut. 8:1-10",
+          "epistle": "1 Cor. 1:17-31",
+          "gospel": "Mark 2:18-22"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Deut. 8:11-20",
+          "epistle": "Heb. 2:11-18",
+          "gospel": "John 2:1-12"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Deut. 9:4-12",
+          "epistle": "Heb. 3:1-11",
+          "gospel": "John 2:13-22"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Deut. 9:13-21",
+          "epistle": "Heb. 3:12-19",
+          "gospel": "John 2:23--3:15"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  19, 46",
+          "ot": "Deut. 9:23--10:5",
+          "epistle": "Heb. 4:1-10",
+          "gospel": "John 3:16-21"
+        },
+        "friday": {
+          "psalmsMorning": "95* * 40, 54",
+          "psalmsEvening": "51",
+          "ot": "Deut. 10:12-22",
+          "epistle": "Heb. 4:11-16",
+          "gospel": "John 3:22-36"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Deut. 11:18-28",
+          "epistle": "Heb. 5:1-10",
+          "gospel": "John 4:1-26"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Dan. 9:3-10",
+          "epistle": "Heb. 2:10-18",
+          "gospel": "John 12:44-50"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Gen. 37:1-11",
+          "epistle": "1 Cor. 1:1-19",
+          "gospel": "Mark 1:1-13"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Gen. 37:12-24",
+          "epistle": "1 Cor. 1:20-31",
+          "gospel": "Mark 1:14-28"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Gen. 37:25-36",
+          "epistle": "1 Cor. 2:1-13",
+          "gospel": "Mark 1:29-45"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  19, 46",
+          "ot": "Gen. 39:1-23",
+          "epistle": "1 Cor. 2:14--3:15",
+          "gospel": "Mark 2:1-12"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 40, 54",
+          "psalmsEvening": "51",
+          "ot": "Gen. 40:1-23",
+          "epistle": "1 Cor. 3:16-23",
+          "gospel": "Mark 2:13-22"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Gen. 41:1-13",
+          "epistle": "1 Cor. 4:1-7",
+          "gospel": "Mark 2:23--3:6"
+        }
+      },
+      "label": "Week of 1 Lent",
+      "placement": {
+        "rule": "lentWeek",
+        "week": 1
+      }
+    },
+    "lent2": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Jer. 1:1-10",
+          "epistle": "1 Cor. 3:11-23",
+          "gospel": "Mark 3:31--4:9"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Jer. 1:11-19",
+          "epistle": "Rom. 1:1-15",
+          "gospel": "John 4:27-42"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Jer. 2:1-13",
+          "epistle": "Rom. 1:16-25",
+          "gospel": "John 4:43-54"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Jer. 3:6-18",
+          "epistle": "Rom. 1:28--2:11",
+          "gospel": "John 5:1-18"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Jer. 4:9-10, 19-28",
+          "epistle": "Rom. 2:12-24",
+          "gospel": "John 5:19-29"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Jer. 5:1-9",
+          "epistle": "Rom. 2:25--3:18",
+          "gospel": "John 5:30-47"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Jer. 5:20-31",
+          "epistle": "Rom. 3:19-31",
+          "gospel": "John 7:1-13"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Gen. 41:14-45",
+          "epistle": "Rom. 6:3-14",
+          "gospel": "John 5:19-24"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Gen. 41:46-57",
+          "epistle": "1 Cor. 4:8-20(21)",
+          "gospel": "Mark 3:7-19a"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Gen. 42:1-17",
+          "epistle": "1 Cor. 5:1-8",
+          "gospel": "Mark 3:19b-35"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Gen. 42:18-28",
+          "epistle": "1 Cor. 5:9--6:8",
+          "gospel": "Mark 4:1-20"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Gen. 42:29-38",
+          "epistle": "1 Cor. 6:12-20",
+          "gospel": "Mark 4:21-34"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Gen. 43:1-15",
+          "epistle": "1 Cor. 7:1-9",
+          "gospel": "Mark 4:35-41"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Gen. 43:16-34",
+          "epistle": "1 Cor. 7:10-24",
+          "gospel": "Mark 5:1-20"
+        }
+      },
+      "label": "Week of 2 Lent",
+      "placement": {
+        "rule": "lentWeek",
+        "week": 2
+      }
+    },
+    "lent3": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Jer. 6:9-15",
+          "epistle": "1 Cor. 6:12-20",
+          "gospel": "Mark 5:1-20"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Jer. 7:1-15",
+          "epistle": "Rom. 4:1-12",
+          "gospel": "John 7:14-36"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Jer. 7:21-34",
+          "epistle": "Rom. 4:13-25",
+          "gospel": "John 7:37-52"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Jer. 8:18--9:6",
+          "epistle": "Rom. 5:1-11",
+          "gospel": "John 8:12-20"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  42, \r\n\t\t43",
+          "psalmsEvening": "85, 86",
+          "ot": "Jer. 10:11-24",
+          "epistle": "Rom. 5:12-21",
+          "gospel": "John 8:21-32"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 88",
+          "psalmsEvening": "91, 92",
+          "ot": "Jer. 11:1-8, 14-20",
+          "epistle": "Rom. 6:1-11",
+          "gospel": "John 8:33-47"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Jer. 13:1-11",
+          "epistle": "Rom. 6:12-23",
+          "gospel": "John 8:47-59"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Gen. 44:1-17",
+          "epistle": "Rom. 8:1-10",
+          "gospel": "John 5:25-29"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Gen. 44:18-34",
+          "epistle": "1 Cor. 7:25-31",
+          "gospel": "Mark 5:21-43"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Gen. 45:1-15",
+          "epistle": "1 Cor. 7:32-40",
+          "gospel": "Mark 6:1-13"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Gen. 45:16-28",
+          "epistle": "1 Cor. 8:1-13",
+          "gospel": "Mark 6:13-29"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  42, 43",
+          "psalmsEvening": "85, 86",
+          "ot": "Gen. 46:1-7, 28-34",
+          "epistle": "1 Cor. 9:1-15",
+          "gospel": "Mark 6:30-46"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 88",
+          "psalmsEvening": "91, 92",
+          "ot": "Gen. 47:1-26",
+          "epistle": "1 Cor. 9:16-27",
+          "gospel": "Mark 6:47-56"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Gen. 47:27--48:7",
+          "epistle": "1 Cor. 10:1-13",
+          "gospel": "Mark 7:1-23"
+        }
+      },
+      "label": "Week of 3 Lent",
+      "placement": {
+        "rule": "lentWeek",
+        "week": 3
+      }
+    },
+    "lent4": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Jer. 14:1-9, 17-22",
+          "epistle": "Gal. 4:21--5:1",
+          "gospel": "Mark 8:11-21"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Jer. 16:10-21",
+          "epistle": "Rom. 7:1-12",
+          "gospel": "John 6:1-15"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Jer. 17:19-27",
+          "epistle": "Rom. 7:13-25",
+          "gospel": "John 6:16-27"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Jer. 18:1-11",
+          "epistle": "Rom. 8:1-11",
+          "gospel": "John 6:27-40"
+        },
+        "thursday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Jer. 22:13-23",
+          "epistle": "Rom. 8:12-27",
+          "gospel": "John 6:41-51"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Jer. 23:1-8",
+          "epistle": "Rom. 8:28-39",
+          "gospel": "John 6:52-59"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Jer. 23:9-15",
+          "epistle": "Rom. 9:1-18",
+          "gospel": "John 6:60-71"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Gen. 48:8-22",
+          "epistle": "Rom. 8:11-25",
+          "gospel": "John 6:27-40"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Gen. 49:1-28",
+          "epistle": "1 Cor. 10:14--11:1",
+          "gospel": "Mark 7:24-37"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Gen. 49:29--50:14",
+          "epistle": "1 Cor. 11:17-34",
+          "gospel": "Mark 8:1-10"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Gen. 50:15-26",
+          "epistle": "1 Cor. 12:1-11",
+          "gospel": "Mark 8:11-26"
+        },
+        "thursday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Exod. 1:6-22",
+          "epistle": "1 Cor. 12:12-26",
+          "gospel": "Mark 8:27--9:1"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Exod. 2:1-22",
+          "epistle": "1 Cor. 12:27--13:3",
+          "gospel": "Mark 9:2-13"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Exod. 2:23--3:15",
+          "epistle": "1 Cor. 13:1-13",
+          "gospel": "Mark 9:14-29"
+        }
+      },
+      "label": "Week of 4 Lent",
+      "placement": {
+        "rule": "lentWeek",
+        "week": 4
+      }
+    },
+    "lent5": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Jer. 23:16-32",
+          "epistle": "1 Cor. 9:19-27",
+          "gospel": "Mark 8:31--9:1"
+        },
+        "monday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Jer. 24:1-10",
+          "epistle": "Rom. 9:19-33",
+          "gospel": "John 9:1-17"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Jer. 25:8-17",
+          "epistle": "Rom. 10:1-13",
+          "gospel": "John 9:18-41"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Jer. 25:30-38",
+          "epistle": "Rom. 10:14-21",
+          "gospel": "John 10:1-18"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "140, 142",
+          "ot": "Jer. 26:1-16",
+          "epistle": "Rom. 11:1-12",
+          "gospel": "John 10:19-42"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 22",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Jer. 29:1, 4-13",
+          "epistle": "Rom. 11:13-24",
+          "gospel": "John 11:1-27,"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "42, 43",
+          "ot": "Jer. 31:27-34",
+          "epistle": "Rom. 11:25-36",
+          "gospel": "John 11:28-44,"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Exod. 3:16--4:12",
+          "epistle": "Rom. 12:1-21",
+          "gospel": "John 8:46-59"
+        },
+        "monday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Exod. 4:10-20(21-26)27-31",
+          "epistle": "1 Cor. 14:1-19",
+          "gospel": "Mark 9:30-41"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Exod. 5:1--6:1",
+          "epistle": "1 Cor. 14:20-33a, 39-40",
+          "gospel": "Mark 9:42-50"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Exod. 7:8-24",
+          "epistle": "2 Cor. 2:14--3:6",
+          "gospel": "Mark 10:1-16"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "140, 142",
+          "ot": "Exod. 7:25--8:19",
+          "epistle": "2 Cor. 3:7-18",
+          "gospel": "Mark 10:17-31"
+        },
+        "friday": {
+          "psalmsMorning": "95* & 22",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Exod. 9:13-35",
+          "epistle": "2 Cor. 4:1-12",
+          "gospel": "Mark 10:32-45"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "42, 43",
+          "ot": "Exod. 10:21--11:8",
+          "epistle": "2 Cor. 4:13-18",
+          "gospel": "Mark 10:46-52"
+        }
+      },
+      "label": "Week of 5 Lent",
+      "placement": {
+        "rule": "lentWeek",
+        "week": 5
+      }
+    },
+    "holy-week": {
+      "1": {
+        "monday": {
+          "psalmsMorning": "51:1-18(19-20)",
+          "psalmsEvening": "69:1-23",
+          "ot": "Jer. 12:1-16",
+          "epistle": "Phil. 3:1-14",
+          "gospel": "John 12:9-19"
+        },
+        "tuesday": {
+          "psalmsMorning": "6, 12",
+          "psalmsEvening": "94",
+          "ot": "Jer. 15:10-21",
+          "epistle": "Phil. 3:15-21",
+          "gospel": "John 12:20-26"
+        },
+        "wednesday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "74",
+          "ot": "Jer. 17:5-10, 14-17",
+          "epistle": "Phil. 4:1-13",
+          "gospel": "John 12:27-36"
+        }
+      },
+      "2": {
+        "monday": {
+          "psalmsMorning": "51:1-18(19-20)",
+          "psalmsEvening": "69:1-23",
+          "ot": "Lam. 1:1-2, 6-12",
+          "epistle": "2 Cor. 1:1-7",
+          "gospel": "Mark 11:12-25"
+        },
+        "tuesday": {
+          "psalmsMorning": "6, 12",
+          "psalmsEvening": "94",
+          "ot": "Lam. 1:17-22",
+          "epistle": "2 Cor. 1:8-22",
+          "gospel": "Mark 11:27-33"
+        },
+        "wednesday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "74",
+          "ot": "Lam. 2:1-9",
+          "epistle": "2 Cor. 1:23--2:11",
+          "gospel": "Mark 12:1-11"
+        }
+      },
+      "label": "Holy Week",
+      "placement": {
+        "rule": "holyWeek"
+      }
+    },
+    "easter-week": {
+      "1": {
+        "monday": {
+          "psalmsMorning": "93, 98",
+          "psalmsEvening": "66",
+          "ot": "Jonah 2:1-9",
+          "epistle": "Acts 2:14, 22-32*",
+          "gospel": "John 14:1-14"
+        },
+        "tuesday": {
+          "psalmsMorning": "103",
+          "psalmsEvening": "111, 114",
+          "ot": "Isa. 30:18-21",
+          "epistle": "Acts 2:36-41(42-47)*",
+          "gospel": "John 14:15-31"
+        },
+        "wednesday": {
+          "psalmsMorning": "97, 99",
+          "psalmsEvening": "115",
+          "ot": "Micah 7:7-15",
+          "epistle": "Acts 3:1-10*",
+          "gospel": "John 15:1-11"
+        },
+        "thursday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "148, 149",
+          "ot": "Ezek. 37:1-14",
+          "epistle": "Acts 3:11-26*",
+          "gospel": "John 15:12-27"
+        },
+        "friday": {
+          "psalmsMorning": "136",
+          "psalmsEvening": "118",
+          "ot": "Dan. 12:1-4, 13",
+          "epistle": "Acts 4:1-12*",
+          "gospel": "John 16:1-15"
+        },
+        "saturday": {
+          "psalmsMorning": "145",
+          "psalmsEvening": "104",
+          "ot": "Isa. 25:1-9",
+          "epistle": "Acts 4:13-21(22-31)*",
+          "gospel": "John 16:16-33"
+        }
+      },
+      "2": {
+        "monday": {
+          "psalmsMorning": "93, 98",
+          "psalmsEvening": "66",
+          "ot": "Exod. 12:14-27",
+          "epistle": "1 Cor. 15:1-11",
+          "gospel": "Mark 16:1-8"
+        },
+        "tuesday": {
+          "psalmsMorning": "103",
+          "psalmsEvening": "111, 114",
+          "ot": "Exod. 12:28-39",
+          "epistle": "1 Cor. 15:12-28",
+          "gospel": "Mark 16:9-20"
+        },
+        "wednesday": {
+          "psalmsMorning": "97, 99",
+          "psalmsEvening": "115",
+          "ot": "Exod. 12:40-51",
+          "epistle": "1 Cor. 15:(29)30-41",
+          "gospel": "Matt. 28:1-16"
+        },
+        "thursday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "148, 149",
+          "ot": "Exod. 13:3-10",
+          "epistle": "1 Cor. 15:41-50",
+          "gospel": "Matt. 28:16-20"
+        },
+        "friday": {
+          "psalmsMorning": "136",
+          "psalmsEvening": "118",
+          "ot": "Exod. 13:1-2, 11-16",
+          "epistle": "1 Cor. 15:51-58",
+          "gospel": "Luke 24:1-12"
+        },
+        "saturday": {
+          "psalmsMorning": "145",
+          "psalmsEvening": "104",
+          "ot": "Exod 13:17--14:4",
+          "epistle": "2 Cor. 4:16--5:10",
+          "gospel": "Mark 12:18-27"
+        }
+      },
+      "label": "Easter Week",
+      "placement": {
+        "rule": "easterWeek",
+        "week": 1
+      }
+    },
+    "easter2": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Isa. 43:8-13",
+          "epistle": "1 Pet. 2:2-10",
+          "gospel": "John 14:1-7"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Dan. 1:1-21",
+          "epistle": "1 John 1:1-10",
+          "gospel": "John 17:1-11"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Dan. 2:1-16",
+          "epistle": "1 John 2:1-11",
+          "gospel": "John 17:12-19"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Dan. 2:17-30",
+          "epistle": "1 John 2:12-17",
+          "gospel": "John 17:20-26"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Dan. 2:31-49",
+          "epistle": "1 John 2:18-29",
+          "gospel": "Luke 3:1-14"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "134, 135",
+          "ot": "Dan. 3:1-18",
+          "epistle": "1 John 3:1-10",
+          "gospel": "Luke 3:15-22"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "Dan. 3:19-30",
+          "epistle": "1 John 3:11-18",
+          "gospel": "Luke 4:1-13"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Exod. 14:5-22",
+          "epistle": "1 John 1:1-7",
+          "gospel": "John 14:1-7"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Exod. 14:21-31",
+          "epistle": "1 Pet. 1:1-12",
+          "gospel": "John 14:(1-7)8-17"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Exod. 15:1-21",
+          "epistle": "1 Pet. 1:13-25",
+          "gospel": "John 14:18-31"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Exod. 15:22--16:10",
+          "epistle": "1 Pet. 2:1-10",
+          "gospel": "John 15:1-11"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Exod. 16:10-21",
+          "epistle": "1 Pet. 2:11-25",
+          "gospel": "John 15:12-27"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "134, 135",
+          "ot": "Exod. 16:22-36",
+          "epistle": "1 Pet. 3:13--4:6",
+          "gospel": "John 16:1-15"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-13)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "Exod. 17:1-16",
+          "epistle": "1 Pet. 4:7-19",
+          "gospel": "John 16:16-33"
+        }
+      },
+      "label": "Week of 2 Easter",
+      "placement": {
+        "rule": "easterWeek",
+        "week": 2
+      }
+    },
+    "easter3": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Dan. 4:1-18",
+          "epistle": "1 Pet. 4:7-11",
+          "gospel": "John 21:15-25"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Dan. 4:19-27",
+          "epistle": "1 John 3:19--4:6",
+          "gospel": "Luke 4:14-30"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Dan. 4:28-37",
+          "epistle": "1 John 4:7-21",
+          "gospel": "Luke 4:31-37"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Dan. 5:1-12",
+          "epistle": "1 John 5:1-12",
+          "gospel": "Luke 4:38-44"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Dan. 5:13-30",
+          "epistle": "1 John 5:13-20(21)",
+          "gospel": "Luke 5:1-11"
+        },
+        "friday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Dan. 6:1-15",
+          "epistle": "2 John 1-13",
+          "gospel": "Luke 5:12-26"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Dan. 6:16-28",
+          "epistle": "3 John 1-15",
+          "gospel": "Luke 5:27-39"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Exod. 18:1-12",
+          "epistle": "1 John 2:7-17",
+          "gospel": "Mark 16:9-20"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Exod. 18:13-27",
+          "epistle": "1 Pet. 5:1-14",
+          "gospel": "Matt. (1:1-17); 3:1-6"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Exod. 19:1-16",
+          "epistle": "Col. 1:1-14",
+          "gospel": "Matt. 3:7-12"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Exod. 19:16-25",
+          "epistle": "Col. 1:15-23",
+          "gospel": "Matt. 3:13-17"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Exod. 20:1-21",
+          "epistle": "Col. 1:24--2:7",
+          "gospel": "Matt. 4:1-11"
+        },
+        "friday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Exod. 24:1-18",
+          "epistle": "Col. 2:8-23",
+          "gospel": "Matt. 4:12-17"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Exod. 25:1-22",
+          "epistle": "Col. 3:1-17",
+          "gospel": "Matt. 4:18-25"
+        }
+      },
+      "label": "Week of 3 Easter",
+      "placement": {
+        "rule": "easterWeek",
+        "week": 3
+      }
+    },
+    "easter4": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Wisdom 1:1-15",
+          "epistle": "1 Pet. 5:1-11",
+          "gospel": "Matt. 7:15-29"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Wisdom 1:16--2:11, 21-24",
+          "epistle": "Col. 1:1-14",
+          "gospel": "Luke 6:1-11"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47,48",
+          "ot": "Wisdom 3:1-9",
+          "epistle": "Col. 1:15-23",
+          "gospel": "Luke 6:12-26"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Wisdom 4:16--5:8",
+          "epistle": "Col. 1:24--2:7",
+          "gospel": "Luke 6:27-38"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  114, 115",
+          "ot": "Wisdom 5:9-23",
+          "epistle": "Col. 2:8-23",
+          "gospel": "Luke 6:39-49"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Wisdom 6:12-23",
+          "epistle": "Col. 3:1-11",
+          "gospel": "Luke 7:1-17"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Wisdom 7:1-14",
+          "epistle": "Col. 3:12-17",
+          "gospel": "Luke 7:18-28(29-30)31-35"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Exod. 25:1-4, 30-38",
+          "epistle": "1 John 2:18-29",
+          "gospel": "Mark 6:30-44"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Exod. 32:1-20",
+          "epistle": "Col. 3:18--4:6(7-18)",
+          "gospel": "Matt. 5:1-10"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Exod. 32:21-34",
+          "epistle": "1 Thess. 1:1-10",
+          "gospel": "Matt. 5:11-16"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Exod. 33:1-23",
+          "epistle": "1 Thess. 2:1-12",
+          "gospel": "Matt. 5:17-20"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  114, 115",
+          "ot": "Exod. 34:1-17",
+          "epistle": "1 Thess. 2:13-20",
+          "gospel": "Matt. 5:21-26"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Exod. 34:18-35",
+          "epistle": "1 Thess. 3:1-13",
+          "gospel": "Matt. 5:27-37"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Exod. 40:18-38",
+          "epistle": "1 Thess. 4:1-12",
+          "gospel": "Matt. 5:38-48"
+        }
+      },
+      "label": "Week of 4 Easter",
+      "placement": {
+        "rule": "easterWeek",
+        "week": 4
+      }
+    },
+    "easter5": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Wisdom 7:22--8:1",
+          "epistle": "2 Thess. 2:13-17",
+          "gospel": "Matt. 7:7-14"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Wisdom 9:1, 7-18",
+          "epistle": "Col. (3:18--4:1)2-18",
+          "gospel": "Luke 7:36-50"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Wisdom 10:1-4(5-12)13-21",
+          "epistle": "Rom. 12:1-21",
+          "gospel": "Luke 8:1-15"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Wisdom 13:1-9",
+          "epistle": "Rom. 13:1-14",
+          "gospel": "Luke 8:16-25"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Wisdom 14:27--15:3",
+          "epistle": "Rom. 14:1-12",
+          "gospel": "Luke 8:26-39"
+        },
+        "friday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Wisdom 16:15--17:1",
+          "epistle": "Rom. 14:13-23",
+          "gospel": "Luke 8:40-56"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Wisdom 19:1-8, 18-22",
+          "epistle": "Rom. 15:1-13",
+          "gospel": "Luke 9:1-17"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Lev. 8:1-13, 30-36",
+          "epistle": "Heb. 12:1-14",
+          "gospel": "Luke 4:16-30"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Lev. 16:1-19",
+          "epistle": "1 Thess. 4:13-18",
+          "gospel": "Matt. 6:1-6, 16-18"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Lev. 16:20-34",
+          "epistle": "1 Thess. 5:1-11",
+          "gospel": "Matt. 6:7-15"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Lev. 19:1-18",
+          "epistle": "1 Thess. 5:12-28",
+          "gospel": "Matt. 6:19-24"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Lev. 19:26-37",
+          "epistle": "2 Thess. 1:1-12",
+          "gospel": "Matt. 6:25-34"
+        },
+        "friday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Lev. 23:1-22",
+          "epistle": "2 Thess. 2:1-17",
+          "gospel": "Matt. 7:1-12"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Lev. 23:23-44",
+          "epistle": "2 Thess. 3:1-18",
+          "gospel": "Matt. 7:13-21"
+        }
+      },
+      "label": "Week of 5 Easter",
+      "placement": {
+        "rule": "easterWeek",
+        "week": 5
+      }
+    },
+    "easter6": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Ecclus. 43:1-12, 27-32",
+          "epistle": "1 Tim. 3:14--4:5",
+          "gospel": "Matt. 13:24-34a"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Deut. 8:1-10",
+          "epistle": "James 1:1-15",
+          "gospel": "Luke 9:18-27"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Deut. 8:11-20",
+          "epistle": "James 1:16-27",
+          "gospel": "Luke 11:1-13"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": null,
+          "ot": "Baruch 3:24-37",
+          "epistle": "James 5:13-18",
+          "gospel": "Luke 12:22-31"
+        },
+        "friday": {
+          "psalmsMorning": "85, 86",
+          "psalmsEvening": "91, 92",
+          "ot": "Ezek. 1:28--3:3",
+          "epistle": "Heb. 4:14--5:6",
+          "gospel": "Luke 9:28-36"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Ezek. 3:4-17",
+          "epistle": "Heb. 5:7-14",
+          "gospel": "Luke 9:37-50"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Lev. 25:1-17",
+          "epistle": "James 1:2-8, 16-18",
+          "gospel": "Luke 12:13-21"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Lev. 25:35-55",
+          "epistle": "Col. 1:9-14",
+          "gospel": "Matt. 13:1-16"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Lev. 26:1-20",
+          "epistle": "1 Tim. 2:1-6",
+          "gospel": "Matt. 13:18-23"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": null,
+          "ot": "Lev. 26:27-42",
+          "epistle": "Eph. 1:1-10",
+          "gospel": "Matt. 22:41-46"
+        },
+        "friday": {
+          "psalmsMorning": "85, 86",
+          "psalmsEvening": "91, 92",
+          "ot": "1 Sam. 2:1-10",
+          "epistle": "Eph. 2:1-10",
+          "gospel": "Matt. 7:22-27"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Num. 11:16-17, 24-29",
+          "epistle": "Eph. 2:11-22",
+          "gospel": "Matt. 7:28--8:4"
+        }
+      },
+      "label": "Week of 6 Easter",
+      "placement": {
+        "rule": "easterWeek",
+        "week": 6
+      }
+    },
+    "easter7": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Ezek. 3:16-27",
+          "epistle": "Eph. 2:1-10",
+          "gospel": "Matt. 10:24-33, 40-42"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Ezek. 4:1-17",
+          "epistle": "Heb. 6:1-12",
+          "gospel": "Luke 9:51-62"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Ezek. 7:10-15, 23b-27",
+          "epistle": "Heb. 6:13-20",
+          "gospel": "Luke 10:1-17"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Ezek. 11:14-25",
+          "epistle": "Heb. 7:1-17",
+          "gospel": "Luke 10:17-24"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Ezek. 18:1-4, 19-32",
+          "epistle": "Heb. 7:18-28",
+          "gospel": "Luke 10:25-37"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Ezek. 34:17-31",
+          "epistle": "Heb. 8:1-13",
+          "gospel": "Luke 10:38-42"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": null,
+          "ot": "Ezek. 43:1-12",
+          "epistle": "Heb. 9:1-14",
+          "gospel": "Luke 11:14-23"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Exod. 3:1-12",
+          "epistle": "Heb. 12:18-29",
+          "gospel": "Luke 10:17-24"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Joshua 1:1-9",
+          "epistle": "Eph. 3:1-13",
+          "gospel": "Matt. 8:5-17"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "1 Sam. 16:1-13a",
+          "epistle": "Eph. 3:14-21",
+          "gospel": "Matt. 8:18-27"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Isa. 4:2-6",
+          "epistle": "Eph. 4:1-16",
+          "gospel": "Matt. 8:28-34"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Zech. 4:1-14",
+          "epistle": "Eph. 4:17-32",
+          "gospel": "Matt. 9:1-8"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Jer. 31:27-34",
+          "epistle": "Eph. 5:1-20",
+          "gospel": "Matt. 9:9-17"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": null,
+          "ot": "Ezek. 36:22-27",
+          "epistle": "Eph. 6:10-24",
+          "gospel": "Matt. 9:18-26"
+        }
+      },
+      "label": "Week of 7 Easter",
+      "placement": {
+        "rule": "easterWeek",
+        "week": 7
+      }
+    },
+    "the-season-after-pentecost": {
+      "1": {},
+      "2": {},
+      "label": "The Season after Pentecost",
+      "placement": null
+    },
+    "proper1": {
+      "1": {
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Isa. 63:7-14",
+          "epistle": "2 tim. 1:1-14",
+          "gospel": "Luke 11:24-36"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, \n\t\t[127]",
+          "ot": "Isa. 63:15--64:9",
+          "epistle": "2 Tim. 1:15--2:13",
+          "gospel": "Luke 11:13-52"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Isa. 65:1-12",
+          "epistle": "2 Tim. 2:14-26",
+          "gospel": "Luke 11:53--12:12"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Isa. 65:17-25",
+          "epistle": "2 Tim. 3:1-17",
+          "gospel": "Luke 12:13-31"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Isa. 66:1-6",
+          "epistle": "2 Tim. 4:1-8",
+          "gospel": "Luke 12:32-48"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Isa. 66:7-14",
+          "epistle": "2 Tim. 4:9-22",
+          "gospel": "Luke 12:49-59"
+        }
+      },
+      "2": {
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Ezek. 33:1-11",
+          "epistle": "1 John 1:1-10",
+          "gospel": "Matt. 9:27-34"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Ezek. 33:21-33",
+          "epistle": "1 John 2:1-11",
+          "gospel": "Matt. 9:35--10:4"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Ezek. 34:1-16",
+          "epistle": "1 John 2:12-17",
+          "gospel": "Matt. 10:5-14"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Ezek. 37:21b-28",
+          "epistle": "1 John 2:18-29",
+          "gospel": "Matt. 10:16-23"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Ezek. 39:21-29",
+          "epistle": "1 John 3:1-10",
+          "gospel": "Matt. 10:24-33"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9); 144",
+          "psalmsEvening": "104",
+          "ot": "Ezek. 47:1-12",
+          "epistle": "1 John 3:11-18",
+          "gospel": "Matt. 10:34-42"
+        }
+      },
+      "label": "Proper 1",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 5,
+        "day": 11
+      }
+    },
+    "proper2": {
+      "1": {
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Ruth 1:1-18",
+          "epistle": "1 Tim. 1:1-17",
+          "gospel": "Luke 13:1-9"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Ruth 1:19--2:13",
+          "epistle": "1 Tim. 1:18--2:8",
+          "gospel": "Luke 13:10-17"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Ruth 2:14-23",
+          "epistle": "1 Tim. 3:1-16",
+          "gospel": "Luke 13:18-30"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Ruth 3:1-18",
+          "epistle": "1 Tim. 4:1-16",
+          "gospel": "Luke 13:31-35"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Ruth 4:1-17",
+          "epistle": "1 Tim. 5:17-22(23-25)",
+          "gospel": "Luke 14:1-11"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, \n\t\t117",
+          "ot": "Deut. 1:1-8",
+          "epistle": "1 Tim. 6:6-21",
+          "gospel": "Luke 14:12-24"
+        }
+      },
+      "2": {
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Prov. 3:11-20",
+          "epistle": "1 John 3:18--4:6",
+          "gospel": "Matt. 11:1-6"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Prov. 4:1-27",
+          "epistle": "1 John 4:7-21",
+          "gospel": "Matt. 11:7-15"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Prov. 6:1-19",
+          "epistle": "1 John 5:1-12",
+          "gospel": "Matt. 11:16-24"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Prov. 7:1-27",
+          "epistle": "1 John 5:13-21",
+          "gospel": "Matt. 11:25-30"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Prov. 8:1-21",
+          "epistle": "2 John 1-13",
+          "gospel": "Matt. 12:1-14"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, \n\t\t117",
+          "ot": "Prov. 8:22-36",
+          "epistle": "3 John 1-15",
+          "gospel": "Matt. 12:15-21"
+        }
+      },
+      "label": "Proper 2",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 5,
+        "day": 18
+      }
+    },
+    "proper3": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Deut. 4:1-9",
+          "epistle": "Rev. 7:1-4, 9-17",
+          "gospel": "Matt. 12:33-45"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Deut. 4:9-14",
+          "epistle": "2 Cor. 1:1-11",
+          "gospel": "Luke 14:25-35"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Deut. 4:15-24",
+          "epistle": "2 Cor. 1:12-22",
+          "gospel": "Luke 15:1-10"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Deut. 4:25-31",
+          "epistle": "2 Cor. 1:23--2:17",
+          "gospel": "Luke 15:1-2, 11-32"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Deut. 4:32-40",
+          "epistle": "2 Cor. 3:1-18",
+          "gospel": "Luke 16:1-9"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Deut. 5:1-22",
+          "epistle": "2 Cor. 4:1-12",
+          "gospel": "Luke 16:10-17(18)"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Deut. 5:22-33",
+          "epistle": "2 Cor. 4:13--5:10",
+          "gospel": "Luke 16:19-31"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 148, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Prov. 9:1-12",
+          "epistle": "Acts 8:14-25",
+          "gospel": "Luke 10:25-28, 38-42"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Prov. 10:1-12",
+          "epistle": "1 Tim. 1:1-17",
+          "gospel": "Matt. 12:22-32"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Prov. 15:16-33",
+          "epistle": "1 Tim. 1:18--2:8",
+          "gospel": "Matt. 12:33-42"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Prov. 17:1-20",
+          "epistle": "1 Tim. 3:1-16",
+          "gospel": "Matt. 12:43-50"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Prov. 21:30--22:6",
+          "epistle": "1 Tim. 4:1-16",
+          "gospel": "Matt. 13:24-30"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Prov. 23:19-21, 29--24:2",
+          "epistle": "1 Tim. 5:17-22(23-25)",
+          "gospel": "Matt. 13:31-35"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Prov. 25:15-28",
+          "epistle": "1 Tim. 6:6-21",
+          "gospel": "Matt. 13:36-43"
+        }
+      },
+      "label": "Proper 3",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 5,
+        "day": 25
+      }
+    },
+    "proper4": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Deut. 11:1-12",
+          "epistle": "Rev. 10:1-11",
+          "gospel": "Matt. 13:44-58"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Deut. 11:13-19",
+          "epistle": "2 Cor. 5:11--6:2",
+          "gospel": "Luke 17:1-10"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47,48",
+          "ot": "Deut. 12:1-12",
+          "epistle": "2 Cor. 6:3-13 (14--7:1)",
+          "gospel": "Luke 17:11-19"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Deut. 13:1-11",
+          "epistle": "2 Cor. 7:2-16",
+          "gospel": "Luke 17:20-37"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  8, 84",
+          "ot": "Deut. 16:18-20; 17:14-20",
+          "epistle": "2 Cor. 8:1-16",
+          "gospel": "Luke 18:1-8"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Deut. 26:1-11",
+          "epistle": "2 Cor. 8:16-24",
+          "gospel": "Luke 18:9-14"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Deut. 29:2-15",
+          "epistle": "2 Cor. 9:1-15",
+          "gospel": "Luke 18:15-30"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Eccles. 1:1-11",
+          "epistle": "Acts 8:26-40",
+          "gospel": "Luke 11:1-13"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Eccles. 2:1-15",
+          "epistle": "Gal. 1:1-17",
+          "gospel": "Matt. 13:44-52"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Eccles. 2:16-26",
+          "epistle": "Gal. 1:18--2:10",
+          "gospel": "Matt. 13:53-58"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Eccles. 3:1-15",
+          "epistle": "Gal. 2:11-21",
+          "gospel": "Matt. 14:1-12"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  8, 84",
+          "ot": "Eccles. 3:16--4:3",
+          "epistle": "Gal. 3:1-14",
+          "gospel": "Matt. 14:13-21"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Eccles. 5:1-7",
+          "epistle": "Gal. 3:15-22",
+          "gospel": "Matt. 14:22-36"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Eccles. 5:8-20",
+          "epistle": "Gal. 3:23--4:11",
+          "gospel": "Matt. 15:1-20"
+        }
+      },
+      "label": "Proper 4",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 6,
+        "day": 1
+      }
+    },
+    "proper5": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Deut. 29:16-29",
+          "epistle": "Rev. 12:1-12",
+          "gospel": "Matt. 15:29-39"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Deut. 30:1-10",
+          "epistle": "2 Cor. 10:1-18",
+          "gospel": "Luke 18:31-43"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Deut. 30:11-20",
+          "epistle": "2 Cor. 11:1-21a",
+          "gospel": "Luke 19:1-10"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Deut. 31:30--32:14",
+          "epistle": "2 Cor. 11:21b-33",
+          "gospel": "Luke 19:11-27"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Ecclus. 44:19--45:5",
+          "epistle": "2 Cor. 12:1-10",
+          "gospel": "Luke 19:28-40"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Ecclus. 45:6-16",
+          "epistle": "2 Cor. 12:11-21",
+          "gospel": "Luke 19:41-48"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Ecclus. 46:1-10",
+          "epistle": "2 Cor. 13:1-14",
+          "gospel": "Luke 20:1-8"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Eccles. 6:1-12",
+          "epistle": "Acts 10:9-23",
+          "gospel": "Luke 12:32-40"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Eccles. 7:1-14",
+          "epistle": "Gal. 4:12-20",
+          "gospel": "Matt. 15:21-28"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Eccles. 8:14--9:10",
+          "epistle": "Gal. 4:21-31",
+          "gospel": "Matt. 15:29-39"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Eccles. 9:11-18",
+          "epistle": "Gal. 5:1-15",
+          "gospel": "Matt. 16:1-12"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Eccles. 11:1-8",
+          "epistle": "Gal. 5:16-24",
+          "gospel": "Matt. 16:13-20"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Eccles. 11:9--12:14",
+          "epistle": "Gal. 5:25--6:10",
+          "gospel": "Matt. 16:21-28"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Num. 3:1-13",
+          "epistle": "Gal. 6:11-18",
+          "gospel": "Matt. 17:1-13"
+        }
+      },
+      "label": "Proper 5",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 6,
+        "day": 8
+      }
+    },
+    "proper6": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Ecclus. 46:11-20",
+          "epistle": "Rev. 15:1-8",
+          "gospel": "Matt. 18:1-14"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "1 Samuel 1:1-20",
+          "epistle": "Acts 1:1-14",
+          "gospel": "Luke 20:9-19"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "1 Samuel 1:21--2:11",
+          "epistle": "Acts 1:15-26",
+          "gospel": "Luke 20:19-26"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "1 Samuel 2:12-26",
+          "epistle": "Acts 2:1-21",
+          "gospel": "Luke 20:27-40"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  34",
+          "psalmsEvening": "85, 86",
+          "ot": "1 Samuel 2:27-36",
+          "epistle": "Acts 2:22-36",
+          "gospel": "Luke 20:41--21:4"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "1 Samuel 3:1-21",
+          "epistle": "Acts 2:37-47",
+          "gospel": "Luke 21:5-19"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "1 Samuel 4:1b-11",
+          "epistle": "Acts 4:32--5:11",
+          "gospel": "Luke 21:20-28"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Num. 6:22-27",
+          "epistle": "Acts 13:1-12",
+          "gospel": "Luke 12:41-48"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Num. 9:15-23; 10:29-36",
+          "epistle": "Rom. 1:1-15",
+          "gospel": "Matt. 17:14-21"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Num. 11:1-23",
+          "epistle": "Rom. 1:16-25",
+          "gospel": "Matt. 17:22-27"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Num. 11:24-33(34-35)",
+          "epistle": "Rom. 1:28--2:11",
+          "gospel": "Matt. 18:1-9"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  34",
+          "psalmsEvening": "85, 86",
+          "ot": "Num. 12:1-16",
+          "epistle": "Rom. 2:12-24",
+          "gospel": "Matt. 18:10-20"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "Num. 13:1-3, 21-30",
+          "epistle": "Rom. 2:25--3:8",
+          "gospel": "Matt. 18:21-35"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Num. 13:31--14:25",
+          "epistle": "Rom. 3:9-20",
+          "gospel": "Matt. 19:1-12"
+        }
+      },
+      "label": "Proper 6",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 6,
+        "day": 15
+      }
+    },
+    "proper7": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "1 Samuel 4:12-22",
+          "epistle": "James 1:1-18",
+          "gospel": "Matt. 19:23-30"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "1 Samuel 5:1-12",
+          "epistle": "Acts 5:12-26",
+          "gospel": "Luke 21:29-36"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "1 Samuel 6:1-16",
+          "epistle": "Acts 5:27-42",
+          "gospel": "Luke 21:37--22:13"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "1 Samuel 7:2-17",
+          "epistle": "Acts 6:1-15",
+          "gospel": "Luke 22:14-23"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "1 Samuel 8:1-22",
+          "epistle": "Acts 6:15--7:16",
+          "gospel": "Luke 22:24-30"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "1 Samuel 9:1-14",
+          "epistle": "Acts 7:17-29",
+          "gospel": "Luke 22:31-38"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "1 Samuel 9:15--10:1",
+          "epistle": "Acts 7:30-43",
+          "gospel": "Luke 22:39-51"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Num. 14:26-45",
+          "epistle": "Acts 15:1-12",
+          "gospel": "Luke 12:49-56"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Num. 16:1-19",
+          "epistle": "Rom. 3:21-31",
+          "gospel": "Matt. 19:13-22"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Num. 16:20-35",
+          "epistle": "Rom. 4:1-12",
+          "gospel": "Matt. 19:23-30"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Num. 16:36-50",
+          "epistle": "Rom. 4:13-25",
+          "gospel": "Matt. 20:1-16"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Num. 17:1-11",
+          "epistle": "Rom. 5:1-11",
+          "gospel": "Matt. 20:17-28"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Num. 20:1-13",
+          "epistle": "Rom. 5:12-21",
+          "gospel": "Matt. 20:29-34"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Num. 20:14-29",
+          "epistle": "Rom. 6:1-11",
+          "gospel": "Matt. 21:1-11"
+        }
+      },
+      "label": "Proper 7",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 6,
+        "day": 22
+      }
+    },
+    "proper8": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "1 Samuel 10:1-16",
+          "epistle": "Rom. 4:13-25",
+          "gospel": "Matt. 21:23-32"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "1 Samuel 10:17-27",
+          "epistle": "Acts 7:44--8:1a",
+          "gospel": "Luke 22:52-62"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "1 Samuel 11:1-15",
+          "epistle": "Acts 8:1-13",
+          "gospel": "Luke 22:63-71"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "1 Samuel 12:1-6, 16-25",
+          "epistle": "Acts 8:14-25",
+          "gospel": "Luke 23:1-12"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "1 Samuel 13:5-18",
+          "epistle": "Acts 8:26-40",
+          "gospel": "Luke 23:13-25"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "1 Samuel 13:19--14:15",
+          "epistle": "Acts 9:1-9",
+          "gospel": "Luke 23:26-31"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "1 Samuel 14:16-30",
+          "epistle": "Acts 9:10-19a",
+          "gospel": "Luke 23:32-43"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Num. 21:4-9, 21-35",
+          "epistle": "Acts 17:(12-21)22-34",
+          "gospel": "Luke 13:10-17"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Num. 22:1-21",
+          "epistle": "Rom. 6:12-23",
+          "gospel": "Matt. 21:12-22"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Num. 22:21-38",
+          "epistle": "Rom. 7:1-12",
+          "gospel": "Matt. 21:23-32"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Num. 22:41--23:12",
+          "epistle": "Rom. 7:13-25",
+          "gospel": "Matt. 21:33-46"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Num. 23:11-26",
+          "epistle": "Rom. 8:1-11",
+          "gospel": "Matt. 22:1-14"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Num. 24:1-13",
+          "epistle": "Rom. 8:12-17",
+          "gospel": "Matt. 22:15-22"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Num. 24:12-25",
+          "epistle": "Rom. 8:18-25",
+          "gospel": "Matt. 22:23-40"
+        }
+      },
+      "label": "Proper 8",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 6,
+        "day": 29
+      }
+    },
+    "proper9": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "1 Samuel 14:36-45",
+          "epistle": "Rom. 5:1-11",
+          "gospel": "Matt. 22:1-14"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "1 Samuel 15:1-3, 7-23",
+          "epistle": "Acts 9:19b-31",
+          "gospel": "Luke 23:44-56a"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "1 Samuel 15:24-35",
+          "epistle": "Acts 9:32-43",
+          "gospel": "Luke 23:56b--24:11"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "1 Samuel 16:1-13",
+          "epistle": "Acts 10:1-16",
+          "gospel": "Luke 24:13-35"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "1 Samuel 16:14--17:11",
+          "epistle": "Acts 10:17-33",
+          "gospel": "Luke 24:36-53"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "1 Samuel 17:17-30",
+          "epistle": "Acts 10:34-48",
+          "gospel": "Mark 1:1-13"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "1 Samuel 17:31-49",
+          "epistle": "Acts 11:1-18",
+          "gospel": "Mark 1:14-28"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Num. 27:12-23",
+          "epistle": "Acts 19:11-20",
+          "gospel": "Mark 1:14-20"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Num. 32:1-6, 16-27",
+          "epistle": "Rom. 8:26-30",
+          "gospel": "Matt. 23:1-12"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Num. 35:1-3, 9-15, 30-34",
+          "epistle": "Rom. 8:31-39",
+          "gospel": "Matt. 23:13-26"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Deut. 1:1-18",
+          "epistle": "Rom. 9:1-18",
+          "gospel": "Matt. 23:27-39"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Deut. 3:18-28",
+          "epistle": "Rom. 9:19-33",
+          "gospel": "Matt. 24:1-14"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Deut. 31:7-13, 24--32:4",
+          "epistle": "Rom. 10:1-13",
+          "gospel": "Matt. 24:15-31"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "Deut. 34:1-12",
+          "epistle": "Rom. 10:14-21",
+          "gospel": "Matt. 24:32-51"
+        }
+      },
+      "label": "Proper 9",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 7,
+        "day": 6
+      }
+    },
+    "proper10": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "1 Samuel 17:50--18:4",
+          "epistle": "Rom. 10:4-17",
+          "gospel": "Matt. 23:29-39"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "1 Samuel 18:5-16, 27b-30",
+          "epistle": "Acts 11:19-30",
+          "gospel": "Mark 1:29-45"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "1 Samuel 19:1-18",
+          "epistle": "Acts 12:1-17",
+          "gospel": "Mark 2:1-12"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "1 Samuel 20:1-23",
+          "epistle": "Acts 12:18-25",
+          "gospel": "Mark 2:13-22"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "1 Samuel 20:24-42",
+          "epistle": "Acts 13:1-12",
+          "gospel": "Mark 2:23--3:6"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "1 Samuel 21:1-15",
+          "epistle": "Acts 13:13-25",
+          "gospel": "Mark 3:7-19a"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "1 Samuel 22:1-23",
+          "epistle": "Acts 13:26-43",
+          "gospel": "Mark 3:19b-35"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Joshua 1:1-18",
+          "epistle": "Acts 21:3-15",
+          "gospel": "Mark 1:21-27"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Joshua 2:1-14",
+          "epistle": "Rom. 11:1-12",
+          "gospel": "Matt. 25:1-13"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Joshua 2:15-24",
+          "epistle": "Rom. 11:13-24",
+          "gospel": "Matt. 25:14-30"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Joshua 3:1-13",
+          "epistle": "Rom. 11:25-36",
+          "gospel": "Matt. 25:31-46"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Joshua 3:14--4:7",
+          "epistle": "Rom. 12:1-8",
+          "gospel": "Matt. 26:1-16"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Joshua 4:19--5:1, 10-15",
+          "epistle": "Rom. 12:9-21",
+          "gospel": "Matt. 26:17-25"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Joshua 6:1-14",
+          "epistle": "Rom. 13:1-7",
+          "gospel": "Matt. 26:26-35"
+        }
+      },
+      "label": "Proper 10",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 7,
+        "day": 13
+      }
+    },
+    "proper11": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "1 Samuel 23:7-18",
+          "epistle": "Rom. 11:33--12:2",
+          "gospel": "Matt. 25:14-30"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "1 Samuel 24:1-22",
+          "epistle": "Acts 13:44-52",
+          "gospel": "Mark 4:1-20"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "1 Samuel 25:1-22",
+          "epistle": "Acts 14:1-18",
+          "gospel": "Mark 4:21-34"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "1 Samuel 25:23-44",
+          "epistle": "Acts 14:19-28",
+          "gospel": "Mark 4:35-41"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  66, 67",
+          "ot": "1 Samuel 28:3-20",
+          "epistle": "Acts 15:1-11",
+          "gospel": "Mark 5:1-20"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "1 Samuel 31:1-13",
+          "epistle": "Acts 15:12-21",
+          "gospel": "Mark 5:21-43"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "2 Samuel 1:1-16",
+          "epistle": "Acts 15:22-35",
+          "gospel": "Mark 6:1-13"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Joshua 6:15-27",
+          "epistle": "Acts 22:30--23:11",
+          "gospel": "Mark 2:1-12"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Joshua 7:1-13",
+          "epistle": "Rom. 13:8-14",
+          "gospel": "Matt. 26:36-46"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Joshua 8:1-22",
+          "epistle": "Rom. 14:1-12",
+          "gospel": "Matt. 26:47-56"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Joshua 8:30-35",
+          "epistle": "Rom. 14:13-23",
+          "gospel": "Matt. 26:57-68"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  66, 67",
+          "ot": "Joshua 9:3-21",
+          "epistle": "Rom. 15:1-13",
+          "gospel": "Matt. 26:69-75"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Joshua 9:22--10:15",
+          "epistle": "Rom. 15:14-24",
+          "gospel": "Matt. 27:1-10"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Joshua 23:1-16",
+          "epistle": "Rom. 15:25-33",
+          "gospel": "Matt. 27:11-23"
+        }
+      },
+      "label": "Proper 11",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 7,
+        "day": 20
+      }
+    },
+    "proper12": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "2 Samuel 1:17-27",
+          "epistle": "Rom. 12:9-21",
+          "gospel": "Matt. 25:31-46"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "2 Samuel 2:1-11",
+          "epistle": "Acts 15:36--16:5",
+          "gospel": "Mark 6:14-29"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "2 Samuel 3:6-21",
+          "epistle": "Acts 16:6-15",
+          "gospel": "Mark 6:30-46"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "2 Samuel 3:22-39",
+          "epistle": "Acts 16:16-24",
+          "gospel": "Mark 6:47-56"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "2 Samuel 4:1-12",
+          "epistle": "Acts 16:25-40",
+          "gospel": "Mark 7:1-23"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "2 Samuel 5:1-12",
+          "epistle": "Acts 17:1-15",
+          "gospel": "Mark 7:24-37"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "2 Samuel 5:22--6:11",
+          "epistle": "Acts 17:16-34",
+          "gospel": "Mark 8:1-10"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Joshua 24:1-15",
+          "epistle": "Acts 28:23-31",
+          "gospel": "Mark 2:23-28"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Joshua 24:16-33",
+          "epistle": "Rom. 16:1-16",
+          "gospel": "Matt. 27:24-31"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Judges 2:1-5, 11-23",
+          "epistle": "Rom. 16:17-27",
+          "gospel": "Matt. 27:32-44"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Judges 3:12-30",
+          "epistle": "Acts 1:1-14",
+          "gospel": "Matt. 27:45-54"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Judges 4:4-23",
+          "epistle": "Acts 1:15-26",
+          "gospel": "Matt. 27:55-66"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Judges 5:1-18",
+          "epistle": "Acts 2:1-21",
+          "gospel": "Matt. 28:1-10"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Judges 5:19-31",
+          "epistle": "Acts 2:22-36",
+          "gospel": "Matt. 28:11-20"
+        }
+      },
+      "label": "Proper 12",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 7,
+        "day": 27
+      }
+    },
+    "proper13": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "2 Samuel 6:12-23",
+          "epistle": "Rom. 14:7-12",
+          "gospel": "John 1:43-51"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "2 Samuel 7:1-17",
+          "epistle": "Acts 18:1-11",
+          "gospel": "Mark 8:11-21"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "2 Samuel 7:18-29",
+          "epistle": "Acts 18:12-28",
+          "gospel": "Mark 8:22-33"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "2 Samuel 9:1-13",
+          "epistle": "Acts 19:1-10",
+          "gospel": "Mark 8:34--9:1"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  145",
+          "psalmsEvening": "85, 86",
+          "ot": "2 Samuel 11:1-27",
+          "epistle": "Acts 19:11-20",
+          "gospel": "Mark 9:2-13"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "2 Samuel 12:1-14",
+          "epistle": "Acts 19:21-41",
+          "gospel": "Mark 9:14-29"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "2 Samuel 12:15-31",
+          "epistle": "Acts 20:1-16",
+          "gospel": "Mark 9:30-41"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Judges 6:1-24",
+          "epistle": "2 Cor. 9:6-15",
+          "gospel": "Mark 3:20-30"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Judges 6:25-40",
+          "epistle": "Acts 2:37-47",
+          "gospel": "John 1:1-18"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Judges 7:1-18",
+          "epistle": "Acts 3:1-11",
+          "gospel": "John 1:19-28"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Judges 7:19--8:12",
+          "epistle": "Acts 3:12-26",
+          "gospel": "John 1:29-42"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  145",
+          "psalmsEvening": "85, 86",
+          "ot": "Judges 8:22-35",
+          "epistle": "Acts 4:1-12",
+          "gospel": "John 1:43-51"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "Judges 9:1-16, 19-21",
+          "epistle": "Acts 4:13-31",
+          "gospel": "John 2:1-12"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Judges 9:22-25, 50-57",
+          "epistle": "Acts 4:32--5:11",
+          "gospel": "John 2:13-25"
+        }
+      },
+      "label": "Proper 13",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 8,
+        "day": 3
+      }
+    },
+    "proper14": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19,46",
+          "ot": "2 Samuel 13:1-22",
+          "epistle": "Rom. 15:1-13",
+          "gospel": "John 3:22-36"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "2 Samuel 13:23-39",
+          "epistle": "Acts 20:17-38",
+          "gospel": "Mark 9:42-50"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "2 Samuel 14:1-20",
+          "epistle": "Acts 21:1-14",
+          "gospel": "Mark 10:1-16"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "2 Samuel 14:21-33",
+          "epistle": "Acts 21:15-26",
+          "gospel": "Mark 10:17-31"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "2 Samuel 15:1-18",
+          "epistle": "Acts 21:27-36",
+          "gospel": "Mark 10:32-45"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "2 Samuel 15:19-37",
+          "epistle": "Acts 21:37--22:16",
+          "gospel": "Mark 10:46-52"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "2 Samuel 16:1-23",
+          "epistle": "Acts 22:17-29",
+          "gospel": "Mark 11:1-11"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Judges 11:1-11, 29-40",
+          "epistle": "2 Cor. 11:21b-31",
+          "gospel": "Mark 4:35-41"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Judges 12:1-7",
+          "epistle": "Acts 5:12-26",
+          "gospel": "John 3:1-21"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Judges 13:1-15",
+          "epistle": "Acts 5:27-42",
+          "gospel": "John 3:22-36"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Judges 13:15-24",
+          "epistle": "Acts 6:1-15",
+          "gospel": "John 4:1-26"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Judges 14:1-19",
+          "epistle": "Acts 6:15--7:16",
+          "gospel": "John 4:27-42"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Judges 14:20--15:20",
+          "epistle": "Acts 7:17-29",
+          "gospel": "John 4:43-54"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Judges 16:1-14",
+          "epistle": "Acts 7:30-43",
+          "gospel": "John 5:1-18"
+        }
+      },
+      "label": "Proper 14",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 8,
+        "day": 10
+      }
+    },
+    "proper15": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "2 Samuel 17:1-23",
+          "epistle": "Gal. 3:6-14",
+          "gospel": "John 5:30-47"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "2 Samuel 17:24--18:8",
+          "epistle": "Acts 22:30--23:11",
+          "gospel": "Mark 11:12-26"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "2 Samuel 18:9-18",
+          "epistle": "Acts 23:12-24",
+          "gospel": "Mark 11:27--12:12"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "2 Samuel 18:19-33",
+          "epistle": "Acts 23:23-35",
+          "gospel": "Mark 12:13-27"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "2 Samuel 19:1-23",
+          "epistle": "Acts 24:1-23",
+          "gospel": "Mark 12:28-34"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "2 Samuel 19:24-43",
+          "epistle": "Acts 24:24--25:12",
+          "gospel": "Mark 12:35-44"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "2 Samuel 23:1-7, 13-17",
+          "epistle": "Acts 25:13-27",
+          "gospel": "Mark 13:1-13"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Judges 16:15-31",
+          "epistle": "2 Cor. 13:1-11",
+          "gospel": "Mark 5:25-34"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Judges 17:1-13",
+          "epistle": "Acts 7:44--8:1a",
+          "gospel": "John 5:19-29"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Judges 18:1-15",
+          "epistle": "Acts 8:1-13",
+          "gospel": "John 5:30-47"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Judges 18:16-31",
+          "epistle": "Acts 8:14-25",
+          "gospel": "John 6:1-15"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Job 1:1-22",
+          "epistle": "Acts 8:26-40",
+          "gospel": "John 6:16-27"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Job 2:1-13",
+          "epistle": "Acts 9:1-9",
+          "gospel": "John 6:27-40"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6)7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Job 3:1-26",
+          "epistle": "Acts 9:10-19a",
+          "gospel": "John 6:41-51"
+        }
+      },
+      "label": "Proper 15",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 8,
+        "day": 17
+      }
+    },
+    "proper16": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "2 Samuel 24:1-2, 10-25",
+          "epistle": "Gal. 3:23--4:7",
+          "gospel": "John 8:12-20"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "1 Kings 1:5-31",
+          "epistle": "Acts 26:1-23",
+          "gospel": "Mark 13:14-27"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "1 Kings 1:38--2:4",
+          "epistle": "Acts 26:24--27:8",
+          "gospel": "Mark 13:28-37"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "1 Kings 3:1-15",
+          "epistle": "Acts 27:9-26",
+          "gospel": "Mark 14:1-11"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "1 Kings 3:16-28",
+          "epistle": "Acts 27:27-44",
+          "gospel": "Mark 14:12-26"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "1 Kings 5:1--6:1, 7",
+          "epistle": "Acts 28:1-16",
+          "gospel": "Mark 14:27-42"
+        },
+        "saturday": {
+          "psalmsMorning": "20 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "1 Kings 7:51--8:21",
+          "epistle": "Acts 28:17-31",
+          "gospel": "Mark 14:43-52"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Job 4:1-6, 12-21",
+          "epistle": "Rev. 4:1-11",
+          "gospel": "Mark 6:1-6a"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Job 4:1; 5:1-11, 17-21, 26-27",
+          "epistle": "Acts 9:19b-31",
+          "gospel": "John 6:52-59"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10-11",
+          "ot": "Job 6:1-4, 8-15, 21",
+          "epistle": "Acts 9:32-43",
+          "gospel": "John 6:60-71"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Job 6:1; 7:1-21",
+          "epistle": "Acts 10:1-16",
+          "gospel": "John 7:1-13"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Job 8:1-10, 20-22",
+          "epistle": "Acts 10:17-33",
+          "gospel": "John 7:14-36"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Job 9:1-15, 32-35",
+          "epistle": "Acts 10:34-48",
+          "gospel": "John 7:37-52"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "Job 9:1; 10:1-9, 16-22",
+          "epistle": "Acts 11:1-18",
+          "gospel": "John 8:12-20"
+        }
+      },
+      "label": "Proper 16",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 8,
+        "day": 24
+      }
+    },
+    "proper17": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "1 Kings 8:22-30(31-40)",
+          "epistle": "1 Tim. 4:7b-16",
+          "gospel": "John 8:47-59"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "2 Chron. 6:32--7:7",
+          "epistle": "James 2:1-13",
+          "gospel": "Mark 14:53-65"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "1 Kings 8:65--9:9",
+          "epistle": "James 2:14-26",
+          "gospel": "Mark 14:66-72"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "1 Kings 9:24--10:13",
+          "epistle": "James 3:1-12",
+          "gospel": "Mark 15:1-11"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "1 Kings 11:1-13",
+          "epistle": "James 3:13--4:12",
+          "gospel": "Mark 15:12-21"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "1 Kings 11:26-43",
+          "epistle": "James 4:13--5:6",
+          "gospel": "Mark 15:22-32"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "1 Kings 12:1-20",
+          "epistle": "James 5:7-12, 19-20",
+          "gospel": "Mark 15:33-39"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Job 11:1-9, 13-20",
+          "epistle": "Rev. 5:1-14",
+          "gospel": "Matt. 5:1-12"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Job 12:1-6, 13-25",
+          "epistle": "Acts 11:19-30",
+          "gospel": "John 8:21-32"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Job 12:1; 13:3-17, 21-27",
+          "epistle": "Acts 12:1-17",
+          "gospel": "John 8:33-47"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Job 12:1; 14:1-22",
+          "epistle": "Acts 12:18-25",
+          "gospel": "John 8:47-59"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Job 16:16-22; 17:1, 13-16",
+          "epistle": "Acts 13:1-12",
+          "gospel": "John 9:1-17"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Job 19:1-7, 14-27",
+          "epistle": "Acts 13:13-25",
+          "gospel": "John 9:18-41"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42. 43",
+          "ot": "Job 22:1-4, 21--23:7",
+          "epistle": "Acts 13:26-43",
+          "gospel": "John 10:1-18"
+        }
+      },
+      "label": "Proper 17",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 8,
+        "day": 31
+      }
+    },
+    "proper18": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "1 Kings 12:21-33",
+          "epistle": "Acts 4:18-31",
+          "gospel": "John 10:31-42"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "1 Kings 13:1-10",
+          "epistle": "Phil. 1:1-11",
+          "gospel": "Mark 15:40-47"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "1 Kings 16:23-34",
+          "epistle": "Phil. 1:12-30",
+          "gospel": "Mark 16:1-8(9-20)"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "1 Kings 17:1-24",
+          "epistle": "Phil. 2:1-11",
+          "gospel": "Matt. 2:1-12"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  93, 96",
+          "ot": "1 Kings 18:1-19",
+          "epistle": "Phil. 2:12-30",
+          "gospel": "Matt. 2:13-23"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "1 Kings 18:20-40",
+          "epistle": "Phil. 3:1-16",
+          "gospel": "Matt. 3:1-12"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "1 Kings 18:41--19:8",
+          "epistle": "Phil. 3:17--4:7",
+          "gospel": "Matt. 3:13-17"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Job 25:1-6; 27:1-6",
+          "epistle": "Rev. 14:1-7, 13",
+          "gospel": "Matt. 5:13-20"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Job 32:1-10, 19--33:1, 19-28",
+          "epistle": "Acts 13:44-52",
+          "gospel": "John 10:19-30"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Job 29:1-20",
+          "epistle": "Acts 14:1-18",
+          "gospel": "John 10:31-42"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Job 29:1; 30:1-2, 16-31",
+          "epistle": "Acts 14:19-28",
+          "gospel": "John 11:1-16"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  93, 96",
+          "ot": "Job 29:1; 31:1-23",
+          "epistle": "Acts 15:1-11",
+          "gospel": "John 11:17-29"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Job 29:1; 31:24-40",
+          "epistle": "Acts 15:12-21",
+          "gospel": "John 11:30-44"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Job 38:1-17",
+          "epistle": "Acts 15:22-35",
+          "gospel": "John 11:45-54"
+        }
+      },
+      "label": "Proper 18",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 9,
+        "day": 7
+      }
+    },
+    "proper19": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "1 Kings 19:8-21",
+          "epistle": "Acts 5:34-42",
+          "gospel": "John 11:45-57"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "1 Kings 21:1-16",
+          "epistle": "1 Cor. 1:1-19",
+          "gospel": "Matt. 4:1-11"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "1 Kings 21:17-29",
+          "epistle": "1 Cor. 1:20-31",
+          "gospel": "Matt. 4:12-17"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "1 Kings 22:1-28",
+          "epistle": "1 Cor. 2:1-13",
+          "gospel": "Matt. 4:18-25"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "1 Kings 22:29-45",
+          "epistle": "1 Cor. 2:14--3:15",
+          "gospel": "Matt. 5:1-10"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "2 Kings 1:2-17",
+          "epistle": "1 Cor. 3:16-23",
+          "gospel": "Matt. 5:11-16"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "2 Kings 2:1-18",
+          "epistle": "1 Cor. 4:1-7",
+          "gospel": "Matt. 5:17-20"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Job 38:1, 18-41",
+          "epistle": "Rev. 18:1-8",
+          "gospel": "Matt. 5:21-26"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Job 40:1-24",
+          "epistle": "Acts 15:36--16:5",
+          "gospel": "John 11:55--12:8"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Job 40:1; 41:1-11",
+          "epistle": "Acts 16:6-15",
+          "gospel": "John 12:9-19"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Job 42:1-17",
+          "epistle": "ACts 16:16-24",
+          "gospel": "John 12:20-26"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Job 28:1-28",
+          "epistle": "Acts 16:25-40",
+          "gospel": "John 12:27-36a"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Esther 1:1-4, 10-19*",
+          "epistle": "Acts 17:1-15",
+          "gospel": "John 12:36b-43"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Esther 2:5-8, 15-23*",
+          "epistle": "Acts 17:16-34",
+          "gospel": "John 12:44-50"
+        }
+      },
+      "label": "Proper 19",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 9,
+        "day": 14
+      }
+    },
+    "proper20": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "2 Kings 4:8-37",
+          "epistle": "Acts 9:10-31",
+          "gospel": "Luke 3:7-18"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "2 Kings 5:1-19",
+          "epistle": "1 Cor. 4:8-21",
+          "gospel": "Matt. 5:21-26"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "2 Kings 5:19-27",
+          "epistle": "1 Cor. 5:1-8",
+          "gospel": "Matt. 5:27-37"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "2 Kings 6:1-23",
+          "epistle": "1 Cor. 5:9--6:8",
+          "gospel": "Matt. 5:38-48"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  116, 117",
+          "psalmsEvening": "85, 86",
+          "ot": "2 Kings 9:1-16",
+          "epistle": "1 Cor. 6:12-20",
+          "gospel": "Matt. 6:1-6, 16-18"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "2 Kings 9:17-37",
+          "epistle": "1 Cor. 7:1-9",
+          "gospel": "Matt. 6:7-15"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "2 Kings 11:1-20a",
+          "epistle": "1 Cor. 7:10-24",
+          "gospel": "Matt. 6:19-24"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Esther 3:1--4:3*",
+          "epistle": "James 1:19-27",
+          "gospel": "Matt. 6:1-6, 16-18"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Esther 4:4-17*",
+          "epistle": "Acts 18:1-11",
+          "gospel": "Luke (1:1-4); 3:1-14"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Esther 5:1-14*",
+          "epistle": "Acts 18:12-28",
+          "gospel": "Luke 3:15-22"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Esther 6:1-14*",
+          "epistle": "Acts 19:1-10",
+          "gospel": "Luke 4:1-13"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  116, 117",
+          "psalmsEvening": "85, 86",
+          "ot": "Esther 7:1-10*",
+          "epistle": "Acts 19:11-20",
+          "gospel": "Luke 4:14-30"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "Esther 8:1-8, 15-17*",
+          "epistle": "Acts 19:21-41",
+          "gospel": "Luke 4:31-37"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Hosea 1:1--2:1",
+          "epistle": "Acts 20:1-16",
+          "gospel": "Luke 4:38-44"
+        }
+      },
+      "label": "Proper 20",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 9,
+        "day": 21
+      }
+    },
+    "proper21": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "2 Kings 17:1-18",
+          "epistle": "Acts 9:36-43",
+          "gospel": "Luke 5:1-11"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "2 Kings 17:24-41",
+          "epistle": "1 Cor. 7:25-31",
+          "gospel": "Matt. 6:25-34"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "2 Chron. 29:1-3; 30:1(2-9) 10-27",
+          "epistle": "1 Cor. 7:32-40",
+          "gospel": "Matt. 7:1-12"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "2 Kings 18:9-25",
+          "epistle": "1 Cor. 8:1-13",
+          "gospel": "Matt. 7:13-21"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "2 Kings 18:28-37",
+          "epistle": "1 Cor. 9:1-15",
+          "gospel": "Matt. 7:22-29"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "2 Kings 19:1-20",
+          "epistle": "1 Cor. 9:16-27",
+          "gospel": "Matt. 8:1-17"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "2 Kings 19:21-36",
+          "epistle": "1 Cor. 10:1-13",
+          "gospel": "Matt. 8:18-27"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Hosea 2:2-14",
+          "epistle": "James 3:1-13",
+          "gospel": "Matt. 13:44-52"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Hosea 2:14-23",
+          "epistle": "Acts 20:17-38",
+          "gospel": "Luke 5:1-11"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Hosea 4:1-10",
+          "epistle": "Acts 21:1-14",
+          "gospel": "Luke 5:12-26"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Hosea 4:11-19",
+          "epistle": "Acts 21:15-26",
+          "gospel": "Luke 5:27-39"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Hosea 5:8--6:6",
+          "epistle": "Acts 21:27-36",
+          "gospel": "Luke 6:1-11"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Hosea 10:1-15",
+          "epistle": "Acts 21:37--22:16",
+          "gospel": "Luke 6:12-26"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Hosea 11:1-9",
+          "epistle": "Acts 22:17-29",
+          "gospel": "Luke 6:27-38"
+        }
+      },
+      "label": "Proper 21",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 9,
+        "day": 28
+      }
+    },
+    "proper22": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "2 Kings 20:1-21",
+          "epistle": "Acts 12:1-17",
+          "gospel": "Luke 7:11-17"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "2 Kings 21:1-18",
+          "epistle": "1 Cor. 10:14--11:1",
+          "gospel": "Matt. 8:28-34"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "2 Kings 22:1-13",
+          "epistle": "1 Cor. 11:2, 17-22",
+          "gospel": "Matt. 9:1-8"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "2 Kings 22:14--23:3",
+          "epistle": "1 Cor 11:23-34",
+          "gospel": "Matt. 9:9-17"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "2 Kings 23:4-25",
+          "epistle": "1 Cor. 12:1-11",
+          "gospel": "Matt. 9:18-26"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "2 Kings 23:36--24:17",
+          "epistle": "1 Cor. 12:12-26",
+          "gospel": "Matt. 9:27-34"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Jer. 35:1-19",
+          "epistle": "1 Cor. 12:27--13:3",
+          "gospel": "Matt. 9:35--10:4"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Hosea 13:4-14",
+          "epistle": "1 Cor. 2:6-16",
+          "gospel": "Matt. 14:1-12"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Hosea 14:1-9",
+          "epistle": "Acts 22:30--23:11",
+          "gospel": "Luke 6:39-49"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Micah 1:1-9",
+          "epistle": "Acts 23:12-24",
+          "gospel": "Luke 7:1-17"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Micah 2:1-13",
+          "epistle": "Acts 23:23-35",
+          "gospel": "Luke 7:18-35"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Micah 3:1-8",
+          "epistle": "Acts 24:1-23",
+          "gospel": "Luke 7:36-50"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Micah 3:9--4:5",
+          "epistle": "Acts 24:24--25:12",
+          "gospel": "Luke 8:1-15"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Micah 5:1-4, 10-15",
+          "epistle": "Acts 25:13-27",
+          "gospel": "Luke 8:16-25"
+        }
+      },
+      "label": "Proper 22",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 10,
+        "day": 5
+      }
+    },
+    "proper23": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Jer. 36:1-10",
+          "epistle": "Acts 14:8-18",
+          "gospel": "Luke 7:36-50"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Jer. 36:11-26",
+          "epistle": "1 Cor. 13:(1-3)4-13",
+          "gospel": "Matt. 10:5-15"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Jer. 36:27--37:2",
+          "epistle": "1 Cor. 14:1-12",
+          "gospel": "Matt. 10:16-23"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Jer. 37:3-21",
+          "epistle": "1 Cor. 14:13-25",
+          "gospel": "Matt. 10:24-33"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Jer. 38:1-13",
+          "epistle": "1 Cor. 14:26-33a, 37-40",
+          "gospel": "Matt. 10:34-42"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Jer. 38:14-28",
+          "epistle": "1 Cor. 15:1-11",
+          "gospel": "Matt. 11:1-6"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "2 Kings 25:8-12, 22-26",
+          "epistle": "1 Cor. 15:12-29",
+          "gospel": "Matt. 11:7-15"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "146, 147",
+          "psalmsEvening": "111, 112, 113",
+          "ot": "Micah 6:1-8",
+          "epistle": "1 Cor. 4:9-16",
+          "gospel": "Matt. 15:21-28"
+        },
+        "monday": {
+          "psalmsMorning": "1, 2, 3",
+          "psalmsEvening": "4, 7",
+          "ot": "Micah 7:1-7",
+          "epistle": "Acts 26:1-23",
+          "gospel": "Luke 8:26-39"
+        },
+        "tuesday": {
+          "psalmsMorning": "5, 6",
+          "psalmsEvening": "10, 11",
+          "ot": "Jonah 1:1-17a",
+          "epistle": "Acts 26:24--27:8",
+          "gospel": "Luke 8:40-56"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:1-24",
+          "psalmsEvening": "12, 13, 14",
+          "ot": "Jonah 1:17--2:10",
+          "epistle": "Acts 27:9-26",
+          "gospel": "Luke 9:1-17"
+        },
+        "thursday": {
+          "psalmsMorning": "18:1-20",
+          "psalmsEvening": "18:21-50",
+          "ot": "Jonah 3:1--4:11",
+          "epistle": "Acts 27:27-44",
+          "gospel": "Luke 9:18-27"
+        },
+        "friday": {
+          "psalmsMorning": "16, 17",
+          "psalmsEvening": "22",
+          "ot": "Ecclus. 1:1-10, 18-27",
+          "epistle": "Acts 28:1-16",
+          "gospel": "Luke 9:28-36"
+        },
+        "saturday": {
+          "psalmsMorning": "20, 21:1-7(8-14)",
+          "psalmsEvening": "110:1-5(6-7), 116, 117",
+          "ot": "Ecclus. 3:17-31",
+          "epistle": "Acts 28:17-31",
+          "gospel": "Luke 9:37-50"
+        }
+      },
+      "label": "Proper 23",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 10,
+        "day": 12
+      }
+    },
+    "proper24": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Jer. 29:1, 4-14",
+          "epistle": "Acts 16:6-15",
+          "gospel": "Luke 10:1-12, 17-20"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Jer. 44:1-14",
+          "epistle": "1 Cor. 15:30-41",
+          "gospel": "Matt. 11:16-24"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Lam. 1:1-5(6-9)10-12",
+          "epistle": "1 Cor. 15:41-50",
+          "gospel": "Matt. 11:25-30"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Lam. 2:8-15",
+          "epistle": "1 Cor. 15:51-58",
+          "gospel": "Matt. 12:1-14"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Ezra 1:1-11",
+          "epistle": "1 Cor. 16:1-9",
+          "gospel": "Matt. 12:15-21"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Ezra 3:1-13",
+          "epistle": "1 Cor. 16:10-24",
+          "gospel": "Matt. 12:22-32"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Ezra 4:7, 11-24",
+          "epistle": "Philemon 1-24",
+          "gospel": "Matt. 12:33-42"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "148, 149, 150",
+          "psalmsEvening": "114, 115",
+          "ot": "Ecclus. 4:1-10",
+          "epistle": "1 Cor. 10:1-13",
+          "gospel": "Matt. 16:13-20"
+        },
+        "monday": {
+          "psalmsMorning": "25",
+          "psalmsEvening": "9, 15",
+          "ot": "Ecclus. 4:20--5:7",
+          "epistle": "Rev. 7:1-8",
+          "gospel": "Luke 9:51-62"
+        },
+        "tuesday": {
+          "psalmsMorning": "26, 28",
+          "psalmsEvening": "36, 39",
+          "ot": "Ecclus. 6:5-17",
+          "epistle": "Rev. 7:9-17",
+          "gospel": "Luke 10:1-16"
+        },
+        "wednesday": {
+          "psalmsMorning": "38",
+          "psalmsEvening": "119:25-48",
+          "ot": "Ecclus. 7:4-14",
+          "epistle": "Rev. 8:1-13",
+          "gospel": "Luke 10:17-24"
+        },
+        "thursday": {
+          "psalmsMorning": "37:1-18",
+          "psalmsEvening": "37:19-42",
+          "ot": "Ecclus. 10:1-18",
+          "epistle": "Rev. 9:1-12",
+          "gospel": "Luke 10:25-37"
+        },
+        "friday": {
+          "psalmsMorning": "31",
+          "psalmsEvening": "35",
+          "ot": "Ecclus. 11:2-20",
+          "epistle": "Rev. 9:13-21",
+          "gospel": "Luke 10:38-42"
+        },
+        "saturday": {
+          "psalmsMorning": "30, 32",
+          "psalmsEvening": "42, 43",
+          "ot": "Ecclus. 15:9-20",
+          "epistle": "Rev. 10:1-11",
+          "gospel": "Luke 11:1-13"
+        }
+      },
+      "label": "Proper 24",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 10,
+        "day": 19
+      }
+    },
+    "proper25": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Haggai 1:1--2:9",
+          "epistle": "Acts 18:24--19:7",
+          "gospel": "Luke 10:25-37"
+        },
+        "monday": {
+          "psalmsMorning": "41, 52",
+          "psalmsEvening": "44",
+          "ot": "Zech. 1:7-17",
+          "epistle": "Rev. 1:4-20",
+          "gospel": "Matt. 12:43-50"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Ezra 5:1-17",
+          "epistle": "Rev. 4:1-11",
+          "gospel": "Matt. 13:1-9"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Ezra 6:1-22",
+          "epistle": "Rev. 5:1-10",
+          "gospel": "Matt. 13:10-17"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  103",
+          "ot": "Neh. 1:1-11",
+          "epistle": "Rev. 5:11--6:11",
+          "gospel": "Matt. 13:18-23"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Neh. 2:1-20",
+          "epistle": "Rev. 6:12--7:4",
+          "gospel": "Matt. 13:24-30"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Neh. 4:1-23",
+          "epistle": "Rev. 7:(4-8)9-17",
+          "gospel": "Matt. 13:31-55"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "63:1-8(9-11), 98",
+          "psalmsEvening": "103",
+          "ot": "Ecclus. 18:19-33",
+          "epistle": "1 Cor. 10:15-24",
+          "gospel": "Matt. 18:15-20"
+        },
+        "monday": {
+          "psalmsMorning": "41,52",
+          "psalmsEvening": "44",
+          "ot": "Ecclus. 19:4-17",
+          "epistle": "Rev. 11:1-14",
+          "gospel": "Luke 11:14-26"
+        },
+        "tuesday": {
+          "psalmsMorning": "45",
+          "psalmsEvening": "47, 48",
+          "ot": "Ecclus. 24:1-12",
+          "epistle": "Rev. 11:14-19",
+          "gospel": "Luke 11:27-36"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:49-72",
+          "psalmsEvening": "49, [53]",
+          "ot": "Ecclus. 28:14-26",
+          "epistle": "Rev. 12:1-6",
+          "gospel": "Luke 11:37-52"
+        },
+        "thursday": {
+          "psalmsMorning": "50",
+          "psalmsEvening": "[59, 60]  or  103",
+          "ot": "Ecclus. 31:12-18, 25--32:2",
+          "epistle": "Rev. 12:7-17",
+          "gospel": "Luke 11:53--12:12"
+        },
+        "friday": {
+          "psalmsMorning": "40, 54",
+          "psalmsEvening": "51",
+          "ot": "Ecclus. 34:1-8, 18-22",
+          "epistle": "Rev. 13:1-10",
+          "gospel": "Luke 12:13-31"
+        },
+        "saturday": {
+          "psalmsMorning": "55",
+          "psalmsEvening": "138, 139:1-17(18-23)",
+          "ot": "Ecclus. 35:1-17",
+          "epistle": "Rev. 13:11-18",
+          "gospel": "Luke 12:32-48"
+        }
+      },
+      "label": "Proper 25",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 10,
+        "day": 26
+      }
+    },
+    "proper26": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Neh. 5:1-19",
+          "epistle": "Acts 20:7-12",
+          "gospel": "Luke 12:22-31"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Neh. 6:1-19",
+          "epistle": "Rev. 10:1-11",
+          "gospel": "Matt. 13:36-43"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Neh. 12:27-31a, 42b-47",
+          "epistle": "Rev. 11:1-19",
+          "gospel": "Matt. 13:44-52"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Neh. 13:4-22",
+          "epistle": "Rev. 12:1-12",
+          "gospel": "Matt. 13:53-58"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Ezra 7:(1-10)11-26",
+          "epistle": "Rev. 14:1-13",
+          "gospel": "Matt. 14:1-12"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Ezra 7:27-28; 8:21-36",
+          "epistle": "Rev. 15:1-8",
+          "gospel": "Matt. 14:13-21"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Ezra 9:1-15",
+          "epistle": "Rev. 17:1-14",
+          "gospel": "Matt. 14:22-36"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "24, 29",
+          "psalmsEvening": "8, 84",
+          "ot": "Ecclus. 36:1-17",
+          "epistle": "1 Cor. 12:27--13:13",
+          "gospel": "Matt. 18:21-35"
+        },
+        "monday": {
+          "psalmsMorning": "56, 57, [58]",
+          "psalmsEvening": "64, 65",
+          "ot": "Ecclus. 38:24-34",
+          "epistle": "Rev. 14:1-13",
+          "gospel": "Luke 12:49-59"
+        },
+        "tuesday": {
+          "psalmsMorning": "61, 62",
+          "psalmsEvening": "68:1-20(21-23)24-36",
+          "ot": "Ecclus. 43:1-22",
+          "epistle": "Rev. 14:14--15:8",
+          "gospel": "Luke 13:1-9"
+        },
+        "wednesday": {
+          "psalmsMorning": "72",
+          "psalmsEvening": "119:73-96",
+          "ot": "Ecclus. 43:23-33",
+          "epistle": "Rev. 16:1-11",
+          "gospel": "Luke 13:10-17"
+        },
+        "thursday": {
+          "psalmsMorning": "[70], 71",
+          "psalmsEvening": "74",
+          "ot": "Ecclus. 44:1-15",
+          "epistle": "Rev. 16:12-21",
+          "gospel": "Luke 13:18-30"
+        },
+        "friday": {
+          "psalmsMorning": "69:1-23(24-30)31-38",
+          "psalmsEvening": "73",
+          "ot": "Ecclus. 50:1, 11-24",
+          "epistle": "Rev. 17:1-18",
+          "gospel": "Luke 13:31-35"
+        },
+        "saturday": {
+          "psalmsMorning": "75, 76",
+          "psalmsEvening": "23, 27",
+          "ot": "Ecclus. 51:1-12",
+          "epistle": "Rev. 18:1-14",
+          "gospel": "Luke 14:1-11"
+        }
+      },
+      "label": "Proper 26",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 11,
+        "day": 2
+      }
+    },
+    "proper27": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Ezra 10:1-17",
+          "epistle": "Acts 24:10-21",
+          "gospel": "Luke 14:12-24"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Neh. 9:1-15(16-25)",
+          "epistle": "Rev. 18:1-8",
+          "gospel": "Matt. 15:1-20"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Neh. 9:26-38",
+          "epistle": "Rev. 18:9-20",
+          "gospel": "Matt. 15:21-28"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Neh. 7:73b--8:3, 5-18",
+          "epistle": "Rev. 18:21-24",
+          "gospel": "Matt. 15:29-39"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  23, 27",
+          "psalmsEvening": "85, 86",
+          "ot": "1 Macc. 1:1-28",
+          "epistle": "Rev. 19:1-10",
+          "gospel": "Matt. 16:1-12"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "1 Macc. 1:41-63",
+          "epistle": "Rev. 19:11-16",
+          "gospel": "Matt. 16:13-20"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "1 Macc. 2:1-28",
+          "epistle": "Rev. 20:1-6",
+          "gospel": "Matt. 16:21-28"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "93, 96",
+          "psalmsEvening": "34",
+          "ot": "Ecclus. 51:13-22",
+          "epistle": "1 Cor. 14:1-12",
+          "gospel": "Matt. 20:1-16"
+        },
+        "monday": {
+          "psalmsMorning": "80",
+          "psalmsEvening": "77, [79]",
+          "ot": "Joel 1:1-13",
+          "epistle": "Rev. 18:15-24",
+          "gospel": "Luke 14:12-24"
+        },
+        "tuesday": {
+          "psalmsMorning": "78:1-39",
+          "psalmsEvening": "78:40-72",
+          "ot": "Joel 1:15--2:2(3-11)",
+          "epistle": "Rev. 19:1-10",
+          "gospel": "Luke 14:25-35"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:97-120",
+          "psalmsEvening": "81, 82",
+          "ot": "Joel 2:12-19",
+          "epistle": "Rev. 19:11-21",
+          "gospel": "Luke 15:1-10"
+        },
+        "thursday": {
+          "psalmsMorning": "[83]  or  23, 27",
+          "psalmsEvening": "85, 86",
+          "ot": "Joel 2:21-27",
+          "epistle": "James 1:1-15",
+          "gospel": "Luke 15:1-2, 11-32"
+        },
+        "friday": {
+          "psalmsMorning": "88",
+          "psalmsEvening": "91, 92",
+          "ot": "Joel 2:28--3:8",
+          "epistle": "James 1:16-27",
+          "gospel": "Luke 16:1-9"
+        },
+        "saturday": {
+          "psalmsMorning": "87, 90",
+          "psalmsEvening": "136",
+          "ot": "Joel 3:9-17",
+          "epistle": "James 2:1-13",
+          "gospel": "Luke 16:10-17(18)"
+        }
+      },
+      "label": "Proper 27",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 11,
+        "day": 9
+      }
+    },
+    "proper28": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "1 Macc. 2:29-43, 49-50",
+          "epistle": "Acts 28:14b-23",
+          "gospel": "Luke 16:1-13"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "1 Macc. 3:1-24",
+          "epistle": "Rev. 20:7-15",
+          "gospel": "Matt. 17:1-13"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "1 Macc. 3:25-41",
+          "epistle": "Rev. 21:1-8",
+          "gospel": "Matt. 17:14-21"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "1 Macc. 3:42-60",
+          "epistle": "Rev. 21:9-21",
+          "gospel": "Matt. 17:22-27"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "1 Macc. 4:1-25",
+          "epistle": "Rev. 21:22--22:5",
+          "gospel": "Matt. 18:1-9"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "1 Macc. 4:36-59",
+          "epistle": "Rev. 22:6-13",
+          "gospel": "Matt. 18:10-20"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Isa. 65:17-25",
+          "epistle": "Rev. 22:14-21",
+          "gospel": "Matt. 18:21-35"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "66, 67",
+          "psalmsEvening": "19, 46",
+          "ot": "Hab. 1:1-4(5-11)12--2:1",
+          "epistle": "Phil. 3:13--4:1",
+          "gospel": "Matt. 23:13-24"
+        },
+        "monday": {
+          "psalmsMorning": "89:1-18",
+          "psalmsEvening": "89:19-52",
+          "ot": "Hab. 2:1-4, 9-20",
+          "epistle": "James 2:14-26",
+          "gospel": "Luke 16:19-31"
+        },
+        "tuesday": {
+          "psalmsMorning": "97, 99, [100]",
+          "psalmsEvening": "94, [95]",
+          "ot": "Hab. 3:1-10(11-15)16-18",
+          "epistle": "James 3:1-12",
+          "gospel": "Luke 17:1-10"
+        },
+        "wednesday": {
+          "psalmsMorning": "101, 109:1-4(5-19)20-30",
+          "psalmsEvening": "119:121-144",
+          "ot": "Mal. 1:1, 6-14",
+          "epistle": "James 3:13--4:12",
+          "gospel": "Luke 17:11-19"
+        },
+        "thursday": {
+          "psalmsMorning": "105:1-22",
+          "psalmsEvening": "105:23-45",
+          "ot": "Mal. 2:1-16",
+          "epistle": "James 4:13--5:6",
+          "gospel": "Luke 17:20-37"
+        },
+        "friday": {
+          "psalmsMorning": "102",
+          "psalmsEvening": "107:1-32",
+          "ot": "Mal. 3:1-12",
+          "epistle": "James 5:7-12",
+          "gospel": "Luke 18:1-8"
+        },
+        "saturday": {
+          "psalmsMorning": "107:33-43, 108:1-6(7-13)",
+          "psalmsEvening": "33",
+          "ot": "Mal. 3:13--4:6",
+          "epistle": "James 5:13-20",
+          "gospel": "Luke 18:9-14"
+        }
+      },
+      "label": "Proper 28",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 11,
+        "day": 16
+      }
+    },
+    "proper29": {
+      "1": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Isa. 19:19-25",
+          "epistle": "Rom. 15:5-13",
+          "gospel": "Luke 19:11-27"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Joel 3:1-2, 9-17",
+          "epistle": "1 Pet. 1:1-12",
+          "gospel": "Matt. 19:1-12"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Nahum 1:1-13",
+          "epistle": "1 Pet. 1:13-25",
+          "gospel": "Matt. 19:13-22"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Obadiah 15-21",
+          "epistle": "1 Pet. 2:1-10",
+          "gospel": "Matt. 19:23-30"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Zeph. 3:1-13",
+          "epistle": "1 Pet. 2:11-25",
+          "gospel": "Matt. 20:1-16"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Isa. 24:14-23",
+          "epistle": "1 Pet. 3:13--4:6",
+          "gospel": "Matt. 20:17-28"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Micah 7:11-20",
+          "epistle": "1 Pet. 4:7-19",
+          "gospel": "Matt. 20:29-34"
+        }
+      },
+      "2": {
+        "sunday": {
+          "psalmsMorning": "118",
+          "psalmsEvening": "145",
+          "ot": "Zech. 9:9-16",
+          "epistle": "1 Pet. 3:13-22",
+          "gospel": "Matt. 21:1-13"
+        },
+        "monday": {
+          "psalmsMorning": "106:1-18",
+          "psalmsEvening": "106:19-48",
+          "ot": "Zech. 10:1-12",
+          "epistle": "Gal. 6:1-10",
+          "gospel": "Luke 18:15-30"
+        },
+        "tuesday": {
+          "psalmsMorning": "[120], 121, 122, 123",
+          "psalmsEvening": "124, 125, 126, [127]",
+          "ot": "Zech. 11:4-17",
+          "epistle": "1 Cor. 3:10-23",
+          "gospel": "Luke 18:31-43"
+        },
+        "wednesday": {
+          "psalmsMorning": "119:145-176",
+          "psalmsEvening": "128, 129, 130",
+          "ot": "Zech. 12:1-10",
+          "epistle": "Eph. 1:3-14",
+          "gospel": "Luke 19:1-10"
+        },
+        "thursday": {
+          "psalmsMorning": "131, 132, [133]",
+          "psalmsEvening": "134, 135",
+          "ot": "Zech. 13:1-9",
+          "epistle": "Eph. 1:15-23",
+          "gospel": "Luke 19:11-27"
+        },
+        "friday": {
+          "psalmsMorning": "140, 142",
+          "psalmsEvening": "141, 143:1-11(12)",
+          "ot": "Zech. 14:1-11",
+          "epistle": "Rom. 15:7-13",
+          "gospel": "Luke 19:28-40"
+        },
+        "saturday": {
+          "psalmsMorning": "137:1-6(7-9), 144",
+          "psalmsEvening": "104",
+          "ot": "Zech. 14:12-21",
+          "epistle": "Phil. 2:1-11",
+          "gospel": "Luke 19:41-48"
+        }
+      },
+      "label": "Proper 29",
+      "placement": {
+        "rule": "sundayClosestTo",
+        "month": 11,
+        "day": 23
+      }
+    }
+  },
+  "dated": {
+    "12-24": {
+      "psalmsMorning": "45, 46",
+      "psalmsEvening": null,
+      "ot": "Baruch 4:36--5:9",
+      "epistle": "Gal. 3:23--4:7",
+      "gospel": "Mat. 1:18-25"
+    },
+    "12-29": {
+      "psalmsMorning": "18:1-20",
+      "psalmsEvening": "18:21-50*",
+      "ot": "2 Samuel 23:13-17b",
+      "epistle": "2 John -13",
+      "gospel": "John 2:1-11"
+    },
+    "12-30": {
+      "psalmsMorning": "20, 21:1-7(8-14)",
+      "psalmsEvening": "23, 27",
+      "ot": "1 Kings 17:17-24",
+      "epistle": "3 John 1-14",
+      "gospel": "John 4:46-54"
+    },
+    "12-31": {
+      "psalmsMorning": "46, 48",
+      "psalmsEvening": null,
+      "ot": "1 Kings 3:5-14",
+      "epistle": "James 4:13-17; 5:7-11",
+      "gospel": "John 5:1-15"
+    },
+    "01-02": {
+      "psalmsMorning": "34",
+      "psalmsEvening": "33",
+      "ot": "1 Kings 19:1-8",
+      "epistle": "Eph. 4:1-16",
+      "gospel": "John 6:1-14"
+    },
+    "01-03": {
+      "psalmsMorning": "68",
+      "psalmsEvening": "72**",
+      "ot": "1 Kings 19:9-18",
+      "epistle": "Eph. 4:17-32",
+      "gospel": "John 6:15-27"
+    },
+    "01-04": {
+      "psalmsMorning": "85, 87",
+      "psalmsEvening": "89:1-29**",
+      "ot": "Joshua 3:14--4:7",
+      "epistle": "Eph. 5:1-20",
+      "gospel": "John 9:1-12, 35-38"
+    },
+    "01-05": {
+      "psalmsMorning": "2, 110:1-5(6-7)",
+      "psalmsEvening": null,
+      "ot": "Jonah 2:2-9",
+      "epistle": "Eph. 6:10-20",
+      "gospel": "John 11:17-27, 38-44"
+    },
+    "01-07": {
+      "psalmsMorning": "103",
+      "psalmsEvening": "114, 115",
+      "ot": "Deut. 8:1-3",
+      "epistle": "Col. 1:1-14",
+      "gospel": "John 6:30-33, 48-51"
+    },
+    "01-08": {
+      "psalmsMorning": "117, 118",
+      "psalmsEvening": "112, 113",
+      "ot": "Exod. 17:1-7",
+      "epistle": "Col. 1:15-23",
+      "gospel": "John 7:37-52"
+    },
+    "01-09": {
+      "psalmsMorning": "121, 122, 123",
+      "psalmsEvening": "131, 132",
+      "ot": "Isa. 45:14-19",
+      "epistle": "Col. 1:21--2:7",
+      "gospel": "John 8:12-19"
+    },
+    "01-10": {
+      "psalmsMorning": "138, 139:1-17(18-23)",
+      "psalmsEvening": "147",
+      "ot": "Jer. 23:1-8",
+      "epistle": "Col. 2:8-23",
+      "gospel": "John 10:7-17"
+    },
+    "01-11": {
+      "psalmsMorning": "148, 150",
+      "psalmsEvening": "91, 92",
+      "ot": "Isa. 55:3-9",
+      "epistle": "Col. 3:1-17",
+      "gospel": "John 14:6-14"
+    },
+    "01-12": {
+      "psalmsMorning": "98, 99, [100]",
+      "psalmsEvening": null,
+      "ot": "Gen. 49:1-2, 8-12",
+      "epistle": "Col. 3:18--4:6",
+      "gospel": "John 15:1-16"
+    }
+  },
+  "named": {
+    "Christmas Eve": {
+      "psalmsMorning": null,
+      "psalmsEvening": "89:1-29",
+      "ot": "Isa. 59:15b-21",
+      "epistle": "Phil. 2:5-11",
+      "gospel": null
+    },
+    "Christmas Day": {
+      "psalmsMorning": "2, 85",
+      "psalmsEvening": "110:1-5(6-7), 132",
+      "ot": "Micah 4:1-5; 5:2-4",
+      "epistle": "1 John 4:7-16",
+      "gospel": "John 3:31-36"
+    },
+    "First Sunday after Christmas": {
+      "psalmsMorning": "93, 96",
+      "psalmsEvening": "34",
+      "ot": "1 Samuel 1:1-2, 7b-28",
+      "epistle": "Col. 1:9-20",
+      "gospel": "Luke 2:22-40"
+    },
+    "Eve of Holy Name": {
+      "psalmsMorning": null,
+      "psalmsEvening": "90",
+      "ot": "Isa. 65:15b-25",
+      "epistle": "Rev. 21:1-6",
+      "gospel": null
+    },
+    "Holy Name": {
+      "psalmsMorning": "103",
+      "psalmsEvening": "148",
+      "ot": "Isa. 62:1-5, 10-12",
+      "epistle": "Rev. 19:11-16",
+      "gospel": "Matt. 1:18-25"
+    },
+    "Second Sunday after Christmas": {
+      "psalmsMorning": "66, 67",
+      "psalmsEvening": "145",
+      "ot": "Wisdom 7:3-14",
+      "epistle": "Col. 3:12-17",
+      "gospel": "John 6:41-47"
+    },
+    "Eve of Epiphany": {
+      "psalmsMorning": null,
+      "psalmsEvening": "29, 98",
+      "ot": "Isa. 66:18-23",
+      "epistle": "Rom. 15:7-13",
+      "gospel": null
+    },
+    "Epiphany": {
+      "psalmsMorning": "46, 97",
+      "psalmsEvening": "96, 100",
+      "ot": "Isa. 49:1-7",
+      "epistle": "Rev. 21:22-27",
+      "gospel": "Matt. 12-14-21"
+    },
+    "Eve of 1 Epiphany": {
+      "psalmsMorning": null,
+      "psalmsEvening": "104",
+      "ot": "Isa. 61:1-9<",
+      "epistle": "Gal. 3:23-29, 4:4-7",
+      "gospel": null
+    },
+    "Ash Wednesday": {
+      "psalmsMorning": "95* & 32, 143",
+      "psalmsEvening": "102, 130",
+      "ot": "Amos 5:6-15",
+      "epistle": "Heb. 12:1-14",
+      "gospel": "Luke 18:9-14"
+    },
+    "Palm Sunday": {
+      "psalmsMorning": "24, 29",
+      "psalmsEvening": "103",
+      "ot": "Zech. 9:9-12**",
+      "epistle": "1 Tim. 6:12-16**",
+      "gospel": null
+    },
+    "Maundy Thursday": {
+      "psalmsMorning": "102",
+      "psalmsEvening": "142, 143",
+      "ot": "Lam. 2:10-18",
+      "epistle": "1 Cor. 10:14-17; 11:27-32",
+      "gospel": "Mark 14:12-25"
+    },
+    "Good Friday": {
+      "psalmsMorning": "95* & 22",
+      "psalmsEvening": "40:1-14(15-19), 54",
+      "ot": "Lam. 3:1-9, 19-33",
+      "epistle": "1 Pet. 1:10-20",
+      "gospel": "John 13:36-38**"
+    },
+    "Holy Saturday": {
+      "psalmsMorning": "95* & 88",
+      "psalmsEvening": "27",
+      "ot": "Lam. 3:37-58",
+      "epistle": "Heb. 4:1-16**",
+      "gospel": "Rom. 8:1-11***"
+    },
+    "Easter Day": {
+      "psalmsMorning": "148, 149, 150",
+      "psalmsEvening": "113, 114,  or  118",
+      "ot": "Exod. 12:1-14**",
+      "epistle": null,
+      "gospel": "John 1:1-18**"
+    },
+    "Eve of Ascension": {
+      "psalmsMorning": null,
+      "psalmsEvening": "68:1-20",
+      "ot": "2 Kings 2:1-15",
+      "epistle": "Rev. 5:1-14",
+      "gospel": null
+    },
+    "Ascension Day": {
+      "psalmsMorning": "8, 47",
+      "psalmsEvening": "24, 96",
+      "ot": "Dan. 7:9-14",
+      "epistle": "Heb. 2:5-18",
+      "gospel": "Matt. 28:16-20"
+    },
+    "Eve of Pentecost": {
+      "psalmsMorning": null,
+      "psalmsEvening": "33",
+      "ot": "Exod. 19:3-8a, 16-20",
+      "epistle": "1 Pet. 2:4-10",
+      "gospel": null
+    },
+    "The Day of Pentecost": {
+      "psalmsMorning": "118",
+      "psalmsEvening": "145",
+      "ot": "Deut. 16:9-12",
+      "epistle": "Acts 4:18-21, 23-33",
+      "gospel": "John 4:19-26"
+    },
+    "Eve of Trinity Sunday": {
+      "psalmsMorning": null,
+      "psalmsEvening": "104",
+      "ot": "Ecclus. 45:15-25",
+      "epistle": "Eph. 3:14-21",
+      "gospel": null
+    },
+    "Trinity Sunday": {
+      "psalmsMorning": "146, 147",
+      "psalmsEvening": "111, 112, 113",
+      "ot": "Job 38:1-11, 42:1-5",
+      "epistle": "Rev. 19:4-16",
+      "gospel": "John 1:29-34"
+    }
+  }
+}
