@@ -25,6 +25,10 @@
 			"database_id": "b31145ba-04a6-4fc9-bc01-744f1224e3d8"
 		}
 	],
+	// Open-source TTS (MeloTTS) for listening to the daily passage.
+	"ai": {
+		"binding": "AI"
+	},
 	"kv_namespaces": [
 		{
 			"binding": "SESSION",

@@ -40,7 +40,7 @@ Bindings live in `wrangler.jsonc`:
 
 - `DB` — D1 database `lectio-readings` (reading log; tables self-create on first use)
 - `SESSION` — KV namespace `lectio-session`
-- `ASSETS` — static assets from `./dist`
+- `AI` — Workers AI, used by `/api/tts` for the open-source MeloTTS model that reads the daily passage aloud
 
 Vars in `wrangler.jsonc`: `GOOGLE_REDIRECT_URI` - pinned so `/api/auth/google/start` and
 `/api/auth/google/callback` always send Google an identical `redirect_uri`; deriving it from the

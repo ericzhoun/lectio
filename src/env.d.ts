@@ -4,6 +4,7 @@
 declare namespace Cloudflare {
   interface Env {
     DB: import('@cloudflare/workers-types').D1Database;
+    AI: Ai;
     SESSION_SECRET: string;
     STRIPE_SECRET_KEY: string;
     STRIPE_WEBHOOK_SECRET: string;
