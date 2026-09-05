@@ -38,7 +38,10 @@ if (!userId && !ANON_STEPS.includes(step)) {
 
 const isWriting = (WRITING_STEPS as readonly Step[]).includes(step);
 
-let reached: Step = 'silencio';
+// An anonymous reader has genuinely reached whichever step they are on; there
+// is just no session row to remember it, so the rail would otherwise show them
+// stuck at the first step.
+let reached: Step = userId ? 'silencio' : step;
 if (userId) {
   const session = (await getSession(userId, day)) ?? (await ensureSession(userId, day, lang));
   reached = session.reachedStep;

@@ -14,8 +14,15 @@ describe('canOpenStep', () => {
     expect(canOpenStep('oratio', 'oratio')).toBe(true);
   });
 
-  it('refuses jumping ahead', () => {
+  it('permits exactly one step ahead, so the walk can proceed', () => {
+    expect(canOpenStep('silencio', 'lectio')).toBe(true);
+    expect(canOpenStep('lectio', 'meditatio')).toBe(true);
+  });
+
+  it('refuses jumping further ahead', () => {
+    expect(canOpenStep('lectio', 'oratio')).toBe(false);
     expect(canOpenStep('lectio', 'actio')).toBe(false);
+    expect(canOpenStep('silencio', 'meditatio')).toBe(false);
   });
 });
 

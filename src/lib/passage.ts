@@ -68,6 +68,20 @@ const ABBREVIATIONS: Record<string, string> = {
   ps: 'Psalms',
 };
 
+/**
+ * Chinese names for the books the daily lectionary reaches, so a reader in
+ * Chinese is not shown an English reference above 和合本 text. Anything
+ * unlisted keeps its English name rather than being half-translated.
+ */
+const BOOK_ZH: Record<string, string> = {
+  Matthew: '马太福音',
+  Mark: '马可福音',
+  Luke: '路加福音',
+  John: '约翰福音',
+  Acts: '使徒行传',
+  Romans: '罗马书',
+};
+
 /** 'Matt.' -> 'Matthew'; '1 Thess.' -> '1 Thessalonians'. */
 function expandBook(raw: string): string {
   const trimmed = raw.trim().replace(/\.$/, '');
@@ -153,5 +167,13 @@ export function resolvePassage(
   }
 
   if (parts.length === 0) return null;
-  return { ref, text: parts.join(' ') };
+
+  // Show the reference in the reader's language: '约翰福音 10:1-18', not
+  // 'John 10:1-18' sitting above 和合本 text.
+  const zhBook = BOOK_ZH[parsed.book];
+  const displayRef = lang === 'zh' && zhBook
+    ? ref.replace(/^\s*(?:[1-3]\s+)?[A-Za-z][A-Za-z\s.]*?(?=\s+\d+\s*:)/, zhBook)
+    : ref;
+
+  return { ref: displayRef, text: parts.join(' ') };
 }

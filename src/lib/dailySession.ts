@@ -55,9 +55,16 @@ export interface StepEntry {
   aiText: string | null;
 }
 
-/** A reader may revisit any step up to the furthest they have reached. */
+/**
+ * A reader may revisit any step they have reached, and take the next one.
+ *
+ * Allowing exactly one step ahead is what lets the walk proceed at all: a
+ * silent step records its arrival, so without this nobody could ever move past
+ * Silencio. It still refuses a jump to Oratio from Lectio, because a writing
+ * step advances `reached` only when something is actually written.
+ */
 export function canOpenStep(reached: Step, requested: Step): boolean {
-  return stepIndex(requested) <= stepIndex(reached);
+  return stepIndex(requested) <= stepIndex(reached) + 1;
 }
 
 export async function getSession(

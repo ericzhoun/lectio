@@ -94,6 +94,12 @@ describe('resolvePassage', () => {
     expect(passage?.text).toContain('John 8 verse 59.');
   });
 
+  it('shows the reference in Chinese for a Chinese reader', () => {
+    expect(resolvePassage('John 7:1-3', 'zh', store)?.ref).toBe('约翰福音 7:1-3');
+    // English is unchanged.
+    expect(resolvePassage('John 7:1-3', 'en', store)?.ref).toBe('John 7:1-3');
+  });
+
   it('returns null for an unparseable reference', () => {
     expect(resolvePassage('nonsense', 'en', store)).toBeNull();
   });
