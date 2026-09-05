@@ -215,6 +215,27 @@ function stripFootnotes(ref) {
 }
 
 /**
+ * Three references in the source do not follow its own conventions. Each is
+ * corrected here, so the shipped table is uniformly parseable:
+ *
+ *   'Matt. 12-14-21'         a typo for 'Matt. 12:14-21'
+ *   'Matt. (1:1-17); 3:1-6'  an optional genealogy before the day's reading
+ *   'Luke (1:1-4); 3:1-14'   an optional prologue before the day's reading
+ *
+ * The parenthesised portions are the BCP's optional extensions, so the reading
+ * proper is what follows the semicolon.
+ */
+function normalizeReference(ref) {
+  if (!ref) return ref;
+  let out = ref;
+  // Drop a parenthesised optional passage that precedes the reading proper.
+  out = out.replace(/^([1-3]?\s*[A-Za-z.]+)\s*\([^)]*\);\s*/, '$1 ');
+  // Repair a chapter:verse separator typed as a dash.
+  out = out.replace(/(?<![\d:])(\d+)-(\d+)-(\d+)\s*$/, '$1:$2-$3');
+  return out.trim();
+}
+
+/**
  * A principal feast prints a morning and an evening set, and the gospel is
  * sometimes only in the evening one (Palm Sunday reads Luke 19:41-48 there).
  */
@@ -338,9 +359,9 @@ export function buildDays(fromYear, toYear) {
       readings: {
         psalmsMorning: readings.psalmsMorning ?? null,
         psalmsEvening: readings.psalmsEvening ?? null,
-        ot: stripFootnotes(readings.ot ?? null),
-        epistle: stripFootnotes(readings.epistle ?? null),
-        gospel: stripFootnotes(gospelOf(readings)),
+        ot: normalizeReference(stripFootnotes(readings.ot ?? null)),
+        epistle: normalizeReference(stripFootnotes(readings.epistle ?? null)),
+        gospel: normalizeReference(stripFootnotes(gospelOf(readings))),
       },
       focus: 'gospel',
     };

@@ -43,6 +43,42 @@ for (const p of parsed) {
 }
 console.log(`${parsed.length} deck refs -> ${chapters.size} unique chapters`);
 
+// ---- 1b. Add the chapters the daily lectionary reads ----------------------
+// The daily flow renders one focus reading per day, always the gospel. Those
+// span far fewer chapters than the whole Bible, so they live in the same
+// bundled file rather than needing a store of their own.
+const deckOnly = chapters.size;
+let lectionaryDays;
+try {
+  lectionaryDays = JSON.parse(
+    readFileSync(new URL('../src/lib/lectionaryDays.json', import.meta.url), 'utf8')
+  );
+} catch {
+  console.log('no lectionaryDays.json yet; run scripts/build-lectionary.mjs first');
+  lectionaryDays = {};
+}
+
+const ABBREV = {
+  matt: 'Matthew', mat: 'Matthew', mk: 'Mark', lk: 'Luke', jn: 'John', rom: 'Romans',
+};
+
+for (const entry of Object.values(lectionaryDays)) {
+  const ref = entry.readings?.gospel;
+  if (!ref) continue;
+  const m = ref.match(/^\s*((?:[1-3]\s+)?[A-Za-z][A-Za-z\s.]*?)\s+(\d+\s*:.*)$/);
+  if (!m) throw new Error(`Unparseable lectionary ref: ${ref}`);
+  const rawBook = m[1].trim().replace(/\.$/, '');
+  const book = ABBREV[rawBook.toLowerCase()] ?? rawBook;
+  if (!BOOK_NR[book]) throw new Error(`Unknown lectionary book: ${book} (from ${ref})`);
+  // A reading may cross a chapter boundary ('John 7:53--8:11'); take every
+  // chapter it touches.
+  const anchors = [...m[2].matchAll(/(\d+)\s*:\s*\d+/g)].map((a) => Number(a[1]));
+  for (let ch = Math.min(...anchors); ch <= Math.max(...anchors); ch++) {
+    chapters.set(`${BOOK_NR[book]}:${ch}`, { book, chapter: ch });
+  }
+}
+console.log(`+ lectionary -> ${chapters.size} unique chapters (${chapters.size - deckOnly} added)`);
+
 // ---- 2. Fetch both translations per chapter --------------------------------
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function fetchChapter(translation, nr, ch, attempt = 1) {
