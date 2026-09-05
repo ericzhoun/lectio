@@ -109,7 +109,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
           <>
             <p class="ref">{passage.ref}</p>
             <p class="text">{passage.text}</p>
-            <button type="button" class="listen" data-listen
+            <button type="button" class="listen" data-listen data-day={day}
               aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
             >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
             <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
@@ -198,34 +198,46 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     });
 
     // Read the passage aloud via the open-source MeloTTS model on Workers AI.
+    // The text itself stays server-side; the button only names the day.
     const listen = reading.querySelector<HTMLButtonElement>('[data-listen]');
-    const text = reading.querySelector<HTMLElement>('.text')?.textContent?.trim() ?? '';
     const lang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
-    if (listen && text) {
-      let audio: HTMLAudioElement | null = null;
-      const reset = () => {
-        listen.textContent = listen.dataset.label ?? listen.textContent;
-        delete listen.dataset.busy;
+    if (listen?.dataset.day) {
+      const label = {
+        idle: lang === 'zh' ? '▶ 朗读' : '▶ Listen',
+        loading: lang === 'zh' ? '生成中…' : 'Loading…',
+        playing: lang === 'zh' ? '■ 停止' : '■ Stop',
       };
+      let audio: HTMLAudioElement | null = null;
+      let objectUrl: string | null = null;
+      let loading = false;
+
+      const stop = () => {
+        audio?.pause();
+        audio = null;
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        objectUrl = null;
+        listen.textContent = label.idle;
+      };
+
       listen.addEventListener('click', async () => {
-        if (listen.dataset.busy) return;
-        listen.dataset.busy = '1';
-        listen.dataset.label = listen.textContent ?? '';
-        listen.textContent = lang === 'zh' ? '生成中…' : 'Loading…';
+        // Mid-playback, the button really is a stop button.
+        if (audio) return stop();
+        // A second click while the model is still working would buy a second clip.
+        if (loading) return;
+        loading = true;
+        listen.textContent = label.loading;
         try {
-          const res = await fetch('/api/tts', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, lang }),
-          });
+          const res = await fetch(`/api/tts?day=${listen.dataset.day}&lang=${lang}`);
           if (!res.ok) throw new Error(String(res.status));
-          const blob = await res.blob();
-          audio = new Audio(URL.createObjectURL(blob));
-          listen.textContent = lang === 'zh' ? '■ 停止' : '■ Stop';
-          audio.addEventListener('ended', reset);
+          objectUrl = URL.createObjectURL(await res.blob());
+          audio = new Audio(objectUrl);
+          audio.addEventListener('ended', stop);
+          listen.textContent = label.playing;
           await audio.play();
         } catch {
-          reset();
+          stop();
+        } finally {
+          loading = false;
         }
       });
     }

@@ -52,6 +52,11 @@ export function getLectionaryDay(day: string): LectionaryDay {
   return FALLBACK;
 }
 
+/** Whether the built table actually covers this day. */
+export function hasLectionaryDay(day: string): boolean {
+  return Object.prototype.hasOwnProperty.call(TABLE, day);
+}
+
 /** The single passage the six steps walk. */
 export function focusReference(day: LectionaryDay): string {
   return day.readings[day.focus] ?? day.readings.gospel;
