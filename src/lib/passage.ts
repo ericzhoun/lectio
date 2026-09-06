@@ -73,7 +73,7 @@ const ABBREVIATIONS: Record<string, string> = {
  * Chinese is not shown an English reference above 和合本 text. Anything
  * unlisted keeps its English name rather than being half-translated.
  */
-const BOOK_ZH: Record<string, string> = {
+export const BOOK_ZH: Record<string, string> = {
   Matthew: '马太福音',
   Mark: '马可福音',
   Luke: '路加福音',

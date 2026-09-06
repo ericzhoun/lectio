@@ -1,4 +1,7 @@
 -- LectioClient: rebuilds the Lectio web UI as a Roblox interface.
+-- Readings served by the site backend include the AI reflection per verse
+-- (`interp`) plus an overall `summary`; when the server runs in offline
+-- fallback mode those fields are empty and the panel simply shows verses.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
@@ -8,7 +11,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 local VerseData = require(ReplicatedStorage:WaitForChild("VerseData"))
 
 local remotes = {}
-for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday" }) do
+for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary" }) do
 	remotes[n] = ReplicatedStorage:WaitForChild(n)
 end
 
@@ -32,6 +35,9 @@ local state = { used = 0, limit = 3, registered = false, divina = 0, deep = 0 }
 local currentReading = nil
 local readingStep = 1
 local ui = nil
+-- Flat verse list served by the backend (nil until the first fetch succeeds;
+-- the library then falls back to the built-in VerseData copy).
+local libraryData = nil
 
 local L = {
 	en = {
@@ -58,6 +64,7 @@ local L = {
 		lblReading = "Reading",
 		lblReflection = "Reflection",
 		lblResponse = "Response",
+		reflectionHeader = "Reflection",
 		next = "Next",
 		prev = "Back",
 		amen = "Amen",
@@ -71,6 +78,7 @@ local L = {
 		divinaMsg = "Lectio Divina is a registered gift — create a free account to unlock trial credits.",
 		deepMsg = "Deep Lectio is a registered gift — create a free account to unlock a trial credit.",
 		assistantLimitMsg = "The assistant has reached today's message limit.",
+		backendError = "The reading service could not be reached. Please try again in a moment.",
 		registeredMsg = "You are registered. Daily limit is now 6, with Lectio Divina and Deep Lectio trials.",
 		stepFmt = "Step %d of %d",
 		music = "Music",
@@ -100,6 +108,7 @@ local L = {
 		lblReading = "读经",
 		lblReflection = "默想",
 		lblResponse = "回应",
+		reflectionHeader = "默想",
 		next = "下一节",
 		prev = "上一节",
 		amen = "阿们",
@@ -113,6 +122,7 @@ local L = {
 		divinaMsg = "灵阅是注册后的礼物 — 创建免费账户解锁体验次数。",
 		deepMsg = "深度灵阅是注册后的礼物 — 创建免费账户解锁体验次数。",
 		assistantLimitMsg = "助手已达到今日消息上限。",
+		backendError = "读经服务暂时无法连接，请稍后再试。",
 		registeredMsg = "注册成功。每日上限已提升至 6 次，并解锁灵阅与深度灵阅体验。",
 		stepFmt = "第 %d 步，共 %d 步",
 		music = "音乐",
@@ -126,6 +136,21 @@ local function t(key, ...)
 		return v(...)
 	end
 	return v
+end
+
+--- Backend verses use textEn/textZh; offline fallback verses use en/zh.
+--- Empty strings fall through to the fallback (Lua treats "" as truthy).
+local function pick(value, fallback)
+	if value ~= nil and value ~= "" then return value end
+	return fallback
+end
+
+local function verseTextOf(v)
+	return pick(lang == "zh" and v.textZh or v.textEn, lang == "zh" and v.zh or v.en)
+end
+
+local function verseRefOf(v)
+	return pick(lang == "zh" and v.refZh or v.refEn, v.refEn)
 end
 
 local function mk(class, props, parent)
@@ -197,22 +222,34 @@ local function showReadingStep()
 	if not currentReading or not ui then return end
 	local v = currentReading.verses[readingStep]
 	if not v then return end
-	local txt = (lang == "zh") and v.zh or v.en
-	local ref = (lang == "zh") and v.refZh or v.refEn
-	ui.verseText.Text = "“" .. txt .. "”"
-	ui.verseRef.Text = ref
-	ui.stepLabel.Text = currentReading.labels[readingStep] or ""
+	local isLast = readingStep >= #currentReading.verses
+	ui.verseText.Text = "“" .. (verseTextOf(v) or "") .. "”"
+	ui.verseRef.Text = verseRefOf(v)
+	local position = pick(lang == "zh" and v.positionZh or v.positionEn, currentReading.labels[readingStep])
+	ui.stepLabel.Text = position or ""
+	-- The AI reflection arrives in the language the reading was requested in;
+	-- on the final step the overall summary is appended.
+	local interp = v.interp or ""
+	local summary = isLast and (currentReading.summary or "") or ""
+	local combined = interp
+	if summary ~= "" then
+		combined = (interp ~= "" and (interp .. "\n\n") or "") .. summary
+	end
+	ui.reflectionHeader.Visible = combined ~= ""
+	ui.reflectionLabel.Text = combined
+	ui.reflectionLabel.Visible = combined ~= ""
+	ui.bodyScroll.CanvasPosition = Vector2.new(0, 0)
 	ui.prevBtn.Visible = readingStep > 1
-	if readingStep >= #currentReading.verses then
+	if isLast then
 		ui.nextBtn.Text = t("amen")
 	else
 		ui.nextBtn.Text = t("next")
 	end
 end
 
-local function startReading(verses, labels, titleText)
+local function startReading(verses, labels, titleText, summary, topic)
 	if #verses == 0 then return end
-	currentReading = { verses = verses, labels = labels }
+	currentReading = { verses = verses, labels = labels, summary = summary or "", topic = topic or "" }
 	ui.readingTitle.Text = titleText
 	readingStep = 1
 	showReadingStep()
@@ -249,6 +286,50 @@ local function refreshModeCards()
 	end
 end
 
+-- Backend library: flat list in canonical book order, grouped by book.
+local function buildBackendLibrary()
+	local order = 0
+	local currentBook = nil
+	for _, v in ipairs(libraryData.verses) do
+		local book = v.bookEn or ""
+		if book ~= currentBook then
+			currentBook = book
+			order = order + 1
+			local header = mk("TextLabel", {
+				Size = UDim2.new(1, -8, 0, 26),
+				BackgroundColor3 = C.panel2,
+				TextColor3 = C.gold,
+				Font = Enum.Font.GothamBold,
+				TextSize = 16,
+				Text = string.upper(book),
+				TextXAlignment = Enum.TextXAlignment.Left,
+				BackgroundTransparency = 0.3,
+			}, ui.libScroll)
+			round(header, 6)
+			header.LayoutOrder = order
+		end
+		order = order + 1
+		local ref = (lang == "zh") and v.refZh or v.refEn
+		local text = (lang == "zh") and v.textZh or v.textEn
+		local row = mk("TextLabel", {
+			Size = UDim2.new(1, -8, 0, 0),
+			AutomaticSize = Enum.AutomaticSize.Y,
+			BackgroundColor3 = C.panel,
+			TextColor3 = C.text,
+			TextSize = 15,
+			Font = Enum.Font.Garamond,
+			Wrapped = true,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			TextYAlignment = Enum.TextYAlignment.Top,
+			BackgroundTransparency = 0.2,
+			Text = "《" .. ref .. "》  " .. text,
+		}, ui.libScroll)
+		round(row, 6)
+		mk("UIPadding", { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10), PaddingTop = UDim.new(0, 8), PaddingBottom = UDim.new(0, 8) }, row)
+		row.LayoutOrder = order
+	end
+end
+
 local function buildLibrary()
 	for _, child in ipairs(ui.libScroll:GetChildren()) do
 		if child:IsA("Frame") or child:IsA("TextLabel") or child:IsA("UIListLayout") then
@@ -256,41 +337,45 @@ local function buildLibrary()
 		end
 	end
 	mk("UIListLayout", { Padding = UDim.new(0, 4), SortOrder = Enum.SortOrder.LayoutOrder }, ui.libScroll)
-	local order = 0
-	for name, cat in pairs(VerseData.Categories) do
-		order = order + 1
-		local header = mk("TextLabel", {
-			Size = UDim2.new(1, -8, 0, 26),
-			BackgroundColor3 = C.panel2,
-			TextColor3 = C.gold,
-			Font = Enum.Font.GothamBold,
-			TextSize = 16,
-			Text = string.upper(name),
-			TextXAlignment = Enum.TextXAlignment.Left,
-			BackgroundTransparency = 0.3,
-		}, ui.libScroll)
-		round(header, 6)
-		header.LayoutOrder = order
-		for _, id in ipairs(cat.verses) do
-			local v = VerseData.Verses[id]
-			if v then
-				order = order + 1
-				local row = mk("TextLabel", {
-					Size = UDim2.new(1, -8, 0, 0),
-					AutomaticSize = Enum.AutomaticSize.Y,
-					BackgroundColor3 = C.panel,
-					TextColor3 = C.text,
-					TextSize = 15,
-					Font = Enum.Font.Garamond,
-					Wrapped = true,
-					TextXAlignment = Enum.TextXAlignment.Left,
-					TextYAlignment = Enum.TextYAlignment.Top,
-					BackgroundTransparency = 0.2,
-					Text = "《" .. ((lang == "zh") and v.refZh or v.refEn) .. "》  " .. ((lang == "zh") and v.zh or v.en),
-				}, ui.libScroll)
-				round(row, 6)
-				mk("UIPadding", { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10), PaddingTop = UDim.new(0, 8), PaddingBottom = UDim.new(0, 8) }, row)
-				row.LayoutOrder = order
+	if libraryData and type(libraryData.verses) == "table" and #libraryData.verses > 0 then
+		buildBackendLibrary()
+	else
+		local order = 0
+		for name, cat in pairs(VerseData.Categories) do
+			order = order + 1
+			local header = mk("TextLabel", {
+				Size = UDim2.new(1, -8, 0, 26),
+				BackgroundColor3 = C.panel2,
+				TextColor3 = C.gold,
+				Font = Enum.Font.GothamBold,
+				TextSize = 16,
+				Text = string.upper(name),
+				TextXAlignment = Enum.TextXAlignment.Left,
+				BackgroundTransparency = 0.3,
+			}, ui.libScroll)
+			round(header, 6)
+			header.LayoutOrder = order
+			for _, id in ipairs(cat.verses) do
+				local v = VerseData.Verses[id]
+				if v then
+					order = order + 1
+					local row = mk("TextLabel", {
+						Size = UDim2.new(1, -8, 0, 0),
+						AutomaticSize = Enum.AutomaticSize.Y,
+						BackgroundColor3 = C.panel,
+						TextColor3 = C.text,
+						TextSize = 15,
+						Font = Enum.Font.Garamond,
+						Wrapped = true,
+						TextXAlignment = Enum.TextXAlignment.Left,
+						TextYAlignment = Enum.TextYAlignment.Top,
+						BackgroundTransparency = 0.2,
+						Text = "《" .. ((lang == "zh") and v.refZh or v.refEn) .. "》  " .. ((lang == "zh") and v.zh or v.en),
+					}, ui.libScroll)
+					round(row, 6)
+					mk("UIPadding", { PaddingLeft = UDim.new(0, 10), PaddingRight = UDim.new(0, 10), PaddingTop = UDim.new(0, 8), PaddingBottom = UDim.new(0, 8) }, row)
+					row.LayoutOrder = order
+				end
 			end
 		end
 	end
@@ -334,6 +419,7 @@ local function openByKey(key)
 	elseif key == "library" then
 		buildLibrary()
 		ui.library.Visible = true
+		remotes.LectioLibrary:FireServer()
 	elseif key == "register" then
 		ui.main.Visible = true
 		showToast(t("register"))
@@ -455,24 +541,33 @@ local function buildGui()
 	table.insert(ui.binds, { inst = settingsBtn, key = "settings" })
 	table.insert(ui.binds, { inst = assistantBtn, key = "assistant" })
 
-	-- reading panel
-	local reading = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(640, 430), BackgroundColor3 = C.bg, BackgroundTransparency = 0.04, BorderSizePixel = 0, Visible = false, Active = true }, gui)
+	-- reading panel: verse + AI reflection scroll together; the reference and
+	-- controls stay fixed below.
+	local reading = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(640, 500), BackgroundColor3 = C.bg, BackgroundTransparency = 0.04, BorderSizePixel = 0, Visible = false, Active = true }, gui)
 	round(reading, 14)
 	ui.reading = reading
-	local stepLabel = mk("TextLabel", { Position = UDim2.fromOffset(20, 14), Size = UDim2.fromOffset(600, 24), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Text = "" }, reading)
+	local stepLabel = mk("TextLabel", { Position = UDim2.fromOffset(20, 14), Size = UDim2.fromOffset(600, 22), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Text = "" }, reading)
 	ui.stepLabel = stepLabel
-	local readingTitle = mk("TextLabel", { Position = UDim2.fromOffset(20, 40), Size = UDim2.fromOffset(600, 28), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextSize = 24, Text = "" }, reading)
+	local readingTitle = mk("TextLabel", { Position = UDim2.fromOffset(20, 38), Size = UDim2.fromOffset(600, 28), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextSize = 24, Text = "" }, reading)
 	ui.readingTitle = readingTitle
-	local verseText = mk("TextLabel", { Position = UDim2.fromOffset(40, 82), Size = UDim2.fromOffset(560, 218), BackgroundTransparency = 1, TextColor3 = C.text, Font = Enum.Font.Garamond, TextScaled = true, Wrapped = true, Text = "" }, reading)
+	local bodyScroll = mk("ScrollingFrame", { Position = UDim2.fromOffset(40, 74), Size = UDim2.fromOffset(560, 288), BackgroundTransparency = 1, BorderSizePixel = 0, ScrollBarThickness = 6, ScrollBarImageColor3 = C.line, CanvasSize = UDim2.new(0, 0, 0, 0) }, reading)
+	bodyScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	ui.bodyScroll = bodyScroll
+	mk("UIListLayout", { Padding = UDim.new(0, 10), SortOrder = Enum.SortOrder.LayoutOrder }, bodyScroll)
+	local verseText = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = C.text, Font = Enum.Font.Garamond, TextSize = 22, Wrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = "", LayoutOrder = 1 }, bodyScroll)
 	ui.verseText = verseText
-	local verseRef = mk("TextLabel", { Position = UDim2.fromOffset(20, 308), Size = UDim2.fromOffset(600, 28), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextSize = 22, Text = "" }, reading)
+	local reflectionHeader = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 20), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.GothamBold, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, Text = t("reflectionHeader"), Visible = false, LayoutOrder = 2 }, bodyScroll)
+	ui.reflectionHeader = reflectionHeader
+	local reflectionLabel = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Wrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = "", Visible = false, LayoutOrder = 3 }, bodyScroll)
+	ui.reflectionLabel = reflectionLabel
+	local verseRef = mk("TextLabel", { Position = UDim2.fromOffset(40, 368), Size = UDim2.fromOffset(560, 28), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextSize = 22, Text = "" }, reading)
 	ui.verseRef = verseRef
-	local closeBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 362), Size = UDim2.fromOffset(110, 44), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = t("close") }, reading)
+	local closeBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 420), Size = UDim2.fromOffset(110, 44), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = t("close") }, reading)
 	round(closeBtn, 8)
-	local prevBtn = mk("TextButton", { Position = UDim2.fromOffset(160, 362), Size = UDim2.fromOffset(140, 44), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = t("prev") }, reading)
+	local prevBtn = mk("TextButton", { Position = UDim2.fromOffset(160, 420), Size = UDim2.fromOffset(140, 44), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = t("prev") }, reading)
 	round(prevBtn, 8)
 	ui.prevBtn = prevBtn
-	local nextBtn = mk("TextButton", { Position = UDim2.fromOffset(340, 362), Size = UDim2.fromOffset(140, 44), BackgroundColor3 = C.gold, TextColor3 = C.darkText, Font = Enum.Font.GothamBold, TextSize = 15, Text = t("next") }, reading)
+	local nextBtn = mk("TextButton", { Position = UDim2.fromOffset(340, 420), Size = UDim2.fromOffset(140, 44), BackgroundColor3 = C.gold, TextColor3 = C.darkText, Font = Enum.Font.GothamBold, TextSize = 15, Text = t("next") }, reading)
 	round(nextBtn, 8)
 	ui.nextBtn = nextBtn
 	table.insert(ui.binds, { inst = closeBtn, key = "close" })
@@ -545,11 +640,12 @@ local function buildGui()
 		remotes.LectioRegister:FireServer()
 	end)
 	calendarBtn.MouseButton1Click:Connect(function()
-		remotes.LectioToday:FireServer()
+		remotes.LectioToday:FireServer(lang)
 	end)
 	libraryBtn.MouseButton1Click:Connect(function()
 		buildLibrary()
 		ui.library.Visible = true
+		remotes.LectioLibrary:FireServer()
 	end)
 	libClose.MouseButton1Click:Connect(function()
 		ui.library.Visible = false
@@ -578,7 +674,7 @@ local function buildGui()
 		if text == "" then return end
 		ui.chatBox.Text = ""
 		addChatBubble(text, true)
-		remotes.LectioAssistant:FireServer(text, lang)
+		remotes.LectioAssistant:FireServer(text, lang, currentReadingContext())
 	end)
 	chatBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
@@ -586,7 +682,7 @@ local function buildGui()
 			if text == "" then return end
 			ui.chatBox.Text = ""
 			addChatBubble(text, true)
-			remotes.LectioAssistant:FireServer(text, lang)
+			remotes.LectioAssistant:FireServer(text, lang, currentReadingContext())
 		end
 	end)
 	closeBtn.MouseButton1Click:Connect(function()
@@ -613,6 +709,25 @@ local function buildGui()
 
 	refreshModeCards()
 	refreshUsage()
+end
+
+-- What is on screen, so the assistant answers with the reading in context.
+function currentReadingContext()
+	if not currentReading or not ui or not ui.reading.Visible then return nil end
+	local items = {}
+	for i, v in ipairs(currentReading.verses) do
+		if i > 12 then break end
+		table.insert(items, {
+			name = verseRefOf(v),
+			position = currentReading.labels[i] or "",
+			interp = v.interp or "",
+		})
+	end
+	return {
+		spread = currentReading.title or "",
+		question = currentReading.topic or "",
+		items = items,
+	}
 end
 
 function refreshLang()
@@ -644,12 +759,12 @@ end)
 remotes.LectioExplore.OnClientEvent:Connect(function(resp)
 	if type(resp) ~= "table" then return end
 	if not resp.ok then
-		showToast(t(resp.errorKey or "limitMsg"))
+		showToast(t(resp.errorKey or "backendError"))
 		return
 	end
 	applyState(resp.state)
 	local labels = labelsForMode(resp.mode)
-	startReading(resp.verses, labels, modeTitle(resp.mode))
+	startReading(resp.verses, labels, modeTitle(resp.mode), resp.summary, resp.topic)
 end)
 
 remotes.LectioRegister.OnClientEvent:Connect(function(s)
@@ -658,19 +773,30 @@ remotes.LectioRegister.OnClientEvent:Connect(function(s)
 end)
 
 remotes.LectioToday.OnClientEvent:Connect(function(resp)
-	if type(resp) ~= "table" or not resp.ok then return end
+	if type(resp) ~= "table" or not resp.ok then
+		if type(resp) == "table" then showToast(t(resp.errorKey or "backendError")) end
+		return
+	end
 	local labels = {}
 	for i = 1, #resp.steps do
 		table.insert(labels, string.format(t("stepFmt"), i, #resp.steps))
 	end
 	local title = (lang == "zh") and resp.titleZh or resp.titleEn
-	startReading(resp.steps, labels, title)
+	startReading(resp.steps, labels, title, "", "")
+end)
+
+remotes.LectioLibrary.OnClientEvent:Connect(function(resp)
+	if type(resp) ~= "table" or not resp.ok then return end
+	libraryData = resp
+	if ui and ui.library.Visible then
+		buildLibrary()
+	end
 end)
 
 remotes.LectioAssistant.OnClientEvent:Connect(function(resp)
 	if type(resp) ~= "table" then return end
 	if not resp.ok then
-		showToast(t(resp.errorKey or "assistantLimitMsg"))
+		showToast(t(resp.errorKey or "backendError"))
 		return
 	end
 	addChatBubble(resp.text, false)

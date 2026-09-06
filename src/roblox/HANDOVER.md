@@ -76,11 +76,47 @@ Serene chapel garden, everything anchored, spawn at `(0, 1.3, 45)` facing the ch
 
 ## 5. Technical notes
 
-- **Structure:** `VerseData` (ReplicatedStorage ModuleScript) ← required by both `LectioServer` (ServerScriptService Script) and `LectioClient` (StarterPlayerScripts LocalScript). All five RemoteEvents (`LectioExplore`, `LectioRegister`, `LectioAssistant`, `LectioState`, `LectioToday`) are created by the server at runtime; the client `WaitForChild`s them.
-- **Persistence:** `DataStoreService:GetDataStore("LectioData_v1")`, key `u_<UserId>`, value `{date, daily, registered, divina, deep, assist}`. All DataStore calls are `pcall`-wrapped with an in-memory fallback, so the place never errors in Studio with API access disabled.
-- **Verse selection:** topic is keyword-matched (case-insensitive, EN+ZH keywords) against 10 categories; N distinct verses are drawn randomly from the matched pool, refilled from the full 43-verse library if the pool is smaller than N.
-- **Erroring:** server replies `{ok=false, errorKey=...}`; client localizes via its `L` table and shows a toast.
-- All three Lua sources pass `luaparse` syntax checking.
+- **Structure:** `VerseData` (ReplicatedStorage ModuleScript) ← required by both `LectioServer` (ServerScriptService Script) and `LectioClient` (StarterPlayerScripts LocalScript). All six RemoteEvents (`LectioExplore`, `LectioRegister`, `LectioAssistant`, `LectioState`, `LectioToday`, `LectioLibrary`) are created by the server at runtime; the client `WaitForChild`s them.
+
+### 5.1 Backend connection (live mode)
+
+The world is wired to this repository's Lectio backend (the site itself). The
+game server calls the site API over HTTPS with `HttpService`; readers are keyed
+`rb:<RobloxUserId>` in the same D1 tables the website uses
+(`usage_daily`, `welcome_credits`, `chat_usage_daily`, plus a small
+`roblox_players` registry). Features served live:
+
+| World feature | Backend endpoint | What it uses |
+|---|---|---|
+| State / usage counters | `POST /api/roblox/state` | daily quota 3/day anon → 6/day registered |
+| Explore (1 / 3 / 10 verses) | `POST /api/roblox/explore` | the real 151-verse deck, `generateInterpretation` AI reflection per verse + summary, welcome credits for Divina/Deep |
+| Register free | `POST /api/roblox/register` | grants 6/day + 3× Divina + 1× Deep credits (idempotent) |
+| Today's reading | `POST /api/roblox/today` | the BCP Daily Office lectionary, focus passage resolved verse-by-verse in WEB + 和合本 |
+| Lectio Assistant | `POST /api/roblox/assistant` | the site's AI assistant (same prompt/grounding/quota), non-streaming, aware of the on-screen reading |
+| Verse Library | `POST /api/roblox/library` | the whole 151-verse deck in canonical book order |
+
+All requests carry the shared secret in the `X-Lectio-Key` header; the backend
+compares it against the `ROBLOX_API_KEY` secret (constant-time). Unset key on
+the server → `503 not_configured`; wrong key → `401`.
+
+**Setup:**
+
+1. Backend: set the `ROBLOX_API_KEY` wrangler secret (`npx wrangler secret put ROBLOX_API_KEY`), same value locally in `.env` / `.dev.vars`.
+2. Game: on the `LectioServer` Script set the `LectioApiKey` attribute (Studio properties pane) — or edit the `DEFAULT_API_KEY` constant — and optionally `LectioBackendUrl` (defaults to `https://3livescapture.com`).
+3. Studio: enable *Game Settings → Security → Allow HTTP Requests*; a published game has HTTP enabled by default.
+
+**Fallback:** if the key is missing, HTTP is disabled, or the backend is
+unreachable, the server logs a warning and serves everything from the built-in
+`VerseData` (43 verses, DataStore quotas, keyword-rule assistant). A 401/503
+switches live mode off for the session instead of hammering a misconfigured
+backend. The verse payloads are shaped identically in both modes, so the
+client UI is unchanged; AI reflections (`interp`/`summary`) are simply empty
+offline.
+
+- **Persistence:** `DataStoreService:GetDataStore("LectioData_v1")`, key `u_<UserId>`, value `{date, daily, registered, divina, deep, assist}` — offline fallback only. All DataStore calls are `pcall`-wrapped with an in-memory fallback, so the place never errors in Studio with API access disabled.
+- **Verse selection:** live mode draws randomly from the full deck (exactly like the website — the topic feeds the AI reflection, not the draw). Offline fallback keeps the local keyword→category matching.
+- **Erroring:** backend answers `{ok=false, errorKey=...}` over HTTP 200; the client localizes via its `L` table and shows a toast (`limitMsg`, `divinaMsg`, `deepMsg`, `assistantLimitMsg`, `backendError`).
+- All three Lua sources pass `luaparse` syntax checking; regenerate with `python generate_lectio.py`.
 
 ## 6. How to test
 
@@ -92,12 +128,12 @@ Serene chapel garden, everything anchored, spawn at `(0, 1.3, 45)` facing the ch
 
 ## 7. Known limitations / next steps
 
-- **DataStore persistence** in Studio requires *Game Settings → Security → Enable Studio Access to API Services*; without it, limits/registration are per-session only (by design, no errors).
+- **HTTP + API key required for live mode**: without *Allow HTTP Requests* (Studio) or a matching `LectioApiKey`/`ROBLOX_API_KEY` pair, the world runs in offline fallback (43 local verses, DataStore quotas, keyword assistant) — see §5.1.
+- **DataStore persistence** in Studio requires *Game Settings → Security → Enable Studio Access to API Services*; without it, offline-fallback limits/registration are per-session only (by design, no errors).
 - **Music asset ID is a placeholder** (`rbxassetid://1841647093`) and may be silent or need replacing with a licensed track.
-- **Assistant** is a local keyword-rule engine (as scoped). A real LLM-backed assistant would need an HttpService proxy backend.
-- **"Registration"** is an in-game flag, not Roblox account linkage; the site's email/Google login has no Roblox equivalent.
-- **Reading count is 10 max** — Deep Lectio draws with refill, so popular categories can repeat verses across sessions (random by design, like the site).
-- Nice-to-haves not built: DataStore versioning/migration, reading history, sound cues on verse reveal, mobile UI scaling pass (current layout is a fixed 720×560 panel), text filtering of user topic input before it hits the 3D board.
+- **"Registration"** is a backend-recorded free account keyed to the Roblox identity — the same registered-free perks (6/day, trial credits) without the site's email/Google login, which has no Roblox equivalent.
+- **Assistant reflection language**: the AI reflection is generated in the language the reading was requested in; toggling language mid-reading re-renders verses but keeps the reflection as generated.
+- Nice-to-haves not built: DataStore versioning/migration, reading history, sound cues on verse reveal, mobile UI scaling pass, per-server rate limiting beyond per-player quotas.
 
 ## 8. Source-of-truth references
 

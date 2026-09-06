@@ -20,6 +20,9 @@ declare namespace Cloudflare {
     GOOGLE_CLIENT_ID: string;
     GOOGLE_CLIENT_SECRET: string;
     GOOGLE_REDIRECT_URI: string;
+    // Shared secret for the Roblox world's server-to-server calls to
+    // /api/roblox/* (see src/roblox). Unset disables the integration (503).
+    ROBLOX_API_KEY: string;
     // Optional endpoint overrides (dev/testing against a mock IdP only)
     GOOGLE_AUTH_URL: string;
     GOOGLE_TOKEN_URL: string;

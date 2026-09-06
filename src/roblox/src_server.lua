@@ -1,10 +1,25 @@
--- LectioServer: usage limits, registration, verse selection, 3D board, prompts.
+-- LectioServer: bridges the world to the Lectio backend (3livescapture.com).
+-- Live mode: every feature is served by the site's API — the real 148-verse
+-- deck, D1-enforced quotas and welcome credits, AI reflections, the AI
+-- assistant and the church-calendar lectionary. If HTTP is disabled or the
+-- backend is unreachable, the world falls back to the built-in VerseData
+-- logic below so a reading never dead-ends.
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 local VerseData = require(ReplicatedStorage:WaitForChild("VerseData"))
 
-local remoteNames = { "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday" }
+-- Configuration. Script attributes override the constants, so the key can be
+-- set from Studio's properties pane (LectioBackendUrl / LectioApiKey on this
+-- Script) without editing code. In production set LectioApiKey via the
+-- Creator Dashboard or publish the place with the attribute filled in.
+local DEFAULT_BACKEND_URL = "https://3livescapture.com"
+local DEFAULT_API_KEY = ""
+local BACKEND_URL = script:GetAttribute("LectioBackendUrl") or DEFAULT_BACKEND_URL
+local API_KEY = script:GetAttribute("LectioApiKey") or DEFAULT_API_KEY
+
+local remoteNames = { "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary" }
 local remotes = {}
 for _, name in ipairs(remoteNames) do
 	local r = Instance.new("RemoteEvent")
@@ -12,6 +27,64 @@ for _, name in ipairs(remoteNames) do
 	r.Parent = ReplicatedStorage
 	remotes[name] = r
 end
+
+-- ---- Live backend client ----------------------------------------------------
+
+local LIVE = false
+if API_KEY == "" then
+	warn("Lectio: no API key configured (script attribute LectioApiKey) - running in offline fallback mode.")
+elseif not HttpService.HttpEnabled then
+	warn("Lectio: HTTP requests are disabled - enable Game Settings > Security > Allow HTTP Requests. Using offline fallback mode.")
+else
+	LIVE = true
+	print("Lectio: live backend mode -> " .. BACKEND_URL)
+end
+
+local warnedPaths = {}
+--- POST `payload` to the backend; returns the decoded table, or nil on any
+--- failure (the caller then falls back to local logic). A 401/503 means the
+--- integration itself is misconfigured, so live mode is switched off.
+local function callBackend(path, payload)
+	if not LIVE then return nil end
+	local ok, resp = pcall(function()
+		return HttpService:RequestAsync({
+			Url = BACKEND_URL .. path,
+			Method = "POST",
+			Headers = {
+				["Content-Type"] = "application/json",
+				["X-Lectio-Key"] = API_KEY,
+			},
+			Body = HttpService:JSONEncode(payload),
+		})
+	end)
+	if not ok then
+		if not warnedPaths[path] then
+			warnedPaths[path] = true
+			warn("Lectio: backend call to " .. path .. " failed: " .. tostring(resp))
+		end
+		return nil
+	end
+	if resp.StatusCode == 401 or resp.StatusCode == 503 then
+		LIVE = false
+		warn("Lectio: backend rejected the request (HTTP " .. tostring(resp.StatusCode) .. "). Check LectioApiKey / server config. Switching to offline fallback mode.")
+		return nil
+	end
+	if not resp.Success then
+		if not warnedPaths[path] then
+			warnedPaths[path] = true
+			warn("Lectio: backend returned HTTP " .. tostring(resp.StatusCode) .. " for " .. path)
+		end
+		return nil
+	end
+	local decoded
+	local okDecode = pcall(function()
+		decoded = HttpService:JSONDecode(resp.Body)
+	end)
+	if not okDecode then return nil end
+	return decoded
+end
+
+-- ---- Offline fallback state (DataStore, session-memory if unavailable) ------
 
 local store = nil
 pcall(function()
@@ -101,18 +174,73 @@ local function pickIds(count, pool)
 	return ids
 end
 
+-- Same shape the backend sends, so the client treats both identically.
 local function versesFor(ids)
 	local out = {}
 	for _, id in ipairs(ids) do
 		local v = VerseData.Verses[id]
 		if v then
-			table.insert(out, { en = v.en, zh = v.zh, refEn = v.refEn, refZh = v.refZh })
+			table.insert(out, {
+				refEn = v.refEn, refZh = v.refZh,
+				textEn = v.en, textZh = v.zh,
+				themeEn = "", themeZh = "",
+				positionEn = "", positionZh = "",
+				interp = "", tags = {},
+			})
 		end
 	end
 	return out
 end
 
--- 3D scripture board above the altar
+local function stateFor(data)
+	return {
+		ok = true,
+		used = data.daily,
+		limit = data.registered and 6 or 3,
+		registered = data.registered,
+		divina = data.registered and data.divina or 0,
+		deep = data.registered and data.deep or 0,
+	}
+end
+
+-- Offline Explore: same rules as the world's original logic.
+local function localExplore(player, topic, mode, lang)
+	local data, key = getData(player.UserId)
+	if mode == "daily" then
+		local limit = data.registered and 6 or 3
+		if data.daily >= limit then
+			return { ok = false, errorKey = "limitMsg" }
+		end
+		data.daily = data.daily + 1
+	elseif mode == "divina" then
+		if not data.registered or data.divina <= 0 then
+			return { ok = false, errorKey = "divinaMsg" }
+		end
+		data.divina = data.divina - 1
+	elseif mode == "deep" then
+		if not data.registered or data.deep <= 0 then
+			return { ok = false, errorKey = "deepMsg" }
+		end
+		data.deep = data.deep - 1
+	end
+	saveData(key, data)
+
+	local count = 1
+	if mode == "divina" then count = 3 end
+	if mode == "deep" then count = 10 end
+	local verses = versesFor(pickIds(count, categoryFor(topic)))
+	return {
+		ok = true,
+		mode = mode,
+		topic = topic,
+		verses = verses,
+		summary = "",
+		state = stateFor(data),
+	}
+end
+
+-- ---- 3D scripture board above the altar --------------------------------------
+
 local board = workspace:WaitForChild("VerseBoard")
 local boardGui = Instance.new("SurfaceGui")
 boardGui.Name = "BoardGui"
@@ -169,15 +297,14 @@ boardWho.Parent = boardBg
 
 local function updateBoard(verse, lang, who)
 	if not verse then return end
-	if lang == "zh" then
-		boardVerse.Text = verse.zh
-		boardRef.Text = verse.refZh
-	else
-		boardVerse.Text = verse.en
-		boardRef.Text = verse.refEn
-	end
+	local text = (lang == "zh") and (verse.textZh or verse.zh) or (verse.textEn or verse.en)
+	local ref = (lang == "zh") and (verse.refZh or "") or (verse.refEn or "")
+	boardVerse.Text = text or ""
+	boardRef.Text = ref or ""
 	boardWho.Text = "offered for " .. who
 end
+
+-- ---- Proximity prompts --------------------------------------------------------
 
 local function addPrompt(part, actionText, objectText, key)
 	local p = Instance.new("ProximityPrompt")
@@ -199,72 +326,71 @@ if npc then addPrompt(npc, "Ask a question", "Lectio Assistant", "assistant") en
 local shelf = workspace:FindFirstChild("LibraryWall")
 if shelf then addPrompt(shelf, "Browse verses", "Verse Library", "library") end
 
-local function stateFor(data)
-	return {
-		ok = true,
-		used = data.daily,
-		limit = data.registered and 6 or 3,
-		registered = data.registered,
-		divina = data.registered and data.divina or 0,
-		deep = data.registered and data.deep or 0,
-	}
+-- ---- Remote handlers (live first, local fallback) ------------------------------
+
+local function sanitizeTopic(topic)
+	if type(topic) ~= "string" then return "" end
+	topic = string.sub(topic, 1, 300)
+	return topic
+end
+
+local function sanitizeLang(lang)
+	if type(lang) ~= "string" or (lang ~= "en" and lang ~= "zh") then return "en" end
+	return lang
 end
 
 remotes.LectioState.OnServerEvent:Connect(function(player)
+	local resp = callBackend("/api/roblox/state", {
+		playerId = tostring(player.UserId),
+		displayName = player.DisplayName,
+	})
+	if resp and resp.ok and type(resp.state) == "table" then
+		remotes.LectioState:FireClient(player, resp.state)
+		return
+	end
 	local data = getData(player.UserId)
 	remotes.LectioState:FireClient(player, stateFor(data))
 end)
 
 remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang)
-	if type(topic) ~= "string" then topic = "" end
-	if type(lang) ~= "string" or (lang ~= "en" and lang ~= "zh") then lang = "en" end
 	if mode ~= "daily" and mode ~= "divina" and mode ~= "deep" then return end
-	if #topic > 200 then topic = string.sub(topic, 1, 200) end
+	topic = sanitizeTopic(topic)
+	lang = sanitizeLang(lang)
 	if topic == "" then
 		local pick = VerseData.PopularTopics[rng:NextInteger(1, #VerseData.PopularTopics)]
 		topic = pick.en
 	end
 
-	local data, key = getData(player.UserId)
-	if mode == "daily" then
-		local limit = data.registered and 6 or 3
-		if data.daily >= limit then
-			remotes.LectioExplore:FireClient(player, { ok = false, errorKey = "limitMsg" })
-			return
-		end
-		data.daily = data.daily + 1
-	elseif mode == "divina" then
-		if not data.registered or data.divina <= 0 then
-			remotes.LectioExplore:FireClient(player, { ok = false, errorKey = "divinaMsg" })
-			return
-		end
-		data.divina = data.divina - 1
-	elseif mode == "deep" then
-		if not data.registered or data.deep <= 0 then
-			remotes.LectioExplore:FireClient(player, { ok = false, errorKey = "deepMsg" })
-			return
-		end
-		data.deep = data.deep - 1
-	end
-	saveData(key, data)
-
-	local count = 1
-	if mode == "divina" then count = 3 end
-	if mode == "deep" then count = 10 end
-	local verses = versesFor(pickIds(count, categoryFor(topic)))
-	remotes.LectioExplore:FireClient(player, {
-		ok = true,
-		mode = mode,
+	local resp = callBackend("/api/roblox/explore", {
+		playerId = tostring(player.UserId),
+		displayName = player.DisplayName,
 		topic = topic,
-		verses = verses,
-		state = stateFor(data),
+		mode = mode,
+		lang = lang,
 	})
-	if #verses > 0 then
-		updateBoard(verses[1], lang, player.DisplayName)
+	if resp and resp.ok == false then
+		-- A definite backend answer (quota exhausted, locked layout): pass it on.
+		remotes.LectioExplore:FireClient(player, resp)
+		return
+	end
+	if not (resp and resp.ok and type(resp.verses) == "table") then
+		resp = localExplore(player, topic, mode, lang)
+	end
+	remotes.LectioExplore:FireClient(player, resp)
+	if resp.ok and type(resp.verses) == "table" and #resp.verses > 0 then
+		updateBoard(resp.verses[1], lang, player.DisplayName)
 	end
 end)
 
 remotes.LectioRegister.OnServerEvent:Connect(function(player)
+	local resp = callBackend("/api/roblox/register", {
+		playerId = tostring(player.UserId),
+		displayName = player.DisplayName,
+	})
+	if resp and resp.ok and type(resp.state) == "table" then
+		remotes.LectioRegister:FireClient(player, resp.state)
+		return
+	end
 	local data, key = getData(player.UserId)
 	if not data.registered then
 		data.registered = true
@@ -275,7 +401,13 @@ remotes.LectioRegister.OnServerEvent:Connect(function(player)
 	remotes.LectioRegister:FireClient(player, stateFor(data))
 end)
 
-remotes.LectioToday.OnServerEvent:Connect(function(player)
+remotes.LectioToday.OnServerEvent:Connect(function(player, lang)
+	lang = sanitizeLang(lang)
+	local resp = callBackend("/api/roblox/today", { lang = lang })
+	if resp and resp.ok and type(resp.steps) == "table" and #resp.steps > 0 then
+		remotes.LectioToday:FireClient(player, resp)
+		return
+	end
 	local idx = tonumber(os.date("!%w")) + 1
 	local reading = VerseData.TodayReadings[idx] or VerseData.TodayReadings[1]
 	local steps = {}
@@ -285,11 +417,50 @@ remotes.LectioToday.OnServerEvent:Connect(function(player)
 	remotes.LectioToday:FireClient(player, { ok = true, titleEn = reading.titleEn, titleZh = reading.titleZh, steps = steps })
 end)
 
-remotes.LectioAssistant.OnServerEvent:Connect(function(player, text, lang)
-	if type(text) ~= "string" then return end
-	if type(lang) ~= "string" or (lang ~= "en" and lang ~= "zh") then lang = "en" end
-	text = string.sub(text, 1, 300)
+local function sanitizeReadingContext(raw)
+	if type(raw) ~= "table" then return nil end
+	local items = {}
+	if type(raw.items) == "table" then
+		for i, it in ipairs(raw.items) do
+			if i > 12 then break end
+			if type(it) == "table" then
+				table.insert(items, {
+					name = type(it.name) == "string" and string.sub(it.name, 1, 100) or "",
+					position = type(it.position) == "string" and string.sub(it.position, 1, 100) or "",
+					interp = type(it.interp) == "string" and string.sub(it.interp, 1, 1000) or "",
+				})
+			end
+		end
+	end
+	return {
+		spread = type(raw.spread) == "string" and string.sub(raw.spread, 1, 100) or "",
+		question = type(raw.question) == "string" and string.sub(raw.question, 1, 300) or "",
+		items = items,
+	}
+end
 
+remotes.LectioAssistant.OnServerEvent:Connect(function(player, text, lang, reading)
+	if type(text) ~= "string" then return end
+	text = string.sub(text, 1, 300)
+	lang = sanitizeLang(lang)
+
+	local resp = callBackend("/api/roblox/assistant", {
+		playerId = tostring(player.UserId),
+		displayName = player.DisplayName,
+		message = text,
+		lang = lang,
+		reading = sanitizeReadingContext(reading),
+	})
+	if resp and resp.ok and type(resp.text) == "string" then
+		remotes.LectioAssistant:FireClient(player, { ok = true, text = resp.text, remaining = resp.remaining })
+		return
+	end
+	if resp and resp.ok == false then
+		remotes.LectioAssistant:FireClient(player, resp)
+		return
+	end
+
+	-- Offline fallback: the local keyword-rule engine.
 	local data, key = getData(player.UserId)
 	if data.assist >= 10 then
 		remotes.LectioAssistant:FireClient(player, { ok = false, errorKey = "assistantLimitMsg" })
@@ -315,4 +486,17 @@ remotes.LectioAssistant.OnServerEvent:Connect(function(player, text, lang)
 	remotes.LectioAssistant:FireClient(player, { ok = true, text = reply, remaining = 10 - data.assist })
 end)
 
-print("Lectio server ready")
+-- The Verse Library is only served by the backend (the local VerseData copy
+-- stays the client-side fallback when this never succeeds).
+local libraryCache = nil
+remotes.LectioLibrary.OnServerEvent:Connect(function(player)
+	if libraryCache == nil then
+		local resp = callBackend("/api/roblox/library", {})
+		if resp and resp.ok and type(resp.verses) == "table" and #resp.verses > 0 then
+			libraryCache = resp
+		end
+	end
+	remotes.LectioLibrary:FireClient(player, libraryCache or { ok = false })
+end)
+
+print("Lectio server ready" .. (LIVE and " (live backend)" or " (offline fallback)"))

@@ -17,3 +17,7 @@ GOOGLE_AUTH_URL=https://accounts.google.com/o/oauth2/v2/auth
 GOOGLE_TOKEN_URL=https://oauth2.googleapis.com/token
 GOOGLE_USERINFO_URL=https://openidconnect.googleapis.com/v1/userinfo
 GOOGLE_REDIRECT_URI=https://3livescapture.com/api/auth/google/callback
+
+# Roblox world integration (src/roblox): shared secret the game server sends
+# in the X-Lectio-Key header to /api/roblox/*. Unset = integration disabled.
+ROBLOX_API_KEY=replace-with-a-long-random-string

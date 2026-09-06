@@ -51,8 +51,9 @@ Vars in `wrangler.jsonc`: `GOOGLE_REDIRECT_URI` - pinned so `/api/auth/google/st
 request URL can differ by scheme and makes the token exchange fail.
 
 Secrets (see `.dev.vars.example`): `OPENAI_API_KEY`, `SESSION_SECRET`, the `STRIPE_*` keys and
-price ids, and the `GOOGLE_*` OAuth values. `SESSION_SECRET` is required - Google sign-in fails at
-the last step without it.
+price ids, the `GOOGLE_*` OAuth values, and `ROBLOX_API_KEY` (server-to-server key for the Roblox
+world in `src/roblox`; unset disables those endpoints). `SESSION_SECRET` is required - Google
+sign-in fails at the last step without it.
 
 ## Project structure
 
@@ -112,6 +113,14 @@ Verification evidence: see `docs/google-login-run-check-report.md`.
   set, the Google button shows a graceful "not configured" message.
 - User records live in D1 `users` (`google_id`, `name`, `avatar_url`, `created_at`,
   `last_login_at`); Google sign-in with an existing verified email links to that account.
+
+## Roblox world
+
+`src/roblox/` contains `Lectio.rbxlx`, a Roblox place that mirrors this site as a playable 3D
+chapel. In live mode the game server calls the `/api/roblox/*` endpoints (same deck, D1 quotas and
+credits, AI reflections and assistant, the daily lectionary) with the `ROBLOX_API_KEY` secret; with
+HTTP or the key missing it falls back to a built-in offline mode. Setup and architecture:
+`src/roblox/HANDOVER.md`.
 
 ## Listen (TTS)
 

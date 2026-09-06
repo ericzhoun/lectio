@@ -3,10 +3,11 @@
 local VerseData = {}
 
 VerseData.PopularTopics = {
-	{ en = "How do I face this season of pressure at work?", zh = "我该如何面对这段工作中的压力？" },
-	{ en = "I want to learn to love better in this relationship.", zh = "我想在这段关系中学习更好地去爱。" },
-	{ en = "What do I need to let go of in the coming weeks?", zh = "在接下来的日子里，我需要放下什么？" },
-	{ en = "How can I find stillness in a busy life?", zh = "在忙碌的生活中，我如何找到安静？" },
+	{ en = "How do I face this season of pressure at work?", zh = "我该如何面对工作中的这段压力？" },
+	{ en = "I want to learn to love better in this relationship.", zh = "我想在这段关系里学会更好地去爱。" },
+	{ en = "What do I need to let go of in the coming weeks?", zh = "接下来这段时间，我需要放下什么？" },
+	{ en = "How can I find stillness in a busy life?", zh = "我该如何在忙碌中安静下来？" },
+	{ en = "What might I be grateful for today?", zh = "我想知道今天可以为什么感恩。" },
 }
 
 VerseData.Verses = {
