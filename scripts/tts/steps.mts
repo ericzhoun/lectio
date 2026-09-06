@@ -12,16 +12,27 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { STEP_COPY, STEP_ORDER } from '../../src/lib/dailySteps';
 import {
-  listMp3s, PUBLIC_AUDIO, readJson, sha8, STEPS_MANIFEST, synthesize, writeJson,
-  type Job, type Lang,
+  listMp3s, openaiClipIdentity, PUBLIC_AUDIO, readJson, sha8, STEPS_MANIFEST, synthesize,
+  writeJson, type Engine, type Job, type Lang,
 } from './lib.mts';
 
 const LANGS: Lang[] = ['en', 'zh'];
 const HERE = dirname(fileURLToPath(import.meta.url));
 
-interface StepClip { file: string; hash: string; text: string }
+const args = process.argv.slice(2);
+const value = (name: string): string | undefined => {
+  const i = args.indexOf(name);
+  return i >= 0 ? args[i + 1] : undefined;
+};
+const ENGINE = (value('--engine') ?? 'chatterbox') as Engine;
+if (ENGINE !== 'chatterbox' && ENGINE !== 'kokoro' && ENGINE !== 'openai') {
+  console.error(`unknown engine: ${ENGINE} (expected chatterbox | kokoro | openai)`);
+  process.exit(1);
+}
+
+interface StepClip { file: string; hash: string; text: string; engine: string; model?: string }
 type StepsManifest = {
-  generator: 'chatterbox-mtl';
+  generator: string;
   steps: Record<Lang, Record<string, StepClip>>;
 };
 
@@ -34,19 +45,29 @@ const clipText = (lang: Lang, step: string): string => {
     : `${copy.name.en}. ${copy.prompt.en}`;
 };
 
-const manifest: StepsManifest = { generator: 'chatterbox-mtl', steps: { en: {}, zh: {} } };
+const manifest: StepsManifest = { generator: ENGINE, steps: { en: {}, zh: {} } };
 const pending: Job[] = [];
 
 for (const lang of LANGS) {
   for (const step of STEP_ORDER) {
     const text = clipText(lang, step);
-    const hash = sha8(text);
+    // The hash covers the whole artifact identity: a different engine, model
+    // or voice must land in a new file, never silently overwrite the old one
+    // (which edge caches may still hold under the same URL).
+    const model = ENGINE === 'openai' ? openaiClipIdentity(lang).split('|')[0] : undefined;
+    const identity = ENGINE === 'openai'
+      ? `${ENGINE}|${openaiClipIdentity(lang)}|${text}`
+      : `${ENGINE}|${text}`;
+    const hash = sha8(identity);
     const file = `/audio/steps/${lang}/${step}-${hash}.mp3`;
     const previous = existing?.steps[lang]?.[step];
     const mp3 = join(PUBLIC_AUDIO, 'steps', lang, `${step}-${hash}.mp3`);
-    manifest.steps[lang][step] = { file, hash, text };
-    if (previous?.hash === hash && existsSync(join(PUBLIC_AUDIO, previous.file.slice(1)))) continue;
-    if (existsSync(mp3)) continue; // same content, manifest was lost
+    manifest.steps[lang][step] = { file, hash, text, engine: ENGINE, ...(model ? { model } : {}) };
+    if (
+      previous?.hash === hash && previous.engine === ENGINE &&
+      existsSync(join(PUBLIC_AUDIO, previous.file.slice(1)))
+    ) continue;
+    if (existsSync(mp3)) continue; // same artifact, manifest was lost
     pending.push({
       id: `${lang}-${step}`, lang, text,
       wav: join(HERE, '..', '..', '.tts-work', `${lang}-${step}.wav`),
@@ -60,7 +81,7 @@ if (pending.length === 0) {
 } else {
   console.log(`tts:steps — synthesizing ${pending.length} clip(s) ...`);
   const started = Date.now();
-  const { ok, failed } = await synthesize(pending);
+  const { ok, failed } = await synthesize(pending, { engine: ENGINE });
   for (const f of failed) console.error(`FAILED ${f.job.id}: ${f.error}`);
   console.log(`tts:steps — ${ok.length} clip(s) in ${((Date.now() - started) / 1000).toFixed(0)}s`);
   if (failed.length > 0) process.exitCode = 1;

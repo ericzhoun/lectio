@@ -132,7 +132,12 @@ Regenerate locally (requires the TTS toolbox venvs; see `scripts/tts/`). Two eng
 default `chatterbox` (best cloning-style voice, ~2.6 min/clip on GPU) and `kokoro`
 (hexgrad/Kokoro-82M, preset voices af_heart/zm_yunxi, ~1.3 s/clip on GPU):
 
-    npm run tts:steps                  # the 12 guidance clips; skips clips whose text is unchanged
+    npm run tts:steps -- --engine openai
+                                       # the 12 guidance clips via OpenAI TTS
+                                       # (en=tts-1-hd/onyx, zh=gpt-4o-mini-tts/shimmer -
+                                       #  tts-1-hd garbles Mandarin, so zh uses the
+                                       #  newer model; needs OPENAI_API_KEY).
+                                       # Default engine remains chatterbox.
     npm run tts:passages -- --next 7   # a rolling window; resumable, skips days already on disk
     npm run tts:passages -- --all --yes --engine kokoro
                                        # the whole 1826-day table, future days first;

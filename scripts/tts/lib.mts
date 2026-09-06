@@ -18,16 +18,53 @@ export const CHATTERBOX_PYTHON =
 export const KOKORO_PYTHON =
   process.env.KOKORO_PYTHON ?? 'D:\\workplace\\TTS\\kokoro\\.venv\\Scripts\\python.exe';
 
-export type Engine = 'chatterbox' | 'kokoro';
+export type Engine = 'chatterbox' | 'kokoro' | 'openai';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const SYNTH = join(HERE, 'synth.py');
 const SYNTH_KOKORO = join(HERE, 'synth_kokoro.py');
 
-const WORKERS: Record<Engine, { py: string; script: string }> = {
+const WORKERS: Record<Exclude<Engine, 'openai'>, { py: string; script: string }> = {
   chatterbox: { py: CHATTERBOX_PYTHON, script: SYNTH },
   kokoro: { py: KOKORO_PYTHON, script: SYNTH_KOKORO },
 };
+
+// OpenAI TTS runs straight from Node (no venv). Per-language model choice is
+// deliberate: tts-1-hd garbles Mandarin - ASR round-trip shows English
+// phonemes leaking in - so Chinese goes through gpt-4o-mini-tts, which also
+// accepts delivery instructions. Override via OPENAI_VOICE_EN / OPENAI_VOICE_ZH.
+const OPENAI_MODELS: Record<Lang, string> = { en: 'tts-1-hd', zh: 'gpt-4o-mini-tts' };
+const OPENAI_VOICES: Record<Lang, string> = { en: 'onyx', zh: 'shimmer' };
+
+/** The identity of an OpenAI clip for one language (part of the file hash). */
+export function openaiClipIdentity(lang: Lang): string {
+  const model = OPENAI_MODELS[lang];
+  const voice = process.env[`OPENAI_VOICE_${lang.toUpperCase()}`] ?? OPENAI_VOICES[lang];
+  return `${model}|${voice}`;
+}
+
+async function openaiSynthesizeJob(job: Job): Promise<void> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) throw new Error('OPENAI_API_KEY is not set');
+  const lang = job.lang;
+  const model = OPENAI_MODELS[lang];
+  const voice = process.env[`OPENAI_VOICE_${lang.toUpperCase()}`] ?? OPENAI_VOICES[lang];
+  const body: Record<string, unknown> = { model, voice, input: job.text, response_format: 'wav' };
+  if (model === 'gpt-4o-mini-tts') {
+    body.instructions =
+      'Speak slowly, calmly and reverently, like a quiet retreat guide reading scripture. ' +
+      '咬字清晰，语速平缓，庄重安详。';
+  }
+  const res = await fetch('https://api.openai.com/v1/audio/speech', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(`openai tts ${res.status}: ${(await res.text()).slice(0, 200)}`);
+  }
+  writeFileSync(job.wav, Buffer.from(await res.arrayBuffer()));
+}
 
 /** Temp wavs + job files; never committed. */
 export const WORK = join(ROOT, '.tts-work');
@@ -88,11 +125,6 @@ export async function synthesize(
   if (jobs.length === 0) return { ok, failed };
 
   mkdirSync(WORK, { recursive: true });
-  const jobsFile = join(WORK, `jobs-${Date.now()}.jsonl`);
-  writeFileSync(
-    jobsFile,
-    jobs.map((j) => JSON.stringify({ id: j.id, lang: j.lang, text: j.text, out: j.wav })).join('\n'),
-  );
 
   let current: Job | undefined;
   const byId = new Map(jobs.map((j) => [j.id, j]));
@@ -122,37 +154,59 @@ export async function synthesize(
     );
   };
 
-  const worker = WORKERS[engine];
-  // Each worker takes only the flags it understands.
-  const workerArgs = engine === 'kokoro'
-    ? [worker.script, '--jobs', jobsFile]
-    : [worker.script, '--jobs', jobsFile, '--exaggeration', String(exaggeration), '--cfg', String(cfg)];
-
-  await run(
-    worker.py,
-    workerArgs,
-    (line) => {
-      let event: { event?: string; id?: string; error?: string };
+  if (engine === 'openai') {
+    // Node-side engine: no venv worker, one API call per clip, sequential to
+    // stay gentle with the API.
+    for (const job of jobs) {
       try {
-        event = JSON.parse(line);
-      } catch {
-        console.log(`  [synth] ${line}`);
-        return;
-      }
-      const job = event.id ? byId.get(event.id) : current;
-      if (event.event === 'chunk') {
-        current = job;
-        return;
-      }
-      if (event.event === 'done' && job) {
+        await openaiSynthesizeJob(job);
         console.log(`  [synth] done ${job.id}`);
         startEncode(job);
-      } else if (event.event === 'error' && job) {
-        failed.push({ job, error: event.error ?? 'unknown' });
-        console.error(`  [synth] FAILED ${job.id}: ${event.error}`);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        failed.push({ job, error: msg });
+        console.error(`  [synth] FAILED ${job.id}: ${msg}`);
       }
-    },
-  );
+    }
+  } else {
+    const worker = WORKERS[engine];
+    const jobsFile = join(WORK, `jobs-${Date.now()}.jsonl`);
+    writeFileSync(
+      jobsFile,
+      jobs.map((j) => JSON.stringify({ id: j.id, lang: j.lang, text: j.text, out: j.wav })).join('\n'),
+    );
+    // Each worker takes only the flags it understands.
+    const workerArgs = engine === 'kokoro'
+      ? [worker.script, '--jobs', jobsFile]
+      : [worker.script, '--jobs', jobsFile, '--exaggeration', String(exaggeration), '--cfg', String(cfg)];
+
+    await run(
+      worker.py,
+      workerArgs,
+      (line) => {
+        let event: { event?: string; id?: string; error?: string };
+        try {
+          event = JSON.parse(line);
+        } catch {
+          console.log(`  [synth] ${line}`);
+          return;
+        }
+        const job = event.id ? byId.get(event.id) : current;
+        if (event.event === 'chunk') {
+          current = job;
+          return;
+        }
+        if (event.event === 'done' && job) {
+          console.log(`  [synth] done ${job.id}`);
+          startEncode(job);
+        } else if (event.event === 'error' && job) {
+          failed.push({ job, error: event.error ?? 'unknown' });
+          console.error(`  [synth] FAILED ${job.id}: ${event.error}`);
+        }
+      },
+    );
+    rmSync(jobsFile, { force: true });
+  }
 
   // Safety net: a wav that exists but whose done event was missed still gets
   // encoded; a job with neither wav nor event is reported as failed.
@@ -161,7 +215,6 @@ export async function synthesize(
     else if (!encoded.has(job.id)) failed.push({ job, error: 'worker produced no file' });
   }
   await Promise.all(encodePromises);
-  rmSync(jobsFile, { force: true });
   return { ok, failed };
 }
 
