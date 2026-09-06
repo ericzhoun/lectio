@@ -44,3 +44,7 @@ logo2.png
 
 # local TTS synthesis workdir (wavs, job files)
 .tts-work/
+
+# TTS output: manifests in src/lib are the source of truth; clips are
+# regenerated locally and ship via the wrangler assets upload
+public/audio/
