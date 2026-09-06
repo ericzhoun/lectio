@@ -95,12 +95,36 @@ const t = {
       }
     : {
         '/pricing': ["What's in Pro?", 'How does the free trial work?', 'Can I cancel anytime?'],
-        '/library': ['What does The Tower mean?', 'Which card means new beginnings?', 'How do reversals work?'],
-        '/': ['How does a reading work?', 'Draw a card for me', 'What can you help with?'],
+        '/library': ['What is this verse about?', 'Which verses are good for anxious times?', "What's the difference between the Old and New Testament?"],
+        '/': ['How does a reading work?', 'What is Lectio Divina?', 'What can you help with?'],
       };
   const DEFAULT_CHIPS = zh
     ? ['你能帮我做什么？', '每日默想次数是怎么算的？', '我过去的默想在哪里看？']
-    : ['What can you help with?', 'How do daily draws work?', 'Where are my past readings?'];
+    : ['What can you help with?', 'How do the daily readings work?', 'Where are my past readings?'];
+
+  // Actions the assistant may offer as [label](action:id) links; clicking one
+  // navigates the site (kept in sync with ASSISTANT_ACTIONS in assistant.ts).
+  const ACTION_DEST: Record<string, string> = {
+    new_reading: '/?new=1',
+    today: '/today',
+    library: '/library',
+    history: '/history',
+    pricing: '/pricing',
+    account: '/account',
+    signup: '/signup',
+  };
+  // Action links drive the site; unknown ids (stale thread in sessionStorage)
+  // are ignored. Plain links navigate natively — same tab for site-relative
+  // hrefs, new tab for external ones.
+  threadEl.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href') ?? '';
+    if (!href.startsWith('action:')) return;
+    e.preventDefault();
+    const dest = ACTION_DEST[href.slice(7)];
+    if (dest) window.location.href = dest;
+  });
 
   const HISTORY_SENT = 10;
   const THREAD_KEPT = 20;
@@ -416,6 +440,13 @@ const t = {
   .assistant-msg-assistant ul:last-child, .assistant-msg-assistant ol:last-child { margin-bottom: 0; }
   .assistant-msg-assistant li { margin: 2px 0; }
   .assistant-msg-assistant a { color: #5b4b8a; }
+  /* Assistant-offered actions render as tappable pills that navigate the site. */
+  .assistant-msg-assistant a[href^="action:"] {
+    display: inline-block; margin: 3px 4px 3px 0;
+    padding: 4px 12px; border: 1px solid #5b4b8a; border-radius: 999px;
+    text-decoration: none; font-size: 13px; font-weight: 600;
+  }
+  .assistant-msg-assistant a[href^="action:"]:hover { background: #f1eef9; }
   .assistant-msg-assistant code { background: rgba(0, 0, 0, 0.07); border-radius: 4px; padding: 0 4px; font-size: 12.5px; }
   .assistant-msg-error { align-self: flex-start; background: #fdecea; color: #7a2b23; display: flex; gap: 8px; align-items: center; }
   .assistant-msg-error button { border: 1px solid #7a2b23; background: none; color: #7a2b23; border-radius: 8px; padding: 2px 8px; cursor: pointer; font-size: 12px; }

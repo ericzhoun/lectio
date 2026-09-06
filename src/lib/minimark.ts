@@ -32,12 +32,19 @@ function inline(escaped: string): string {
     return `\u0000${codeSpans.length - 1}\u0000`;
   });
 
-  // Links [text](url). Href allowlist: http(s) or site-relative. The input is
-  // pre-escaped, so quotes inside the url are &quot; and cannot break out of
-  // the attribute.
+  // Links [text](url). Href allowlist: http(s), site-relative, or an assistant
+  // action (action:id, dispatched by the chat client to drive the site). The
+  // input is pre-escaped, so quotes inside the url are &quot; and cannot break
+  // out of the attribute. Site-relative and action links navigate in the same
+  // tab; external links open in a new one.
   s = s.replace(/\[([^\]\n]+)\]\(([^()\s]+)\)/g, (m, text: string, url: string) => {
-    if (!/^(https?:\/\/|\/)/i.test(url)) return m;
-    return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    if (/^https?:\/\//i.test(url)) {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    }
+    if (/^\//.test(url) || /^action:[a-z_-]+$/i.test(url)) {
+      return `<a href="${url}">${text}</a>`;
+    }
+    return m;
   });
 
   // Bold **x** before italic *x* so ** never leaks into <em>.

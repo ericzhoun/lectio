@@ -71,6 +71,21 @@ export function buildGroundingFacts(): string {
   ].join('\n');
 }
 
+/**
+ * Site actions the assistant may offer as [label](action:id) links so a
+ * visitor's request ("draw a card for me") can actually drive the site.
+ * AssistantWidget maps each id to a navigation target — keep the two in sync.
+ */
+export const ASSISTANT_ACTIONS: readonly { id: string; does: string }[] = [
+  { id: 'new_reading', does: 'go to a fresh reading form so the visitor can receive verses (use for "draw a card" or "give me a reading" requests)' },
+  { id: 'today', does: "open today's guided reading, step by step" },
+  { id: 'library', does: 'open the verse library' },
+  { id: 'history', does: 'open past readings' },
+  { id: 'pricing', does: 'open the plans page' },
+  { id: 'account', does: 'open plan status' },
+  { id: 'signup', does: 'open free registration' },
+];
+
 export function buildSystemPrompt(opts: {
   lang: Lang;
   context: PageContext | null;
@@ -99,7 +114,13 @@ export function buildSystemPrompt(opts: {
     '(**bold**, dash or numbered lists, [label](/path) links to site pages); ' +
     'never use markdown headings (#), tables, code blocks or horizontal rules. ' +
     `Default to writing in ${langName}; if the visitor writes in another language, reply in theirs.`;
-  const parts = [role, rules, `Site facts:\n${opts.grounding}`];
+  const actions =
+    'Actions: you can end a reply with action buttons that drive the site. ' +
+    'Write each one on its own line as a markdown link whose url is action: plus an id:\n' +
+    ASSISTANT_ACTIONS.map((a) => `- [label](action:${a.id}) - ${a.does}`).join('\n') +
+    '\nOffer an action only when it is the natural next step (the visitor wants to start or redo a reading, ' +
+    'or reach a page); one or two at most. Use only the ids above, and never wrap an action link inside a sentence.';
+  const parts = [role, rules, actions, `Site facts:\n${opts.grounding}`];
 
   if (opts.context) {
     // Two spaces after the path are intentional — the prompt contract asserts

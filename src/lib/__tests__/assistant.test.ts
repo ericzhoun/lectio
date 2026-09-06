@@ -41,6 +41,17 @@ describe('buildGroundingFacts', () => {
   });
 });
 
+describe('assistant actions menu', () => {
+  it('offers a fixed action menu so replies can drive the site', () => {
+    const p = buildSystemPrompt({ lang: 'en', context: null, grounding: buildGroundingFacts() });
+    expect(p).toContain('action:new_reading');
+    expect(p).toContain('action:today');
+    expect(p).toContain('action:history');
+    expect(p).toContain('action:pricing');
+    expect(p).toContain('action:signup');
+  });
+});
+
 describe('buildSystemPrompt', () => {
   it('declares the three roles, safety rails and language rule', () => {
     const p = buildSystemPrompt({ lang: 'zh', context: null, grounding: buildGroundingFacts() });

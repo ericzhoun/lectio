@@ -12,9 +12,13 @@ describe('renderMarkdownLite - inline formatting', () => {
     expect(renderMarkdownLite('see snake_case_name here')).toBe('<p>see snake_case_name here</p>');
   });
 
-  it('renders links and rejects non-http(s), non-relative hrefs', () => {
-    expect(renderMarkdownLite('[Pricing](/pricing)')).toBe(
-      '<p><a href="/pricing" target="_blank" rel="noopener noreferrer">Pricing</a></p>'
+  it('renders relative links same-tab, external links new-tab, and allows action links', () => {
+    expect(renderMarkdownLite('[Pricing](/pricing)')).toBe('<p><a href="/pricing">Pricing</a></p>');
+    expect(renderMarkdownLite('[Docs](https://example.com)')).toBe(
+      '<p><a href="https://example.com" target="_blank" rel="noopener noreferrer">Docs</a></p>'
+    );
+    expect(renderMarkdownLite('[Start](action:new_reading)')).toBe(
+      '<p><a href="action:new_reading">Start</a></p>'
     );
     const js = renderMarkdownLite('[click](javascript:alert(1))');
     expect(js).not.toContain('<a ');
