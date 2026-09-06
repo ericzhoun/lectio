@@ -14,6 +14,9 @@ vi.mock('cloudflare:workers', () => ({
         return store.run(model, input);
       },
     },
+    // Static-assets binding. The prebuilt-clip lookup runs before synthesis;
+    // a 404 here sends the endpoint down the synthesis path these tests cover.
+    ASSETS: { fetch: async () => new Response(null, { status: 404 }) },
   },
 }));
 

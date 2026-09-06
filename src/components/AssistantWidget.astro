@@ -28,10 +28,26 @@ const t = {
   error: zh ? '我暂时没能回复，请重试。' : "I couldn't respond just now. Please try again.",
   retry: zh ? '重试' : 'Retry',
   thinking: zh ? '思考中…' : 'Thinking…',
+  bubbleText: zh ? '提问' : 'Ask a question',
+  teaserTitle: zh ? '有问题吗？' : 'Questions?',
+  teaserBody: zh
+    ? '点这里就能向助手提问，比如今天经文的意思，或网站的使用方法。'
+    : "Chat with the assistant — ask what today's reading means, or how the site works.",
+  teaserCta: zh ? '开始提问' : 'Ask a question',
+  teaserDismiss: zh ? '关闭提示' : 'Dismiss tip',
 };
 ---
 <div id="assistant-root" data-logged-in={loggedIn ? '1' : '0'} data-lang={lang}>
-  <button type="button" id="assistant-bubble" aria-label={t.bubbleLabel}>✦</button>
+  <div id="assistant-teaser" hidden role="status">
+    <button type="button" id="assistant-teaser-close" aria-label={t.teaserDismiss}>×</button>
+    <p class="assistant-teaser-title">{t.teaserTitle}</p>
+    <p class="assistant-teaser-body">{t.teaserBody}</p>
+    <button type="button" id="assistant-teaser-open" class="assistant-teaser-cta">{t.teaserCta}</button>
+  </div>
+  <button type="button" id="assistant-bubble" aria-label={t.bubbleLabel}>
+    <span class="assistant-bubble-icon" aria-hidden="true">✦</span>
+    <span class="assistant-bubble-label">{t.bubbleText}</span>
+  </button>
   <section id="assistant-panel" hidden aria-label={t.title}>
     <header class="assistant-head">
       <strong>{t.title}</strong>
@@ -91,6 +107,9 @@ const t = {
   const STORE_KEY = 'inspire-assistant-thread';
 
   const bubble = document.getElementById('assistant-bubble') as HTMLButtonElement;
+  const teaser = document.getElementById('assistant-teaser') as HTMLElement;
+  const teaserClose = document.getElementById('assistant-teaser-close') as HTMLButtonElement;
+  const teaserOpen = document.getElementById('assistant-teaser-open') as HTMLButtonElement;
   const panel = document.getElementById('assistant-panel') as HTMLElement;
   const minimizeBtn = document.getElementById('assistant-minimize') as HTMLButtonElement;
   const threadEl = document.getElementById('assistant-thread') as HTMLElement;
@@ -115,6 +134,25 @@ const t = {
     try { sessionStorage.setItem(STORE_KEY, JSON.stringify(thread.slice(-THREAD_KEPT))); } catch { /* ignore */ }
   };
   const scroll = () => { threadEl.scrollTop = threadEl.scrollHeight; };
+
+  // One-time first-visit teaser: a labeled card pointing at the question
+  // bubble, so new users can discover that they can ask things. Once they
+  // open the assistant (or dismiss it) it never shows again.
+  const TEASER_KEY = 'inspire-assistant-teaser-seen';
+  let teaserSeen = false;
+  try { teaserSeen = localStorage.getItem(TEASER_KEY) === '1'; } catch { /* ignore */ }
+  function dismissTeaser() {
+    teaser.hidden = true;
+    teaserSeen = true;
+    try { localStorage.setItem(TEASER_KEY, '1'); } catch { /* ignore */ }
+  }
+  function maybeShowTeaser() {
+    if (teaserSeen || thread.length > 0) return;
+    setTimeout(() => { if (!teaserSeen && panel.hidden) teaser.hidden = false; }, 1500);
+  }
+  teaserClose.addEventListener('click', dismissTeaser);
+  teaserOpen.addEventListener('click', () => { dismissTeaser(); openPanel(); });
+  maybeShowTeaser();
 
   function bubbleEl(role: 'user' | 'assistant' | 'error', content: string): HTMLElement {
     const el = document.createElement('div');
@@ -265,6 +303,7 @@ const t = {
   });
 
   function openPanel() {
+    dismissTeaser();
     panel.hidden = false;
     bubble.hidden = true;
     // Rebuild the thread from state on every open so reopening never duplicates.
@@ -301,12 +340,39 @@ const t = {
   }
   #assistant-root [hidden] { display: none !important; }
   #assistant-bubble {
-    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
-    font-size: 22px; color: #fff; background: linear-gradient(135deg, #5b4b8a, #2e2654);
+    height: 52px; border-radius: 999px; border: none; cursor: pointer;
+    display: flex; align-items: center; gap: 9px;
+    padding: 0 20px 0 16px;
+    color: #fff; background: linear-gradient(135deg, #5b4b8a, #2e2654);
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); transition: transform 0.15s ease;
     margin-left: auto; pointer-events: auto;
+    font-size: 15px; font-weight: 600;
   }
-  #assistant-bubble:hover { transform: scale(1.06); }
+  .assistant-bubble-icon { font-size: 19px; line-height: 1; }
+  #assistant-bubble:hover { transform: scale(1.05); }
+  #assistant-teaser {
+    position: relative;
+    width: min(270px, 100%);
+    margin: 0 4px 12px auto;
+    padding: 14px 16px;
+    background: #fff; color: #222; border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
+    animation: assistant-rise 0.18s ease;
+    font-size: 13px; line-height: 1.5;
+  }
+  #assistant-teaser .assistant-teaser-title { margin: 0 0 4px; font-weight: 600; font-size: 14px; }
+  #assistant-teaser .assistant-teaser-body { margin: 0 0 10px; }
+  #assistant-teaser-close {
+    position: absolute; top: 4px; right: 8px;
+    background: none; border: none; cursor: pointer;
+    font-size: 18px; line-height: 1; color: #888;
+  }
+  #assistant-teaser .assistant-teaser-cta {
+    border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer;
+    background: #5b4b8a; color: #fff; font-size: 13px; font-weight: 600;
+  }
   #assistant-panel {
     width: min(380px, 100%); max-height: 70dvh;
     display: flex; flex-direction: column;
@@ -318,7 +384,7 @@ const t = {
   }
   @keyframes assistant-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) {
-    #assistant-panel, #assistant-bubble { animation: none; transition: none; }
+    #assistant-panel, #assistant-bubble, #assistant-teaser { animation: none; transition: none; }
   }
   .assistant-head {
     display: flex; align-items: center; gap: 8px;
