@@ -171,9 +171,32 @@ const fmtDate = (iso: string | null | undefined): string => {
         </form>
       )}
       <a class="explore-button" href={`/history?lang=${lang}`}>{lang === 'zh' ? '查看历史记录' : 'View history'}</a>
+      <button type="button" id="theme-toggle" class="theme-toggle"></button>
       <form method="post" action="/api/auth/logout">
         <button type="submit" class="reset-button">{lang === 'zh' ? '登出' : 'Log out'}</button>
       </form>
     </div>
   </div>
 </Layout>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const labels: Record<string, string> = {
+    dark: document.documentElement.lang === 'zh' ? '🌙 深色主题' : '🌙 Dark theme',
+    light: document.documentElement.lang === 'zh' ? '☀️ 浅色主题' : '☀️ Light theme',
+  };
+
+  const sync = () => {
+    const current = document.documentElement.getAttribute('data-theme') ?? 'dark';
+    if (toggle) toggle.textContent = labels[current] ?? labels.dark;
+  };
+
+  toggle?.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch { /* private mode; session-only */ }
+    sync();
+  });
+
+  sync();
+</script>
