@@ -6,6 +6,7 @@ import { verifySessionToken } from '../../lib/session';
 import { resolveLang } from '../../lib/i18n';
 import { resolveLocalDay, DAY_COOKIE } from '../../lib/localDay';
 import { ensureSession, getSession } from '../../lib/dailySession';
+import { takeAnonProgress } from '../../lib/anonProgress';
 
 const lang = resolveLang(Astro);
 const day = resolveLocalDay(Astro);
@@ -28,7 +29,14 @@ const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSI
 if (!userId) return Astro.redirect('/today/silencio');
 
 const existing = await getSession(userId, day);
-if (!existing) await ensureSession(userId, day, lang);
+if (!existing) {
+  // A reader who signed in mid-walk resumes where their anonymous steps ended,
+  // recorded in the signed anon-progress cookie, instead of starting over.
+  await ensureSession(
+    userId, day, lang, env.DB,
+    await takeAnonProgress(Astro.cookies, day, env.SESSION_SECRET)
+  );
+}
 
 // A finished day opens at its summary rather than starting over.
 if (existing?.completedAt) return Astro.redirect('/today/amen');

@@ -14,6 +14,7 @@ import { hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../li
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
 } from '../../lib/dailySession';
+import { recordAnonProgress, takeAnonProgress } from '../../lib/anonProgress';
 import { handleStepSubmit, STEP_TEXT_MAX_CHARS } from '../../lib/dailySubmit';
 import type { WritingStep } from '../../lib/dailyReflection';
 
@@ -68,6 +69,10 @@ if (!userId && !ANON_STEPS.includes(step)) {
   return Astro.redirect(`/login?lang=${lang}&returnTo=${returnTo}`);
 }
 
+// An anonymous walk leaves no session row to remember it, so the furthest step
+// reached travels in a signed cookie and seeds the session once they sign in.
+if (!userId) await recordAnonProgress(Astro.cookies, day, step, env.SESSION_SECRET);
+
 const isWriting = (WRITING_STEPS as readonly Step[]).includes(step);
 
 // An anonymous reader has genuinely reached whichever step they are on; there
@@ -75,7 +80,15 @@ const isWriting = (WRITING_STEPS as readonly Step[]).includes(step);
 // stuck at the first step.
 let reached: Step = userId ? 'silencio' : step;
 if (userId) {
-  const session = (await getSession(userId, day)) ?? (await ensureSession(userId, day, lang));
+  let session = await getSession(userId, day);
+  if (!session) {
+    // First session since signing in mid-walk: resume where the anonymous
+    // reader left off rather than restarting at Silencio.
+    session = await ensureSession(
+      userId, day, lang, env.DB,
+      await takeAnonProgress(Astro.cookies, day, env.SESSION_SECRET)
+    );
+  }
   reached = session.reachedStep;
   // No jumping ahead: nobody lands on Oratio without having read.
   if (!canOpenStep(reached, step)) return Astro.redirect(`/today/${reached}`);

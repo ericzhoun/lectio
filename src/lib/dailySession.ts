@@ -88,17 +88,19 @@ export async function getSession(
 }
 
 export async function ensureSession(
-  userId: string, day: string, lang: Lang, db: D1Database = env.DB
+  userId: string, day: string, lang: Lang, db: D1Database = env.DB,
+  seedStep: Step | null = null
 ): Promise<DailySessionRow> {
   await ensureTables(db);
   // The language is pinned at creation: switching mid-session would strand the
-  // reader's own words beside a different translation.
+  // reader's own words beside a different translation. A reader who signed in
+  // mid-walk resumes at the step their anonymous walk had already reached.
   await db
     .prepare(
-      `INSERT INTO daily_sessions (user_id, day, lang) VALUES (?, ?, ?)
+      `INSERT INTO daily_sessions (user_id, day, lang, reached_step) VALUES (?, ?, ?, ?)
        ON CONFLICT(user_id, day) DO NOTHING`
     )
-    .bind(userId, day, lang)
+    .bind(userId, day, lang, seedStep ?? 'silencio')
     .run();
   const row = await getSession(userId, day, db);
   if (!row) throw new Error(`daily session missing after insert: ${userId} ${day}`);

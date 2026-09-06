@@ -41,6 +41,18 @@ describe('ensureSession', () => {
     expect(again.lang).toBe('en');
     expect(again.reachedStep).toBe('oratio');
   });
+
+  it('seeds the reached step for a walk resumed after sign-in', async () => {
+    const s = await ensureSession('u1', '2026-09-04', 'en', db, 'lectio');
+    expect(s.reachedStep).toBe('lectio');
+  });
+
+  it('ignores the seed when the session already exists', async () => {
+    await ensureSession('u1', '2026-09-04', 'en', db);
+    await advanceTo('u1', '2026-09-04', 'oratio', db);
+    const again = await ensureSession('u1', '2026-09-04', 'en', db, 'lectio');
+    expect(again.reachedStep).toBe('oratio');
+  });
 });
 
 describe('saveStepEntry', () => {
