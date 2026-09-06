@@ -9,7 +9,7 @@ import { resolveLang } from '../../lib/i18n';
 import { resolveActiveDay } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
-import { isStep, nextStep, STEP_COPY, WRITING_STEPS, type Step } from '../../lib/dailySteps';
+import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, type Step } from '../../lib/dailySteps';
 import { hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../lib/audio';
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
@@ -126,113 +126,134 @@ const advanceHref = next ? `/today/${next}` : '/today/amen';
 const continueLabel = lang === 'zh' ? '继续' : 'Continue';
 ---
 
-<Layout title={`${copy.name[lang]} · ${entry.title[lang]}`} lang={lang} noindex={true}>
-  <article class="daily">
-    <header>
-      <p class="day">{entry.title[lang]}</p>
-      <h1>{copy.name[lang]}</h1>
-      <p class="prompt">{copy.prompt[lang]}</p>
-      {stepAudio && (
-        <button type="button" class="listen" data-clip={stepAudio}
-          aria-label={lang === 'zh' ? '朗读引导语' : 'Listen to the guidance'}
-        >{lang === 'zh' ? '▶ 引导' : '▶ Guidance'}</button>
-      )}
+<Layout title={`${copy.name[lang]} · ${entry.title[lang]}`} lang={lang} noindex={true} chrome="minimal">
+  <article class="daily ritual">
+    <header class="ritual-top">
+      <DailyProgress reached={reached} current={step} lang={lang} variant="dots" />
+      <span class="ritual-count">
+        {lang === 'zh' ? `第 ${stepIndex(step) + 1} 步，共 6 步` : `Step ${stepIndex(step) + 1} of 6`}
+      </span>
+      <a class="ritual-exit" href="/today" aria-label={lang === 'zh' ? '退出本次诵读' : 'Exit this session'}>✕</a>
     </header>
 
-    <DailyProgress reached={reached} current={step} lang={lang} />
+    <div class="ritual-body">
+      <header>
+        <p class="day">{entry.title[lang]}</p>
+        <h1>{copy.name[lang]}</h1>
+        <p class="prompt">{copy.prompt[lang]}</p>
+        {stepAudio && (
+          <button type="button" class="listen" data-clip={stepAudio}
+            aria-label={lang === 'zh' ? '朗读引导语' : 'Listen to the guidance'}
+          >{lang === 'zh' ? '▶ 引导' : '▶ Guidance'}</button>
+        )}
+      </header>
 
-    {step === 'silencio' && (
-      <section class="silence">
-        <div class="timer" data-seconds="60" aria-live="polite"></div>
-        <a class="advance" href={advanceHref}>{lang === 'zh' ? '开始' : 'Begin'}</a>
-        {guidedAvailable && (
-          <div class="guided">
-            <button type="button" class="listen" data-guided={JSON.stringify(guidedItems)}
-              aria-label={lang === 'zh' ? '播放整场引导音频' : 'Play the whole guided session'}
-            >{lang === 'zh' ? '▶ 整场引导' : '▶ Guided session'}</button>
-            <p class="guided-now" data-guided-now hidden aria-live="polite"></p>
-            <p class="guided-hint">
-              {lang === 'zh' ? '依次朗读六个步骤与经文，之间留出安歇的时间。' : 'Reads the six steps and the passage aloud, with rests between.'}
-            </p>
+      {step === 'silencio' && (
+        <section class="silence">
+          <div class="timer" data-seconds="60" aria-live="polite"></div>
+          {guidedAvailable && (
+            <div class="guided">
+              <button type="button" class="listen" data-guided={JSON.stringify(guidedItems)}
+                aria-label={lang === 'zh' ? '播放整场引导音频' : 'Play the whole guided session'}
+              >{lang === 'zh' ? '▶ 整场引导' : '▶ Guided session'}</button>
+              <p class="guided-now" data-guided-now hidden aria-live="polite"></p>
+              <p class="guided-hint">
+                {lang === 'zh' ? '依次朗读六个步骤与经文，之间留出安歇的时间。' : 'Reads the six steps and the passage aloud, with rests between.'}
+              </p>
+            </div>
+          )}
+        </section>
+      )}
+
+      {step === 'lectio' && (
+        <section class="reading">
+          <div class="controls" role="group" aria-label={lang === 'zh' ? '字体大小' : 'Text size'}>
+            <button type="button" data-scale="-1" aria-label={lang === 'zh' ? '缩小字体' : 'Smaller text'}>A-</button>
+            <button type="button" data-scale="0" aria-label={lang === 'zh' ? '默认字体' : 'Default text size'}>A</button>
+            <button type="button" data-scale="1" aria-label={lang === 'zh' ? '放大字体' : 'Larger text'}>A+</button>
           </div>
-        )}
-      </section>
-    )}
+          {passage ? (
+            <>
+              <p class="ref">{passage.ref}</p>
+              <p class="text">{passage.text}</p>
+              <button type="button" class="listen" data-listen data-day={day} data-prebuilt={prebuiltPassage}
+                aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
+              >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
+              <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
+            </>
+          ) : (
+            <p class="text">
+              {lang === 'zh' ? '今天的经文暂时无法显示。' : "Today's passage could not be loaded."}
+            </p>
+          )}
+        </section>
+      )}
 
-    {step === 'lectio' && (
-      <section class="reading">
-        <div class="controls" role="group" aria-label={lang === 'zh' ? '字体大小' : 'Text size'}>
-          <button type="button" data-scale="-1" aria-label={lang === 'zh' ? '缩小字体' : 'Smaller text'}>A-</button>
-          <button type="button" data-scale="0" aria-label={lang === 'zh' ? '默认字体' : 'Default text size'}>A</button>
-          <button type="button" data-scale="1" aria-label={lang === 'zh' ? '放大字体' : 'Larger text'}>A+</button>
-        </div>
-        {passage ? (
-          <>
-            <p class="ref">{passage.ref}</p>
-            <p class="text">{passage.text}</p>
-            <button type="button" class="listen" data-listen data-day={day} data-prebuilt={prebuiltPassage}
-              aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
-            >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
-            <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
-          </>
-        ) : (
-          <p class="text">
-            {lang === 'zh' ? '今天的经文暂时无法显示。' : "Today's passage could not be loaded."}
-          </p>
-        )}
-        <a class="advance" href={advanceHref}>{continueLabel}</a>
-      </section>
-    )}
+      {step === 'contemplatio' && (
+        <section class="rest">
+          {priorText('oratio') && <blockquote class="own-words mine">{priorText('oratio')}</blockquote>}
+          <div class="timer" data-seconds="120" aria-live="polite"></div>
+        </section>
+      )}
 
-    {step === 'contemplatio' && (
-      <section class="rest">
-        {priorText('oratio') && <blockquote class="own-words mine">{priorText('oratio')}</blockquote>}
-        <div class="timer" data-seconds="120" aria-live="polite"></div>
-        <a class="advance" href={advanceHref}>{continueLabel}</a>
-      </section>
-    )}
+      {isWriting && (
+        <section class="writing">
+          {step === 'meditatio' && passage && <p class="text passage-again">{passage.text}</p>}
+          {step !== 'meditatio' && priorText('meditatio') && (
+            <blockquote class="own-words">{priorText('meditatio')}</blockquote>
+          )}
 
-    {isWriting && (
-      <section class="writing">
-        {step === 'meditatio' && passage && <p class="text passage-again">{passage.text}</p>}
-        {step !== 'meditatio' && priorText('meditatio') && (
-          <blockquote class="own-words">{priorText('meditatio')}</blockquote>
-        )}
+          {saved && myEntry ? (
+            <>
+              <blockquote class="own-words mine">{myEntry.userText}</blockquote>
+              {myEntry.aiText
+                ? (
+                  <>
+                    <p class="reply">{myEntry.aiText}</p>
+                    <button type="button" class="listen" data-reply data-day={day} data-step={step}
+                      aria-label={lang === 'zh' ? '朗读回复' : 'Listen to the reply'}
+                    >{lang === 'zh' ? '▶ 听回复' : '▶ Reply'}</button>
+                  </>
+                )
+                : <p class="reply muted">{copy.prompt[lang]}</p>}
+            </>
+          ) : (
+            <form method="post" id="step-form">
+              <label for="step_text">{copy.prompt[lang]}</label>
+              {/* A textarea's value is its children, never a value attribute. */}
+              <textarea
+                id="step_text"
+                name="step_text"
+                rows="5"
+                maxlength={STEP_TEXT_MAX_CHARS}
+                required
+              >{myEntry?.userText ?? ''}</textarea>
+              {submitError === 'empty' && (
+                <p class="error">{lang === 'zh' ? '请先写下一点什么。' : 'Write something first.'}</p>
+              )}
+            </form>
+          )}
+        </section>
+      )}
+    </div>
 
-        {saved && myEntry ? (
-          <>
-            <blockquote class="own-words mine">{myEntry.userText}</blockquote>
-            {myEntry.aiText
-              ? (
-                <>
-                  <p class="reply">{myEntry.aiText}</p>
-                  <button type="button" class="listen" data-reply data-day={day} data-step={step}
-                    aria-label={lang === 'zh' ? '朗读回复' : 'Listen to the reply'}
-                  >{lang === 'zh' ? '▶ 听回复' : '▶ Reply'}</button>
-                </>
-              )
-              : <p class="reply muted">{copy.prompt[lang]}</p>}
-            <a class="advance ready" href={advanceHref}>{continueLabel}</a>
-          </>
-        ) : (
-          <form method="post">
-            <label for="step_text">{copy.prompt[lang]}</label>
-            {/* A textarea's value is its children, never a value attribute. */}
-            <textarea
-              id="step_text"
-              name="step_text"
-              rows="5"
-              maxlength={STEP_TEXT_MAX_CHARS}
-              required
-            >{myEntry?.userText ?? ''}</textarea>
-            {submitError === 'empty' && (
-              <p class="error">{lang === 'zh' ? '请先写下一点什么。' : 'Write something first.'}</p>
-            )}
-            <button type="submit">{continueLabel}</button>
-          </form>
-        )}
-      </section>
-    )}
+    <div class="action-bar">
+      {step === 'silencio' && (
+        <a class="advance bar-action" href={advanceHref}>{lang === 'zh' ? '开始' : 'Begin'}</a>
+      )}
+      {step === 'lectio' && (
+        <a class="advance bar-action ready" href={advanceHref}>{continueLabel}</a>
+      )}
+      {step === 'contemplatio' && (
+        <a class="advance bar-action" href={advanceHref}>{continueLabel}</a>
+      )}
+      {isWriting && saved && (
+        <a class="advance ready bar-action" href={advanceHref}>{continueLabel}</a>
+      )}
+      {isWriting && !saved && (
+        <button type="submit" form="step-form" class="bar-action">{continueLabel}</button>
+      )}
+    </div>
   </article>
 </Layout>
 
@@ -250,6 +271,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         clearInterval(id);
         el.textContent = '';
         el.closest('section')?.classList.add('ready');
+        document.querySelector('.action-bar')?.classList.add('ready');
       }
     }, 1000);
   });
@@ -443,6 +465,24 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     max-width: 38rem;
     margin: 0 auto;
     padding: 2.5rem 1.25rem 4rem;
+  }
+
+  .ritual {
+    padding: 0 1.25rem;
+  }
+
+  /* Page-specific action-bar behavior (frame geometry lives in global.css). */
+  .action-bar .advance { opacity: 0.35; }
+  .action-bar.ready .advance,
+  .action-bar .advance.ready { opacity: 1; }
+  .ritual .advance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+    padding: 0 1.5rem;
+    border: none;
+    border-radius: 14px;
   }
 
   .daily header {

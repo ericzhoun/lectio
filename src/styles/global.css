@@ -785,3 +785,69 @@ form p { margin-bottom: 10px; }
 }
 .mn-row:hover { background: var(--pill-bg); }
 .mn-hint { color: var(--text-dim); font-size: 12px; }
+
+/* ---------- Ritual frame: chrome-free full-height practice pages (M-02) ---------- */
+.ritual {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 40px); /* body padding: 20px top + 20px bottom */
+  min-height: calc(100dvh - 40px);
+  padding: 0 1.25rem;
+}
+/* Overrides .daily header / .amen header (a .ritual-top is also a <header>). */
+.ritual .ritual-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: max(10px, env(safe-area-inset-top)) 0 6px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg);
+  margin-bottom: 0;
+  text-align: left;
+}
+.ritual-count { font-size: 0.75rem; opacity: 0.55; white-space: nowrap; }
+.ritual-exit {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ritual-exit:hover { color: var(--text); }
+.ritual-body { flex: 1 1 auto; }
+.action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin-top: auto;
+  padding: 10px 0 max(12px, env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, var(--bg) 30%);
+}
+.bar-action {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: var(--gold);
+  color: #1c1503;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 14px;
+  min-height: 52px;
+  border: none;
+  border-radius: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.daily-dots { display: flex; gap: 6px; align-items: center; }
+.ddot { width: 8px; height: 8px; border-radius: 50%; background: var(--panel-border); }
+.ddot.done { background: var(--gold); }
+.ddot.current { background: transparent; border: 2px solid var(--gold); }

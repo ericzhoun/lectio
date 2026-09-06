@@ -6,12 +6,23 @@ interface Props {
   reached: Step;
   current: Step;
   lang: Lang;
+  variant?: 'list' | 'dots';
 }
-const { reached, current, lang } = Astro.props;
+const { reached, current, lang, variant = 'list' } = Astro.props;
 const percent = progressPercent(reached);
 const reachedIndex = stepIndex(reached);
 ---
 
+{variant === 'dots' ? (
+  <div class="daily-dots" role="img"
+    aria-label={lang === 'zh' ? '圣言诵读的步骤' : 'Lectio Divina steps'}>
+    {STEP_ORDER.map((s) => {
+      const i = stepIndex(s);
+      const state = s === current ? 'current' : i < reachedIndex ? 'done' : 'locked';
+      return <span class={`ddot ${state}`}></span>;
+    })}
+  </div>
+) : (
 <nav class="daily-progress" aria-label={lang === 'zh' ? '圣言诵读的步骤' : 'Lectio Divina steps'}>
   <ol>
     {STEP_ORDER.map((step) => {
@@ -41,8 +52,12 @@ const reachedIndex = stepIndex(reached);
     <div class="fill" style={`width: ${percent}%`}></div>
   </div>
 </nav>
+)}
 
 <style>
+  /* .daily-dots / .ddot geometry lives in global.css so the amen page can
+     reuse it outside this component. */
+
   .daily-progress {
     margin: 0 auto 2.5rem;
     max-width: 34rem;

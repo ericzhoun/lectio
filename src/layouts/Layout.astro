@@ -13,8 +13,9 @@ interface Props {
   description?: string;
   lang: Lang;
   noindex?: boolean;
+  chrome?: 'full' | 'minimal';
 }
-const { title, description = '', lang, noindex = false } = Astro.props;
+const { title, description = '', lang, noindex = false, chrome = 'full' } = Astro.props;
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
@@ -104,22 +105,24 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
   })} />
 </head>
 <body>
-  <div class="top-nav">
-    {path !== '/' && <a href="/" style={isActive('/') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '首页' : 'Home'}</a>}
-    {userId ? (
-      <a href="/account" style={isActive('/account') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '账户' : 'Account'}</a>
-    ) : (
-      <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
-    )}
-    <a href="/today" data-event="cta_click" data-event-props='{"slot":"nav_today"}' style={isActive('/today') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '今日' : 'Today'}</a>
-    <a href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}' style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '价格' : 'Pricing'}</a>
-    <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '经文库' : 'Verse Library'}</a>
-    <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
-    <a href="/privacy" style={isActive('/privacy') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '隐私' : 'Privacy'}</a>
-    <a href={langSwitchHref(Astro, 'zh')} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>
-    <a href={langSwitchHref(Astro, 'en')} style={lang === 'en' ? 'font-weight: bold;' : undefined}>English</a>
-  </div>
-  <MobileNav lang={lang} loggedIn={!!userId} />
+  {chrome === 'full' && (
+    <div class="top-nav">
+      {path !== '/' && <a href="/" style={isActive('/') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '首页' : 'Home'}</a>}
+      {userId ? (
+        <a href="/account" style={isActive('/account') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '账户' : 'Account'}</a>
+      ) : (
+        <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
+      )}
+      <a href="/today" data-event="cta_click" data-event-props='{"slot":"nav_today"}' style={isActive('/today') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '今日' : 'Today'}</a>
+      <a href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}' style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '价格' : 'Pricing'}</a>
+      <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '经文库' : 'Verse Library'}</a>
+      <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
+      <a href="/privacy" style={isActive('/privacy') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '隐私' : 'Privacy'}</a>
+      <a href={langSwitchHref(Astro, 'zh')} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>
+      <a href={langSwitchHref(Astro, 'en')} style={lang === 'en' ? 'font-weight: bold;' : undefined}>English</a>
+    </div>
+  )}
+  {chrome === 'full' && <MobileNav lang={lang} loggedIn={!!userId} />}
   <slot />
   {!userId && <LoginOverlay lang={lang} />}
   <script is:inline>

@@ -31,33 +31,44 @@ const entries = await getStepEntries(userId, day);
 const finished = Boolean(session.completedAt);
 ---
 
-<Layout title={`${entry.title[lang]} · Amen`} lang={lang} noindex={true}>
-  <article class="amen">
-    <header>
-      <p class="day">{entry.title[lang]}</p>
-      <h1>{finished ? 'Amen' : (lang === 'zh' ? '未完成' : 'Unfinished')}</h1>
-      {passage && <p class="ref">{passage.ref}</p>}
+<Layout title={`${entry.title[lang]} · Amen`} lang={lang} noindex={true} chrome="minimal">
+  <article class="amen ritual">
+    <header class="ritual-top">
+      <span class="daily-dots" aria-hidden="true">
+        <span class="ddot done"></span><span class="ddot done"></span><span class="ddot done"></span>
+        <span class="ddot done"></span><span class="ddot done"></span><span class="ddot done"></span>
+      </span>
+      <a class="ritual-exit" href="/" aria-label={lang === 'zh' ? '返回首页' : 'Back to the home page'}>✕</a>
     </header>
 
-    {passage && <p class="text">{passage.text}</p>}
+    <div class="ritual-body">
+      <header>
+        <p class="day">{entry.title[lang]}</p>
+        <h1>{finished ? 'Amen' : (lang === 'zh' ? '未完成' : 'Unfinished')}</h1>
+        {passage && <p class="ref">{passage.ref}</p>}
+      </header>
 
-    {entries.length === 0 && (
-      <p class="empty">
-        {lang === 'zh' ? '这一天还没有写下什么。' : 'Nothing was written on this day.'}
-      </p>
-    )}
+      {passage && <p class="text">{passage.text}</p>}
 
-    {entries.map((e) => (
-      <section>
-        <h2>{STEP_COPY[e.step].name[lang]}</h2>
-        <blockquote class="own-words mine">{e.userText}</blockquote>
-        {e.aiText && <p class="reply">{e.aiText}</p>}
-      </section>
-    ))}
+      {entries.length === 0 && (
+        <p class="empty">
+          {lang === 'zh' ? '这一天还没有写下什么。' : 'Nothing was written on this day.'}
+        </p>
+      )}
 
-    <nav class="after">
-      {!finished && <a href="/today">{lang === 'zh' ? '继续今天的诵读' : 'Continue today'}</a>}
-      <a href="/history">{lang === 'zh' ? '查看过往' : 'See past days'}</a>
+      {entries.map((e) => (
+        <section>
+          <h2>{STEP_COPY[e.step].name[lang]}</h2>
+          <blockquote class="own-words mine">{e.userText}</blockquote>
+          {e.aiText && <p class="reply">{e.aiText}</p>}
+        </section>
+      ))}
+    </div>
+
+    <nav class="action-bar">
+      {!finished && <a class="bar-action" href="/today">{lang === 'zh' ? '继续今天的诵读' : 'Continue today'}</a>}
+      {finished && <a class="bar-action" href="/">{lang === 'zh' ? '返回首页' : 'Return home'}</a>}
+      <a class="amen-secondary" href="/history">{lang === 'zh' ? '查看过往' : 'See past days'}</a>
     </nav>
   </article>
 </Layout>
@@ -66,7 +77,7 @@ const finished = Boolean(session.completedAt);
   .amen {
     max-width: 38rem;
     margin: 0 auto;
-    padding: 2.5rem 1.25rem 4rem;
+    padding: 0 1.25rem;
   }
 
   .amen header {
@@ -125,10 +136,15 @@ const finished = Boolean(session.completedAt);
     font-style: italic;
   }
 
-  .after {
-    display: flex;
-    gap: 1.5rem;
-    margin-top: 3rem;
+  .amen-secondary {
+    display: block;
+    text-align: center;
+    margin-top: 6px;
+    color: var(--text-dim, #9aa0b8);
+    text-decoration: none;
     font-size: 0.9rem;
+    min-height: 44px;
+    line-height: 44px;
   }
+  .amen-secondary:hover { color: var(--text, #e8e9f0); }
 </style>
