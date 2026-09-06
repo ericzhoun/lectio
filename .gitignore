@@ -41,3 +41,6 @@ Thumbs.db
 logo2.png
 /.gemini
 /.claude
+
+# local TTS synthesis workdir (wavs, job files)
+.tts-work/

@@ -1,0 +1,4 @@
+# Prebuilt Chatterbox audio. Step clips are content-hashed and day clips are
+# immutable once generated, so both may be cached hard at the edge.
+/audio/*
+  Cache-Control: public, max-age=86400, s-maxage=2592000

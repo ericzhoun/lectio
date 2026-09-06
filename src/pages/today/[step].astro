@@ -10,6 +10,7 @@ import { resolveActiveDay } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
 import { isStep, nextStep, STEP_COPY, WRITING_STEPS, type Step } from '../../lib/dailySteps';
+import { hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../lib/audio';
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
 } from '../../lib/dailySession';
@@ -24,6 +25,37 @@ const lang = resolveLang(Astro);
 const day = resolveActiveDay(Astro);
 const entry = getLectionaryDay(day);
 const passage = resolvePassage(focusReference(entry), lang);
+
+// Prebuilt (Chatterbox) audio for this day and language, when the batch job
+// has already covered it. Days without a clip fall back to /api/tts.
+const stepAudio = stepAudioUrl(lang, step);
+const prebuiltPassage = passage && hasPrebuiltDayAudio(day, lang)
+  ? prebuiltDayAudioUrl(lang, day)
+  : null;
+
+// The guided-session playlist, only ever handed to the browser as URLs: the
+// six step prompts with the day's passage in the middle, separated by the
+// page's own silences. A missing clip (no prebuilt audio yet) drops the whole
+// session rather than half of it.
+const guidedItems: { label: string; src: string; pauseSeconds: number }[] = [];
+if (step === 'silencio') {
+  const say = (s: Step | 'passage', src: string | null, pauseSeconds: number) => {
+    if (!src) return;
+    guidedItems.push({
+      label: s === 'passage' ? (lang === 'zh' ? '经文' : 'Scripture') : STEP_COPY[s].name[lang],
+      src,
+      pauseSeconds,
+    });
+  };
+  say('silencio', stepAudioUrl(lang, 'silencio'), 50);
+  say('lectio', stepAudioUrl(lang, 'lectio'), 6);
+  say('passage', passage ? (prebuiltPassage ?? `/api/tts?day=${day}&lang=${lang}`) : null, 10);
+  say('meditatio', stepAudioUrl(lang, 'meditatio'), 90);
+  say('oratio', stepAudioUrl(lang, 'oratio'), 90);
+  say('contemplatio', stepAudioUrl(lang, 'contemplatio'), 110);
+  say('actio', stepAudioUrl(lang, 'actio'), 0);
+}
+const guidedAvailable = guidedItems.length === 7;
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
@@ -87,6 +119,11 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       <p class="day">{entry.title[lang]}</p>
       <h1>{copy.name[lang]}</h1>
       <p class="prompt">{copy.prompt[lang]}</p>
+      {stepAudio && (
+        <button type="button" class="listen" data-clip={stepAudio}
+          aria-label={lang === 'zh' ? '朗读引导语' : 'Listen to the guidance'}
+        >{lang === 'zh' ? '▶ 引导' : '▶ Guidance'}</button>
+      )}
     </header>
 
     <DailyProgress reached={reached} current={step} lang={lang} />
@@ -95,6 +132,17 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       <section class="silence">
         <div class="timer" data-seconds="60" aria-live="polite"></div>
         <a class="advance" href={advanceHref}>{lang === 'zh' ? '开始' : 'Begin'}</a>
+        {guidedAvailable && (
+          <div class="guided">
+            <button type="button" class="listen" data-guided={JSON.stringify(guidedItems)}
+              aria-label={lang === 'zh' ? '播放整场引导音频' : 'Play the whole guided session'}
+            >{lang === 'zh' ? '▶ 整场引导' : '▶ Guided session'}</button>
+            <p class="guided-now" data-guided-now hidden aria-live="polite"></p>
+            <p class="guided-hint">
+              {lang === 'zh' ? '依次朗读六个步骤与经文，之间留出安歇的时间。' : 'Reads the six steps and the passage aloud, with rests between.'}
+            </p>
+          </div>
+        )}
       </section>
     )}
 
@@ -109,7 +157,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
           <>
             <p class="ref">{passage.ref}</p>
             <p class="text">{passage.text}</p>
-            <button type="button" class="listen" data-listen data-day={day}
+            <button type="button" class="listen" data-listen data-day={day} data-prebuilt={prebuiltPassage}
               aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
             >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
             <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
@@ -142,7 +190,14 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
           <>
             <blockquote class="own-words mine">{myEntry.userText}</blockquote>
             {myEntry.aiText
-              ? <p class="reply">{myEntry.aiText}</p>
+              ? (
+                <>
+                  <p class="reply">{myEntry.aiText}</p>
+                  <button type="button" class="listen" data-reply data-day={day} data-step={step}
+                    aria-label={lang === 'zh' ? '朗读回复' : 'Listen to the reply'}
+                  >{lang === 'zh' ? '▶ 听回复' : '▶ Reply'}</button>
+                </>
+              )
               : <p class="reply muted">{copy.prompt[lang]}</p>}
             <a class="advance ready" href={advanceHref}>{continueLabel}</a>
           </>
@@ -227,7 +282,9 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         loading = true;
         listen.textContent = label.loading;
         try {
-          const res = await fetch(`/api/tts?day=${listen.dataset.day}&lang=${lang}`);
+          // The prebuilt clip, when today has one; on-demand MeloTTS otherwise.
+          const src = listen.dataset.prebuilt ?? `/api/tts?day=${listen.dataset.day}&lang=${lang}`;
+          const res = await fetch(src);
           if (!res.ok) throw new Error(String(res.status));
           objectUrl = URL.createObjectURL(await res.blob());
           audio = new Audio(objectUrl);
@@ -241,6 +298,127 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         }
       });
     }
+  }
+
+  // The rest of the players. `lang` above is scoped to the reading block.
+  const uiLang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
+  const clipLabels = (idle: string) => ({
+    idle,
+    loading: uiLang === 'zh' ? '生成中…' : 'Loading…',
+    playing: uiLang === 'zh' ? '■ 停止' : '■ Stop',
+  });
+
+  // Shared button contract with the passage Listen button: click plays, click
+  // again stops, a second click while loading does nothing.
+  const clipPlayer = (button: HTMLButtonElement, load: () => Promise<string>, idle: string): void => {
+    const label = clipLabels(idle);
+    let audio: HTMLAudioElement | null = null;
+    let objectUrl: string | null = null;
+    let loading = false;
+    const stop = () => {
+      audio?.pause();
+      audio = null;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+      button.textContent = label.idle;
+    };
+    button.addEventListener('click', async () => {
+      if (audio) return stop();
+      if (loading) return;
+      loading = true;
+      button.textContent = label.loading;
+      try {
+        const src = await load();
+        if (src.startsWith('blob:')) objectUrl = src;
+        audio = new Audio(src);
+        audio.addEventListener('ended', stop);
+        button.textContent = label.playing;
+        await audio.play();
+      } catch {
+        stop();
+      } finally {
+        loading = false;
+      }
+    });
+  };
+
+  // Step guidance clips, prebuilt and committed under /audio/steps/.
+  document.querySelectorAll<HTMLButtonElement>('[data-clip]').forEach((btn) => {
+    const src = btn.dataset.clip;
+    if (src) clipPlayer(btn, () => Promise.resolve(src), uiLang === 'zh' ? '▶ 引导' : '▶ Guidance');
+  });
+
+  // The model's reply, spoken only from what is already stored in D1 for this
+  // reader's day and step - never from request text.
+  document.querySelectorAll<HTMLButtonElement>('[data-reply]').forEach((btn) => {
+    clipPlayer(
+      btn,
+      async () => {
+        const res = await fetch('/api/reflection-tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ day: btn.dataset.day, step: btn.dataset.step }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        return URL.createObjectURL(await res.blob());
+      },
+      uiLang === 'zh' ? '▶ 听回复' : '▶ Reply',
+    );
+  });
+
+  // The whole guided session: the six prompts and the passage, in order, with
+  // rests between. It never navigates - the reader walks the pages themselves.
+  const guided = document.querySelector<HTMLButtonElement>('[data-guided]');
+  const guidedNow = document.querySelector<HTMLElement>('[data-guided-now]');
+  if (guided && guidedNow) {
+    type GuidedItem = { label: string; src: string; pauseSeconds: number };
+    const idle = uiLang === 'zh' ? '▶ 整场引导' : '▶ Guided session';
+    const playing = uiLang === 'zh' ? '■ 停止' : '■ Stop';
+    let running = false;
+    let audio: HTMLAudioElement | null = null;
+    let objectUrl: string | null = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    const stop = () => {
+      running = false;
+      if (timer) clearTimeout(timer);
+      timer = null;
+      audio?.pause();
+      audio = null;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+      guided.textContent = idle;
+      guidedNow.hidden = true;
+    };
+
+    const playAt = async (items: GuidedItem[], i: number): Promise<void> => {
+      if (i >= items.length) return stop();
+      const item = items[i];
+      guidedNow.textContent = item.label;
+      guidedNow.hidden = false;
+      let src = item.src;
+      if (src.startsWith('/api/')) {
+        const res = await fetch(src);
+        if (!res.ok) return stop();
+        objectUrl = URL.createObjectURL(await res.blob());
+        src = objectUrl;
+      }
+      audio = new Audio(src);
+      audio.addEventListener('ended', () => {
+        audio = null;
+        timer = setTimeout(() => void playAt(items, i + 1), item.pauseSeconds * 1000);
+      });
+      await audio.play();
+    };
+
+    guided.addEventListener('click', () => {
+      if (running) return stop();
+      const items = JSON.parse(guided.dataset.guided ?? '[]') as GuidedItem[];
+      if (!items.length) return;
+      running = true;
+      guided.textContent = playing;
+      void playAt(items, 0).catch(stop);
+    });
   }
 </script>
 
@@ -423,5 +601,22 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
 
   .advance:hover {
     opacity: 1;
+  }
+
+  .guided {
+    margin-top: 1.75rem;
+  }
+
+  .guided-now {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    min-height: 1.2rem;
+    margin: 0.6rem 0 0;
+  }
+
+  .guided-hint {
+    font-size: 0.75rem;
+    opacity: 0.45;
+    margin: 0.25rem 0 0;
   }
 </style>

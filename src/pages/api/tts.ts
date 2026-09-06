@@ -8,6 +8,7 @@
 // every reader of that day - so each one is synthesized once, globally.
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
+import { hasPrebuiltDayAudio, prebuiltDayAudioUrl } from '../../lib/audio';
 import { focusReference, getLectionaryDay, hasLectionaryDay } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
 import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech } from '../../lib/tts';
@@ -33,6 +34,19 @@ export const GET: APIRoute = async ({ url }) => {
   const passage = resolvePassage(focusReference(getLectionaryDay(day)), lang);
   const text = sanitizeTtsText(passage?.text);
   if (!text) return json({ error: 'no_passage' }, 404);
+
+  // A prebuilt Chatterbox clip beats on-demand synthesis whenever it exists:
+  // better voice, zero per-request cost. Days without one still get MeloTTS.
+  if (hasPrebuiltDayAudio(day, lang)) {
+    const asset = await env.ASSETS.fetch(
+      new Request(new URL(prebuiltDayAudioUrl(lang, day), url.origin).toString())
+    );
+    if (asset.ok) {
+      return new Response(asset.body, {
+        headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': CACHE_CONTROL },
+      });
+    }
+  }
 
   // Normalized so 'lang=fr' and a missing lang share the 'en' entry.
   const cacheKey = new Request(new URL(`/api/tts?day=${day}&lang=${lang}`, url).toString());

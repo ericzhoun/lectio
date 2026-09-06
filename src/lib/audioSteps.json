@@ -1,0 +1,69 @@
+{
+  "generator": "chatterbox-mtl",
+  "steps": {
+    "en": {
+      "silencio": {
+        "file": "/audio/steps/en/silencio-61838b24.mp3",
+        "hash": "61838b24",
+        "text": "Silencio. Be still. Let the noise settle before you read."
+      },
+      "lectio": {
+        "file": "/audio/steps/en/lectio-14e8c6df.mp3",
+        "hash": "14e8c6df",
+        "text": "Lectio. Read it slowly, twice. There is no hurry."
+      },
+      "meditatio": {
+        "file": "/audio/steps/en/meditatio-d0a7f16e.mp3",
+        "hash": "d0a7f16e",
+        "text": "Meditatio. What word or phrase caught you?"
+      },
+      "oratio": {
+        "file": "/audio/steps/en/oratio-d9227a28.mp3",
+        "hash": "d9227a28",
+        "text": "Oratio. What do you want to say to God about it?"
+      },
+      "contemplatio": {
+        "file": "/audio/steps/en/contemplatio-6ed605fa.mp3",
+        "hash": "6ed605fa",
+        "text": "Contemplatio. Nothing more to do now. Rest here a while."
+      },
+      "actio": {
+        "file": "/audio/steps/en/actio-e5d6ec86.mp3",
+        "hash": "e5d6ec86",
+        "text": "Actio. One thing you will do today."
+      }
+    },
+    "zh": {
+      "silencio": {
+        "file": "/audio/steps/zh/silencio-d69fb9b6.mp3",
+        "hash": "d69fb9b6",
+        "text": "静默。安静下来。在诵读之前，让心中的喧嚣沉淀。"
+      },
+      "lectio": {
+        "file": "/audio/steps/zh/lectio-4cc8bd7c.mp3",
+        "hash": "4cc8bd7c",
+        "text": "诵读。慢慢地读两遍。不用急。"
+      },
+      "meditatio": {
+        "file": "/audio/steps/zh/meditatio-dc30cebf.mp3",
+        "hash": "dc30cebf",
+        "text": "默想。哪一个词、哪一句话触动了你？"
+      },
+      "oratio": {
+        "file": "/audio/steps/zh/oratio-406be73c.mp3",
+        "hash": "406be73c",
+        "text": "祈祷。关于这句话，你想对神说什么？"
+      },
+      "contemplatio": {
+        "file": "/audio/steps/zh/contemplatio-2ca56664.mp3",
+        "hash": "2ca56664",
+        "text": "默观。现在无需再做什么。在这里安歇片刻。"
+      },
+      "actio": {
+        "file": "/audio/steps/zh/actio-68282317.mp3",
+        "hash": "68282317",
+        "text": "践行。今天你要做的一件事。"
+      }
+    }
+  }
+}

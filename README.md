@@ -112,3 +112,31 @@ Verification evidence: see `docs/google-login-run-check-report.md`.
   set, the Google button shows a graceful "not configured" message.
 - User records live in D1 `users` (`google_id`, `name`, `avatar_url`, `created_at`,
   `last_login_at`); Google sign-in with an existing verified email links to that account.
+
+## Listen (TTS)
+
+Daily audio is generated with the open-source Chatterbox model (MIT) on a local GPU and committed
+as static assets, so listening costs nothing at request time - free for everyone.
+
+- **Step guidance + whole-session audio**: the twelve step prompts (6 steps x en/zh) live in
+  `public/audio/steps/`, content-hashed. The Silencio page offers a guided-session player that
+  reads all six steps and the passage aloud, with rests between.
+- **Daily passage**: `public/audio/days/<lang>/<day>.mp3` for each day the batch has covered.
+  `/api/tts?day=...&lang=...` serves the prebuilt clip when it exists and falls back to on-demand
+  Workers AI (MeloTTS) when it does not, so every day of the lectionary is audible either way.
+- **AI replies** (per reader, written in response to their words, so never prebuildable) can be
+  spoken via `POST /api/reflection-tts { day, step }`. The endpoint only ever reads the reply text
+  already stored in D1 for that reader - it never accepts request text.
+
+Regenerate locally (requires the TTS toolbox venvs; see `scripts/tts/`). Two engines: the
+default `chatterbox` (best cloning-style voice, ~2.6 min/clip on GPU) and `kokoro`
+(hexgrad/Kokoro-82M, preset voices af_heart/zm_yunxi, ~1.3 s/clip on GPU):
+
+    npm run tts:steps                  # the 12 guidance clips; skips clips whose text is unchanged
+    npm run tts:passages -- --next 7   # a rolling window; resumable, skips days already on disk
+    npm run tts:passages -- --all --yes --engine kokoro
+                                       # the whole 1826-day table, future days first;
+                                       # resumable - just rerun to continue an interrupted run
+
+`run_tts_backlog.bat` runs the full-table command standalone (safe to stop and rerun anytime).
+The manifest `src/lib/audioDays.json` also records which engine produced each clip.
