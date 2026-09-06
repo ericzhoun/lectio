@@ -120,6 +120,12 @@ const t = {
   const upsellBody = document.getElementById('assistant-upsell-body') as HTMLElement;
   const upsellLink = document.getElementById('assistant-upsell-link') as HTMLAnchorElement;
 
+  // On ritual writing steps the launcher must never cover the gold action bar:
+  // lift it above the bar and collapse it to an icon-only tab.
+  if (document.querySelector('.ritual .writing')) {
+    document.getElementById('assistant-root')?.classList.add('above-action');
+  }
+
   interface Turn { role: 'user' | 'assistant'; content: string }
   let thread: Turn[] = [];
   try {
@@ -335,9 +341,15 @@ const t = {
 
 <style>
   #assistant-root {
-    position: fixed; left: 18px; right: 18px; bottom: 18px; z-index: 9999;
+    position: fixed; left: 18px; right: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    z-index: 60;
     pointer-events: none;
   }
+  /* Ritual writing steps: never cover the action bar; icon-only launcher. */
+  #assistant-root.above-action { bottom: calc(84px + env(safe-area-inset-bottom)); }
+  #assistant-root.above-action #assistant-bubble .assistant-bubble-label { display: none; }
+  #assistant-root.above-action #assistant-bubble { padding: 0 16px; }
   #assistant-root [hidden] { display: none !important; }
   #assistant-bubble {
     height: 52px; border-radius: 999px; border: none; cursor: pointer;
