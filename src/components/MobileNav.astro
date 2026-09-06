@@ -1,0 +1,79 @@
+---
+// Mobile shell (≤760px): sticky thumb bar + full-screen navigation sheet.
+// Desktop keeps .top-nav until the site-wide redesign adopts this component.
+import { langSwitchHref } from '../lib/i18n';
+import type { Lang } from '../lib/reading';
+
+interface Props {
+  lang: Lang;
+  loggedIn: boolean;
+}
+const { lang, loggedIn } = Astro.props;
+
+const t = {
+  menu: lang === 'zh' ? '菜单' : 'Menu',
+  close: lang === 'zh' ? '关闭' : 'Close',
+  today: lang === 'zh' ? '今日' : 'Today',
+  library: lang === 'zh' ? '经文库' : 'Verse Library',
+  approach: lang === 'zh' ? '方法' : 'Approach',
+  pricing: lang === 'zh' ? '价格' : 'Pricing',
+  privacy: lang === 'zh' ? '隐私' : 'Privacy',
+  account: lang === 'zh' ? '账户' : 'Account',
+  login: lang === 'zh' ? '登录' : 'Log in',
+  hint: {
+    library: lang === 'zh' ? '148 段经文' : '148 passages',
+    approach: lang === 'zh' ? '什么是圣言诵读' : 'what is Lectio?',
+    pricing: lang === 'zh' ? '首月免费' : 'first month free',
+    privacy: lang === 'zh' ? '你的回应不被追踪' : 'your words stay yours',
+  },
+};
+const loginHref = `/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`;
+---
+<div class="mobile-nav">
+  <nav class="mn-bar" aria-label={t.menu}>
+    <a class="mn-brand" href="/">✦ Lectio</a>
+    <div class="mn-actions">
+      <a class="mn-today" href="/today" data-event="cta_click" data-event-props='{"slot":"nav_today"}'>{t.today}</a>
+      <button type="button" class="mn-toggle" id="mn-toggle"
+        aria-expanded="false" aria-controls="mn-sheet" aria-label={t.menu}>
+        <span class="mn-burger" aria-hidden="true"><i></i><i></i><i></i></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mn-sheet" id="mn-sheet" hidden>
+    <div class="mn-sheet-head">
+      <span>{t.menu}</span>
+      <button type="button" class="mn-close" id="mn-close" aria-label={t.close}>✕</button>
+    </div>
+    <a class="mn-row" href="/library"><span>{t.library}</span><span class="mn-hint">{t.hint.library}</span></a>
+    <a class="mn-row" href="/approach"><span>{t.approach}</span><span class="mn-hint">{t.hint.approach}</span></a>
+    <a class="mn-row" href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}'><span>{t.pricing}</span><span class="mn-hint">{t.hint.pricing}</span></a>
+    <a class="mn-row" href="/privacy"><span>{t.privacy}</span><span class="mn-hint">{t.hint.privacy}</span></a>
+    <a class="mn-row" href={langSwitchHref(Astro, 'zh')}>中文</a>
+    <a class="mn-row" href={langSwitchHref(Astro, 'en')}>English</a>
+    <a class="mn-row" href={loggedIn ? '/account' : loginHref}>{loggedIn ? t.account : t.login}</a>
+  </div>
+</div>
+
+<script>
+  // Progressive enhancement: hiding the 9-link .top-nav on phones is keyed on
+  // this class, so without JS the familiar link list still works.
+  document.documentElement.classList.add('js-nav');
+
+  const toggle = document.getElementById('mn-toggle') as HTMLButtonElement | null;
+  const closeBtn = document.getElementById('mn-close') as HTMLButtonElement | null;
+  const sheet = document.getElementById('mn-sheet') as HTMLElement | null;
+
+  const setOpen = (open: boolean) => {
+    if (!sheet || !toggle) return;
+    sheet.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  toggle?.addEventListener('click', () => setOpen(Boolean(sheet?.hidden)));
+  closeBtn?.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+</script>

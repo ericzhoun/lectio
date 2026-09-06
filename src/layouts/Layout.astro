@@ -5,6 +5,7 @@ import { verifySessionToken } from '../lib/session';
 import { langSwitchHref } from '../lib/i18n';
 import LoginOverlay from '../components/LoginOverlay.astro';
 import AssistantWidget from '../components/AssistantWidget.astro';
+import MobileNav from '../components/MobileNav.astro';
 import type { Lang } from '../lib/reading';
 
 interface Props {
@@ -118,6 +119,7 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
     <a href={langSwitchHref(Astro, 'zh')} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>
     <a href={langSwitchHref(Astro, 'en')} style={lang === 'en' ? 'font-weight: bold;' : undefined}>English</a>
   </div>
+  <MobileNav lang={lang} loggedIn={!!userId} />
   <slot />
   {!userId && <LoginOverlay lang={lang} />}
   <script is:inline>
