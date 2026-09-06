@@ -68,6 +68,17 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/webp" href="/logo.webp" />
+
+  <!-- Site-wide organization identity for search and AI engines. -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Lectio",
+    "alternateName": "Lectio 圣言诵读",
+    "url": siteUrl,
+    "logo": `${siteUrl}/logo.webp`,
+    "description": "Daily Lectio Divina scripture reflection in English and Chinese.",
+  })} />
 </head>
 <body>
   <div class="top-nav">

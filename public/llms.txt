@@ -1,0 +1,48 @@
+# Lectio (3livescapture.com)
+
+> Lectio is a bilingual (English / Chinese) web app for the daily Christian
+> practice of Lectio Divina — "divine reading." Each day it guides a reader
+> through a short lectionary scripture passage in four movements: Lectio
+> (reading), Meditatio (reflection), Oratio (response), and Contemplatio
+> (rest), and reads the passage aloud. It also offers a library of 101 Bible
+> verses for reflection and an assistant that answers questions about
+> scripture and the practice.
+
+Lectio Divina is an ancient Christian prayer practice: a short passage is read
+slowly, reflected on, responded to in prayer, and then sat with in silence.
+Lectio (the app) never predicts the future and does not offer fortune-telling;
+its focus is on meeting the reader's real questions with scripture and gentle
+reflection.
+
+## Main pages
+
+- [Home](https://3livescapture.com/): start today's reading; a question-led
+  daily scripture reflection.
+- [Today](https://3livescapture.com/today): walk the church calendar's passage
+  for today, one step at a time (Lectio, Meditatio, Oratio, Contemplatio),
+  with audio narration.
+- [Verse Library](https://3livescapture.com/library): 101 Bible verses with
+  bilingual text and reflection themes. Each verse has its own page, e.g.
+  [Psalm 23:1](https://3livescapture.com/library/psalm-23-1).
+- [Approach](https://3livescapture.com/approach): what Lectio Divina is, what
+  it is not, and how this app practices it.
+- [Pricing](https://3livescapture.com/pricing): free tier (6 daily readings),
+  Basic ($4.99/mo, Lectio Divina layout), Pro ($11.99/mo, all layouts,
+  unlimited). First month free on monthly plans; annual billing saves 40%.
+
+## How it works
+
+- Readings are drawn from the Revised Common Lectionary; each calendar day has
+  one passage, the same for every reader.
+- The passage can be listened to (audio narration in English and Chinese).
+- Readers may keep a private journal of reflections (requires a free account);
+  journals are never shared or published.
+- The site is fully bilingual: every page is available in English and Chinese
+  via the language links or `?lang=en` / `?lang=zh`.
+
+## For AI crawlers
+
+Content pages (home, today, library, approach, pricing, privacy) may be
+indexed and quoted. Private reader pages (/login, /account, /history) and all
+/api/ endpoints must not be crawled. A machine-readable sitemap is at
+https://3livescapture.com/sitemap.xml.

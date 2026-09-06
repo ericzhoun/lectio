@@ -47,10 +47,47 @@ const tiers = [
   },
 ];
 
+const faq = [
+  {
+    q: { en: 'What is Lectio Divina?', zh: '什么是圣言诵读？' },
+    a: {
+      en: 'Lectio Divina ("divine reading") is an ancient Christian practice of slowly reading a short scripture passage and sitting with it through four movements: reading, reflection, response, and rest. Lectio guides you through each step.',
+      zh: '圣言诵读（Lectio Divina）是古老的基督徒灵修方式：慢慢诵读一段短经文，经历诵读、默想、祈祷、默观四个阶段。Lectio 会一步一步带领你完成。',
+    },
+  },
+  {
+    q: { en: 'What do I get for free?', zh: '免费版包含什么？' },
+    a: {
+      en: 'The free tier includes 6 Daily Word readings a day plus trial credits for the longer layouts — no payment details required.',
+      zh: '免费版每天可领受 6 次每日经文，并附带较长布局的试用次数，无需绑定付款方式。',
+    },
+  },
+  {
+    q: { en: 'Can I cancel anytime?', zh: '可以随时取消吗？' },
+    a: {
+      en: 'Yes. Cancel from your account page whenever you like; you keep access until the end of the billing period you already paid for.',
+      zh: '可以。随时在账户页面取消，已付费周期结束前仍可继续使用。',
+    },
+  },
+  {
+    q: { en: 'How does the first month free work?', zh: '首月免费是怎么运作的？' },
+    a: {
+      en: 'Monthly plans start with a free first month. You will not be charged until the trial ends, and you can cancel before then at no cost.',
+      zh: '月付方案首月免费。试用期结束前不会扣费，届时之前取消则完全不收费。',
+    },
+  },
+  {
+    q: { en: 'Is Lectio available in Chinese?', zh: '有中文版本吗？' },
+    a: {
+      en: 'Yes — every reading, the whole library, and the site itself are fully bilingual in English and Chinese (中文).',
+      zh: '有。每一次默想、整部经文库和整个网站都提供中英双语。',
+    },
+  },
+];
+
 const title = lang === 'zh'
   ? 'Lectio 价格方案 — 免费、基础版与专业版'
-  : 'Lectio Plans & Pricing — Free, Basic & Pro';
-const description = lang === 'zh'
+  : 'Lectio Plans & Pricing — Free, Basic & Pro';const description = lang === 'zh'
   ? '选择适合你的方案：免费每日 6 次每日经文，基础版 $4.99/月含圣言诵读，专业版 $11.99/月解锁全部布局无限默想。月付方案首月免费试用，年付享六折优惠。'
   : 'Choose your Lectio plan: free tier with 6 Daily Word readings a day, Basic at $4.99/mo for Lectio Divina, or Pro at $11.99/mo for every layout unlimited. First month free on monthly plans; save 40% with annual billing.';
 ---
@@ -113,6 +150,28 @@ const description = lang === 'zh'
     ))}
   </div>
 
+  <section class="pricing-faq" aria-labelledby="faq-heading">
+    <h2 id="faq-heading">{lang === 'zh' ? '常见问题' : 'Frequently asked questions'}</h2>
+    <dl>
+      {faq.map((item) => (
+        <div class="pricing-faq-item">
+          <dt>{item.q[lang]}</dt>
+          <dd>{item.a[lang]}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faq.map((item) => ({
+      "@type": "Question",
+      "name": item.q.en,
+      "acceptedAnswer": { "@type": "Answer", "text": item.a.en }
+    }))
+  })} />
+
   <script>
     // The notice describes the click that brought you here, not the page you are
     // on now. Drop the param so a reload or a shared link starts clean.
@@ -154,3 +213,11 @@ const description = lang === 'zh'
     });
   </script>
 </Layout>
+
+<style>
+  .pricing-faq { max-width: 640px; margin: 48px auto 0; text-align: left; }
+  .pricing-faq h2 { font-size: 1.4rem; margin-bottom: 16px; }
+  .pricing-faq-item { margin-bottom: 18px; }
+  .pricing-faq dt { font-weight: 600; margin-bottom: 4px; }
+  .pricing-faq dd { margin: 0; line-height: 1.6; opacity: 0.85; }
+</style>

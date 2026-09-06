@@ -10,3 +10,5 @@ Disallow: /api/
 
 # Sitemap
 Sitemap: https://3livescapture.com/sitemap.xml
+
+# Overview for AI assistants: https://3livescapture.com/llms.txt

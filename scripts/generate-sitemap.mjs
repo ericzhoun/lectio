@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
 const SITE = 'https://3livescapture.com';
-const STATIC_PATHS = ['/', '/pricing', '/library', '/approach', '/signup', '/privacy'];
+const STATIC_PATHS = ['/', '/today', '/pricing', '/library', '/approach', '/signup', '/privacy'];
 
 // Extract English verse references from scripture.ts (the BIBLE_VERSES export).
 const deckSrc = readFileSync(resolve(ROOT, 'src/lib/scripture.ts'), 'utf-8');
