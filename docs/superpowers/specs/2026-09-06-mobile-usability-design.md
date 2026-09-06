@@ -68,7 +68,9 @@ Applies to `src/pages/today/[step].astro` and `src/pages/today/amen.astro` at al
 ### 4.3 M-03 — PWA-lite
 
 - `public/manifest.webmanifest`: `name: "Lectio"`, `short_name: "Lectio"`, `description` from the existing Organization schema, `start_url: "/today"`, `display: "standalone"`, `background_color: "#0e1220"`, `theme_color: "#0e1220"`, icons: `logo.webp` is already 512×512 — declare it as the 512 icon (`type: image/webp`) **and** add a generated 192×192 `logo-192.png` — a one-off conversion committed to `public/` (e.g. a `scripts/make-icons.mjs` run once with `sharp` as a devDependency, or any offline image tool); `sharp` must not become a runtime dependency.
-- `Layout.astro` head: `<link rel="manifest" href="/manifest.webmanifest">`, `<link rel="apple-touch-icon" href="/logo-192.png">`, and two `<meta name="theme-color">` tags (`media="(prefers-color-scheme: dark)"` → `#0e1220`, light → `#f5f2ea`). The existing pre-paint theme script also sets `document.querySelector('meta[name=theme-color]')` to match the *resolved* theme (localStorage can disagree with the OS preference; resolved wins).
+- `Layout.astro` head: `<link rel="manifest" href="/manifest.webmanifest">`, `<link rel="apple-touch-icon" href="/logo-192.png">`, and one `<meta name="theme-color" id="theme-color-meta">` (dark default), which the
+existing pre-paint theme script sets to the *resolved* theme — a script cannot
+override media-scoped metas, and the resolved theme must win over the OS preference.
 - Cloudflare `_headers`: cache `/manifest.webmanifest` and `/logo-192.png` with a moderate TTL (e.g. `max-age=86400`) — matching the existing `_headers` style.
 - No service worker in this scope.
 

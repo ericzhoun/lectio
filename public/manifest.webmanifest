@@ -1,0 +1,13 @@
+{
+  "name": "Lectio",
+  "short_name": "Lectio",
+  "description": "Daily Lectio Divina scripture reflection in English and Chinese.",
+  "start_url": "/today",
+  "display": "standalone",
+  "background_color": "#0e1220",
+  "theme_color": "#0e1220",
+  "icons": [
+    { "src": "/logo-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/logo.webp", "sizes": "512x512", "type": "image/webp", "purpose": "any" }
+  ]
+}

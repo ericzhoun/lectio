@@ -2,3 +2,10 @@
 # immutable once generated, so both may be cached hard at the edge.
 /audio/*
   Cache-Control: public, max-age=86400, s-maxage=2592000
+
+# PWA identity files. The manifest references content-addressed icons, so a
+# one-day client cache is safe and cheap.
+/manifest.webmanifest
+  Cache-Control: public, max-age=86400
+/logo-192.png
+  Cache-Control: public, max-age=86400

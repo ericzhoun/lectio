@@ -36,7 +36,7 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
 <html lang={lang}>
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <!-- Apply the saved theme before first paint so there is no flash of the wrong colors -->
   <script is:inline>
@@ -47,8 +47,12 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
           t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
         }
         document.documentElement.setAttribute('data-theme', t);
+        var m = document.getElementById('theme-color-meta');
+        if (m) m.setAttribute('content', t === 'light' ? '#f5f2ea' : '#0e1220');
       } catch (e) {
         document.documentElement.setAttribute('data-theme', 'dark');
+        var m2 = document.getElementById('theme-color-meta');
+        if (m2) m2.setAttribute('content', '#0e1220');
       }
     })();
   </script>
@@ -83,6 +87,9 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/webp" href="/logo.webp" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/logo-192.png" />
+  <meta name="theme-color" id="theme-color-meta" content="#0e1220" />
 
   <!-- Site-wide organization identity for search and AI engines. -->
   <script type="application/ld+json" set:html={JSON.stringify({
