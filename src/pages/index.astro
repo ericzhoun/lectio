@@ -501,13 +501,6 @@ const description = lang === 'zh'
   })}>
   </script>
 
-  <div class="loading-overlay" id="loading-overlay">
-    <div class="loading-content">
-      <div class="loading-spinner"></div>
-      <p id="loading-text">{lang === 'zh' ? '正在为你领受经文，请稍候...' : 'Receiving your verses, please wait...'}</p>
-    </div>
-  </div>
-
   <header>
     <img src="/logo.webp" alt="Lectio — daily scripture reading and reflection" class="site-logo" width="512" height="512" />
     <h1>{lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Scripture Reading'}</h1>
@@ -624,6 +617,15 @@ const description = lang === 'zh'
       </p>
     </div>
   </form>
+
+  <div class="wait-panel" id="wait-panel" hidden role="status" aria-live="polite">
+    <p class="wait-title" id="wait-text">
+      {lang === 'zh' ? '正在为你领受经文，请稍候...' : 'Receiving your verses, please wait...'}
+    </p>
+    <div class="teaser-line w85"></div>
+    <div class="teaser-line w70"></div>
+    <div class="teaser-line w60"></div>
+  </div>
 
   {error && (
     <p class="error">{lang === 'zh' ? '错误:' : 'Error:'} {error}</p>
@@ -924,11 +926,22 @@ const description = lang === 'zh'
     });
 
     function showLoading() {
-      const overlay = document.getElementById('loading-overlay');
-      if (overlay) overlay.style.display = 'flex';
+      const panel = document.getElementById('wait-panel');
+      if (panel) {
+        panel.hidden = false;
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
-    document.getElementById('reading-form')?.addEventListener('submit', showLoading);
+    document.getElementById('reading-form')?.addEventListener('submit', () => {
+      const text = document.getElementById('wait-text');
+      if (text) {
+        text.textContent = document.documentElement.lang === 'zh'
+          ? '正在为你领受经文，请稍候...'
+          : 'Receiving your verses, please wait...';
+      }
+      showLoading();
+    });
 
     // ---- Open-the-Bible panel (anonymous read-to-reveal flow) ----
     // Only the multi-verse layouts go through the gated panel; the single
@@ -987,11 +1000,11 @@ const description = lang === 'zh'
       });
     }
 
-    // Interpret form (registered visitors): loading overlay while the reading
+    // Interpret form (registered visitors): inline wait panel while the reading
     // is generated.
     document.getElementById('interpret-form')?.addEventListener('submit', () => {
       showLoading();
-      const text = document.getElementById('loading-text');
+      const text = document.getElementById('wait-text');
       if (text) {
         text.textContent = document.documentElement.lang === 'zh'
           ? '正在写下默想，请稍候...'
