@@ -5,6 +5,7 @@ import { createUser } from '../../../lib/users';
 import { createSessionToken } from '../../../lib/session';
 import { resolveLang } from '../../../lib/i18n';
 import { safeAuthReturn } from '../../../lib/authReturn';
+import { trackServerEvent } from '../../../lib/analytics';
 
 export const prerender = false;
 
@@ -27,5 +28,6 @@ export const POST: APIRoute = async ({ request, url, cookies, redirect }) => {
 
   const token = await createSessionToken(result.id, env.SESSION_SECRET);
   cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });
+  await trackServerEvent({ name: 'signup_success', cookies, userId: result.id });
   return redirect(returnTo, 303);
 };

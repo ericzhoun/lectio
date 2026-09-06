@@ -65,6 +65,12 @@ export class D1Memory {
     };
   }
 
+  async batch(statements: Array<{ run: (...args: never[]) => Promise<unknown> }>) {
+    const results = [];
+    for (const statement of statements) results.push(await statement.run());
+    return results.map(() => ({ success: true }));
+  }
+
   dump(sql: string): unknown[] {
     return this.db.prepare(sql).all() as unknown[];
   }

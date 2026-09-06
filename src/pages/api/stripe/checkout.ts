@@ -4,6 +4,7 @@ import { env } from 'cloudflare:workers';
 import { getStripeClient, FIRST_MONTH_TRIAL_DAYS } from '../../../lib/stripe';
 import { getSubscription } from '../../../lib/subscriptions';
 import { verifySessionToken } from '../../../lib/session';
+import { trackServerEvent } from '../../../lib/analytics';
 
 export const prerender = false;
 
@@ -46,6 +47,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect, url }) => {
     success_url: `${url.origin}/account?checkout=success`,
     cancel_url: `${url.origin}/pricing?checkout=cancelled`,
   });
+  await trackServerEvent({ name: 'checkout_start', cookies, userId, props: { tier, billing } });
 
   return redirect(checkoutSession.url ?? '/pricing');
 };

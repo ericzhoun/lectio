@@ -304,6 +304,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
           audio.addEventListener('ended', stop);
           listen.textContent = label.playing;
           await audio.play();
+          window.lectioTrack?.('audio_play', { player: 'passage', step: listen.dataset.day ?? '' });
         } catch {
           stop();
         } finally {
@@ -347,6 +348,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         audio.addEventListener('ended', stop);
         button.textContent = label.playing;
         await audio.play();
+        window.lectioTrack?.('audio_play', { player: 'clip', clip: button.dataset.clip ?? '' });
       } catch {
         stop();
       } finally {
@@ -422,6 +424,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         timer = setTimeout(() => void playAt(items, i + 1), item.pauseSeconds * 1000);
       });
       await audio.play();
+      window.lectioTrack?.('audio_play', { player: 'guided' });
     };
 
     guided.addEventListener('click', () => {

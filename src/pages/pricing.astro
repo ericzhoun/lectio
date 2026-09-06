@@ -140,7 +140,7 @@ const title = lang === 'zh'
         )}
         <p>{t.blurb[lang]}</p>
         {t.key !== 'free' && (
-          <form method="post" action="/api/stripe/checkout">
+          <form method="post" action="/api/stripe/checkout" data-event-form="checkout_click" data-event-props={`{"tier":"${t.key}"}`}>
             <input type="hidden" name="tier" value={t.key} />
             <input type="hidden" name="billing" value="monthly" data-billing-input />
             <button type="submit">{lang === 'zh' ? '订阅' : 'Subscribe'}</button>

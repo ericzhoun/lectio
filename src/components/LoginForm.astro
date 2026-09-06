@@ -1,7 +1,18 @@
 ---
 import type { Lang } from '../lib/reading';
+import { variantFor } from '../lib/ab';
 interface Props { lang: Lang; returnTo: string; error?: string | null; headingId?: string; }
 const { lang, returnTo, error = null, headingId } = Astro.props;
+// A/B: invitation-shaped signup CTA vs the plain link (signup_cta_copy).
+const signupCtaCopy = variantFor(Astro.locals.variants ?? {}, 'signup_cta_copy');
+const signupLinkText =
+  signupCtaCopy === 'invitation'
+    ? lang === 'zh'
+      ? '没有账号？开始今日的灵修 —— 免费'
+      : "New here? Start today's walk — free"
+    : lang === 'zh'
+      ? '没有账号？注册'
+      : "Don't have an account? Sign up";
 const errors: Record<string, { zh: string; en: string }> = {
   invalid: { zh: '邮箱或密码错误', en: 'Invalid email or password' },
   cancelled: {
@@ -58,5 +69,5 @@ const errorMsg = error ? errors[error] : null;
         <button type="submit" class="explore-button auth-submit">{lang === 'zh' ? '登录' : 'Log in'}</button>
       </form>
 
-      <p class="auth-switch"><a data-auth-signup href={`/signup?lang=${lang}&returnTo=${encodeURIComponent(returnTo)}`}>{lang === 'zh' ? '没有账号？注册' : "Don't have an account? Sign up"}</a></p>
+      <p class="auth-switch"><a data-auth-signup data-event="cta_click" data-event-props='{"slot":"auth_signup_link"}' href={`/signup?lang=${lang}&returnTo=${encodeURIComponent(returnTo)}`}>{signupLinkText}</a></p>
     </div>

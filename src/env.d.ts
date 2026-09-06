@@ -26,3 +26,12 @@ declare namespace Cloudflare {
     GOOGLE_USERINFO_URL: string;
   }
 }
+
+declare namespace App {
+  interface Locals {
+    /** Stable first-party visitor id, set by middleware (cookie `vid`). */
+    vid: string;
+    /** A/B variants assigned to this visitor (see src/lib/ab.ts). */
+    variants: Record<string, string>;
+  }
+}

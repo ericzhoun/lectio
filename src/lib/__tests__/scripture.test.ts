@@ -7,9 +7,9 @@ import { SPREADS } from '../reading';
 
 describe('scripture verse deck', () => {
   it('has 148 unique English references', () => {
-    expect(BIBLE_VERSES).toHaveLength(148);
+    expect(BIBLE_VERSES).toHaveLength(151);
     const refs = new Set(BIBLE_VERSES.map((v) => v.en.ref));
-    expect(refs.size).toBe(148);
+    expect(refs.size).toBe(151);
   });
 
   it('has non-empty ref, text, and theme in both languages', () => {
@@ -37,7 +37,7 @@ describe('drawVerses', () => {
   });
 
   it('clamps the count to the deck size', () => {
-    expect(drawVerses(200)).toHaveLength(148);
+    expect(drawVerses(200)).toHaveLength(151);
   });
 
   it('carries through both languages and themes', () => {

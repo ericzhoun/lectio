@@ -279,6 +279,10 @@ export const BIBLE_VERSES: BibleVerse[] = [
     zh: { ref: '诗篇 139:14', text: '我要称谢你，因我受造奇妙可畏。你的作为奇妙，这是我心深知道的。', theme: '受造奇妙' },
   },
   {
+    en: { ref: '2 Corinthians 10:2-6', text: "Now I beg you that when I am present I may not yet be bold with that confidence by which I intend to be bold against some, who consider us to be walking according to the flesh. For though we walk in the flesh, we don't wage war according to the flesh; for the weapons of our warfare are not of the flesh, but mighty before God to the throwing down of strongholds, throwing down imaginations and every high thing that is exalted against the knowledge of God, and bringing every thought into captivity to the obedience of Christ; and being in readiness to avenge all disobedience, when your obedience will have been made full.", theme: 'Weapons not of the flesh' },
+    zh: { ref: '哥林多后书 10:2-6', text: '有人以为我是凭着血气行事，我也以为必须用勇敢待这等人；求你们不要叫我在你们那里的时候，有这样的勇敢。因为我们虽然在血气中行事，却不凭着血气争战。我们争战的兵器本不是属血气的，乃是在神面前有能力，可以攻破坚固的营垒，将各样的计谋，各样拦阻人认识神的那些自高之事，一概攻破了，又将人所有的心意夺回，使他都顺服基督。并且我已经预备好了，等你们十分顺服的时候，要责罚那一切不顺服的人。', theme: '属灵争战' },
+  },
+  {
     en: { ref: '2 Corinthians 5:17', text: 'If anyone is in Christ, he is a new creation. The old things have passed away. Behold, all things have become new.', theme: 'New beginnings' },
     zh: { ref: '哥林多后书 5:17', text: '若有人在基督里，他就是新造的人，旧事已过，都变成新的了。', theme: '新的开始' },
   },
@@ -608,6 +612,10 @@ export const BIBLE_VERSES: BibleVerse[] = [
     zh: { ref: '诗篇 37:5', text: '当将你的事交托耶和华，并倚靠他，他就必成全。', theme: '交托所行' },
   },
   {
+    en: { ref: 'Philippians 4:10-13', text: "But I rejoice in the Lord greatly, that now at last you have revived your thought for me; indeed, you were concerned before, but you lacked opportunity. Not that I speak because of lack, for I have learned in whatever state I am, to be content in it. I know how to be abased, and I know also how to abound. In everything and in all things I have learned both to be filled and to be hungry, both to abound and to be in need. I can do all things through Christ, who strengthens me.", theme: 'Content in all things' },
+    zh: { ref: '腓立比书 4:10-13', text: '我靠主大大地喜乐，因为你们思念我的心如今又发生；你们向来就思念我，只是没得机会。我并不是因缺乏说这话；我无论在什么景况都可以知足，这是我已经学会了。我知道怎样处卑贱，也知道怎样处丰富；或饱足，或饥饿；或有余，或缺乏，随事随在，我都得了秘诀。我靠着那加给我力量的，凡事都能做。', theme: '凡事知足' },
+  },
+  {
     en: { ref: 'Philippians 4:8', text: 'Finally, brothers, whatever things are true, whatever things are honorable, whatever things are just, whatever things are pure, whatever things are lovely, whatever things are of good report; if there is any virtue, and if there is any praise, think about these things.', theme: 'Think on these things' },
     zh: { ref: '腓立比书 4:8', text: '弟兄们，我还有未尽的话：凡是真实的、可敬的、公义的、清洁的、可爱的、有美名的，若有甚么德行，若有甚么称赞，这些事你们都要思念。', theme: '思念美善' },
   },
@@ -626,6 +634,10 @@ export const BIBLE_VERSES: BibleVerse[] = [
   {
     en: { ref: 'Luke 14:28', text: "For which of you, desiring to build a tower, doesn't first sit down and count the cost, to see if he has enough to complete it?", theme: 'Count the cost' },
     zh: { ref: '路加福音 14:28', text: '你们哪一个要盖一座楼，不先坐下算计花费，能盖成不能呢？', theme: '先算计花费' },
+  },
+  {
+    en: { ref: 'Proverbs 30:8-9', text: "Remove far from me falsehood and lies. Give me neither poverty nor riches. Feed me with the food that is needful for me; or I will be full, deny you, and say, 'Who is the LORD?' or lest I be poor, and steal, and so dishonor the name of my God.", theme: 'Neither poverty nor riches' },
+    zh: { ref: '箴言 30:8-9', text: '求你使虚假和谎言远离我；使我也不贫穷也不富足；赐给我需用的饮食，恐怕我饱足不认你，说：耶和华是谁呢？又恐怕我贫穷就偷窃，以致亵渎我神的名。', theme: '不贫不富' },
   },
   {
     en: { ref: 'Proverbs 27:17', text: "Iron sharpens iron; so a man sharpens his friend's countenance.", theme: 'Iron sharpens iron' },

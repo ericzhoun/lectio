@@ -36,6 +36,7 @@ const { lang } = Astro.props;
       }
       error.hidden = true;
       if (!dialog.open) {
+        window.lectioTrack?.('login_overlay_open');
         previousOverflow = document.body.style.overflow;
         dialog.showModal();
         document.body.style.overflow = 'hidden';

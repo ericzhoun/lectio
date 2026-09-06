@@ -4,6 +4,7 @@ import { env } from 'cloudflare:workers';
 import { verifyUserCredentials } from '../../../lib/users';
 import { createSessionToken } from '../../../lib/session';
 import { safeAuthReturn } from '../../../lib/authReturn';
+import { trackServerEvent } from '../../../lib/analytics';
 
 export const prerender = false;
 
@@ -23,6 +24,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
   const token = await createSessionToken(userId, env.SESSION_SECRET);
   cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });
+  await trackServerEvent({ name: 'login_success', cookies, userId });
   if (json) return Response.json({ returnTo });
   return redirect(returnTo, 303);
 };
