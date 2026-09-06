@@ -60,6 +60,7 @@ header h1 { color: var(--gold); letter-spacing: 1px; }
   text-decoration: none;
   margin-left: 10px;
   font-size: 14px;
+  display: inline-flex; align-items: center; min-height: 44px;
 }
 .top-nav a:hover { color: var(--text); }
 
@@ -109,8 +110,8 @@ form p { margin-bottom: 10px; }
 .follow-up-questions { margin-top: 20px; }
 .follow-up-questions h3 { margin-bottom: 10px; color: var(--gold); }
 .follow-up-question {
-  display: inline-block; background: var(--pill-bg); color: var(--text);
-  padding: 8px 15px; margin: 5px; border-radius: 20px; cursor: pointer; transition: background-color 0.3s;
+  display: inline-flex; align-items: center; background: var(--pill-bg); color: var(--text);
+  padding: 10px 18px; min-height: 44px; margin: 5px; border-radius: 20px; cursor: pointer; transition: background-color 0.3s;
 }
 .follow-up-question:hover { background: var(--accent); }
 
@@ -190,7 +191,7 @@ form p { margin-bottom: 10px; }
 /* Card library */
 .filters { text-align: center; margin: 15px 0; }
 .filters a {
-  display: inline-block; padding: 6px 14px; margin: 4px; border-radius: 20px;
+  display: inline-flex; align-items: center; min-height: 44px; padding: 6px 14px; margin: 4px; border-radius: 20px;
   background: var(--pill-bg); color: var(--text); text-decoration: none; font-size: 14px;
 }
 .filters a.active { background: var(--accent); color: #fff; }
@@ -234,7 +235,7 @@ form p { margin-bottom: 10px; }
 .auth-card form { background: none; border: none; padding: 0; }
 .auth-card input {
   width: 100%; padding: 11px 12px; border: 1px solid var(--panel-border); border-radius: 8px;
-  font-size: 15px; color: var(--text); background: var(--bg);
+  font-size: 16px; color: var(--text); background: var(--bg);
 }
 .auth-card input::placeholder { color: var(--text-dim); }
 .auth-submit { width: 100%; text-align: center; margin: 6px 0 0; padding: 12px 22px; font-size: 16px; }
@@ -398,7 +399,7 @@ form p { margin-bottom: 10px; }
 }
 .billing-toggle-btn {
   border: none; background: transparent; color: var(--text-dim);
-  padding: 8px 22px; border-radius: 999px; cursor: pointer;
+  padding: 10px 22px; border-radius: 999px; cursor: pointer; min-height: 44px;
   font-size: 14px; font-weight: 500; transition: background 0.2s, color 0.2s;
 }
 .billing-toggle-btn.active {
@@ -500,6 +501,7 @@ form p { margin-bottom: 10px; }
 .gate-modal-later {
   margin-top: 6px; background: none; border: none; color: var(--text-dim);
   font-size: 13px; cursor: pointer; text-decoration: underline;
+  min-height: 44px; display: inline-flex; align-items: center;
 }
 .gate-modal-later:hover { color: var(--text); }
 
