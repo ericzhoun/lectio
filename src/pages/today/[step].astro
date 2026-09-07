@@ -634,6 +634,9 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     min-height: 44px;
     font-size: 0.85rem;
     cursor: pointer;
+    /* Buttons don't inherit color by default — without this the label
+       stays browser-black on the vespers (dark) background. */
+    color: inherit;
   }
 
   .controls button {
@@ -717,7 +720,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
   }
 
   .error {
-    color: #b3261e;
+    color: var(--terracotta);
     font-size: 0.9rem;
   }
 
