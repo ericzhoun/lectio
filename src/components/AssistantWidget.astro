@@ -113,19 +113,6 @@ const t = {
     account: '/account',
     signup: '/signup',
   };
-  // Action links drive the site; unknown ids (stale thread in sessionStorage)
-  // are ignored. Plain links navigate natively — same tab for site-relative
-  // hrefs, new tab for external ones.
-  threadEl.addEventListener('click', (e) => {
-    const a = (e.target as HTMLElement).closest('a');
-    if (!a) return;
-    const href = a.getAttribute('href') ?? '';
-    if (!href.startsWith('action:')) return;
-    e.preventDefault();
-    const dest = ACTION_DEST[href.slice(7)];
-    if (dest) window.location.href = dest;
-  });
-
   const HISTORY_SENT = 10;
   const THREAD_KEPT = 20;
   const STORE_KEY = 'inspire-assistant-thread';
@@ -143,6 +130,19 @@ const t = {
   const upsellEl = document.getElementById('assistant-upsell') as HTMLElement;
   const upsellBody = document.getElementById('assistant-upsell-body') as HTMLElement;
   const upsellLink = document.getElementById('assistant-upsell-link') as HTMLAnchorElement;
+
+  // Action links drive the site; unknown ids (stale thread in sessionStorage)
+  // are ignored. Plain links navigate natively — same tab for site-relative
+  // hrefs, new tab for external ones.
+  threadEl.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href') ?? '';
+    if (!href.startsWith('action:')) return;
+    e.preventDefault();
+    const dest = ACTION_DEST[href.slice(7)];
+    if (dest) window.location.href = dest;
+  });
 
   // On ritual writing steps the launcher must never cover the gold action bar:
   // lift it above the bar and collapse it to an icon-only tab.
