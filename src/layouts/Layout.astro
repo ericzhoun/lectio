@@ -40,21 +40,30 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-  <!-- Apply the saved theme before first paint so there is no flash of the wrong colors -->
+  <!-- Sanctuary fonts: Cormorant Garamond (headings), EB Garamond (body),
+       Noto Serif SC (Chinese). Loaded with display=swap so text never hides. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+SC:wght@400;600&display=swap"
+  />
+
+  <!-- Apply the saved theme before first paint so there is no flash of the wrong
+       colors. Morning (light, parchment) is the sanctuary's default; vespers
+       (dark) is an explicit choice kept in localStorage. -->
   <script is:inline>
     (function () {
       try {
         var t = localStorage.getItem('theme');
-        if (t !== 'light' && t !== 'dark') {
-          t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-        }
+        if (t !== 'light' && t !== 'dark') t = 'light';
         document.documentElement.setAttribute('data-theme', t);
         var m = document.getElementById('theme-color-meta');
-        if (m) m.setAttribute('content', t === 'light' ? '#f5f2ea' : '#0e1220');
+        if (m) m.setAttribute('content', t === 'light' ? '#f5efe2' : '#211e18');
       } catch (e) {
-        document.documentElement.setAttribute('data-theme', 'dark');
+        document.documentElement.setAttribute('data-theme', 'light');
         var m2 = document.getElementById('theme-color-meta');
-        if (m2) m2.setAttribute('content', '#0e1220');
+        if (m2) m2.setAttribute('content', '#f5efe2');
       }
     })();
   </script>
@@ -91,7 +100,7 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
   <link rel="icon" type="image/webp" href="/logo.webp" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/logo-192.png" />
-  <meta name="theme-color" id="theme-color-meta" content="#0e1220" />
+  <meta name="theme-color" id="theme-color-meta" content="#f5efe2" />
 
   <!-- Site-wide organization identity for search and AI engines. -->
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -139,6 +148,28 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
       } catch (e) {
         /* no zone available; the server falls back to UTC */
       }
+    })();
+  </script>
+  <script is:inline>
+    // Headlines and sections fade up, unhurried (800ms), as they enter view.
+    // Elements already on screen reveal at once; reduced-motion users simply
+    // see everything (the CSS keeps [data-reveal] static for them).
+    (function () {
+      var els = document.querySelectorAll('[data-reveal]');
+      if (!els.length) return;
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('revealed'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+      els.forEach(function (el) { io.observe(el); });
     })();
   </script>
   <script src="../scripts/analytics.ts"></script>

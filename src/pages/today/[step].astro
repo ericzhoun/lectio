@@ -148,6 +148,12 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       {step === 'silencio' && (
         <section class="silence">
           <div class="timer" data-seconds="60" aria-live="polite"></div>
+          <div class="bell-row">
+            <button type="button" class="bell-toggle" id="bell-toggle" aria-pressed="false">
+              <span class="bell-icon" aria-hidden="true">🔔</span>
+              <span id="bell-label">{lang === 'zh' ? '开场钟声 · 关' : 'Opening bell · off'}</span>
+            </button>
+          </div>
           {guidedAvailable && (
             <div class="guided">
               <button type="button" class="listen" data-guided={JSON.stringify(guidedItems)}
@@ -468,6 +474,71 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       guided.textContent = playing;
       void playAt(items, 0).catch(stop);
     });
+  }
+
+  // ---- Opt-in ambient bell: a soft chime as the session begins ----
+  // Pure Web Audio, no asset: a small bowl tone with inharmonic partials and a
+  // long decay. Plays only on a user gesture (browsers block otherwise).
+  const bellBtn = document.getElementById('bell-toggle');
+  if (bellBtn) {
+    const bellLabel = document.getElementById('bell-label');
+    const zhPage = document.documentElement.lang === 'zh';
+    let bellOn = false;
+    try { bellOn = localStorage.getItem('lectio_bell') === 'on'; } catch { /* private mode */ }
+
+    const renderBell = () => {
+      bellBtn.classList.toggle('on', bellOn);
+      bellBtn.setAttribute('aria-pressed', String(bellOn));
+      if (bellLabel) {
+        bellLabel.textContent = zhPage
+          ? `开场钟声 · ${bellOn ? '开' : '关'}`
+          : `Opening bell · ${bellOn ? 'on' : 'off'}`;
+      }
+    };
+    renderBell();
+
+    const chime = () => {
+      try {
+        const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+        if (!Ctx) return;
+        const ctx = new Ctx();
+        if (ctx.state === 'suspended') void ctx.resume();
+        const t0 = ctx.currentTime;
+        const master = ctx.createGain();
+        master.gain.setValueAtTime(0.0001, t0);
+        master.gain.exponentialRampToValueAtTime(0.13, t0 + 0.04);
+        master.gain.exponentialRampToValueAtTime(0.0001, t0 + 5.5);
+        master.connect(ctx.destination);
+        // A quiet singing-bowl: fundamental at 432 Hz plus faint inharmonic partials.
+        const partials: Array<[number, number]> = [[432, 1], [866, 0.4], [1298, 0.18], [1732, 0.08], [2589, 0.04]];
+        for (const [freq, amp] of partials) {
+          const osc = ctx.createOscillator();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const g = ctx.createGain();
+          g.gain.value = amp;
+          osc.connect(g);
+          g.connect(master);
+          osc.start(t0);
+          osc.stop(t0 + 6);
+        }
+        setTimeout(() => void ctx.close(), 6500);
+      } catch { /* audio unavailable; silence is also a fine beginning */ }
+    };
+
+    bellBtn.addEventListener('click', () => {
+      bellOn = !bellOn;
+      try { localStorage.setItem('lectio_bell', bellOn ? 'on' : 'off'); } catch { /* private mode */ }
+      renderBell();
+      if (bellOn) chime();
+    });
+
+    // With the bell opted in, the first gesture of the sitting lets it sound.
+    if (bellOn) {
+      const once = () => chime();
+      document.addEventListener('pointerdown', once, { once: true });
+      document.addEventListener('keydown', once, { once: true });
+    }
   }
 </script>
 

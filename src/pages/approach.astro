@@ -167,7 +167,7 @@ const hinge = [
       <h2>{t.s3}</h2>
       <div class="dt-grid">
         {mechanisms.map((m, i) => (
-          <div class="dt-card">
+          <div class="dt-card" id={['lectio', 'meditatio', 'oratio', 'contemplatio'][i]}>
             <h3><span class="dt-num">{i + 1}</span>{m.title}</h3>
             <p>{m.body}</p>
           </div>
@@ -234,6 +234,8 @@ const hinge = [
     background: var(--panel); border: 1px solid var(--panel-border);
     border-radius: 10px; padding: 16px 18px;
   }
+  /* Deep links from the homepage's four path cards land here. */
+  .dt-card[id] { scroll-margin-top: 96px; }
   .dt-card h3 { color: var(--gold); font-size: 15px; margin: 0 0 8px; }
   .dt-card p { color: var(--text); font-size: 14px; line-height: 1.7; margin: 0; }
   .dt-num {

@@ -22,6 +22,10 @@ import {
 import { getCreditBalance } from '../lib/credits';
 import { getTodayUsage } from '../lib/usage';
 import { resolveLang } from '../lib/i18n';
+import { getLectionaryDay, focusReference } from '../lib/lectionary';
+import { resolvePassage } from '../lib/passage';
+import { resolveLocalDay } from '../lib/localDay';
+import lectionaryDays from '../lib/lectionaryDays.json';
 
 const url = Astro.url;
 const lang = resolveLang(Astro);
@@ -451,6 +455,187 @@ const spreadViews: SpreadCardView[] = Object.entries(SPREADS).map(([key, s]) => 
 
 const resultCount = verses?.length ?? 0;
 
+// ── The sanctuary: verse of the day, season, and reading plans ─────────────
+// The reader's local day (tz cookie, UTC fallback) picks the lectionary entry,
+// the same source the /today walk uses, so the hero and the practice agree.
+const day = resolveLocalDay(Astro);
+const entry = getLectionaryDay(day);
+
+// Short, contemplative excerpt for the hero slides.
+const excerpt = (text: string, max: number): string => {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const at = lang === 'zh' ? cut.length : Math.max(cut.lastIndexOf(' '), 40);
+  return `${cut.slice(0, at).replace(/[,;:.\s]+$/, '')}…`;
+};
+
+// The BCP lists morning psalms as bare numbers ("41, 52") — normalize the
+// first one into a reference resolvePassage understands.
+const psalmRef = (slot: string | null): string | null => {
+  if (!slot) return null;
+  const first = slot.split(',')[0]?.trim();
+  return /^\d+(:\d+(-\d+)?)?$/.test(first) ? `Psalm ${first}` : null;
+};
+
+// Up to three slides from the day's readings: the focus, then epistle, then
+// psalm. A slot the bundled chapter store cannot resolve is skipped, not
+// broken; if none resolve the hero still speaks with a fixed word.
+const heroSources = [
+  focusReference(entry),
+  entry.readings.epistle,
+  psalmRef(entry.readings.psalmsMorning),
+];
+const heroVerses: Array<{ ref: string; text: string }> = [];
+for (const ref of heroSources) {
+  if (!ref || heroVerses.length >= 3) continue;
+  const passage = resolvePassage(ref, lang);
+  if (passage) {
+    heroVerses.push({ ref: passage.ref, text: excerpt(passage.text, lang === 'zh' ? 110 : 210) });
+  }
+}
+if (heroVerses.length === 0) {
+  const fallback = resolvePassage('Matthew 11:28-30', lang);
+  if (fallback) heroVerses.push({ ref: fallback.ref, text: excerpt(fallback.text, lang === 'zh' ? 110 : 210) });
+}
+
+// Season runs across the whole lectionary table: one pass gives every
+// season's real start and end, which the plans use for their quiet progress.
+interface SeasonRun { season: string; start: string; end: string; }
+const dayTable = lectionaryDays as unknown as Record<string, { season: string }>;
+const seasonRuns: SeasonRun[] = [];
+for (const d of Object.keys(dayTable).sort()) {
+  const last = seasonRuns[seasonRuns.length - 1];
+  if (last && last.season === dayTable[d].season) last.end = d;
+  else seasonRuns.push({ season: dayTable[d].season, start: d, end: d });
+}
+const runFor = (season: string): SeasonRun | null =>
+  seasonRuns.find((r) => r.season === season && r.end >= day) ?? null;
+
+const fmtDay = (iso: string): string => {
+  const dt = new Date(`${iso}T00:00:00Z`);
+  return lang === 'zh'
+    ? `${dt.getUTCMonth() + 1}月${dt.getUTCDate()}日`
+    : dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+};
+
+interface PlanView {
+  season: string;
+  marker: string;
+  name: string;
+  tagline: string;
+  description: string;
+  context: string;
+  prompts: string[];
+  inSeason: boolean;
+  progressLabel: string;
+  progressPct: number;
+}
+
+const PLAN_COPY: Array<Omit<PlanView, 'inSeason' | 'progressLabel' | 'progressPct'>> = [
+  {
+    season: 'advent', marker: 'I',
+    name: lang === 'zh' ? '将临之光' : 'The Coming Light',
+    tagline: lang === 'zh' ? '四个星期的守望与等候' : 'Four weeks of watching and waiting',
+    description: lang === 'zh'
+      ? '教会年历从等候开始。经文沿以赛亚书与福音书走向破晓——先知应许，马利亚反复思想，世界在昏暗中侧耳。'
+      : 'The church year opens with the ache of waiting: prophets promising, Mary pondering, a world dim and listening. The readings walk Isaiah and the Gospels toward the dawn.',
+    context: lang === 'zh'
+      ? '将临期约为十一月末至圣诞前的四个星期，"将临"意为"即将来临"。'
+      : 'Advent spans the four weeks before Christmas; the name simply means "coming."',
+    prompts: lang === 'zh'
+      ? ['有什么盼望，你还未说出口？', '光已经从哪里悄悄进来？', '「守望」与「赶路」有什么不同？']
+      : ['What are you waiting for that you have not said aloud?', 'Where is light already entering — quietly?', 'What would it mean to keep watch, rather than to hurry?'],
+  },
+  {
+    season: 'christmas', marker: 'II',
+    name: lang === 'zh' ? '道成肉身' : 'The Word Made Flesh',
+    tagline: lang === 'zh' ? '停留在伯利恒的十二天' : 'Twelve days at the manger',
+    description: lang === 'zh'
+      ? '十二天的圣诞期不催促任何决定，只有抵达。约翰福音的序言与婴孩叙事，把敬畏安放在马槽边。'
+      : 'The twelve days of Christmas sit still at the incarnation — no resolutions, only arrival. John\'s prologue and the infancy narratives carry the awe.',
+    context: lang === 'zh'
+      ? '圣诞期从12月25日到1月5日，是年历中第一个「庆典之季」。'
+      : 'Christmastide runs December 25 to January 5 — the year\'s first festival season.',
+    prompts: lang === 'zh'
+      ? ['「不平常」此刻藏在你生活的哪个「平常」里？', '有什么事不打招呼就「抵达」了你的生命？', '慢慢读约翰福音 1:14，哪个词留下了？']
+      : ['Where does the extraordinary hide inside your ordinary?', 'What has arrived in your life unannounced?', 'Read John 1:14 slowly. Which word stays?'],
+  },
+  {
+    season: 'epiphany', marker: 'III',
+    name: lang === 'zh' ? '显现之光' : 'Light for the Nations',
+    tagline: lang === 'zh' ? '星辰、河水与婚宴' : 'A star, a river, a wedding',
+    description: lang === 'zh'
+      ? '显现期跟随基督一次次「显明」的痕迹：博士来拜、约旦河的水、迦拿的酒。寻常的场景一扇扇变成门。'
+      : 'Epiphany trails the showings of Christ — magi at the manger, the Jordan waters, wine at Cana. Ordinary scenes become doors.',
+    context: lang === 'zh'
+      ? '「显现」（Epiphany）意为「显明」，从1月6日基督显现日起，延续数周。'
+      : '"Epiphany" means showing: the season begins January 6 and runs for weeks.',
+    prompts: lang === 'zh'
+      ? ['你身边哪个寻常场景，其实是一扇门？', '光正照向你的圈子之外的谁？', '写下这个星期的一次「忽然明白」。']
+      : ['What ordinary scene is quietly a door?', 'Whom does the light reach beyond your circle?', 'Name one epiphany moment from this week.'],
+  },
+  {
+    season: 'lent', marker: 'IV',
+    name: lang === 'zh' ? '旷野之路' : 'The Wilderness Road',
+    tagline: lang === 'zh' ? '四十天的诚实之地' : 'Forty days of honest ground',
+    description: lang === 'zh'
+      ? '大斋期陪着耶稣走进旷野。它不是阴沉的节期，而是一段删繁就简的诚实：当喧闹被放下，还剩下什么。'
+      : 'Lent walks Jesus\' forty days into the desert — less a season of gloom than of uncluttered honesty: what remains when the noise is set down.',
+    context: lang === 'zh'
+      ? '大斋期从圣灰日起四十余天，止于复活节前的圣周。'
+      : 'Lent runs from Ash Wednesday through Holy Week, forty days and more before Easter.',
+    prompts: lang === 'zh'
+      ? ['放下哪一件事，能为你腾出空间？', '你正被带往哪个自己不会选择的地方？', '写下你一直在回避的那句祷告。']
+      : ['What one thing, set down, would make room?', 'Where are you being led that you would not choose?', 'Write the prayer you have been avoiding.'],
+  },
+  {
+    season: 'easter', marker: 'V',
+    name: lang === 'zh' ? '复活五十日' : 'Fifty Days of Light',
+    tagline: lang === 'zh' ? '最长的庆典' : 'The longest festival',
+    description: lang === 'zh'
+      ? '复活期拒绝匆忙：五十天的显现、开门的锁屋、岸边的鱼与火。喜乐得到它所需要的空间。'
+      : 'Eastertide refuses to hurry: fifty days of appearances, locked rooms opening, fish on a shore. Joy is given the space it needs.',
+    context: lang === 'zh'
+      ? '复活期五十天，从复活日到圣灵降临日，是年历中最长的庆典。'
+      : 'Eastertide lasts fifty days, from the resurrection to Pentecost — the calendar\'s longest feast.',
+    prompts: lang === 'zh'
+      ? ['谁在背后叫你的名字，让生命回转？', '你哪一间「锁着的屋子」正在被打开？', '五十天的喜乐会如何改变你的节奏？']
+      : ['Where is life standing behind you, saying your name?', 'What locked room of yours is being opened?', 'How would fifty days of joy change your pace?'],
+  },
+  {
+    season: 'pentecost', marker: 'VI',
+    name: lang === 'zh' ? '漫长的绿季' : 'The Long Green Season',
+    tagline: lang === 'zh' ? '平常日子，不平常的生长' : 'Ordinary time, extraordinary growth',
+    description: lang === 'zh'
+      ? '圣灵降临之后，年历转绿。这是最长的一段「平常时间」——生活大部分发生在这里，诗篇与比喻慢慢做工。'
+      : 'After Pentecost the calendar turns green. This long ordinary season is where most of life happens; the psalms and parables do their slow work.',
+    context: lang === 'zh'
+      ? '圣灵降临期从初夏延续到将临期前，占年历近一半，礼仪颜色是绿。'
+      : 'Pentecost runs from early summer to the edge of Advent, nearly half the year, vested in green.',
+    prompts: lang === 'zh'
+      ? ['有什么正在你里面生长，却没有人为它鼓掌？', '今天可以重复的一次小小忠信之举是什么？', '在琐碎里，圣灵正在提醒你什么？']
+      : ['What is growing in you that no one applauds?', 'Which small, faithful act can you repeat today?', 'Where is the Spirit prompting in the mundane?'],
+  },
+];
+
+const plans: PlanView[] = PLAN_COPY.map((p) => {
+  const run = runFor(p.season);
+  const inSeason = entry.season === p.season;
+  let progressLabel = '';
+  let progressPct = 0;
+  if (run) {
+    const total = Math.round((Date.parse(`${run.end}T00:00:00Z`) - Date.parse(`${run.start}T00:00:00Z`)) / 86_400_000) + 1;
+    if (inSeason && day >= run.start) {
+      const nth = Math.round((Date.parse(`${day}T00:00:00Z`) - Date.parse(`${run.start}T00:00:00Z`)) / 86_400_000) + 1;
+      progressLabel = lang === 'zh' ? `第 ${nth} 天 · 共 ${total} 天` : `Day ${nth} of ${total}`;
+      progressPct = Math.round((nth / total) * 100);
+    } else {
+      progressLabel = lang === 'zh' ? `${fmtDay(run.start)} 开始` : `begins ${fmtDay(run.start)}`;
+    }
+  }
+  return { ...p, inSeason, progressLabel, progressPct };
+});
+
 // Assistant widget context: what reading is currently on screen (design:
 // docs/superpowers/specs/2026-09-01-web-assistant-design.md, section 3).
 // Hidden interpretations (gated draws) are passed as '' - the assistant is
@@ -501,18 +686,90 @@ const description = lang === 'zh'
   })}>
   </script>
 
-  <header>
-    <img src="/logo.webp" alt="Lectio — daily scripture reading and reflection" class="site-logo" width="512" height="512" />
-    <h1>{lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Scripture Reading'}</h1>
-  </header>
+  <section class="sanctuary-hero" aria-labelledby="sanctuary-name">
+    <div class="hero-breath" aria-hidden="true"></div>
+    <img src="/logo.webp" alt="" class="site-logo" width="512" height="512" />
+    <h1 class="sanctuary-name" id="sanctuary-name">{lang === 'zh' ? 'Lectio 圣言诵读' : 'Lectio'}</h1>
+    <p class="sanctuary-sub">
+      {lang === 'zh' ? '一座为默想读经而建的网络小圣所' : 'A quiet house for contemplative scripture reading'}
+    </p>
 
-  <p class="today-entry">
-    {lang === 'zh'
-      ? '或者跟随教会年历，一步一步读今天的经文。'
-      : "Or follow the church calendar and walk today's passage, one step at a time."}
-    {' '}
-    <a href="/today">{lang === 'zh' ? '今日诵读' : "Today's reading"}</a>
-  </p>
+    <div class="verse-of-day">
+      <p class="verse-label">{lang === 'zh' ? '今日经文 · 沿教会年历' : 'Verse of the day · from the lectionary'}</p>
+      <div class="verse-cycle" id="verse-cycle">
+        {heroVerses.map((v, i) => (
+          <div class={`verse-slide${i === 0 ? ' shown' : ''}`}>
+            <blockquote>&ldquo;{v.text}&rdquo;</blockquote>
+            <p class="verse-ref">{v.ref}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <a class="begin-cta" href="/today" data-event="cta_click" data-event-props='{"slot":"hero_begin"}'>
+      {lang === 'zh' ? '开始诵读' : 'Begin Reading'}
+    </a>
+    <p class="hero-alt">
+      <a href="#receive">{lang === 'zh' ? '或者，带着一个问题，领受一节经文' : 'Or bring a question and receive a verse'}</a>
+    </p>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="paths-section" aria-labelledby="paths-heading">
+    <p class="smallcaps" data-reveal>{lang === 'zh' ? '默观之路' : 'The Contemplative Paths'}</p>
+    <h2 class="paths-title" id="paths-heading" data-reveal>{lang === 'zh' ? '四个动作' : 'The Four Movements'}</h2>
+    <p class="paths-sub" data-reveal>
+      {lang === 'zh'
+        ? '圣言诵读不是读法，而是走法——在一段经文里，四个不慌不忙的动作。'
+        : 'Lectio Divina is walked, not skimmed — four unhurried movements through one passage.'}
+    </p>
+    <div class="paths-grid">
+      {[
+        {
+          latin: 'Lectio', name: lang === 'zh' ? '读' : 'Read', anchor: 'lectio',
+          desc: lang === 'zh' ? '缓慢地读，直到有一个词亮起来。' : 'Read slowly, again and again, until a word shines.',
+        },
+        {
+          latin: 'Meditatio', name: lang === 'zh' ? '想' : 'Reflect', anchor: 'meditatio',
+          desc: lang === 'zh' ? '停在那词上，让它触到你的生活。' : 'Chew on the word that stopped you; let it touch your day.',
+        },
+        {
+          latin: 'Oratio', name: lang === 'zh' ? '应' : 'Respond', anchor: 'oratio',
+          desc: lang === 'zh' ? '把浮现的说回去——感谢、疑问、恳求，都算。' : 'Say back what surfaced — thanks, protest, plea, all honest.',
+        },
+        {
+          latin: 'Contemplatio', name: lang === 'zh' ? '息' : 'Rest', anchor: 'contemplatio',
+          desc: lang === 'zh' ? '放下言语，只是安静地待着。' : 'Set the words down. Sit with what has been given.',
+        },
+      ].map((p, i) => (
+        <a
+          class="path-card"
+          href={`/approach#${p.anchor}`}
+          data-reveal
+          style={`--reveal-delay:${(i * 0.12).toFixed(2)}s`}
+        >
+          <p class="path-latin">{p.latin}</p>
+          <p class="path-name">{p.name}</p>
+          <p class="path-desc">{p.desc}</p>
+        </a>
+      ))}
+    </div>
+    <p class="paths-more" data-reveal>
+      <a href="/library">{lang === 'zh' ? '或先到经文库看看' : 'Or browse the verse library first'}</a>
+    </p>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="receive-section" id="receive" aria-labelledby="receive-heading">
+    <p class="smallcaps" data-reveal>{lang === 'zh' ? '带着一个问题' : 'Bring a Question'}</p>
+    <h2 class="receive-title" id="receive-heading" data-reveal>{lang === 'zh' ? '领受一句话' : 'Receive a Word'}</h2>
+    <p class="receive-sub" data-reveal>
+      {lang === 'zh'
+        ? '经文不由你挑选地到来——正因如此，它才有机会说出你原本不会对自己说的话。'
+        : 'The verse arrives unbidden — which is exactly why it may say what you would not say to yourself.'}
+    </p>
 
   <form method="post" id="reading-form">
     <div class="suggested-questions">
@@ -630,6 +887,7 @@ const description = lang === 'zh'
   {error && (
     <p class="error">{lang === 'zh' ? '错误:' : 'Error:'} {error}</p>
   )}
+  </section>
 
   {!registered && (
     <div class="register-perk">
@@ -879,6 +1137,178 @@ const description = lang === 'zh'
     </section>
   )}
 
+  <hr class="rule" />
+
+  <section class="guide-section" aria-labelledby="guide-heading">
+    <p class="smallcaps" data-reveal>{lang === 'zh' ? '向导手记' : 'From the Guide'}</p>
+    <h2 class="guide-title" id="guide-heading" data-reveal>
+      {lang === 'zh' ? '守此一隅的人' : 'A Note from the Keeper'}
+    </h2>
+    <p class="guide-sub" data-reveal>
+      {lang === 'zh' ? '关于与经文相遇这件事' : 'On encountering the text'}
+    </p>
+    <div class="guide-body" data-reveal>
+      <div class="guide-portrait" aria-hidden="true">
+        <svg viewBox="0 0 100 100" role="img" aria-hidden="true">
+          <defs>
+            <radialGradient id="gp-bg" cx="38%" cy="30%" r="80%">
+              <stop offset="0%" stop-color="#f3ecd7" />
+              <stop offset="100%" stop-color="#ddd1b0" />
+            </radialGradient>
+          </defs>
+          <circle cx="50" cy="50" r="49" fill="url(#gp-bg)" stroke="#b59a5e" stroke-width="1" />
+          <path d="M30 74 Q 46 58 66 30" fill="none" stroke="#66744a" stroke-width="2.2" stroke-linecap="round" />
+          <path d="M45 55 Q 38 48 28 48 Q 34 57 45 55 Z" fill="#7c8a5c" />
+          <path d="M52 45 Q 60 38 70 40 Q 64 49 52 45 Z" fill="#66744a" />
+          <path d="M58 36 Q 55 27 47 24 Q 48 34 58 36 Z" fill="#7c8a5c" />
+          <path d="M40 63 Q 30 60 24 52 Q 34 52 40 63 Z" fill="#66744a" />
+          <circle cx="50" cy="62" r="3.2" fill="#8a6d2c" />
+          <circle cx="61" cy="49" r="2.6" fill="#96772e" />
+        </svg>
+      </div>
+      <div class="guide-text">
+        {lang === 'zh' ? (
+          <>
+            <p>
+              我起初并不是到经文里找答案的。我来的方式，更像走进一座园子——厌倦了屏幕，厌倦了速度。
+              第一个清晨，我对着一节经文坐了十分钟，什么也没有发生。{' '}
+              <span class="annotated" tabindex="0">而这正是重点<span class="annotation">十分钟在起初会显得漫长；奇怪的是，练习得越久，它越短。</span></span>
+              ：有什么在我里面终于安静了下来。
+            </p>
+            <p>
+              许多年里，我读圣经像读新闻：快、扫视、随时准备离开。是圣言诵读{' '}
+              <span class="annotated" tabindex="0">把读经慢了下来<span class="annotation">诵读（读）、默想（想）、祈祷（应）、默观（息）——正是这座小圣所立基的四个动作。</span></span>
+              ——一段经文，四个动作，不要求结论。我在这里遇见的很少是答案；更多是陪伴。
+            </p>
+            <p class="guide-sign">—— 守此一隅的人</p>
+          </>
+        ) : (
+          <>
+            <p>
+              I did not come to scripture looking for answers. I came the way you come to a garden —
+              tired of screens, tired of speed. The first morning I sat with a single verse for ten
+              minutes, nothing happened. That was the point: something in me{' '}
+              <span class="annotated" tabindex="0">finally stopped<span class="annotation">Ten minutes can feel like an eternity at first. Strangely, it grows shorter the longer you practice.</span></span>.
+            </p>
+            <p>
+              For years I read the Bible the way I read the news: fast, scanning, already leaving.
+              Lectio Divina{' '}
+              <span class="annotated" tabindex="0">unhurried the reading<span class="annotation">Lectio (read), Meditatio (reflect), Oratio (respond), Contemplatio (rest) — the same four movements this house is built on.</span></span>{' '}
+              — one passage, four movements, no verdict required. What I meet here is rarely an
+              answer; it is company.
+            </p>
+            <p class="guide-sign">&mdash; The keeper of this sanctuary</p>
+          </>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="plans-section" aria-labelledby="plans-heading">
+    <p class="smallcaps" data-reveal>{lang === 'zh' ? '诵读之旅' : 'Reading Plans'}</p>
+    <h2 class="plans-title" id="plans-heading" data-reveal>{lang === 'zh' ? '随节期而读' : 'Seasons of Reading'}</h2>
+    <p class="plans-sub" data-reveal>
+      {lang === 'zh'
+        ? '教会年历是最古老的诵读计划。用一个节期的长度，慢慢地走。'
+        : 'The church year is the oldest reading plan there is. Walk one season, slowly.'}
+    </p>
+    <div class="plans-list">
+      {plans.map((plan, i) => (
+        <div class={`plan-card${plan.inSeason ? ' in-season' : ''}`} data-reveal style={`--reveal-delay:${(i * 0.08).toFixed(2)}s`}>
+          <button class="plan-head" type="button" aria-expanded="false" aria-controls={`plan-body-${i}`}>
+            <span class="plan-marker" aria-hidden="true">{plan.marker}</span>
+            <span class="plan-head-text">
+              <span class="plan-name">{plan.name}</span>
+              <span class="plan-tagline">{plan.tagline}</span>
+            </span>
+            <svg class="plan-caret" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M3 6 L8 11 L13 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+          <div class="plan-body" id={`plan-body-${i}`}>
+            <div class="plan-body-inner">
+              <div class="plan-body-pad">
+                <p>{plan.description}</p>
+                <p class="plan-context">{plan.context}</p>
+                <ul class="plan-prompts">
+                  {plan.prompts.map((prompt) => <li>{prompt}</li>)}
+                </ul>
+                {plan.progressLabel && (
+                  <div class="plan-progress">
+                    <span>{plan.progressLabel}</span>
+                    {plan.inSeason && (
+                      <span class="plan-progress-track">
+                        <span class="plan-progress-fill" style={`width:${plan.progressPct}%`}></span>
+                      </span>
+                    )}
+                  </div>
+                )}
+                <a class="plan-walk" href="/today">
+                  {lang === 'zh' ? '在今日诵读中同行' : 'Walk it in today\u2019s reading'}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="invitation-section" aria-labelledby="invitation-heading">
+    <p class="smallcaps" data-reveal>{lang === 'zh' ? '每日一句' : 'The Daily Invitation'}</p>
+    <h2 class="invitation-title" id="invitation-heading" data-reveal>
+      {lang === 'zh' ? '清晨的一句话' : 'One Verse with Your Morning'}
+    </h2>
+    <p class="invitation-sub" data-reveal>
+      {lang === 'zh'
+        ? '每个清晨，一节安静的经文抵达你的信箱。没有推送，没有打卡——只有一句话，陪你安坐。'
+        : 'Each morning, one quiet verse in your inbox. No noise, no streaks — only a word to sit with.'}
+    </p>
+    <form class="invite-form" id="invite-form" data-reveal>
+      <input
+        class="invite-input"
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        aria-label={lang === 'zh' ? '电子邮箱' : 'Email address'}
+        placeholder={lang === 'zh' ? '你的邮箱' : 'your@email'}
+      />
+      <button class="invite-button" type="submit">
+        {lang === 'zh' ? '接受邀请' : 'Receive it'}
+      </button>
+    </form>
+    <p class="invite-error" id="invite-error" hidden>
+      {lang === 'zh' ? '这个邮箱看起来不太对——再看一眼？' : 'That address does not look right — one more look?'}
+    </p>
+    <div class="invite-success" id="invite-success" hidden>
+      {lang === 'zh'
+        ? '已经记下你了。明早见——愿第一缕光里有一句话等你。'
+        : 'You are on the list. See you at morning light — may a word be waiting.'}
+    </div>
+    <p class="invite-note">
+      {lang === 'zh' ? '每天最多一封，随时可退订。参见' : 'At most one email a day; unsubscribe anytime. See our '}
+      <a href="/privacy">{lang === 'zh' ? '隐私说明' : 'privacy note'}</a>.
+    </p>
+  </section>
+
+  <footer class="sanctuary-footer">
+    <p>
+      <a href="/approach">{lang === 'zh' ? '方法' : 'Approach'}</a>
+      {' · '}
+      <a href="/library">{lang === 'zh' ? '经文库' : 'Verse Library'}</a>
+      {' · '}
+      <a href="/today">{lang === 'zh' ? '今日诵读' : "Today's Reading"}</a>
+      {' · '}
+      <a href="/privacy">{lang === 'zh' ? '隐私' : 'Privacy'}</a>
+    </p>
+    <p>{lang === 'zh' ? 'Lectio 圣言诵读 — 一间安读经文的小圣所' : 'Lectio — a quiet house for scripture'}</p>
+  </footer>
+
   <script>
     function selectSpread(key: string) {
       const input = document.getElementById('spread-input') as HTMLInputElement | null;
@@ -1011,5 +1441,53 @@ const description = lang === 'zh'
           : 'Writing your reflection, please wait...';
       }
     });
+
+    // ---- The verse of the day: slides share one cell and take turns ----
+    const slides = document.querySelectorAll<HTMLElement>('#verse-cycle .verse-slide');
+    if (slides.length > 1) {
+      let current = 0;
+      setInterval(() => {
+        slides[current].classList.remove('shown');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('shown');
+      }, 8000);
+    }
+
+    // ---- A revealed reading opens in the light, not below the fold ----
+    const result = document.querySelector('.result-header');
+    if (result) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      result.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    // ---- The Daily Invitation: one quiet POST, no redirect ----
+    const inviteForm = document.getElementById('invite-form') as HTMLFormElement | null;
+    if (inviteForm) {
+      const errorNote = document.getElementById('invite-error');
+      const successNote = document.getElementById('invite-success');
+      inviteForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const input = inviteForm.querySelector<HTMLInputElement>('input[name="email"]');
+        const email = input?.value.trim() ?? '';
+        const lang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
+        errorNote?.setAttribute('hidden', '');
+        try {
+          const res = await fetch('/api/daily-invitation', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, lang }),
+          });
+          const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+          if (res.ok && data?.ok) {
+            inviteForm.setAttribute('hidden', '');
+            successNote?.removeAttribute('hidden');
+          } else {
+            errorNote?.removeAttribute('hidden');
+          }
+        } catch {
+          errorNote?.removeAttribute('hidden');
+        }
+      });
+    }
   </script>
 </Layout>
