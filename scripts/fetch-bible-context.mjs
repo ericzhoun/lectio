@@ -11,6 +11,7 @@
 // Validates every deck verse against the fetched chapters and reports gaps.
 
 import { readFileSync, writeFileSync } from 'node:fs';
+import { collapse, restoreWhitespace } from './lib/restore-whitespace.mjs';
 
 const src = readFileSync(new URL('../src/lib/scripture.ts', import.meta.url), 'utf8');
 
@@ -106,13 +107,60 @@ const normalizeEn = (t) =>
     return sentenceStart ? 'The LORD' : 'the LORD';
   });
 
+// getbible.net drops the WEB's line breaks without leaving a space behind, so
+// the text arrives with words glued together ("one smallest letteror one tiny
+// pen stroke"). scripts/lib/restore-whitespace.mjs explains the repair; this
+// just fetches the reference edition it needs. bible-api.com rate-limits hard,
+// hence the deliberate pacing - and if it is unreachable the generation still
+// completes and reports what it could not check.
+const BIBLE_API_UNAVAILABLE = [];
+
+async function repairChapter(book, chapter, verses) {
+  const slug = `${book.toLowerCase().replace(/ /g, '+')}+${chapter}`;
+  let reference;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(`https://bible-api.com/${slug}?translation=web`);
+      if (res.status === 429) { await sleep(4000 * attempt); continue; }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      reference = await res.json();
+      break;
+    } catch (e) {
+      if (attempt === 3) {
+        BIBLE_API_UNAVAILABLE.push(`${book} ${chapter}: ${e.message}`);
+        return { verses, repaired: 0 };
+      }
+      await sleep(1500 * attempt);
+    }
+  }
+  if (!reference?.verses) {
+    BIBLE_API_UNAVAILABLE.push(`${book} ${chapter}: no verses in response`);
+    return { verses, repaired: 0 };
+  }
+
+  const byNum = new Map(reference.verses.map((v) => [v.verse, collapse(v.text)]));
+  let repaired = 0;
+  const fixed = verses.map((v) => {
+    const text = restoreWhitespace(v.text, byNum.get(v.num));
+    if (text === v.text) return v;
+    repaired++;
+    return { ...v, text };
+  });
+  return { verses: fixed, repaired };
+}
+
 const out = {};
 const failures = [];
+let repairedTotal = 0;
 for (const [key, { book, chapter }] of chapters) {
   const nr = BOOK_NR[book];
   try {
-    const en = await fetchChapter('web', nr, chapter);
+    let en = await fetchChapter('web', nr, chapter);
     await sleep(250);
+    const restored = await repairChapter(book, chapter, en);
+    en = restored.verses;
+    repairedTotal += restored.repaired;
+    await sleep(2000);
     const zh = await fetchChapter('cus', nr, chapter);
     await sleep(250);
     // Align by verse number (sources are ordered but never trust order blindly)
@@ -134,6 +182,13 @@ for (const [key, { book, chapter }] of chapters) {
 if (failures.length > 0) {
   console.error(`\n${failures.length} chapters failed:\n` + failures.join('\n'));
   process.exit(1);
+}
+console.log(`\nwhitespace repair: ${repairedTotal} verses restored from bible-api.com`);
+if (BIBLE_API_UNAVAILABLE.length > 0) {
+  console.warn(
+    `${BIBLE_API_UNAVAILABLE.length} chapters could not be checked for missing spaces:\n` +
+      BIBLE_API_UNAVAILABLE.join('\n')
+  );
 }
 
 // ---- 3. Validate every deck verse against the fetched chapters -------------

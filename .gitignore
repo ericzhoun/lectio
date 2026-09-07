@@ -49,3 +49,4 @@ logo2.png
 # regenerated locally and ship via the wrangler assets upload
 public/audio/
 /.lavish
+/src/roblox/__pycache__

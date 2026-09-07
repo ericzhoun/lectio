@@ -36,11 +36,21 @@ npm run dev
 ## Deployment
 
 ```bash
-npm run build
-npx wrangler deploy
+npm run deploy
 ```
 
-Deploys the `lectio` Worker to `3livescapture.com`.
+Deploys the `lectio` Worker to `3livescapture.com`. This builds, checks the
+build output, and only then uploads — so a failed build aborts the deploy
+instead of shipping whatever stale `dist/` was left behind.
+
+Do not run `npm run build` and `npx wrangler deploy` as separate commands. A
+build that dies partway (see the `EPERM` note above) empties `dist/` first;
+`wrangler deploy` on its own has no way to know and will ship the wreckage.
+`scripts/check-build-output.mjs` catches the specific case that has bitten us:
+the prebuilt audio in `public/audio/` is gitignored, so a build made without it
+succeeds, and `/api/tts` then quietly serves Workers AI speech in place of the
+committed voice. The check asserts every clip the manifests in `src/lib` promise
+is actually present in `dist/client` before anything is uploaded.
 
 ### Bindings and environment
 
