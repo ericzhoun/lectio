@@ -11,7 +11,7 @@ function Session:dispatch(e)
     local t = e.type
     if t == "near" then
         self.near = e.value
-        if not self.near and self.phase ~= "idle" and self.phase ~= "failed" and self.phase ~= "uncertain" then
+        if not self.near and self.phase ~= "idle" and self.phase ~= "failed" and self.phase ~= "uncertain" and self.phase ~= "closing" then
             if self.phase == "reaching" then self.phase="idle"; self.requestId=nil
             else self.phase="paused" end
         end
@@ -20,7 +20,7 @@ function Session:dispatch(e)
     elseif t == "contact" and self.phase == "reaching" then self.phase="loading"
     elseif t == "received" and e.id == self.requestId and not self.reading then
         self.reading=e.reading; self.page=1
-        self.phase=(self.near and self.phase ~= "paused") and "revealing" or "paused"
+        self.phase=(self.near and self.phase == "loading") and "revealing" or "paused"
     elseif t == "revealed" and self.phase == "revealing" then self.phase="reading"
     elseif t == "select" and self.reading and self.phase ~= "closing" then
         self.page=math.max(1,math.min(#self.reading.verses,e.page))
@@ -32,10 +32,11 @@ function Session:dispatch(e)
         self.phase="idle"; self.reading=nil; self.requestId=nil; self.page=1
     elseif t == "failure" and e.id == self.requestId and not self.reading then
         self.phase=e.uncertain and "uncertain" or "failed"
+        if not e.uncertain then self.requestId=nil end
     elseif t == "respawn" then
         self.near=false
         if self.phase == "reaching" then self.phase="idle"; self.requestId=nil
-        elseif self.phase ~= "idle" and self.phase ~= "uncertain" and self.phase ~= "failed" then self.phase="paused" end
+        elseif self.phase ~= "idle" and self.phase ~= "uncertain" and self.phase ~= "failed" and self.phase ~= "closing" then self.phase="paused" end
     end
     return self:snapshot()
 end

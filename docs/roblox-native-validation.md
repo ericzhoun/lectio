@@ -20,8 +20,12 @@ The speech driver implements the documented API as a candidate, not a verified t
 
 - Baseline: existing Roblox backend suite passed, 19 tests.
 - Red phase: new behavioral/generator tests failed because session modules and a safe build entry point did not exist.
-- Green phase: session transitions, stale responses, duplicate requests, independent players, uncertain outcomes, UTF-8 segmentation, narration ownership, generator structure, no default key embedding, and Lua syntax pass using Python unittest and Lua 5.4 through lupa.
-- Lua 5.4 compilation is an additional syntax check; it is not Roblox engine execution. The modules deliberately use the common Lua subset.
+- Green phase: session transitions, stale responses, duplicate requests, independent players, uncertain outcomes, UTF-8 segmentation, narration ownership, generator structure, no default key embedding, and Lua syntax pass using Python unittest and Lua through lupa.
+- Lua compilation through lupa is an additional syntax check; it is not Roblox engine execution. The modules deliberately use the common Lua subset.
+- The real server handlers execute against controlled engine/HTTP doubles: live timeout does not invoke offline drawing, replay makes no second backend call or quota use, distance rejection works, and no private reading text reaches the public board or broadcast remote.
+- The real client controller executes against presentation doubles: deliberate activation sends once, a result arriving while away pauses, resume/replay/next reuse content, Finish clears it, and definitive rejection is not later overwritten by the request timer.
+- Generated artifact matches current sources, has unique XML references, and contains no credential attribute or test runner in the normal build.
+- Final local verification: eight Python/Lua checks pass; 19 existing Roblox backend Vitest tests pass in the isolated worktree. The generated place is approximately 209 KB. No runtime checkbox below is implied by these counts.
 
 ## Required Studio acceptance checklist
 
@@ -35,4 +39,8 @@ The speech driver implements the documented API as a candidate, not a verified t
 - [ ] Leave during loading and reading; return/resume; repeated activation; quota rejection and live timeout.
 - [ ] Reduced motion, small-screen layout, page flight and camera cleanup.
 
-Release status: implementation in progress; Studio acceptance not yet run.
+Release status: candidate implementation and generated place available; Studio acceptance not yet run. No merge or publication performed.
+
+## Execution deviations
+
+The approved plan's first task asks for real audio/rig feasibility in Studio before audio integration. That verification is blocked by the lack of a connected Studio tool. To prepare a concrete artifact for testing, the implementation includes the documented audio driver and gesture candidates, with explicit unavailable-audio handling. This is not a claim that the first task's runtime gate passed. All visual/audio/device acceptance remains unchecked above.

@@ -184,8 +184,8 @@ def build_world():
     items += P("Altar", (9, 3, 3.5), (0, 3.3, -49), (230, 225, 215), "Marble")
     items += P("AltarBible", (4.4, 0.35, 3.1), (0, 5.15, -49), (124, 64, 52), transparency=1, cancollide=False)
     book = []
-    book += P("CoverLeft", (2.2, 0.14, 3.2), (-1.1, 5.1, -49), (95, 43, 36), cancollide=False)
-    book += P("CoverRight", (2.2, 0.14, 3.2), (1.1, 5.1, -49), (95, 43, 36), cancollide=False)
+    book += P("CoverLeft", (2.2, 0.14, 3.2), (-1.1, 5.45, -49), (95, 43, 36), cancollide=False)
+    book += P("CoverRight", (2.2, 0.14, 3.2), (1.1, 5.45, -49), (95, 43, 36), cancollide=False)
     book += P("PageBlock", (4.1, 0.18, 2.95), (0, 5.26, -49), (247, 238, 212), cancollide=False)
     for name, x, color in (("RibbonDaily", -1.4, (204, 166, 81)), ("RibbonDivina", 0, (116, 146, 119)), ("RibbonDeep", 1.4, (128, 117, 162))):
         book += P(name, (0.45, 0.06, 1.1), (x, 5.4, -47.55), color, cancollide=False)

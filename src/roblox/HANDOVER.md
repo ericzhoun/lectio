@@ -2,7 +2,9 @@
 
 **Date:** 2026-09-06
 **Author:** Built with ZCode (automated Roblox place generator)
-**Workspace:** `C:\Users\ericz\Documents\roblox`
+**Native-reading implementation:** `D:\workplace\lectio-native-reading`, branch `codex/roblox-native-reading`.
+
+**Validation status:** Automated checks pass; Roblox Studio visual, audio, input-device, and multiplayer playtests have not been run in the implementation session. See `docs/roblox-native-validation.md` for the exact acceptance checklist. Do not treat generated XML validation as proof of playable behavior.
 
 ---
 
@@ -10,7 +12,7 @@
 
 A Roblox world that replicates the functionality of **https://3livescapture.com/** — the **Lectio** daily scripture-reading website — as a playable 3D place. The original `/continuecontinue` path returns HTTP 404; the root site was used as the source of truth.
 
-The deliverable is **`Lectio.rbxlx`**, a standard Roblox place file that opens directly in Roblox Studio (it was generated on this machine and is currently open in Studio).
+The deliverable is **`Lectio.rbxlx`**, a standard Roblox place file for Roblox Studio. This version makes the physical Bible the primary reading interface: approach, select a ribbon, touch, then read private flying pages and verse bubbles. Narration uses a client-only candidate Roblox speech driver. The agent has not opened or playtested this generated version in Studio.
 
 ### What the original site does (source of truth)
 
@@ -30,7 +32,14 @@ The deliverable is **`Lectio.rbxlx`**, a standard Roblox place file that opens d
 | `generate_lectio.py` | Python generator that builds `Lectio.rbxlx` from the three Lua sources. Re-run after editing any `src_*.lua`. |
 | `src_verse_data.lua` | ModuleScript — bilingual (KJV / CUV, both public domain) verse library, topic categories/keywords, 7 weekday "Today's reading" passages, assistant rules. |
 | `src_server.lua` | Server Script — RemoteEvents, DataStore-backed daily limits, registration, verse picking, 3D board updates, ProximityPrompts. |
-| `src_client.lua` | LocalScript — the entire web UI rebuilt as a Roblox ScreenGui (landing panel, reading panel, library, assistant chat, settings, toasts, language switching). |
+| `src_client.lua` | LocalScript — composes native reading and retains optional intention/menu, library, assistant, registration, settings, and language controls. |
+| `modules/ReadingSession.lua` | Pure reading lifecycle, retained session bookmark, page and language. |
+| `modules/DrawRequests.lua` | Server request identity, bounded result cache, duplicate/uncertain protection. |
+| `modules/BibleInteraction.lua` | Local prompts, ribbon choice, R15 IK/R6 fallback reach, public activity presentation. |
+| `modules/BiblePresentation.lua` | Private book copy, flying pages, verse bubbles, page controls, brief camera framing. |
+| `modules/Narration.lua`, `SpeechDriver.lua`, `TextSegments.lua` | Single-owner audio, candidate exact-text TTS, complete UTF-8 segments. |
+| `modules/NativeReading.lua` | Connects interaction, session, presentation, narration, and existing remotes. |
+| `tests/` | Pure Lua/controller/server tests through lupa, generator checks, optional Studio assertions. |
 
 Regenerate the place after editing any source:
 
@@ -39,6 +48,8 @@ python generate_lectio.py
 ```
 
 The generator validates the XML is well-formed before writing.
+
+Default generation never reads or embeds the API key. For a private live build, use an explicit untracked output, for example `python generate_lectio.py --embed-api-key --output Lectio.test.rbxlx`. Never commit a credential-bearing build. `--include-tests` packages the Studio assertions; it is off for the normal artifact.
 
 ---
 
@@ -49,16 +60,16 @@ The generator validates the XML is well-formed before writing.
 | Question input ("I want to explore…") | TextBox on the landing panel; empty input falls back to a random popular topic |
 | Popular Topics (4 chips) | Four clickable chips that fill the topic box |
 | Daily Word / Lectio Divina / Deep Lectio | Three selectable mode cards (1 / 3 / 10 verses) |
-| "Explore" button | Fires `LectioExplore` → server picks verses, deducts usage, replies; client shows a reading panel one verse at a time (Next / Back / Amen) |
-| Verse display | Reading panel + live 3D "VerseBoard" above the altar showing the first verse and the reader's display name |
+| Touch Bible / Explore | Starts one deliberate reach and request near the altar; server selects verses and enforces usage; pages fly from a private Bible copy. |
+| Verse display | Private verse bubble above the selected page; reference, stage/progress, replay/pause/resume, previous/next, reflection, and final summary. The public board contains general chapel information only. |
 | 3 readings/day, 6/day registered | Server-enforced per-player counters keyed by UTC date, persisted via DataStore `LectioData_v1` (session-memory fallback) |
 | "Create free account" registration | Register panel button (and a desk with prompt in the world) sets `registered=true`, grants 6/day + 3 divina + 1 deep trials |
 | Church calendar "Today's reading" | Deterministic weekday-picked 3-step passage; free (doesn't consume daily readings) |
 | Verse Library | Scrolling GUI list of all verses grouped by 10 topic categories; also reachable via the bookshelf in the world |
 | Lectio Assistant chat | Chat window wired to keyword-rule assistant with a 10 messages/day cap |
 | EN / 中文 toggle | Full UI + verse re-render in both languages |
-| Settings | Music toggle (placeholder asset ID) and language shortcut |
-| In-world interactivity | ProximityPrompts: altar Bible → main panel; RegisterDesk → register; AssistantNPC → chat; LibraryWall → library |
+| Settings | Separate narration and music toggles, reduced motion, language shortcut. |
+| In-world interactivity | Private Bible/ribbon prompts initiate reading; desk, assistant, and library keep their secondary destinations. The small Lectio menu opens optional intention and secondary controls. |
 
 ---
 
@@ -102,16 +113,13 @@ the server → `503 not_configured`; wrong key → `401`.
 **Setup:**
 
 1. Backend: set the `ROBLOX_API_KEY` wrangler secret (`npx wrangler secret put ROBLOX_API_KEY`), same value locally in `.env` / `.dev.vars`.
-2. Game: on the `LectioServer` Script set the `LectioApiKey` attribute (Studio properties pane) — or edit the `DEFAULT_API_KEY` constant — and optionally `LectioBackendUrl` (defaults to `https://3livescapture.com`). `generate_lectio.py` also bakes the attribute into the generated place automatically when `ROBLOX_API_KEY` is set in the environment or in the repo-root `.env`.
+2. Game: on the `LectioServer` Script set the `LectioApiKey` attribute privately in Studio and optionally `LectioBackendUrl` (defaults to `https://3livescapture.com`). The generator embeds the attribute only with `--embed-api-key`; use a separate untracked output. Never put the real secret in a source constant or tracked place.
 3. Studio: enable *Game Settings → Security → Allow HTTP Requests*; a published game has HTTP enabled by default.
 
-**Fallback:** if the key is missing, HTTP is disabled, or the backend is
-unreachable, the server logs a warning and serves everything from the built-in
+**Fallback:** if the key is missing or HTTP is disabled before a draw, the server logs a warning and serves readings from the built-in
 `VerseData` (43 verses, DataStore quotas, keyword-rule assistant). A 401/503
 switches live mode off for the session instead of hammering a misconfigured
-backend. The verse payloads are shaped identically in both modes, so the
-client UI is unchanged; AI reflections (`interp`/`summary`) are simply empty
-offline.
+backend. A charged live explore request with an uncertain transport result never triggers a second offline draw. That player's draw stays blocked for the server session rather than risking another charge. A late confirmed client result is retained for explicit resume. AI reflections (`interp`/`summary`) are empty offline.
 
 - **Persistence:** `DataStoreService:GetDataStore("LectioData_v1")`, key `u_<UserId>`, value `{date, daily, registered, divina, deep, assist}` — offline fallback only. All DataStore calls are `pcall`-wrapped with an in-memory fallback, so the place never errors in Studio with API access disabled.
 - **Verse selection:** live mode draws randomly from the full deck (exactly like the website — the topic feeds the AI reflection, not the draw). Offline fallback keeps the local keyword→category matching.
@@ -120,11 +128,21 @@ offline.
 
 ## 6. How to test
 
-1. Open `Lectio.rbxlx` in Roblox Studio (already open if nothing was closed).
+1. Open the generated `Lectio.rbxlx` in Roblox Studio, preserving any other unsaved place.
 2. Press **Play (F5)**.
-3. The landing panel appears. Try: a popular-topic chip → mode card → **Explore**; "Today's reading"; language toggle; register → notice limit changes 3→6 and divina/deep cards show credits; walk to the altar Bible / desk / statue / bookshelf and press **E**.
-4. Check the 3D VerseBoard updates after each reading.
+3. Spawn is unobstructed. Walk close to the Bible, choose a ribbon, and touch it. Test page flights, complete text segments, narration, replay, previous/next, and finish. The Lectio menu provides optional intention, calendar, registration, library, assistant, and settings.
+4. Start two players and verify that their content and audio stay private. The public board must not display either player's name or verse. Walk away/resume and respawn mid-reading without another draw.
 5. Server output shows `Lectio server ready`; client output `Lectio client ready`.
+
+Automated checks from repository root:
+
+```powershell
+python -m pip install -r src/roblox/tests/requirements.txt
+python -m unittest discover -s src/roblox/tests -p "test_*.py"
+npm test -- src/lib/__tests__/roblox-api.test.ts
+```
+
+The client/server harnesses execute actual routing and session code with engine doubles. They do not simulate rendering, physics, audio output, or Roblox input devices.
 
 ## 7. Known limitations / next steps
 
@@ -133,7 +151,11 @@ offline.
 - **Music asset ID is a placeholder** (`rbxassetid://1841647093`) and may be silent or need replacing with a licensed track.
 - **"Registration"** is a backend-recorded free account keyed to the Roblox identity — the same registered-free perks (6/day, trial credits) without the site's email/Google login, which has no Roblox equivalent.
 - **Assistant reflection language**: the AI reflection is generated in the language the reading was requested in; toggling language mid-reading re-renders verses but keeps the reflection as generated.
-- Nice-to-haves not built: DataStore versioning/migration, reading history, sound cues on verse reveal, mobile UI scaling pass, per-server rate limiting beyond per-player quotas.
+- Bookmarks last only for the current server session. Disconnecting does not preserve reading history.
+- Speech uses `AudioTextToSpeech` through a local `AudioDeviceOutput`; actual target-experience permissions, Mandarin output, and rate limits need Studio verification. A failed load leaves readable text with an audio-unavailable indication.
+- R6 fallback gesture and R15 IK need visual verification with varied avatar sizes. Camera framing is brief; reduced motion skips it.
+- Reused request IDs cannot redraw after result-cache eviction. Up to 256 request identities are retained per player/session; 16 completed payloads are cached.
+- Deferred: persistent history, DataStore migrations, and redesign of secondary menus.
 
 ## 8. Source-of-truth references
 

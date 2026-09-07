@@ -1,12 +1,17 @@
 local Requests = {}
 Requests.__index=Requests
 function Requests.new() return setmetatable({players={}},Requests) end
-function Requests:begin(player,id)
+function Requests:begin(player,id,signature)
+    signature=signature or ""
     local p=self.players[player]
-    if not p then p={cache={},order={}}; self.players[player]=p end
+    if not p then p={cache={},order={},seen={},count=0}; self.players[player]=p end
+    if p.seen[id] and p.seen[id]~=signature then return "conflict" end
     if p.cache[id] then return "cached",p.cache[id] end
     if p.uncertain then return "blocked" end
     if p.active then return p.active == id and "pending" or "blocked" end
+    if p.seen[id] then return "expired" end
+    if p.count>=256 then return "expired" end
+    p.seen[id]=signature; p.count=p.count+1
     p.active=id
     return "start"
 end
@@ -23,7 +28,10 @@ function Requests:uncertain(player,id)
 end
 function Requests:remove(player) self.players[player]=nil end
 function Requests.executeDraw(mode,backend,offline)
-    if mode == "offline" then return {kind="complete",response=offline()} end
+    if mode == "offline" then
+        local ok,response=pcall(offline)
+        return ok and {kind="complete",response=response} or {kind="uncertain"}
+    end
     local ok,result=pcall(backend)
     if not ok or not result then return {kind="uncertain"} end
     return result

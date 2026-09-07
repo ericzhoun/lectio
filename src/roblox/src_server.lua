@@ -9,6 +9,8 @@ local HttpService = game:GetService("HttpService")
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 local VerseData = require(ReplicatedStorage:WaitForChild("VerseData"))
+local DrawRequests = require(script.Parent:WaitForChild("DrawRequests"))
+local drawRequests = DrawRequests.new()
 
 -- Configuration. Script attributes override the constants, so the key can be
 -- set from Studio's properties pane (LectioBackendUrl / LectioApiKey on this
@@ -19,7 +21,7 @@ local DEFAULT_API_KEY = ""
 local BACKEND_URL = script:GetAttribute("LectioBackendUrl") or DEFAULT_BACKEND_URL
 local API_KEY = script:GetAttribute("LectioApiKey") or DEFAULT_API_KEY
 
-local remoteNames = { "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary" }
+local remoteNames = { "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary", "LectioActivity" }
 local remotes = {}
 for _, name in ipairs(remoteNames) do
 	local r = Instance.new("RemoteEvent")
@@ -295,15 +297,6 @@ boardWho.TextScaled = true
 boardWho.Text = "a verse for everyone who seeks"
 boardWho.Parent = boardBg
 
-local function updateBoard(verse, lang, who)
-	if not verse then return end
-	local text = (lang == "zh") and (verse.textZh or verse.zh) or (verse.textEn or verse.en)
-	local ref = (lang == "zh") and (verse.refZh or "") or (verse.refEn or "")
-	boardVerse.Text = text or ""
-	boardRef.Text = ref or ""
-	boardWho.Text = "offered for " .. who
-end
-
 -- ---- Proximity prompts --------------------------------------------------------
 
 local function addPrompt(part, actionText, objectText, key)
@@ -318,7 +311,7 @@ local function addPrompt(part, actionText, objectText, key)
 end
 
 local altar = workspace:FindFirstChild("AltarBible")
-if altar then addPrompt(altar, "Flip open the Bible", "Lectio", "main") end
+-- Bible and ribbon prompts are private client objects; the server validates requests.
 local desk = workspace:FindFirstChild("RegisterDesk")
 if desk then addPrompt(desk, "Register free", "Lectio Registration", "register") end
 local npc = workspace:FindFirstChild("AssistantNPC")
@@ -352,15 +345,59 @@ remotes.LectioState.OnServerEvent:Connect(function(player)
 	remotes.LectioState:FireClient(player, stateFor(data))
 end)
 
-remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang)
+local function beginDraw(player, id, remote, signature)
+    if type(id) ~= "string" or #id < 8 or #id > 80 then return false end
+    local root=player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if not root or not altar or (root.Position-altar.Position).Magnitude > 10 then
+        remote:FireClient(player,{requestId=id,status="rejected",response={ok=false,errorKey="approachBible"}})
+        return false
+    end
+    local status,cached=drawRequests:begin(player.UserId,id,signature)
+    if status == "cached" then remote:FireClient(player,cached); return false end
+    if status ~= "start" then
+        if status == "blocked" then remote:FireClient(player,{requestId=id,status="uncertain",response={ok=false,errorKey="drawUncertain"}}) end
+        if status == "expired" or status == "conflict" then remote:FireClient(player,{requestId=id,status="rejected",response={ok=false,errorKey="backendError"}}) end
+        return false
+    end
+    return true
+end
+local function finishDraw(player,id,remote,result)
+    local envelope={requestId=id,status=result.kind == "uncertain" and "uncertain" or
+        (result.response and result.response.ok and "complete" or "rejected"),response=result.response}
+    if result.kind == "uncertain" then
+        drawRequests:uncertain(player.UserId,id)
+    else drawRequests:complete(player.UserId,id,envelope) end
+    if player.Parent then remote:FireClient(player,envelope) end
+end
+
+local lastActivity={}
+remotes.LectioActivity.OnServerEvent:Connect(function(player)
+    local root=player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    local now=os.clock()
+    if root and altar and (root.Position-altar.Position).Magnitude <= 10 and now-(lastActivity[player.UserId] or -10)>1.5 then
+        lastActivity[player.UserId]=now
+        remotes.LectioActivity:FireAllClients(player.UserId)
+    end
+end)
+Players.PlayerRemoving:Connect(function(player)
+    drawRequests:remove(player.UserId); lastActivity[player.UserId]=nil
+end)
+boardVerse.Text="A quiet place to read and reflect."
+boardRef.Text="Walk to the Bible to begin."
+boardWho.Text="Your reading is personal."
+
+remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang, requestId)
 	if mode ~= "daily" and mode ~= "divina" and mode ~= "deep" then return end
 	topic = sanitizeTopic(topic)
 	lang = sanitizeLang(lang)
+    if not beginDraw(player,requestId,remotes.LectioExplore,HttpService:JSONEncode({topic,mode,lang})) then return end
 	if topic == "" then
 		local pick = VerseData.PopularTopics[rng:NextInteger(1, #VerseData.PopularTopics)]
 		topic = pick.en
 	end
 
+    local liveAtStart=LIVE
+    local result=DrawRequests.executeDraw(liveAtStart and "live" or "offline",function()
 	local resp = callBackend("/api/roblox/explore", {
 		playerId = tostring(player.UserId),
 		displayName = player.DisplayName,
@@ -368,18 +405,11 @@ remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang)
 		mode = mode,
 		lang = lang,
 	})
-	if resp and resp.ok == false then
-		-- A definite backend answer (quota exhausted, locked layout): pass it on.
-		remotes.LectioExplore:FireClient(player, resp)
-		return
-	end
-	if not (resp and resp.ok and type(resp.verses) == "table") then
-		resp = localExplore(player, topic, mode, lang)
-	end
-	remotes.LectioExplore:FireClient(player, resp)
-	if resp.ok and type(resp.verses) == "table" and #resp.verses > 0 then
-		updateBoard(resp.verses[1], lang, player.DisplayName)
-	end
+    if resp and resp.ok == false then return {kind="rejected",response=resp} end
+    if resp and resp.ok and type(resp.verses)=="table" and #resp.verses>0 then return {kind="complete",response=resp} end
+    return {kind="uncertain"}
+    end,function() return localExplore(player,topic,mode,lang) end)
+    finishDraw(player,requestId,remotes.LectioExplore,result)
 end)
 
 remotes.LectioRegister.OnServerEvent:Connect(function(player)
@@ -401,11 +431,12 @@ remotes.LectioRegister.OnServerEvent:Connect(function(player)
 	remotes.LectioRegister:FireClient(player, stateFor(data))
 end)
 
-remotes.LectioToday.OnServerEvent:Connect(function(player, lang)
+remotes.LectioToday.OnServerEvent:Connect(function(player, lang, requestId)
 	lang = sanitizeLang(lang)
+    if not beginDraw(player,requestId,remotes.LectioToday,"today:"..lang) then return end
 	local resp = callBackend("/api/roblox/today", { lang = lang })
 	if resp and resp.ok and type(resp.steps) == "table" and #resp.steps > 0 then
-		remotes.LectioToday:FireClient(player, resp)
+		finishDraw(player,requestId,remotes.LectioToday,{kind="complete",response=resp})
 		return
 	end
 	local idx = tonumber(os.date("!%w")) + 1
@@ -414,7 +445,7 @@ remotes.LectioToday.OnServerEvent:Connect(function(player, lang)
 	for _, s in ipairs(reading.steps) do
 		table.insert(steps, { en = s.en, zh = s.zh, refEn = s.refEn, refZh = s.refZh })
 	end
-	remotes.LectioToday:FireClient(player, { ok = true, titleEn = reading.titleEn, titleZh = reading.titleZh, steps = steps })
+	finishDraw(player,requestId,remotes.LectioToday,{kind="complete",response={ ok = true, titleEn = reading.titleEn, titleZh = reading.titleZh, steps = steps }})
 end)
 
 local function sanitizeReadingContext(raw)
