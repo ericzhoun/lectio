@@ -182,9 +182,16 @@ def build_world():
 
     # altar + open bible
     items += P("Altar", (9, 3, 3.5), (0, 3.3, -49), (230, 225, 215), "Marble")
-    items += P("AltarBible", (4.4, 0.35, 3.1), (0, 5.15, -49), (124, 64, 52), "SmoothPlastic")
-    items += P("BiblePageL", (2.05, 0.18, 2.9), (-1.05, 5.4, -49), (246, 242, 230), "SmoothPlastic", pitch=0.06)
-    items += P("BiblePageR", (2.05, 0.18, 2.9), (1.05, 5.4, -49), (246, 242, 230), "SmoothPlastic", pitch=-0.06)
+    items += P("AltarBible", (4.4, 0.35, 3.1), (0, 5.15, -49), (124, 64, 52), transparency=1, cancollide=False)
+    book = []
+    book += P("CoverLeft", (2.2, 0.14, 3.2), (-1.1, 5.1, -49), (95, 43, 36), cancollide=False)
+    book += P("CoverRight", (2.2, 0.14, 3.2), (1.1, 5.1, -49), (95, 43, 36), cancollide=False)
+    book += P("PageBlock", (4.1, 0.18, 2.95), (0, 5.26, -49), (247, 238, 212), cancollide=False)
+    for name, x, color in (("RibbonDaily", -1.4, (204, 166, 81)), ("RibbonDivina", 0, (116, 146, 119)), ("RibbonDeep", 1.4, (128, 117, 162))):
+        book += P(name, (0.45, 0.06, 1.1), (x, 5.4, -47.55), color, cancollide=False)
+    items.append(wrap("Model", "BibleVisual", "\n".join(book)))
+    items += P("Contact", (0.15, 0.15, 0.15), (0.8, 5.5, -47.8), (255,255,255), transparency=1, cancollide=False)
+    items += P("PageDestination", (0.15, 0.15, 0.15), (0, 7.5, -46.8), (255,255,255), transparency=1, cancollide=False)
 
     # scripture board
     items += P("BoardTrim", (21, 11, 0.6), (0, 15.5, -61.2), (190, 160, 95), "Metal")
@@ -317,7 +324,8 @@ def wrap(class_name, name, children, extra=""):
 </Item>'''
 
 
-def main():
+def build_document(embed_key=False, include_tests=False):
+    _refs[0] = 0
     (ROOT / "src_verse_data.lua").read_text(encoding="utf-8")
     verse_data = (ROOT / "src_verse_data.lua").read_text(encoding="utf-8")
     server = (ROOT / "src_server.lua").read_text(encoding="utf-8")
@@ -325,21 +333,26 @@ def main():
 
     ws_children = "\n".join(build_world())
     workspace = wrap("Workspace", "Workspace", ws_children,
-                     extra='<bool name="Gravity">196.2</bool>')
+                     extra='<float name="Gravity">196.2</float>')
 
-    api_key = load_api_key()
+    api_key = load_api_key() if embed_key else ""
     server_extra = None
     if api_key:
         server_extra = [
             f'<BinaryString name="AttributesSerialize">{base64_blob({"LectioApiKey": api_key})}</BinaryString>'
         ]
-    else:
-        print("note: ROBLOX_API_KEY not set; the LectioServer script gets no LectioApiKey attribute")
-
+    modules = []
+    server_modules = []
+    for path in sorted((ROOT / "modules").glob("*.lua")):
+        target = server_modules if path.stem == "DrawRequests" else modules
+        target += script_item("ModuleScript", path.stem, path.read_text(encoding="utf-8"))
     rstorage = wrap("ReplicatedStorage", "ReplicatedStorage",
-                    "\n".join(script_item("ModuleScript", "VerseData", verse_data)))
+                    "\n".join(script_item("ModuleScript", "VerseData", verse_data)) +
+                    wrap("Folder", "LectioModules", "\n".join(modules)))
+    if include_tests:
+        server_modules += script_item("Script", "NativeTests", (ROOT / "tests/run.lua").read_text(encoding="utf-8"))
     sss = wrap("ServerScriptService", "ServerScriptService",
-               "\n".join(script_item("Script", "LectioServer", server, extra_props=server_extra)))
+               "\n".join(script_item("Script", "LectioServer", server, extra_props=server_extra) + server_modules))
     sps = wrap("StarterPlayerScripts", "StarterPlayerScripts",
                "\n".join(script_item("LocalScript", "LectioClient", client)))
     starter_player = wrap("StarterPlayer", "StarterPlayer", sps)
@@ -351,8 +364,19 @@ def main():
 {sss}
 {starter_player}
 </roblox>'''
+    return doc
 
-    out = ROOT / "Lectio.rbxlx"
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--embed-api-key', action='store_true', help='Private local builds only; never commit this output')
+    parser.add_argument('--include-tests', action='store_true')
+    parser.add_argument('--output', type=Path, default=ROOT / 'Lectio.rbxlx')
+    args = parser.parse_args()
+    doc = build_document(args.embed_api_key, args.include_tests)
+
+    out = args.output
     out.write_text(doc, encoding="utf-8")
 
     import xml.dom.minidom
