@@ -455,9 +455,8 @@ local function buildGui()
 	round(main, 14)
 	ui.main = main
     main.Visible = false
-    local menuBtn = mk("TextButton", {Position=UDim2.fromOffset(16,16),Size=UDim2.fromOffset(100,44),Text="Lectio",TextSize=16,BackgroundColor3=C.panel2,TextColor3=C.gold},gui)
-    round(menuBtn,8)
-    menuBtn.Activated:Connect(function() main.Visible=not main.Visible end)
+    local closeOptions=mk("TextButton",{Name="CloseOptions",Position=UDim2.new(1,-42,0,8),Size=UDim2.fromOffset(34,34),Text="×",TextSize=24,TextColor3=C.text,BackgroundColor3=C.panel2,ZIndex=2},main)
+    closeOptions.Activated:Connect(function() main.Visible=false end)
     local mainScale=mk("UIScale",{Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)},main)
     workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
         mainScale.Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)
@@ -845,6 +844,7 @@ native=NativeReading.new(remotes,{
     language=function() return lang end,
     topic=function() return ui.topicBox.Text end,
     setMode=function(mode) selectedMode=mode; refreshModeCards() end,
+    openOptions=function() ui.main.Visible=not ui.main.Visible end,
     labels=function(mode,count)
         if mode~="today" then return labelsForMode(mode) end
         local labels={}

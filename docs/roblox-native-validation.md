@@ -41,6 +41,12 @@ The speech driver implements the documented API as a candidate, not a verified t
 
 Release status: candidate implementation and generated place available; Studio acceptance not yet run. No merge or publication performed.
 
+## Visibility correction after user feedback
+
+The original native candidate retained a screen Lectio button and spawned the reader 94 studs from the altar. The revised build removes that screen button, moves spawn beside the Bible, adds visible cover lettering, a spine, back cover and gilded page edges, and supports cover click/tap alongside the touch prompt. Secondary options are a separate in-world prompt. A new generator test fails on the original distant spawn and passes on the corrected arrival layout. Nine local checks now pass.
+
+The updated Windows computer-use package was discovered and initialized for Studio inspection, but its node tool returned `failed to write kernel assets: The system cannot find the path specified (os error 3)`. No screenshot or Studio interaction was obtained; visual claims remain unverified.
+
 ## Execution deviations
 
 The approved plan's first task asks for real audio/rig feasibility in Studio before audio integration. That verification is blocked by the lack of a connected Studio tool. To prepare a concrete artifact for testing, the implementation includes the documented audio driver and gesture candidates, with explicit unavailable-audio handling. This is not a claim that the first task's runtime gate passed. All visual/audio/device acceptance remains unchecked above.

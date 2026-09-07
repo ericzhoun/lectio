@@ -1,5 +1,5 @@
 <roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
-<Item class="Lighting" referent="RBX137">
+<Item class="Lighting" referent="RBX146">
 <Properties>
 <string name="Name">Lighting</string>
 <float name="Brightness">2.9</float>
@@ -13,7 +13,7 @@
 <Color3 name="ColorShift_Bottom"><R>0</R><G>0</G><B>0</B></Color3>
 <Color3 name="ColorShift_Top"><R>0</R><G>0</G><B>0</B></Color3>
 </Properties>
-<Item class="Atmosphere" referent="RBX138">
+<Item class="Atmosphere" referent="RBX147">
 <Properties>
 <string name="Name">Atmosphere</string>
 <float name="Density">0.32</float>
@@ -25,7 +25,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Workspace" referent="RBX120">
+<Item class="Workspace" referent="RBX129">
 <Properties>
 <string name="Name">Workspace</string>
 <float name="Gravity">196.2</float>
@@ -336,7 +336,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Model" referent="RBX25">
+<Item class="Model" referent="RBX34">
 <Properties>
 <string name="Name">BibleVisual</string>
 
@@ -353,12 +353,35 @@
 <token name="shape">1</token>
 <Color3uint8 name="Color3uint8">4284427044</Color3uint8>
 <Vector3 name="size"><X>2.2</X><Y>0.14</Y><Z>3.2</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>-1.1</X><Y>5.45</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<CoordinateFrame name="CFrame"><X>-1.1</X><Y>5.53</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
+<Item class="SurfaceGui" referent="RBX21">
+<Properties>
+<string name="Name">CoverLettering</string>
+
+<token name="Face">1</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>320</X><Y>480</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX20">
+<Properties>
+<string name="Name">CoverTitle</string>
+
+<UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.90</R><G>0.75</G><B>0.39</B></Color3>
+<string name="Text">✝
+
+LECTIO</string>
+</Properties>
+
 </Item>
-<Item class="Part" referent="RBX20">
+</Item>
+</Item>
+<Item class="Part" referent="RBX22">
 <Properties>
 <string name="Name">CoverRight</string>
 <bool name="Anchored">true</bool>
@@ -370,12 +393,53 @@
 <token name="shape">1</token>
 <Color3uint8 name="Color3uint8">4284427044</Color3uint8>
 <Vector3 name="size"><X>2.2</X><Y>0.14</Y><Z>3.2</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>1.1</X><Y>5.45</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<CoordinateFrame name="CFrame"><X>1.1</X><Y>5.53</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+<Item class="SurfaceGui" referent="RBX24">
+<Properties>
+<string name="Name">CoverLettering</string>
+
+<token name="Face">1</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>320</X><Y>480</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX23">
+<Properties>
+<string name="Name">CoverTitle</string>
+
+<UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.90</R><G>0.75</G><B>0.39</B></Color3>
+<string name="Text">HOLY
+BIBLE
+
+圣经</string>
+</Properties>
+
+</Item>
+</Item>
+</Item>
+<Item class="Part" referent="RBX25">
+<Properties>
+<string name="Name">BackCover</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4283179035</Color3uint8>
+<Vector3 name="size"><X>4.5</X><Y>0.13</Y><Z>3.25</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.05</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX21">
+<Item class="Part" referent="RBX26">
 <Properties>
 <string name="Name">PageBlock</string>
 <bool name="Anchored">true</bool>
@@ -386,13 +450,81 @@
 <token name="Material">256</token>
 <token name="shape">1</token>
 <Color3uint8 name="Color3uint8">4294438612</Color3uint8>
-<Vector3 name="size"><X>4.1</X><Y>0.18</Y><Z>2.95</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>0</X><Y>5.26</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<Vector3 name="size"><X>4.1</X><Y>0.3</Y><Z>2.95</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.28</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX22">
+<Item class="Part" referent="RBX27">
+<Properties>
+<string name="Name">Spine</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4289955129</Color3uint8>
+<Vector3 name="size"><X>0.16</X><Y>0.46</Y><Z>3.2</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.3</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX28">
+<Properties>
+<string name="Name">GiltPageEdge0</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.19</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX29">
+<Properties>
+<string name="Name">GiltPageEdge1</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.27</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX30">
+<Properties>
+<string name="Name">GiltPageEdge2</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.35</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX31">
 <Properties>
 <string name="Name">RibbonDaily</string>
 <bool name="Anchored">true</bool>
@@ -409,7 +541,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX23">
+<Item class="Part" referent="RBX32">
 <Properties>
 <string name="Name">RibbonDivina</string>
 <bool name="Anchored">true</bool>
@@ -426,7 +558,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX24">
+<Item class="Part" referent="RBX33">
 <Properties>
 <string name="Name">RibbonDeep</string>
 <bool name="Anchored">true</bool>
@@ -444,7 +576,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX26">
+<Item class="Part" referent="RBX35">
 <Properties>
 <string name="Name">Contact</string>
 <bool name="Anchored">true</bool>
@@ -456,12 +588,12 @@
 <token name="shape">1</token>
 <Color3uint8 name="Color3uint8">4294967295</Color3uint8>
 <Vector3 name="size"><X>0.15</X><Y>0.15</Y><Z>0.15</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>0.8</X><Y>5.5</Y><Z>-47.8</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<CoordinateFrame name="CFrame"><X>0.8</X><Y>5.75</Y><Z>-47.8</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX27">
+<Item class="Part" referent="RBX36">
 <Properties>
 <string name="Name">PageDestination</string>
 <bool name="Anchored">true</bool>
@@ -478,7 +610,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX28">
+<Item class="Part" referent="RBX37">
 <Properties>
 <string name="Name">BoardTrim</string>
 <bool name="Anchored">true</bool>
@@ -495,7 +627,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX29">
+<Item class="Part" referent="RBX38">
 <Properties>
 <string name="Name">VerseBoard</string>
 <bool name="Anchored">true</bool>
@@ -512,7 +644,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX30">
+<Item class="Part" referent="RBX39">
 <Properties>
 <string name="Name">CandlePole-6</string>
 <bool name="Anchored">true</bool>
@@ -529,7 +661,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX31">
+<Item class="Part" referent="RBX40">
 <Properties>
 <string name="Name">CandleFlame-6</string>
 <bool name="Anchored">true</bool>
@@ -545,7 +677,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX32">
+<Item class="PointLight" referent="RBX41">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.4</float>
@@ -554,7 +686,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX33">
+<Item class="Part" referent="RBX42">
 <Properties>
 <string name="Name">CandlePole6</string>
 <bool name="Anchored">true</bool>
@@ -571,7 +703,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX34">
+<Item class="Part" referent="RBX43">
 <Properties>
 <string name="Name">CandleFlame6</string>
 <bool name="Anchored">true</bool>
@@ -587,7 +719,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX35">
+<Item class="PointLight" referent="RBX44">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.4</float>
@@ -596,20 +728,22 @@
 </Properties>
 </Item>
 </Item>
-<Item class="SpawnLocation" referent="RBX36">
+<Item class="SpawnLocation" referent="RBX45">
 <Properties>
 <string name="Name">SpawnLocation</string>
 <bool name="Anchored">true</bool>
 <bool name="Neutral">true</bool>
 <float name="Duration">0</float>
 <Color3uint8 name="Color3uint8">4291676090</Color3uint8>
-<Vector3 name="size"><X>8</X><Y>1</Y><Z>8</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>0</X><Y>1.3</Y><Z>45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<float name="Transparency">1</float>
+<bool name="CanCollide">false</bool>
+<Vector3 name="size"><X>4</X><Y>0.2</Y><Z>4</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>2</Y><Z>-45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX37">
+<Item class="Part" referent="RBX46">
 <Properties>
 <string name="Name">Path0</string>
 <bool name="Anchored">true</bool>
@@ -626,7 +760,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX38">
+<Item class="Part" referent="RBX47">
 <Properties>
 <string name="Name">Path1</string>
 <bool name="Anchored">true</bool>
@@ -643,7 +777,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX39">
+<Item class="Part" referent="RBX48">
 <Properties>
 <string name="Name">Path2</string>
 <bool name="Anchored">true</bool>
@@ -660,7 +794,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX40">
+<Item class="Part" referent="RBX49">
 <Properties>
 <string name="Name">Path3</string>
 <bool name="Anchored">true</bool>
@@ -677,7 +811,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX41">
+<Item class="Part" referent="RBX50">
 <Properties>
 <string name="Name">Path4</string>
 <bool name="Anchored">true</bool>
@@ -694,7 +828,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX42">
+<Item class="Part" referent="RBX51">
 <Properties>
 <string name="Name">Path5</string>
 <bool name="Anchored">true</bool>
@@ -711,7 +845,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX43">
+<Item class="Part" referent="RBX52">
 <Properties>
 <string name="Name">Path6</string>
 <bool name="Anchored">true</bool>
@@ -728,7 +862,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX44">
+<Item class="Part" referent="RBX53">
 <Properties>
 <string name="Name">LanternPost-6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -745,7 +879,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX45">
+<Item class="Part" referent="RBX54">
 <Properties>
 <string name="Name">LanternGlow-6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -761,7 +895,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX46">
+<Item class="PointLight" referent="RBX55">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -770,7 +904,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX47">
+<Item class="Part" referent="RBX56">
 <Properties>
 <string name="Name">LanternPost6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -787,7 +921,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX48">
+<Item class="Part" referent="RBX57">
 <Properties>
 <string name="Name">LanternGlow6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -803,7 +937,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX49">
+<Item class="PointLight" referent="RBX58">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -812,7 +946,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX50">
+<Item class="Part" referent="RBX59">
 <Properties>
 <string name="Name">LanternPost-6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -829,7 +963,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX51">
+<Item class="Part" referent="RBX60">
 <Properties>
 <string name="Name">LanternGlow-6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -845,7 +979,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX52">
+<Item class="PointLight" referent="RBX61">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -854,7 +988,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX53">
+<Item class="Part" referent="RBX62">
 <Properties>
 <string name="Name">LanternPost6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -871,7 +1005,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX54">
+<Item class="Part" referent="RBX63">
 <Properties>
 <string name="Name">LanternGlow6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -887,7 +1021,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX55">
+<Item class="PointLight" referent="RBX64">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -896,7 +1030,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX56">
+<Item class="Part" referent="RBX65">
 <Properties>
 <string name="Name">PondBed</string>
 <bool name="Anchored">true</bool>
@@ -913,7 +1047,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX57">
+<Item class="Part" referent="RBX66">
 <Properties>
 <string name="Name">PondWater</string>
 <bool name="Anchored">true</bool>
@@ -930,7 +1064,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX58">
+<Item class="Part" referent="RBX67">
 <Properties>
 <string name="Name">TreeTrunk0</string>
 <bool name="Anchored">true</bool>
@@ -947,7 +1081,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX59">
+<Item class="Part" referent="RBX68">
 <Properties>
 <string name="Name">TreeTop0</string>
 <bool name="Anchored">true</bool>
@@ -964,7 +1098,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX60">
+<Item class="Part" referent="RBX69">
 <Properties>
 <string name="Name">TreeTop20</string>
 <bool name="Anchored">true</bool>
@@ -981,7 +1115,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX61">
+<Item class="Part" referent="RBX70">
 <Properties>
 <string name="Name">TreeTrunk1</string>
 <bool name="Anchored">true</bool>
@@ -998,7 +1132,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX62">
+<Item class="Part" referent="RBX71">
 <Properties>
 <string name="Name">TreeTop1</string>
 <bool name="Anchored">true</bool>
@@ -1015,7 +1149,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX63">
+<Item class="Part" referent="RBX72">
 <Properties>
 <string name="Name">TreeTop21</string>
 <bool name="Anchored">true</bool>
@@ -1032,7 +1166,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX64">
+<Item class="Part" referent="RBX73">
 <Properties>
 <string name="Name">TreeTrunk2</string>
 <bool name="Anchored">true</bool>
@@ -1049,7 +1183,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX65">
+<Item class="Part" referent="RBX74">
 <Properties>
 <string name="Name">TreeTop2</string>
 <bool name="Anchored">true</bool>
@@ -1066,7 +1200,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX66">
+<Item class="Part" referent="RBX75">
 <Properties>
 <string name="Name">TreeTop22</string>
 <bool name="Anchored">true</bool>
@@ -1083,7 +1217,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX67">
+<Item class="Part" referent="RBX76">
 <Properties>
 <string name="Name">TreeTrunk3</string>
 <bool name="Anchored">true</bool>
@@ -1100,7 +1234,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX68">
+<Item class="Part" referent="RBX77">
 <Properties>
 <string name="Name">TreeTop3</string>
 <bool name="Anchored">true</bool>
@@ -1117,7 +1251,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX69">
+<Item class="Part" referent="RBX78">
 <Properties>
 <string name="Name">TreeTop23</string>
 <bool name="Anchored">true</bool>
@@ -1134,7 +1268,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX70">
+<Item class="Part" referent="RBX79">
 <Properties>
 <string name="Name">TreeTrunk4</string>
 <bool name="Anchored">true</bool>
@@ -1151,7 +1285,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX71">
+<Item class="Part" referent="RBX80">
 <Properties>
 <string name="Name">TreeTop4</string>
 <bool name="Anchored">true</bool>
@@ -1168,7 +1302,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX72">
+<Item class="Part" referent="RBX81">
 <Properties>
 <string name="Name">TreeTop24</string>
 <bool name="Anchored">true</bool>
@@ -1185,7 +1319,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX73">
+<Item class="Part" referent="RBX82">
 <Properties>
 <string name="Name">TreeTrunk5</string>
 <bool name="Anchored">true</bool>
@@ -1202,7 +1336,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX74">
+<Item class="Part" referent="RBX83">
 <Properties>
 <string name="Name">TreeTop5</string>
 <bool name="Anchored">true</bool>
@@ -1219,7 +1353,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX75">
+<Item class="Part" referent="RBX84">
 <Properties>
 <string name="Name">TreeTop25</string>
 <bool name="Anchored">true</bool>
@@ -1236,7 +1370,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX76">
+<Item class="Part" referent="RBX85">
 <Properties>
 <string name="Name">TreeTrunk6</string>
 <bool name="Anchored">true</bool>
@@ -1253,7 +1387,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX77">
+<Item class="Part" referent="RBX86">
 <Properties>
 <string name="Name">TreeTop6</string>
 <bool name="Anchored">true</bool>
@@ -1270,7 +1404,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX78">
+<Item class="Part" referent="RBX87">
 <Properties>
 <string name="Name">TreeTop26</string>
 <bool name="Anchored">true</bool>
@@ -1287,7 +1421,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX79">
+<Item class="Part" referent="RBX88">
 <Properties>
 <string name="Name">TreeTrunk7</string>
 <bool name="Anchored">true</bool>
@@ -1304,7 +1438,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX80">
+<Item class="Part" referent="RBX89">
 <Properties>
 <string name="Name">TreeTop7</string>
 <bool name="Anchored">true</bool>
@@ -1321,7 +1455,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX81">
+<Item class="Part" referent="RBX90">
 <Properties>
 <string name="Name">TreeTop27</string>
 <bool name="Anchored">true</bool>
@@ -1338,7 +1472,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX82">
+<Item class="Part" referent="RBX91">
 <Properties>
 <string name="Name">TreeTrunk8</string>
 <bool name="Anchored">true</bool>
@@ -1355,7 +1489,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX83">
+<Item class="Part" referent="RBX92">
 <Properties>
 <string name="Name">TreeTop8</string>
 <bool name="Anchored">true</bool>
@@ -1372,7 +1506,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX84">
+<Item class="Part" referent="RBX93">
 <Properties>
 <string name="Name">TreeTop28</string>
 <bool name="Anchored">true</bool>
@@ -1389,7 +1523,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX85">
+<Item class="Part" referent="RBX94">
 <Properties>
 <string name="Name">BenchSeat-10</string>
 <bool name="Anchored">true</bool>
@@ -1406,7 +1540,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX86">
+<Item class="Part" referent="RBX95">
 <Properties>
 <string name="Name">BenchBack-10</string>
 <bool name="Anchored">true</bool>
@@ -1423,7 +1557,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX87">
+<Item class="Part" referent="RBX96">
 <Properties>
 <string name="Name">BenchLegL-10</string>
 <bool name="Anchored">true</bool>
@@ -1440,7 +1574,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX88">
+<Item class="Part" referent="RBX97">
 <Properties>
 <string name="Name">BenchLegR-10</string>
 <bool name="Anchored">true</bool>
@@ -1457,7 +1591,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX89">
+<Item class="Part" referent="RBX98">
 <Properties>
 <string name="Name">BenchSeat10</string>
 <bool name="Anchored">true</bool>
@@ -1474,7 +1608,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX90">
+<Item class="Part" referent="RBX99">
 <Properties>
 <string name="Name">BenchBack10</string>
 <bool name="Anchored">true</bool>
@@ -1491,7 +1625,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX91">
+<Item class="Part" referent="RBX100">
 <Properties>
 <string name="Name">BenchLegL10</string>
 <bool name="Anchored">true</bool>
@@ -1508,7 +1642,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX92">
+<Item class="Part" referent="RBX101">
 <Properties>
 <string name="Name">BenchLegR10</string>
 <bool name="Anchored">true</bool>
@@ -1525,7 +1659,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX93">
+<Item class="Part" referent="RBX102">
 <Properties>
 <string name="Name">Hill0</string>
 <bool name="Anchored">true</bool>
@@ -1542,7 +1676,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX94">
+<Item class="Part" referent="RBX103">
 <Properties>
 <string name="Name">Hill1</string>
 <bool name="Anchored">true</bool>
@@ -1559,7 +1693,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX95">
+<Item class="Part" referent="RBX104">
 <Properties>
 <string name="Name">Hill2</string>
 <bool name="Anchored">true</bool>
@@ -1576,7 +1710,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX96">
+<Item class="Part" referent="RBX105">
 <Properties>
 <string name="Name">Hill3</string>
 <bool name="Anchored">true</bool>
@@ -1593,7 +1727,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX97">
+<Item class="Part" referent="RBX106">
 <Properties>
 <string name="Name">Hill4</string>
 <bool name="Anchored">true</bool>
@@ -1610,7 +1744,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX98">
+<Item class="Part" referent="RBX107">
 <Properties>
 <string name="Name">Hill5</string>
 <bool name="Anchored">true</bool>
@@ -1627,7 +1761,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX99">
+<Item class="Part" referent="RBX108">
 <Properties>
 <string name="Name">Hill6</string>
 <bool name="Anchored">true</bool>
@@ -1644,7 +1778,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX100">
+<Item class="Part" referent="RBX109">
 <Properties>
 <string name="Name">Hill7</string>
 <bool name="Anchored">true</bool>
@@ -1661,7 +1795,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX101">
+<Item class="Part" referent="RBX110">
 <Properties>
 <string name="Name">RegisterDesk</string>
 <bool name="Anchored">true</bool>
@@ -1678,7 +1812,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX102">
+<Item class="Part" referent="RBX111">
 <Properties>
 <string name="Name">RegisterTop</string>
 <bool name="Anchored">true</bool>
@@ -1695,7 +1829,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX103">
+<Item class="Part" referent="RBX112">
 <Properties>
 <string name="Name">RegisterSign</string>
 <bool name="Anchored">true</bool>
@@ -1712,7 +1846,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX104">
+<Item class="Part" referent="RBX113">
 <Properties>
 <string name="Name">AssistantPedestal</string>
 <bool name="Anchored">true</bool>
@@ -1729,7 +1863,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX105">
+<Item class="Part" referent="RBX114">
 <Properties>
 <string name="Name">AssistantRobe</string>
 <bool name="Anchored">true</bool>
@@ -1746,7 +1880,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX106">
+<Item class="Part" referent="RBX115">
 <Properties>
 <string name="Name">AssistantHead</string>
 <bool name="Anchored">true</bool>
@@ -1763,7 +1897,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX107">
+<Item class="Part" referent="RBX116">
 <Properties>
 <string name="Name">AssistantNPC</string>
 <bool name="Anchored">true</bool>
@@ -1779,7 +1913,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX108">
+<Item class="PointLight" referent="RBX117">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.2</float>
@@ -1788,7 +1922,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX109">
+<Item class="Part" referent="RBX118">
 <Properties>
 <string name="Name">LibraryWall</string>
 <bool name="Anchored">true</bool>
@@ -1805,7 +1939,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX110">
+<Item class="Part" referent="RBX119">
 <Properties>
 <string name="Name">Book0</string>
 <bool name="Anchored">true</bool>
@@ -1822,7 +1956,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX111">
+<Item class="Part" referent="RBX120">
 <Properties>
 <string name="Name">Book1</string>
 <bool name="Anchored">true</bool>
@@ -1839,7 +1973,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX112">
+<Item class="Part" referent="RBX121">
 <Properties>
 <string name="Name">Book2</string>
 <bool name="Anchored">true</bool>
@@ -1856,7 +1990,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX113">
+<Item class="Part" referent="RBX122">
 <Properties>
 <string name="Name">Book3</string>
 <bool name="Anchored">true</bool>
@@ -1873,7 +2007,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX114">
+<Item class="Part" referent="RBX123">
 <Properties>
 <string name="Name">Book4</string>
 <bool name="Anchored">true</bool>
@@ -1890,7 +2024,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX115">
+<Item class="Part" referent="RBX124">
 <Properties>
 <string name="Name">Book5</string>
 <bool name="Anchored">true</bool>
@@ -1907,7 +2041,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX116">
+<Item class="Part" referent="RBX125">
 <Properties>
 <string name="Name">Book6</string>
 <bool name="Anchored">true</bool>
@@ -1924,7 +2058,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX117">
+<Item class="Part" referent="RBX126">
 <Properties>
 <string name="Name">Book7</string>
 <bool name="Anchored">true</bool>
@@ -1941,7 +2075,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX118">
+<Item class="Part" referent="RBX127">
 <Properties>
 <string name="Name">Motes</string>
 <bool name="Anchored">true</bool>
@@ -1953,7 +2087,7 @@
 <Vector3 name="size"><X>1</X><Y>1</Y><Z>1</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>9</Y><Z>-44</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
 </Properties>
-<Item class="ParticleEmitter" referent="RBX119">
+<Item class="ParticleEmitter" referent="RBX128">
 <Properties>
 <string name="Name">MotesEmitter</string>
 <float name="Rate">5</float>
@@ -1968,12 +2102,12 @@
 </Item>
 </Item>
 </Item>
-<Item class="ReplicatedStorage" referent="RBX131">
+<Item class="ReplicatedStorage" referent="RBX140">
 <Properties>
 <string name="Name">ReplicatedStorage</string>
 
 </Properties>
-<Item class="ModuleScript" referent="RBX129">
+<Item class="ModuleScript" referent="RBX138">
 <Properties>
 <string name="Name">VerseData</string>
 <ProtectedString name="Source">-- VerseData: scripture library, topics, today's readings, assistant rules.
@@ -2147,12 +2281,12 @@ VerseData.AssistantFallback = {
 return VerseData
 </ProtectedString>
 </Properties>
-</Item><Item class="Folder" referent="RBX130">
+</Item><Item class="Folder" referent="RBX139">
 <Properties>
 <string name="Name">LectioModules</string>
 
 </Properties>
-<Item class="ModuleScript" referent="RBX121">
+<Item class="ModuleScript" referent="RBX130">
 <Properties>
 <string name="Name">BibleInteraction</string>
 <ProtectedString name="Source">local Players=game:GetService("Players")
@@ -2197,7 +2331,7 @@ function Interaction.gesture(character,target,onContact)
 end
 
 function Interaction.new(anchors,onAction)
-    local self=setmetatable({anchors=anchors,onAction=onAction,connections={},prompts={},near=false},Interaction)
+    local self=setmetatable({anchors=anchors,onAction=onAction,connections={},prompts={},detectors={},near=false},Interaction)
     local function prompt(part,action,key,callback)
         local p=Instance.new("ProximityPrompt")
         p.ActionText=action; p.ObjectText="Lectio"; p.HoldDuration=0.2
@@ -2209,8 +2343,21 @@ function Interaction.new(anchors,onAction)
         table.insert(self.connections,p.Triggered:Connect(callback))
         return p
     end
-    self.main=prompt(anchors.altar,"Touch Bible",Enum.KeyCode.E,function() onAction({type="activate"}) end)
+    self.main=prompt(anchors.contact,"Touch Bible",Enum.KeyCode.E,function() onAction({type="activate"}) end)
     self.main.MaxActivationDistance=3.5
+    self.main.RequiresLineOfSight=false
+    self.options=prompt(anchors.contact,"Reading options",Enum.KeyCode.Q,function() onAction({type="options"}) end)
+    self.options.GamepadKeyCode=Enum.KeyCode.ButtonY
+    self.options.RequiresLineOfSight=false
+    for _,name in ipairs({"CoverLeft","CoverRight"}) do
+        local detector=Instance.new("ClickDetector")
+        detector.MaxActivationDistance=6
+        detector.Parent=anchors.visual:WaitForChild(name)
+        table.insert(self.detectors,detector)
+        table.insert(self.connections,detector.MouseClick:Connect(function(who)
+            if who==Players.LocalPlayer then onAction({type="activate"}) end
+        end))
+    end
     local modes={{"RibbonDaily","Daily Word","daily",Enum.KeyCode.One},
         {"RibbonDivina","Lectio Divina","divina",Enum.KeyCode.Two},
         {"RibbonDeep","Deep Lectio","deep",Enum.KeyCode.Three}}
@@ -2230,13 +2377,17 @@ function Interaction.new(anchors,onAction)
     end))
     return self
 end
-function Interaction:setEnabled(enabled) self.main.Enabled=enabled end
+function Interaction:setEnabled(enabled)
+    self.main.Enabled=enabled
+    for _,detector in ipairs(self.detectors) do detector.MaxActivationDistance=enabled and 6 or 0 end
+end
 function Interaction:isWithinReach()
     local character=Players.LocalPlayer.Character
     local root=character and character:FindFirstChild("HumanoidRootPart")
     return root~=nil and (root.Position-self.anchors.contact.Position).Magnitude&lt;=3.5
 end
 function Interaction:setLanguage(lang,mode,resume)
+    self.options.ActionText=lang=="zh" and "阅读选项" or "Reading options"
     self.main.ActionText=resume and (lang=="zh" and "继续阅读" or "Resume reading") or (lang=="zh" and "触摸圣经" or "Touch Bible")
     self.main.ObjectText=({daily=lang=="zh" and "每日圣言" or "Daily Word",divina="Lectio Divina",deep="Deep Lectio",today=lang=="zh" and "今日经课" or "Today's reading"})[mode]
 end
@@ -2248,12 +2399,13 @@ function Interaction:destroy()
     if self.cancel then self.cancel() end
     for _,c in ipairs(self.connections) do c:Disconnect() end
     for _,p in ipairs(self.prompts) do p:Destroy() end
+    for _,d in ipairs(self.detectors) do d:Destroy() end
 end
 return Interaction
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX122">
+<Item class="ModuleScript" referent="RBX131">
 <Properties>
 <string name="Name">BiblePresentation</string>
 <ProtectedString name="Source">local TweenService=game:GetService("TweenService")
@@ -2271,7 +2423,7 @@ local function make(class,props,parent)
 end
 local function round(o) make("UICorner",{CornerRadius=UDim.new(0,10)},o) end
 function Presentation.new(anchors,onAction)
-    return setmetatable({anchors=anchors,onAction=onAction,segment=1,pages={},bookmarks={},hidden={},tweens={},generation=0},Presentation)
+    return setmetatable({anchors=anchors,onAction=onAction,segment=1,pages={},bookmarks={},hidden={},hiddenGuis={},tweens={},generation=0},Presentation)
 end
 function Presentation:tween(object,seconds,props)
     local t=TweenService:Create(object,TweenInfo.new(seconds,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),props)
@@ -2287,6 +2439,8 @@ function Presentation:clear()
     if self.folder then self.folder:Destroy(); self.folder=nil end
     if self.gui then self.gui:Destroy(); self.gui=nil end
     for part,value in pairs(self.hidden) do if part.Parent then part.LocalTransparencyModifier=value end end
+    for gui,value in pairs(self.hiddenGuis) do if gui.Parent then gui.Enabled=value end end
+    self.hiddenGuis={}
     self.hidden={}; self.pages={}; self.key=nil
 end
 function Presentation:releaseCamera()
@@ -2304,7 +2458,7 @@ function Presentation:ensureBook()
     self.folder=make("Folder",{Name="LectioPersonalReading"},workspace)
     self.book=self.anchors.visual:Clone()
     for _,o in ipairs(self.book:GetDescendants()) do
-        if o:IsA("ProximityPrompt") then o:Destroy()
+        if o:IsA("ProximityPrompt") or o:IsA("ClickDetector") then o:Destroy()
         elseif o:IsA("BasePart") then o.CanCollide=false; o.CanTouch=false; o.CanQuery=false end
     end
     self.book.Parent=self.folder
@@ -2312,6 +2466,7 @@ function Presentation:ensureBook()
     self.closedRight=self.book.CoverRight.CFrame
     for _,o in ipairs(self.anchors.visual:GetDescendants()) do
         if o:IsA("BasePart") then self.hidden[o]=o.LocalTransparencyModifier; o.LocalTransparencyModifier=1 end
+        if o:IsA("SurfaceGui") then self.hiddenGuis[o]=o.Enabled; o.Enabled=false end
     end
 end
 function Presentation:createPage(i,cf)
@@ -2471,7 +2626,7 @@ return Presentation
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX124">
+<Item class="ModuleScript" referent="RBX133">
 <Properties>
 <string name="Name">Narration</string>
 <ProtectedString name="Source">-- Pure playback ownership; Roblox driver is supplied at composition time.
@@ -2506,7 +2661,7 @@ return Narration
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX125">
+<Item class="ModuleScript" referent="RBX134">
 <Properties>
 <string name="Name">NativeReading</string>
 <ProtectedString name="Source">local Players=game:GetService("Players")
@@ -2527,6 +2682,7 @@ function Native.new(remotes,options)
     self.narrator=Narration.new(SpeechDriver,function(state) self.presenter:setAudioState(state) end)
     self.interaction=Interaction.new(self.anchors,function(e)
         if e.type=="activate" then self:activate()
+        elseif e.type=="options" then options.openOptions()
         elseif e.type=="mode" then
             self.mode=e.mode; options.setMode(e.mode); self:render()
         elseif e.type=="near" then
@@ -2656,7 +2812,7 @@ return Native
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX126">
+<Item class="ModuleScript" referent="RBX135">
 <Properties>
 <string name="Name">ReadingSession</string>
 <ProtectedString name="Source">local Session = {}
@@ -2705,7 +2861,7 @@ return Session
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX127">
+<Item class="ModuleScript" referent="RBX136">
 <Properties>
 <string name="Name">SpeechDriver</string>
 <ProtectedString name="Source">-- Client-only exact-text TTS. No public audio emitter or website media URL.
@@ -2783,7 +2939,7 @@ return Driver
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX128">
+<Item class="ModuleScript" referent="RBX137">
 <Properties>
 <string name="Name">TextSegments</string>
 <ProtectedString name="Source">local Segments={}
@@ -2810,12 +2966,12 @@ return Segments
 </Item>
 </Item>
 </Item>
-<Item class="ServerScriptService" referent="RBX133">
+<Item class="ServerScriptService" referent="RBX142">
 <Properties>
 <string name="Name">ServerScriptService</string>
 
 </Properties>
-<Item class="Script" referent="RBX132">
+<Item class="Script" referent="RBX141">
 <Properties>
 <string name="Name">LectioServer</string>
 <ProtectedString name="Source">-- LectioServer: bridges the world to the Lectio backend (3livescapture.com).
@@ -3354,7 +3510,7 @@ print("Lectio server ready" .. (LIVE and " (live backend)" or " (offline fallbac
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX123">
+<Item class="ModuleScript" referent="RBX132">
 <Properties>
 <string name="Name">DrawRequests</string>
 <ProtectedString name="Source">local Requests = {}
@@ -3400,17 +3556,17 @@ return Requests
 </Properties>
 </Item>
 </Item>
-<Item class="StarterPlayer" referent="RBX136">
+<Item class="StarterPlayer" referent="RBX145">
 <Properties>
 <string name="Name">StarterPlayer</string>
 
 </Properties>
-<Item class="StarterPlayerScripts" referent="RBX135">
+<Item class="StarterPlayerScripts" referent="RBX144">
 <Properties>
 <string name="Name">StarterPlayerScripts</string>
 
 </Properties>
-<Item class="LocalScript" referent="RBX134">
+<Item class="LocalScript" referent="RBX143">
 <Properties>
 <string name="Name">LectioClient</string>
 <ProtectedString name="Source">-- LectioClient: rebuilds the Lectio web UI as a Roblox interface.
@@ -3870,9 +4026,8 @@ local function buildGui()
 	round(main, 14)
 	ui.main = main
     main.Visible = false
-    local menuBtn = mk("TextButton", {Position=UDim2.fromOffset(16,16),Size=UDim2.fromOffset(100,44),Text="Lectio",TextSize=16,BackgroundColor3=C.panel2,TextColor3=C.gold},gui)
-    round(menuBtn,8)
-    menuBtn.Activated:Connect(function() main.Visible=not main.Visible end)
+    local closeOptions=mk("TextButton",{Name="CloseOptions",Position=UDim2.new(1,-42,0,8),Size=UDim2.fromOffset(34,34),Text="×",TextSize=24,TextColor3=C.text,BackgroundColor3=C.panel2,ZIndex=2},main)
+    closeOptions.Activated:Connect(function() main.Visible=false end)
     local mainScale=mk("UIScale",{Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)},main)
     workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
         mainScale.Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)
@@ -4260,6 +4415,7 @@ native=NativeReading.new(remotes,{
     language=function() return lang end,
     topic=function() return ui.topicBox.Text end,
     setMode=function(mode) selectedMode=mode; refreshModeCards() end,
+    openOptions=function() ui.main.Visible=not ui.main.Visible end,
     labels=function(mode,count)
         if mode~="today" then return labelsForMode(mode) end
         local labels={}

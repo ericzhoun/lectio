@@ -16,6 +16,7 @@ function Native.new(remotes,options)
     self.narrator=Narration.new(SpeechDriver,function(state) self.presenter:setAudioState(state) end)
     self.interaction=Interaction.new(self.anchors,function(e)
         if e.type=="activate" then self:activate()
+        elseif e.type=="options" then options.openOptions()
         elseif e.type=="mode" then
             self.mode=e.mode; options.setMode(e.mode); self:render()
         elseif e.type=="near" then

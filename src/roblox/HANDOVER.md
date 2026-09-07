@@ -69,15 +69,15 @@ Default generation never reads or embeds the API key. For a private live build, 
 | Lectio Assistant chat | Chat window wired to keyword-rule assistant with a 10 messages/day cap |
 | EN / 中文 toggle | Full UI + verse re-render in both languages |
 | Settings | Separate narration and music toggles, reduced motion, language shortcut. |
-| In-world interactivity | Private Bible/ribbon prompts initiate reading; desk, assistant, and library keep their secondary destinations. The small Lectio menu opens optional intention and secondary controls. |
+| In-world interactivity | Click/tap the Bible cover or use its touch prompt to open and draw. Ribbon prompts select modes. Reading options is a separate in-world prompt; there is no screen Lectio button. |
 
 ---
 
 ## 4. World layout
 
-Serene chapel garden, everything anchored, spawn at `(0, 1.3, 45)` facing the chapel at `z ≈ -40..-60`:
+Serene chapel garden, with spawn beside the altar at `(0, 2, -45)` facing the Bible:
 
-- **Chapel:** marble floor, 4 columns, wood roof, back wall with 5 neon stained-glass panels, altar with open Bible (`AltarBible`), candelights with PointLights.
+- **Chapel:** marble floor, 4 columns, wood roof, back wall with 5 neon stained-glass panels, altar with labeled physical Bible (`BibleVisual`), candelights with PointLights.
 - **VerseBoard** (20×10, named part at `(0, 15.5, -60.5)`, yaw 180°): server builds a SurfaceGui on its Front face at runtime.
 - **Plaza & path:** concrete plaza, cobblestone path from spawn, four lanterns with warm lights.
 - **Landmarks:** RegisterDesk `(14, 2.8, 26)`, AssistantNPC statue `(-16, 1.6, 26)`, LibraryWall bookshelf `(16, 4.75, 44)`, glass pond `(42, 30)`, 9 trees, 2 benches, horizon hills, floating light motes (ParticleEmitter) above the altar.
@@ -130,7 +130,7 @@ backend. A charged live explore request with an uncertain transport result never
 
 1. Open the generated `Lectio.rbxlx` in Roblox Studio, preserving any other unsaved place.
 2. Press **Play (F5)**.
-3. Spawn is unobstructed. Walk close to the Bible, choose a ribbon, and touch it. Test page flights, complete text segments, narration, replay, previous/next, and finish. The Lectio menu provides optional intention, calendar, registration, library, assistant, and settings.
+3. Spawn is beside the visible labeled Bible. Choose a ribbon, then click/tap the cover or use the touch prompt. Test page flights, complete text segments, narration, replay, previous/next, and finish. Reading options (Q/controller Y/touch prompt) opens optional intention, calendar, registration, library, assistant, and settings.
 4. Start two players and verify that their content and audio stay private. The public board must not display either player's name or verse. Walk away/resume and respawn mid-reading without another draw.
 5. Server output shows `Lectio server ready`; client output `Lectio client ready`.
 

@@ -157,6 +157,23 @@ def services():
 </Item>'''
     return lighting
 
+
+def bible_cover(name, x, title):
+    """A physical cover with surface lettering, visible without client scripts."""
+    cover = part(name, (2.2, 0.14, 3.2), (x, 5.53, -49), (95, 43, 36), cancollide=False)
+    label = wrap('TextLabel', 'CoverTitle', '', extra=f'''
+<UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.90</R><G>0.75</G><B>0.39</B></Color3>
+<string name="Text">{esc(title)}</string>''')
+    surface = wrap('SurfaceGui', 'CoverLettering', label, extra='''
+<token name="Face">1</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>320</X><Y>480</Y></Vector2>''')
+    cover.insert(-1, surface)
+    return cover
+
 def build_world():
     items = []
     P = part
@@ -184,13 +201,17 @@ def build_world():
     items += P("Altar", (9, 3, 3.5), (0, 3.3, -49), (230, 225, 215), "Marble")
     items += P("AltarBible", (4.4, 0.35, 3.1), (0, 5.15, -49), (124, 64, 52), transparency=1, cancollide=False)
     book = []
-    book += P("CoverLeft", (2.2, 0.14, 3.2), (-1.1, 5.45, -49), (95, 43, 36), cancollide=False)
-    book += P("CoverRight", (2.2, 0.14, 3.2), (1.1, 5.45, -49), (95, 43, 36), cancollide=False)
-    book += P("PageBlock", (4.1, 0.18, 2.95), (0, 5.26, -49), (247, 238, 212), cancollide=False)
+    book += bible_cover("CoverLeft", -1.1, "✝\n\nLECTIO")
+    book += bible_cover("CoverRight", 1.1, "HOLY\nBIBLE\n\n圣经")
+    book += P("BackCover", (4.5, 0.13, 3.25), (0, 5.05, -49), (76, 32, 27), cancollide=False)
+    book += P("PageBlock", (4.1, 0.30, 2.95), (0, 5.28, -49), (247, 238, 212), cancollide=False)
+    book += P("Spine", (0.16, 0.46, 3.2), (0, 5.30, -49), (179, 133, 57), cancollide=False)
+    for index, y in enumerate((5.19, 5.27, 5.35)):
+        book += P(f"GiltPageEdge{index}", (4.12, 0.012, 2.97), (0, y, -49), (212, 179, 112), cancollide=False)
     for name, x, color in (("RibbonDaily", -1.4, (204, 166, 81)), ("RibbonDivina", 0, (116, 146, 119)), ("RibbonDeep", 1.4, (128, 117, 162))):
         book += P(name, (0.45, 0.06, 1.1), (x, 5.4, -47.55), color, cancollide=False)
     items.append(wrap("Model", "BibleVisual", "\n".join(book)))
-    items += P("Contact", (0.15, 0.15, 0.15), (0.8, 5.5, -47.8), (255,255,255), transparency=1, cancollide=False)
+    items += P("Contact", (0.15, 0.15, 0.15), (0.8, 5.75, -47.8), (255,255,255), transparency=1, cancollide=False)
     items += P("PageDestination", (0.15, 0.15, 0.15), (0, 7.5, -46.8), (255,255,255), transparency=1, cancollide=False)
 
     # scripture board
@@ -212,8 +233,10 @@ def build_world():
         '<bool name="Neutral">true</bool>',
         '<float name="Duration">0</float>',
         '<Color3uint8 name="Color3uint8">' + str(c3uint((205, 199, 186))) + "</Color3uint8>",
-        '<Vector3 name="size"><X>8</X><Y>1</Y><Z>8</Z></Vector3>',
-        '<CoordinateFrame name="CFrame"><X>0</X><Y>1.3</Y><Z>45</Z>'
+        '<float name="Transparency">1</float>',
+        '<bool name="CanCollide">false</bool>',
+        '<Vector3 name="size"><X>4</X><Y>0.2</Y><Z>4</Z></Vector3>',
+        '<CoordinateFrame name="CFrame"><X>0</X><Y>2</Y><Z>-45</Z>'
         '<R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12>'
         '<R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>',
         '<token name="TopSurface">0</token>',

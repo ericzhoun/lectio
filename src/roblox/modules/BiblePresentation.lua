@@ -13,7 +13,7 @@ local function make(class,props,parent)
 end
 local function round(o) make("UICorner",{CornerRadius=UDim.new(0,10)},o) end
 function Presentation.new(anchors,onAction)
-    return setmetatable({anchors=anchors,onAction=onAction,segment=1,pages={},bookmarks={},hidden={},tweens={},generation=0},Presentation)
+    return setmetatable({anchors=anchors,onAction=onAction,segment=1,pages={},bookmarks={},hidden={},hiddenGuis={},tweens={},generation=0},Presentation)
 end
 function Presentation:tween(object,seconds,props)
     local t=TweenService:Create(object,TweenInfo.new(seconds,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),props)
@@ -29,6 +29,8 @@ function Presentation:clear()
     if self.folder then self.folder:Destroy(); self.folder=nil end
     if self.gui then self.gui:Destroy(); self.gui=nil end
     for part,value in pairs(self.hidden) do if part.Parent then part.LocalTransparencyModifier=value end end
+    for gui,value in pairs(self.hiddenGuis) do if gui.Parent then gui.Enabled=value end end
+    self.hiddenGuis={}
     self.hidden={}; self.pages={}; self.key=nil
 end
 function Presentation:releaseCamera()
@@ -46,7 +48,7 @@ function Presentation:ensureBook()
     self.folder=make("Folder",{Name="LectioPersonalReading"},workspace)
     self.book=self.anchors.visual:Clone()
     for _,o in ipairs(self.book:GetDescendants()) do
-        if o:IsA("ProximityPrompt") then o:Destroy()
+        if o:IsA("ProximityPrompt") or o:IsA("ClickDetector") then o:Destroy()
         elseif o:IsA("BasePart") then o.CanCollide=false; o.CanTouch=false; o.CanQuery=false end
     end
     self.book.Parent=self.folder
@@ -54,6 +56,7 @@ function Presentation:ensureBook()
     self.closedRight=self.book.CoverRight.CFrame
     for _,o in ipairs(self.anchors.visual:GetDescendants()) do
         if o:IsA("BasePart") then self.hidden[o]=o.LocalTransparencyModifier; o.LocalTransparencyModifier=1 end
+        if o:IsA("SurfaceGui") then self.hiddenGuis[o]=o.Enabled; o.Enabled=false end
     end
 end
 function Presentation:createPage(i,cf)

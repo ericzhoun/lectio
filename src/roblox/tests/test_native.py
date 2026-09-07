@@ -43,6 +43,24 @@ class NativeTests(unittest.TestCase):
         self.assertEqual(len(refs), len(set(refs)))
         self.assertFalse(root.findall('.//BinaryString[@name="AttributesSerialize"]'))
 
+    def test_arrival_has_visible_identifiable_bible_within_walking_reach(self):
+        spec = importlib.util.spec_from_file_location('generator', ROOT / 'generate_lectio.py')
+        generator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(generator)
+        root = ET.fromstring(generator.build_document())
+        items = {i.findtext('Properties/string[@name="Name"]'): i for i in root.findall('.//Item')}
+        def position(item):
+            frame = item.find('Properties/CoordinateFrame[@name="CFrame"]')
+            return tuple(float(frame.findtext(axis)) for axis in ('X','Y','Z'))
+        spawn, bible = position(items['SpawnLocation']), position(items['AltarBible'])
+        self.assertLess(sum((a-b)**2 for a,b in zip(spawn,bible))**0.5, 8,
+                        'Bible must be in the arrival view, not across the whole garden')
+        model = items['BibleVisual']
+        titles = [n.text for n in model.findall('.//string[@name="Text"]')]
+        self.assertTrue(any('BIBLE' in (t or '') for t in titles), 'visible cover title identifies the Bible')
+        for name in ('CoverLeft','CoverRight','PageBlock','BackCover','Spine'):
+            self.assertLess(float(items[name].findtext('Properties/float[@name="Transparency"]')),1)
+
     def test_all_lua_compiles(self):
         lua = LuaRuntime()
         compile_lua = lua.eval('function(source, name) local f,e=load(source,name); return f ~= nil,e end')
