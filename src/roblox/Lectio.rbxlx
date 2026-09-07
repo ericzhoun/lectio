@@ -1,5 +1,5 @@
 <roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
-<Item class="Lighting" referent="RBX147">
+<Item class="Lighting" referent="RBX148">
 <Properties>
 <string name="Name">Lighting</string>
 <float name="Brightness">2.9</float>
@@ -13,7 +13,7 @@
 <Color3 name="ColorShift_Bottom"><R>0</R><G>0</G><B>0</B></Color3>
 <Color3 name="ColorShift_Top"><R>0</R><G>0</G><B>0</B></Color3>
 </Properties>
-<Item class="Atmosphere" referent="RBX148">
+<Item class="Atmosphere" referent="RBX149">
 <Properties>
 <string name="Name">Atmosphere</string>
 <float name="Density">0.32</float>
@@ -2103,12 +2103,12 @@ BIBLE
 </Item>
 </Item>
 </Item>
-<Item class="ReplicatedStorage" referent="RBX141">
+<Item class="ReplicatedStorage" referent="RBX142">
 <Properties>
 <string name="Name">ReplicatedStorage</string>
 
 </Properties>
-<Item class="ModuleScript" referent="RBX139">
+<Item class="ModuleScript" referent="RBX140">
 <Properties>
 <string name="Name">VerseData</string>
 <ProtectedString name="Source">-- VerseData: scripture library, topics, today's readings, assistant rules.
@@ -2282,7 +2282,7 @@ VerseData.AssistantFallback = {
 return VerseData
 </ProtectedString>
 </Properties>
-</Item><Item class="Folder" referent="RBX140">
+</Item><Item class="Folder" referent="RBX141">
 <Properties>
 <string name="Name">LectioModules</string>
 
@@ -2413,6 +2413,7 @@ return Interaction
 local Players=game:GetService("Players")
 local Segments=require(script.Parent.TextSegments)
 local ReadingText=require(script.Parent.ReadingText)
+local ReadingLayout=require(script.Parent.ReadingLayout)
 local Presentation={}
 Presentation.__index=Presentation
 local ink=Color3.fromRGB(63,49,34)
@@ -2493,12 +2494,13 @@ end
 function Presentation:buildBubble(page)
     if self.gui then self.gui:Destroy() end
     local viewport=workspace.CurrentCamera.ViewportSize
-    local width=math.min(380,math.max(240,viewport.X-24))
-    local height=math.min(410,math.max(260,viewport.Y-48))
+    local layout=ReadingLayout.forViewport(viewport.X,viewport.Y)
+    local width,height=layout.width,layout.height
     local bodyHeight=height-236
     self.gui=make("BillboardGui",{Name="PersonalVerseBubble",Adornee=page,
-        Size=UDim2.fromOffset(width,height),StudsOffsetWorldSpace=Vector3.new(0,0,0),
-        AlwaysOnTop=true,MaxDistance=24,Active=true,ResetOnSpawn=false},Players.LocalPlayer:WaitForChild("PlayerGui"))
+        Size=UDim2.fromOffset(width,height),StudsOffsetWorldSpace=Vector3.new(layout.offsetX,layout.offsetY,0),
+        AlwaysOnTop=layout.alwaysOnTop,MaxDistance=layout.maxDistance,Active=true,ResetOnSpawn=false,
+        ZIndexBehavior=Enum.ZIndexBehavior.Sibling},Players.LocalPlayer:WaitForChild("PlayerGui"))
     local frame=make("Frame",{Size=UDim2.fromScale(1,1),BackgroundColor3=paper,BorderSizePixel=0},self.gui)
     round(frame)
     local function label(y,h,size)
@@ -2820,6 +2822,25 @@ return Native
 </Item>
 <Item class="ModuleScript" referent="RBX135">
 <Properties>
+<string name="Name">ReadingLayout</string>
+<ProtectedString name="Source">local Layout={}
+function Layout.forViewport(width,height)
+    local compact=width&lt;700 or height&lt;500
+    return {
+        width=compact and 248 or 286,
+        height=compact and 258 or 286,
+        offsetX=compact and 2.7 or 3.6,
+        offsetY=compact and 0.45 or 0.65,
+        maxDistance=compact and 14 or 18,
+        alwaysOnTop=false,
+    }
+end
+return Layout
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX136">
+<Properties>
 <string name="Name">ReadingSession</string>
 <ProtectedString name="Source">local Session = {}
 Session.__index = Session
@@ -2867,7 +2888,7 @@ return Session
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX136">
+<Item class="ModuleScript" referent="RBX137">
 <Properties>
 <string name="Name">ReadingText</string>
 <ProtectedString name="Source">-- Presentation content only. Fallback prompts are labeled, never passed off as AI interpretation.
@@ -2908,7 +2929,7 @@ return ReadingText
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX137">
+<Item class="ModuleScript" referent="RBX138">
 <Properties>
 <string name="Name">SpeechDriver</string>
 <ProtectedString name="Source">-- Client-only exact-text TTS. No public audio emitter or website media URL.
@@ -2986,7 +3007,7 @@ return Driver
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX138">
+<Item class="ModuleScript" referent="RBX139">
 <Properties>
 <string name="Name">TextSegments</string>
 <ProtectedString name="Source">local Segments={}
@@ -3013,12 +3034,12 @@ return Segments
 </Item>
 </Item>
 </Item>
-<Item class="ServerScriptService" referent="RBX143">
+<Item class="ServerScriptService" referent="RBX144">
 <Properties>
 <string name="Name">ServerScriptService</string>
 
 </Properties>
-<Item class="Script" referent="RBX142">
+<Item class="Script" referent="RBX143">
 <Properties>
 <string name="Name">LectioServer</string>
 <ProtectedString name="Source">-- LectioServer: bridges the world to the Lectio backend (3livescapture.com).
@@ -3603,17 +3624,17 @@ return Requests
 </Properties>
 </Item>
 </Item>
-<Item class="StarterPlayer" referent="RBX146">
+<Item class="StarterPlayer" referent="RBX147">
 <Properties>
 <string name="Name">StarterPlayer</string>
 
 </Properties>
-<Item class="StarterPlayerScripts" referent="RBX145">
+<Item class="StarterPlayerScripts" referent="RBX146">
 <Properties>
 <string name="Name">StarterPlayerScripts</string>
 
 </Properties>
-<Item class="LocalScript" referent="RBX144">
+<Item class="LocalScript" referent="RBX145">
 <Properties>
 <string name="Name">LectioClient</string>
 <ProtectedString name="Source">-- LectioClient: rebuilds the Lectio web UI as a Roblox interface.

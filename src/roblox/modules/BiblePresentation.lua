@@ -2,6 +2,7 @@ local TweenService=game:GetService("TweenService")
 local Players=game:GetService("Players")
 local Segments=require(script.Parent.TextSegments)
 local ReadingText=require(script.Parent.ReadingText)
+local ReadingLayout=require(script.Parent.ReadingLayout)
 local Presentation={}
 Presentation.__index=Presentation
 local ink=Color3.fromRGB(63,49,34)
@@ -82,12 +83,13 @@ end
 function Presentation:buildBubble(page)
     if self.gui then self.gui:Destroy() end
     local viewport=workspace.CurrentCamera.ViewportSize
-    local width=math.min(380,math.max(240,viewport.X-24))
-    local height=math.min(410,math.max(260,viewport.Y-48))
+    local layout=ReadingLayout.forViewport(viewport.X,viewport.Y)
+    local width,height=layout.width,layout.height
     local bodyHeight=height-236
     self.gui=make("BillboardGui",{Name="PersonalVerseBubble",Adornee=page,
-        Size=UDim2.fromOffset(width,height),StudsOffsetWorldSpace=Vector3.new(0,0,0),
-        AlwaysOnTop=true,MaxDistance=24,Active=true,ResetOnSpawn=false},Players.LocalPlayer:WaitForChild("PlayerGui"))
+        Size=UDim2.fromOffset(width,height),StudsOffsetWorldSpace=Vector3.new(layout.offsetX,layout.offsetY,0),
+        AlwaysOnTop=layout.alwaysOnTop,MaxDistance=layout.maxDistance,Active=true,ResetOnSpawn=false,
+        ZIndexBehavior=Enum.ZIndexBehavior.Sibling},Players.LocalPlayer:WaitForChild("PlayerGui"))
     local frame=make("Frame",{Size=UDim2.fromScale(1,1),BackgroundColor3=paper,BorderSizePixel=0},self.gui)
     round(frame)
     local function label(y,h,size)

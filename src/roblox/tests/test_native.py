@@ -177,5 +177,20 @@ class NativeTests(unittest.TestCase):
             assert(view.heading=="阅读回顾" and view.body:find("诗篇 46:10",1,true))
         ''')
 
+    def test_reading_bubble_is_side_offset_and_does_not_cover_book(self):
+        lua = LuaRuntime(unpack_returned_tuples=True)
+        path = ROOT / 'modules/ReadingLayout.lua'
+        self.assertTrue(path.exists(), 'reading bubble layout must be explicit')
+        lua.globals().ReadingLayout = lua.execute(path.read_text(encoding='utf-8'))
+        lua.execute('''
+            local layout=ReadingLayout.forViewport(1280,720)
+            assert(layout.width <= 300)
+            assert(layout.height <= 300)
+            assert(layout.offsetX >= 3)
+            assert(layout.offsetY >= 0.4)
+            assert(layout.maxDistance <= 18)
+            assert(layout.alwaysOnTop == false)
+        ''')
+
 if __name__ == '__main__':
     unittest.main()

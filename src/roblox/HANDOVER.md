@@ -155,6 +155,7 @@ The client/server harnesses execute actual routing and session code with engine 
 - **Assistant reflection language**: the AI reflection is generated in the language the reading was requested in; toggling language mid-reading re-renders verses but keeps the reflection as generated.
 - Bookmarks last only for the current server session. Disconnecting does not preserve reading history.
 - Speech uses `AudioTextToSpeech` through a local `AudioDeviceOutput`; actual target-experience permissions, Mandarin output, and rate limits need Studio verification. A failed load leaves readable text with an audio-unavailable indication.
+- The reading bubble is intentionally offset to the right of the floating page, compact, bounded by distance, and not always-on-top so the avatar, Bible, and page flight remain visible. Verify this framing in Studio at desktop and mobile aspect ratios.
 - R6 fallback gesture and R15 IK need visual verification with varied avatar sizes. Camera framing is brief; reduced motion skips it.
 - Reused request IDs cannot redraw after result-cache eviction. Up to 256 request identities are retained per player/session; 16 completed payloads are cached.
 - Deferred: persistent history, DataStore migrations, and redesign of secondary menus.

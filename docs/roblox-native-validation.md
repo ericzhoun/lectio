@@ -26,6 +26,7 @@ The speech driver implements the documented API as a candidate, not a verified t
 - The real client controller executes against presentation doubles: deliberate activation sends once, a result arriving while away pauses, resume/replay/next reuse content, Finish clears it, and definitive rejection is not later overwritten by the request timer.
 - Generated artifact matches current sources, has unique XML references, and contains no credential attribute or test runner in the normal build.
 - Final local verification: eight Python/Lua checks pass; 19 existing Roblox backend Vitest tests pass in the isolated worktree. The generated place is approximately 209 KB. No runtime checkbox below is implied by these counts.
+- View-blocking correction: the reading bubble is now a compact side-offset panel (286×286 desktop, 248×258 compact), with `AlwaysOnTop=false`, a bounded distance, and the page kept in the camera’s center. Eleven Python/Lua checks pass after rebuilding the place.
 
 ## Required Studio acceptance checklist
 
