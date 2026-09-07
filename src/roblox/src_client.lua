@@ -318,7 +318,7 @@ local function buildBackendLibrary()
 			TextColor3 = C.text,
 			TextSize = 15,
 			Font = Enum.Font.Garamond,
-			Wrapped = true,
+			TextWrapped = true,
 			TextXAlignment = Enum.TextXAlignment.Left,
 			TextYAlignment = Enum.TextYAlignment.Top,
 			BackgroundTransparency = 0.2,
@@ -366,7 +366,7 @@ local function buildLibrary()
 						TextColor3 = C.text,
 						TextSize = 15,
 						Font = Enum.Font.Garamond,
-						Wrapped = true,
+						TextWrapped = true,
 						TextXAlignment = Enum.TextXAlignment.Left,
 						TextYAlignment = Enum.TextYAlignment.Top,
 						BackgroundTransparency = 0.2,
@@ -392,7 +392,7 @@ local function addChatBubble(text, fromPlayer)
 		TextColor3 = fromPlayer and C.darkText or C.text,
 		TextSize = 15,
 		Font = Enum.Font.Gotham,
-		Wrapped = true,
+		TextWrapped = true,
 		TextXAlignment = Enum.TextXAlignment.Left,
 		Text = ((fromPlayer and "You: ") or "") .. text,
 	}, row)
@@ -499,7 +499,7 @@ local function buildGui()
 		local btn = mk("TextButton", { Position = UDim2.fromOffset(def.x, 294), Size = UDim2.fromOffset(216, 72), BackgroundColor3 = C.panel2, Text = "", AutoButtonColor = true }, main)
 		round(btn, 10)
 		local cardTitle = mk("TextLabel", { Position = UDim2.fromOffset(12, 8), Size = UDim2.fromOffset(192, 24), BackgroundTransparency = 1, TextColor3 = C.text, Font = Enum.Font.GothamBold, TextSize = 16, TextXAlignment = Enum.TextXAlignment.Left, Text = t(def.titleKey) }, btn)
-		local cardDesc = mk("TextLabel", { Position = UDim2.fromOffset(12, 36), Size = UDim2.fromOffset(158, 32), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 12, Wrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = t(def.descKey) }, btn)
+		local cardDesc = mk("TextLabel", { Position = UDim2.fromOffset(12, 36), Size = UDim2.fromOffset(158, 32), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 12, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = t(def.descKey) }, btn)
 		local cardTag = mk("TextLabel", { Position = UDim2.fromOffset(174, 40), Size = UDim2.fromOffset(36, 22), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.GothamBold, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Right, Text = "" }, btn)
 		local card = { mode = def.mode, btn = btn, title = cardTitle, desc = cardDesc, tag = cardTag, titleKey = def.titleKey, descKey = def.descKey }
 		btn.MouseButton1Click:Connect(function()
@@ -515,7 +515,7 @@ local function buildGui()
 	local regBox = mk("Frame", { Position = UDim2.fromOffset(20, 430), Size = UDim2.fromOffset(680, 76), BackgroundColor3 = C.panel, BorderSizePixel = 0 }, main)
 	round(regBox, 10)
 	local regTitle = mk("TextLabel", { Position = UDim2.fromOffset(14, 6), Size = UDim2.fromOffset(320, 22), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.GothamBold, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left, Text = t("register") }, regBox)
-	local regBullets = mk("TextLabel", { Position = UDim2.fromOffset(14, 28), Size = UDim2.fromOffset(430, 44), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 12, Wrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = t("regBullets") }, regBox)
+	local regBullets = mk("TextLabel", { Position = UDim2.fromOffset(14, 28), Size = UDim2.fromOffset(430, 44), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 12, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = t("regBullets") }, regBox)
 	local regBtn = mk("TextButton", { Position = UDim2.fromOffset(468, 17), Size = UDim2.fromOffset(196, 42), BackgroundColor3 = C.green, TextColor3 = Color3.fromRGB(245, 245, 240), Font = Enum.Font.GothamBold, TextSize = 15, Text = state.registered and t("registered") or t("create") }, regBox)
 	round(regBtn, 8)
 	ui.regBtn = regBtn
@@ -554,11 +554,11 @@ local function buildGui()
 	bodyScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
 	ui.bodyScroll = bodyScroll
 	mk("UIListLayout", { Padding = UDim.new(0, 10), SortOrder = Enum.SortOrder.LayoutOrder }, bodyScroll)
-	local verseText = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = C.text, Font = Enum.Font.Garamond, TextSize = 22, Wrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = "", LayoutOrder = 1 }, bodyScroll)
+	local verseText = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = C.text, Font = Enum.Font.Garamond, TextSize = 22, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = "", LayoutOrder = 1 }, bodyScroll)
 	ui.verseText = verseText
 	local reflectionHeader = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 20), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.GothamBold, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, Text = t("reflectionHeader"), Visible = false, LayoutOrder = 2 }, bodyScroll)
 	ui.reflectionHeader = reflectionHeader
-	local reflectionLabel = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Wrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = "", Visible = false, LayoutOrder = 3 }, bodyScroll)
+	local reflectionLabel = mk("TextLabel", { Size = UDim2.new(1, -10, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, TextYAlignment = Enum.TextYAlignment.Top, Text = "", Visible = false, LayoutOrder = 3 }, bodyScroll)
 	ui.reflectionLabel = reflectionLabel
 	local verseRef = mk("TextLabel", { Position = UDim2.fromOffset(40, 368), Size = UDim2.fromOffset(560, 28), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextSize = 22, Text = "" }, reading)
 	ui.verseRef = verseRef
@@ -618,7 +618,7 @@ local function buildGui()
 	local toast = mk("Frame", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -30), Size = UDim2.fromOffset(460, 44), BackgroundColor3 = C.panel2, BorderSizePixel = 0, Visible = false }, gui)
 	round(toast, 10)
 	ui.toast = toast
-	local toastLabel = mk("TextLabel", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 14, Wrapped = true, Text = "" }, toast)
+	local toastLabel = mk("TextLabel", { Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 14, TextWrapped = true, Text = "" }, toast)
 	ui.toastLabel = toastLabel
 
 	local function updateMusicBtn()

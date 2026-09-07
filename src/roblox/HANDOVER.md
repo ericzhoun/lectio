@@ -102,7 +102,7 @@ the server → `503 not_configured`; wrong key → `401`.
 **Setup:**
 
 1. Backend: set the `ROBLOX_API_KEY` wrangler secret (`npx wrangler secret put ROBLOX_API_KEY`), same value locally in `.env` / `.dev.vars`.
-2. Game: on the `LectioServer` Script set the `LectioApiKey` attribute (Studio properties pane) — or edit the `DEFAULT_API_KEY` constant — and optionally `LectioBackendUrl` (defaults to `https://3livescapture.com`).
+2. Game: on the `LectioServer` Script set the `LectioApiKey` attribute (Studio properties pane) — or edit the `DEFAULT_API_KEY` constant — and optionally `LectioBackendUrl` (defaults to `https://3livescapture.com`). `generate_lectio.py` also bakes the attribute into the generated place automatically when `ROBLOX_API_KEY` is set in the environment or in the repo-root `.env`.
 3. Studio: enable *Game Settings → Security → Allow HTTP Requests*; a published game has HTTP enabled by default.
 
 **Fallback:** if the key is missing, HTTP is disabled, or the backend is

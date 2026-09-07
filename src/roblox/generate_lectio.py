@@ -90,6 +90,44 @@ def script_item(class_name, name, source, extra_props=None):
     ]
     return lines
 
+
+def attributes_blob(attrs):
+    """Roblox AttributesSerialize payload (rbx-dom spec): a little-endian u32
+    attribute count, then per attribute a length-prefixed name, a type byte
+    (0x02 = String) and a length-prefixed string value. No version byte."""
+    import struct
+
+    def string(value):
+        raw = value.encode("utf-8")
+        return struct.pack("<I", len(raw)) + raw
+
+    blob = struct.pack("<I", len(attrs))
+    for key, value in attrs.items():
+        blob += string(key) + b"\x02" + string(value)
+    return blob
+
+
+def base64_blob(attrs):
+    import base64
+
+    return base64.b64encode(attributes_blob(attrs)).decode("ascii")
+
+
+def load_api_key():
+    """The shared secret for /api/roblox/*, read from the environment or a
+    local .env so the secret never lands in the repository."""
+    import os
+
+    key = os.environ.get("ROBLOX_API_KEY", "")
+    if key:
+        return key
+    for candidate in (ROOT.parent.parent / ".env", ROOT / ".env"):
+        if candidate.is_file():
+            for line in candidate.read_text(encoding="utf-8").splitlines():
+                if line.startswith("ROBLOX_API_KEY="):
+                    return line.split("=", 1)[1].strip()
+    return ""
+
 def services():
     lighting = f'''<Item class="Lighting" referent="{ref()}">
 <Properties>
@@ -289,10 +327,19 @@ def main():
     workspace = wrap("Workspace", "Workspace", ws_children,
                      extra='<bool name="Gravity">196.2</bool>')
 
+    api_key = load_api_key()
+    server_extra = None
+    if api_key:
+        server_extra = [
+            f'<BinaryString name="AttributesSerialize">{base64_blob({"LectioApiKey": api_key})}</BinaryString>'
+        ]
+    else:
+        print("note: ROBLOX_API_KEY not set; the LectioServer script gets no LectioApiKey attribute")
+
     rstorage = wrap("ReplicatedStorage", "ReplicatedStorage",
                     "\n".join(script_item("ModuleScript", "VerseData", verse_data)))
     sss = wrap("ServerScriptService", "ServerScriptService",
-               "\n".join(script_item("Script", "LectioServer", server)))
+               "\n".join(script_item("Script", "LectioServer", server, extra_props=server_extra)))
     sps = wrap("StarterPlayerScripts", "StarterPlayerScripts",
                "\n".join(script_item("LocalScript", "LectioClient", client)))
     starter_player = wrap("StarterPlayer", "StarterPlayer", sps)
