@@ -1,4 +1,4 @@
-# robots.txt for Lectio (3livescapture.com)
+# robots.txt for Lectio (enjoyhim.org)
 User-agent: *
 Allow: /
 
@@ -9,6 +9,6 @@ Disallow: /history
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://3livescapture.com/sitemap.xml
+Sitemap: https://enjoyhim.org/sitemap.xml
 
-# Overview for AI assistants: https://3livescapture.com/llms.txt
+# Overview for AI assistants: https://enjoyhim.org/llms.txt

@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
-const SITE = 'https://3livescapture.com';
+const SITE = 'https://enjoyhim.org';
 const STATIC_PATHS = ['/', '/today', '/pricing', '/library', '/approach', '/signup', '/privacy'];
 
 // Extract English verse references from scripture.ts (the BIBLE_VERSES export).

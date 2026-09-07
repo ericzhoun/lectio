@@ -61,7 +61,7 @@ export function evaluateChatQuota(
 /** Site facts the site-guide role must ground on (keep in sync with /pricing). */
 export function buildGroundingFacts(): string {
   return [
-    'Lectio (3livescapture.com) plans and limits, as shown on /pricing:',
+    'Lectio (enjoyhim.org) plans and limits, as shown on /pricing:',
     `- Free: guests ${ANON_DAILY_DRAWS} Daily Word readings/day; registered users ${REGISTERED_DAILY_DRAWS}/day plus one-time trial credits (Lectio Divina x${3}, Deep Lectio x${1}).`,
     `- Basic: $4.99/mo (annual $2.99/mo, billed $35.88/yr). Daily Word and Lectio Divina layouts, ${QUOTA.basic} readings/day, reading history.`,
     '- Pro: $11.99/mo (annual $7.19/mo, billed $86.28/yr). All layouts including Deep Lectio, unlimited readings, reading history.',

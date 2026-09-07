@@ -1,4 +1,4 @@
-# Lectio (3livescapture.com)
+# Lectio (enjoyhim.org)
 
 > Lectio is a bilingual (English / Chinese) web app for the daily Christian
 > practice of Lectio Divina — "divine reading." Each day it guides a reader
@@ -16,17 +16,17 @@ reflection.
 
 ## Main pages
 
-- [Home](https://3livescapture.com/): start today's reading; a question-led
+- [Home](https://enjoyhim.org/): start today's reading; a question-led
   daily scripture reflection.
-- [Today](https://3livescapture.com/today): walk the church calendar's passage
+- [Today](https://enjoyhim.org/today): walk the church calendar's passage
   for today, one step at a time (Lectio, Meditatio, Oratio, Contemplatio),
   with audio narration.
-- [Verse Library](https://3livescapture.com/library): 101 Bible verses with
+- [Verse Library](https://enjoyhim.org/library): 101 Bible verses with
   bilingual text and reflection themes. Each verse has its own page, e.g.
-  [Psalm 23:1](https://3livescapture.com/library/psalm-23-1).
-- [Approach](https://3livescapture.com/approach): what Lectio Divina is, what
+  [Psalm 23:1](https://enjoyhim.org/library/psalm-23-1).
+- [Approach](https://enjoyhim.org/approach): what Lectio Divina is, what
   it is not, and how this app practices it.
-- [Pricing](https://3livescapture.com/pricing): free tier (6 daily readings),
+- [Pricing](https://enjoyhim.org/pricing): free tier (6 daily readings),
   Basic ($4.99/mo, Lectio Divina layout), Pro ($11.99/mo, all layouts,
   unlimited). First month free on monthly plans; annual billing saves 40%.
 
@@ -45,4 +45,4 @@ reflection.
 Content pages (home, today, library, approach, pricing, privacy) may be
 indexed and quoted. Private reader pages (/login, /account, /history) and all
 /api/ endpoints must not be crawled. A machine-readable sitemap is at
-https://3livescapture.com/sitemap.xml.
+https://enjoyhim.org/sitemap.xml.

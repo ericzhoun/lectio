@@ -1,4 +1,4 @@
--- LectioServer: bridges the world to the Lectio backend (3livescapture.com).
+-- LectioServer: bridges the world to the Lectio backend (enjoyhim.org).
 -- Live mode: every feature is served by the site's API — the real 148-verse
 -- deck, D1-enforced quotas and welcome credits, AI reflections, the AI
 -- assistant and the church-calendar lectionary. If HTTP is disabled or the
@@ -16,7 +16,7 @@ local drawRequests = DrawRequests.new()
 -- set from Studio's properties pane (LectioBackendUrl / LectioApiKey on this
 -- Script) without editing code. In production set LectioApiKey via the
 -- Creator Dashboard or publish the place with the attribute filled in.
-local DEFAULT_BACKEND_URL = "https://3livescapture.com"
+local DEFAULT_BACKEND_URL = "https://enjoyhim.org"
 local DEFAULT_API_KEY = ""
 local BACKEND_URL = script:GetAttribute("LectioBackendUrl") or DEFAULT_BACKEND_URL
 local API_KEY = script:GetAttribute("LectioApiKey") or DEFAULT_API_KEY

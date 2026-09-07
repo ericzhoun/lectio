@@ -12,7 +12,7 @@
 	"vars": {
 		// Pinned so /start and /callback always send Google the identical redirect_uri;
 		// deriving it from the request URL can differ by scheme and breaks token exchange.
-		"GOOGLE_REDIRECT_URI": "https://3livescapture.com/api/auth/google/callback"
+		"GOOGLE_REDIRECT_URI": "https://enjoyhim.org/api/auth/google/callback"
 	},
 	"observability": {
 		"enabled": true,
@@ -37,8 +37,8 @@
 	],
 	"routes": [
 		{
-			"pattern": "3livescapture.com",
-			"zone_name": "3livescapture.com",
+			"pattern": "enjoyhim.org",
+			"zone_name": "enjoyhim.org",
 			"custom_domain": true,
 			"enabled": true,
 			"previews_enabled": false
