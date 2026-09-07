@@ -9,9 +9,11 @@ local SoundService = game:GetService("SoundService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local VerseData = require(ReplicatedStorage:WaitForChild("VerseData"))
+local NativeReading = require(ReplicatedStorage:WaitForChild("LectioModules"):WaitForChild("NativeReading"))
+local native
 
 local remotes = {}
-for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary" }) do
+for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary", "LectioActivity" }) do
 	remotes[n] = ReplicatedStorage:WaitForChild(n)
 end
 
@@ -41,6 +43,8 @@ local libraryData = nil
 
 local L = {
 	en = {
+        approachBible = "Walk to the Bible to begin your reading.",
+        drawUncertain = "Your reading is still unconfirmed. Another draw is paused to avoid using a second reading.",
 		title = "Lectio — Daily Scripture Reading",
 		sub = "Bring a question, flip open the Bible, and let a verse find you.",
 		calendar = "✦ Or follow the church calendar — Today's reading",
@@ -85,6 +89,8 @@ local L = {
 		setTitle = "Settings",
 	},
 	zh = {
+        approachBible = "请走近圣经，开始阅读。",
+        drawUncertain = "本次阅读尚未确认。为避免重复扣次数，暂不能再次抽取。",
 		title = "Lectio — 每日读经默想",
 		sub = "带着一个问题，翻开圣经，让经文找到你。",
 		calendar = "✦ 或跟随教会年历 — 今日读经",
@@ -448,6 +454,13 @@ local function buildGui()
 	}, gui)
 	round(main, 14)
 	ui.main = main
+    main.Visible = false
+    local closeOptions=mk("TextButton",{Name="CloseOptions",Position=UDim2.new(1,-42,0,8),Size=UDim2.fromOffset(34,34),Text="×",TextSize=24,TextColor3=C.text,BackgroundColor3=C.panel2,ZIndex=2},main)
+    closeOptions.Activated:Connect(function() main.Visible=false end)
+    local mainScale=mk("UIScale",{Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)},main)
+    workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+        mainScale.Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)
+    end)
 
 	local title = mk("TextLabel", { Position = UDim2.fromOffset(20, 12), Size = UDim2.fromOffset(680, 40), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextScaled = true, Text = t("title") }, main)
 	local sub = mk("TextLabel", { Position = UDim2.fromOffset(20, 54), Size = UDim2.fromOffset(680, 24), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Text = t("sub") }, main)
@@ -606,6 +619,7 @@ local function buildGui()
 	local settings = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(360, 220), BackgroundColor3 = C.bg, BackgroundTransparency = 0.04, BorderSizePixel = 0, Visible = false, Active = true }, gui)
 	round(settings, 14)
 	ui.settings = settings
+    settings.Size=UDim2.fromOffset(360,300)
 	local setTitle = mk("TextLabel", { Position = UDim2.fromOffset(20, 12), Size = UDim2.fromOffset(320, 28), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextSize = 22, Text = t("setTitle") }, settings)
 	table.insert(ui.binds, { inst = setTitle, key = "setTitle" })
 	local musicBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 56), Size = UDim2.fromOffset(320, 40), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = "" }, settings)
@@ -613,6 +627,16 @@ local function buildGui()
 	local setClose = mk("TextButton", { Position = UDim2.fromOffset(20, 106), Size = UDim2.fromOffset(320, 40), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = t("close") }, settings)
 	round(setClose, 8)
 	table.insert(ui.binds, { inst = setClose, key = "close" })
+    setClose.Position=UDim2.fromOffset(20,206)
+    local voiceBtn=mk("TextButton",{Position=UDim2.fromOffset(20,106),Size=UDim2.fromOffset(320,40),Text="Narration: On",TextSize=15,BackgroundColor3=C.panel2,TextColor3=C.text},settings)
+    local motionBtn=mk("TextButton",{Position=UDim2.fromOffset(20,156),Size=UDim2.fromOffset(320,40),Text="Reduced motion: Off",TextSize=15,BackgroundColor3=C.panel2,TextColor3=C.text},settings)
+    ui.voiceBtn=voiceBtn; ui.motionBtn=motionBtn
+    voiceBtn.Activated:Connect(function()
+        native:toggleMute(); refreshLang()
+    end)
+    motionBtn.Activated:Connect(function()
+        native:toggleMotion(); refreshLang()
+    end)
 
 	-- toast
 	local toast = mk("Frame", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -30), Size = UDim2.fromOffset(460, 44), BackgroundColor3 = C.panel2, BorderSizePixel = 0, Visible = false }, gui)
@@ -628,19 +652,21 @@ local function buildGui()
 
 	-- wiring
 	exploreBtn.MouseButton1Click:Connect(function()
-		local topic = ui.topicBox.Text
-		remotes.LectioExplore:FireServer(topic, selectedMode, lang)
+        ui.main.Visible=false
+        native:activate(selectedMode)
 	end)
 	topicBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
-			remotes.LectioExplore:FireServer(ui.topicBox.Text, selectedMode, lang)
+            ui.main.Visible=false
+            native:activate(selectedMode)
 		end
 	end)
 	regBtn.MouseButton1Click:Connect(function()
 		remotes.LectioRegister:FireServer()
 	end)
 	calendarBtn.MouseButton1Click:Connect(function()
-		remotes.LectioToday:FireServer(lang)
+        ui.main.Visible=false
+        native:activate("today")
 	end)
 	libraryBtn.MouseButton1Click:Connect(function()
 		buildLibrary()
@@ -713,7 +739,7 @@ end
 
 -- What is on screen, so the assistant answers with the reading in context.
 function currentReadingContext()
-	if not currentReading or not ui or not ui.reading.Visible then return nil end
+	if not currentReading or not ui then return nil end
 	local items = {}
 	for i, v in ipairs(currentReading.verses) do
 		if i > 12 then break end
@@ -732,6 +758,11 @@ end
 
 function refreshLang()
 	if not ui or not ui.gui then return end
+    if native then
+        native:setLanguage(lang)
+        ui.voiceBtn.Text=(lang=="zh" and "语音：" or "Narration: ")..(native.settings.narrationMuted and (lang=="zh" and "关闭" or "Off") or (lang=="zh" and "开启" or "On"))
+        ui.motionBtn.Text=(lang=="zh" and "减少动态：" or "Reduced motion: ")..(native.settings.reducedMotion and (lang=="zh" and "开启" or "On") or (lang=="zh" and "关闭" or "Off"))
+    end
 	for _, b in ipairs(ui.binds) do
 		b.inst.Text = t(b.key)
 	end
@@ -757,14 +788,7 @@ remotes.LectioState.OnClientEvent:Connect(function(s)
 end)
 
 remotes.LectioExplore.OnClientEvent:Connect(function(resp)
-	if type(resp) ~= "table" then return end
-	if not resp.ok then
-		showToast(t(resp.errorKey or "backendError"))
-		return
-	end
-	applyState(resp.state)
-	local labels = labelsForMode(resp.mode)
-	startReading(resp.verses, labels, modeTitle(resp.mode), resp.summary, resp.topic)
+    if native then native:receive(resp,false) end
 end)
 
 remotes.LectioRegister.OnClientEvent:Connect(function(s)
@@ -773,16 +797,7 @@ remotes.LectioRegister.OnClientEvent:Connect(function(s)
 end)
 
 remotes.LectioToday.OnClientEvent:Connect(function(resp)
-	if type(resp) ~= "table" or not resp.ok then
-		if type(resp) == "table" then showToast(t(resp.errorKey or "backendError")) end
-		return
-	end
-	local labels = {}
-	for i = 1, #resp.steps do
-		table.insert(labels, string.format(t("stepFmt"), i, #resp.steps))
-	end
-	local title = (lang == "zh") and resp.titleZh or resp.titleEn
-	startReading(resp.steps, labels, title, "", "")
+    if native then native:receive(resp,true) end
 end)
 
 remotes.LectioLibrary.OnClientEvent:Connect(function(resp)
@@ -825,5 +840,22 @@ workspace.DescendantAdded:Connect(function(d)
 end)
 
 buildGui()
+native=NativeReading.new(remotes,{
+    language=function() return lang end,
+    topic=function() return ui.topicBox.Text end,
+    setMode=function(mode) selectedMode=mode; refreshModeCards() end,
+    openOptions=function() ui.main.Visible=not ui.main.Visible end,
+    labels=function(mode,count)
+        if mode~="today" then return labelsForMode(mode) end
+        local labels={}
+        for i=1,count do labels[i]=string.format(t("stepFmt"),i,count) end
+        return labels
+    end,title=modeTitle,
+    toast=function(key) showToast(t(key)) end,
+    accept=function(reading,newState)
+        currentReading=reading
+        if newState then applyState(newState) end
+    end,
+})
 remotes.LectioState:FireServer()
 print("Lectio client ready")

@@ -1,5 +1,5 @@
 <roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
-<Item class="Lighting" referent="RBX121">
+<Item class="Lighting" referent="RBX148">
 <Properties>
 <string name="Name">Lighting</string>
 <float name="Brightness">2.9</float>
@@ -13,7 +13,7 @@
 <Color3 name="ColorShift_Bottom"><R>0</R><G>0</G><B>0</B></Color3>
 <Color3 name="ColorShift_Top"><R>0</R><G>0</G><B>0</B></Color3>
 </Properties>
-<Item class="Atmosphere" referent="RBX122">
+<Item class="Atmosphere" referent="RBX149">
 <Properties>
 <string name="Name">Atmosphere</string>
 <float name="Density">0.32</float>
@@ -25,10 +25,11 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Workspace" referent="RBX113">
+
+<Item class="Workspace" referent="RBX129">
 <Properties>
 <string name="Name">Workspace</string>
-<bool name="Gravity">196.2</bool>
+<float name="Gravity">196.2</float>
 </Properties>
 <Item class="Part" referent="RBX1">
 <Properties>
@@ -323,11 +324,11 @@
 <Properties>
 <string name="Name">AltarBible</string>
 <bool name="Anchored">true</bool>
-<bool name="CanCollide">true</bool>
+<bool name="CanCollide">false</bool>
 <bool name="CastShadow">true</bool>
-<float name="Transparency">0.0</float>
+<float name="Transparency">1</float>
 <float name="Reflectance">0</float>
-<token name="Material">272</token>
+<token name="Material">256</token>
 <token name="shape">1</token>
 <Color3uint8 name="Color3uint8">4286332980</Color3uint8>
 <Vector3 name="size"><X>4.4</X><Y>0.35</Y><Z>3.1</Z></Vector3>
@@ -336,41 +337,281 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
+<Item class="Model" referent="RBX34">
+<Properties>
+<string name="Name">BibleVisual</string>
+
+</Properties>
 <Item class="Part" referent="RBX19">
 <Properties>
-<string name="Name">BiblePageL</string>
+<string name="Name">CoverLeft</string>
 <bool name="Anchored">true</bool>
-<bool name="CanCollide">true</bool>
+<bool name="CanCollide">false</bool>
 <bool name="CastShadow">true</bool>
 <float name="Transparency">0.0</float>
 <float name="Reflectance">0</float>
-<token name="Material">272</token>
+<token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4294374118</Color3uint8>
-<Vector3 name="size"><X>2.05</X><Y>0.18</Y><Z>2.9</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>-1.05</X><Y>5.4</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>0.9982005399352042</R11><R12>-0.059964006479444595</R12><R20>-0.0</R20><R21>0.059964006479444595</R21><R22>0.9982005399352042</R22></CoordinateFrame>
+<Color3uint8 name="Color3uint8">4284427044</Color3uint8>
+<Vector3 name="size"><X>2.2</X><Y>0.14</Y><Z>3.2</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>-1.1</X><Y>5.53</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-</Item>
-<Item class="Part" referent="RBX20">
+<Item class="SurfaceGui" referent="RBX21">
 <Properties>
-<string name="Name">BiblePageR</string>
+<string name="Name">CoverLettering</string>
+
+<token name="Face">1</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>320</X><Y>480</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX20">
+<Properties>
+<string name="Name">CoverTitle</string>
+
+<UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.90</R><G>0.75</G><B>0.39</B></Color3>
+<string name="Text">✝
+
+LECTIO</string>
+</Properties>
+
+</Item>
+</Item>
+</Item>
+<Item class="Part" referent="RBX22">
+<Properties>
+<string name="Name">CoverRight</string>
 <bool name="Anchored">true</bool>
-<bool name="CanCollide">true</bool>
+<bool name="CanCollide">false</bool>
 <bool name="CastShadow">true</bool>
 <float name="Transparency">0.0</float>
 <float name="Reflectance">0</float>
-<token name="Material">272</token>
+<token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4294374118</Color3uint8>
-<Vector3 name="size"><X>2.05</X><Y>0.18</Y><Z>2.9</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>1.05</X><Y>5.4</Y><Z>-49</Z><R00>1.0</R00><R01>-0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>0.9982005399352042</R11><R12>0.059964006479444595</R12><R20>-0.0</R20><R21>-0.059964006479444595</R21><R22>0.9982005399352042</R22></CoordinateFrame>
+<Color3uint8 name="Color3uint8">4284427044</Color3uint8>
+<Vector3 name="size"><X>2.2</X><Y>0.14</Y><Z>3.2</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>1.1</X><Y>5.53</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+<Item class="SurfaceGui" referent="RBX24">
+<Properties>
+<string name="Name">CoverLettering</string>
+
+<token name="Face">1</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>320</X><Y>480</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX23">
+<Properties>
+<string name="Name">CoverTitle</string>
+
+<UDim2 name="Size"><XS>1</XS><XO>0</XO><YS>1</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.90</R><G>0.75</G><B>0.39</B></Color3>
+<string name="Text">HOLY
+BIBLE
+
+圣经</string>
+</Properties>
+
+</Item>
+</Item>
+</Item>
+<Item class="Part" referent="RBX25">
+<Properties>
+<string name="Name">BackCover</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4283179035</Color3uint8>
+<Vector3 name="size"><X>4.5</X><Y>0.13</Y><Z>3.25</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.05</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX21">
+<Item class="Part" referent="RBX26">
+<Properties>
+<string name="Name">PageBlock</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4294438612</Color3uint8>
+<Vector3 name="size"><X>4.1</X><Y>0.3</Y><Z>2.95</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.28</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX27">
+<Properties>
+<string name="Name">Spine</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4289955129</Color3uint8>
+<Vector3 name="size"><X>0.16</X><Y>0.46</Y><Z>3.2</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.3</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX28">
+<Properties>
+<string name="Name">GiltPageEdge0</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.19</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX29">
+<Properties>
+<string name="Name">GiltPageEdge1</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.27</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX30">
+<Properties>
+<string name="Name">GiltPageEdge2</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.35</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX31">
+<Properties>
+<string name="Name">RibbonDaily</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4291602001</Color3uint8>
+<Vector3 name="size"><X>0.45</X><Y>0.06</Y><Z>1.1</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>-1.4</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX32">
+<Properties>
+<string name="Name">RibbonDivina</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4285829751</Color3uint8>
+<Vector3 name="size"><X>0.45</X><Y>0.06</Y><Z>1.1</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX33">
+<Properties>
+<string name="Name">RibbonDeep</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4286608802</Color3uint8>
+<Vector3 name="size"><X>0.45</X><Y>0.06</Y><Z>1.1</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>1.4</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+</Item>
+<Item class="Part" referent="RBX35">
+<Properties>
+<string name="Name">Contact</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">1</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+<Vector3 name="size"><X>0.15</X><Y>0.15</Y><Z>0.15</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0.8</X><Y>5.75</Y><Z>-47.8</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX36">
+<Properties>
+<string name="Name">PageDestination</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">1</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4294967295</Color3uint8>
+<Vector3 name="size"><X>0.15</X><Y>0.15</Y><Z>0.15</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>7.5</Y><Z>-46.8</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX37">
 <Properties>
 <string name="Name">BoardTrim</string>
 <bool name="Anchored">true</bool>
@@ -387,7 +628,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX22">
+<Item class="Part" referent="RBX38">
 <Properties>
 <string name="Name">VerseBoard</string>
 <bool name="Anchored">true</bool>
@@ -404,7 +645,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX23">
+<Item class="Part" referent="RBX39">
 <Properties>
 <string name="Name">CandlePole-6</string>
 <bool name="Anchored">true</bool>
@@ -421,7 +662,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX24">
+<Item class="Part" referent="RBX40">
 <Properties>
 <string name="Name">CandleFlame-6</string>
 <bool name="Anchored">true</bool>
@@ -437,7 +678,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX25">
+<Item class="PointLight" referent="RBX41">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.4</float>
@@ -446,7 +687,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX26">
+<Item class="Part" referent="RBX42">
 <Properties>
 <string name="Name">CandlePole6</string>
 <bool name="Anchored">true</bool>
@@ -463,7 +704,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX27">
+<Item class="Part" referent="RBX43">
 <Properties>
 <string name="Name">CandleFlame6</string>
 <bool name="Anchored">true</bool>
@@ -479,7 +720,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX28">
+<Item class="PointLight" referent="RBX44">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.4</float>
@@ -488,20 +729,22 @@
 </Properties>
 </Item>
 </Item>
-<Item class="SpawnLocation" referent="RBX29">
+<Item class="SpawnLocation" referent="RBX45">
 <Properties>
 <string name="Name">SpawnLocation</string>
 <bool name="Anchored">true</bool>
 <bool name="Neutral">true</bool>
 <float name="Duration">0</float>
 <Color3uint8 name="Color3uint8">4291676090</Color3uint8>
-<Vector3 name="size"><X>8</X><Y>1</Y><Z>8</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>0</X><Y>1.3</Y><Z>45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
+<float name="Transparency">1</float>
+<bool name="CanCollide">false</bool>
+<Vector3 name="size"><X>4</X><Y>0.2</Y><Z>4</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>2</Y><Z>-45</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX30">
+<Item class="Part" referent="RBX46">
 <Properties>
 <string name="Name">Path0</string>
 <bool name="Anchored">true</bool>
@@ -518,7 +761,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX31">
+<Item class="Part" referent="RBX47">
 <Properties>
 <string name="Name">Path1</string>
 <bool name="Anchored">true</bool>
@@ -535,7 +778,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX32">
+<Item class="Part" referent="RBX48">
 <Properties>
 <string name="Name">Path2</string>
 <bool name="Anchored">true</bool>
@@ -552,7 +795,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX33">
+<Item class="Part" referent="RBX49">
 <Properties>
 <string name="Name">Path3</string>
 <bool name="Anchored">true</bool>
@@ -569,7 +812,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX34">
+<Item class="Part" referent="RBX50">
 <Properties>
 <string name="Name">Path4</string>
 <bool name="Anchored">true</bool>
@@ -586,7 +829,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX35">
+<Item class="Part" referent="RBX51">
 <Properties>
 <string name="Name">Path5</string>
 <bool name="Anchored">true</bool>
@@ -603,7 +846,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX36">
+<Item class="Part" referent="RBX52">
 <Properties>
 <string name="Name">Path6</string>
 <bool name="Anchored">true</bool>
@@ -620,7 +863,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX37">
+<Item class="Part" referent="RBX53">
 <Properties>
 <string name="Name">LanternPost-6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -637,7 +880,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX38">
+<Item class="Part" referent="RBX54">
 <Properties>
 <string name="Name">LanternGlow-6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -653,7 +896,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX39">
+<Item class="PointLight" referent="RBX55">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -662,7 +905,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX40">
+<Item class="Part" referent="RBX56">
 <Properties>
 <string name="Name">LanternPost6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -679,7 +922,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX41">
+<Item class="Part" referent="RBX57">
 <Properties>
 <string name="Name">LanternGlow6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -695,7 +938,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX42">
+<Item class="PointLight" referent="RBX58">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -704,7 +947,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX43">
+<Item class="Part" referent="RBX59">
 <Properties>
 <string name="Name">LanternPost-6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -721,7 +964,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX44">
+<Item class="Part" referent="RBX60">
 <Properties>
 <string name="Name">LanternGlow-6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -737,7 +980,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX45">
+<Item class="PointLight" referent="RBX61">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -746,7 +989,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX46">
+<Item class="Part" referent="RBX62">
 <Properties>
 <string name="Name">LanternPost6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -763,7 +1006,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX47">
+<Item class="Part" referent="RBX63">
 <Properties>
 <string name="Name">LanternGlow6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -779,7 +1022,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX48">
+<Item class="PointLight" referent="RBX64">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -788,7 +1031,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX49">
+<Item class="Part" referent="RBX65">
 <Properties>
 <string name="Name">PondBed</string>
 <bool name="Anchored">true</bool>
@@ -805,7 +1048,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX50">
+<Item class="Part" referent="RBX66">
 <Properties>
 <string name="Name">PondWater</string>
 <bool name="Anchored">true</bool>
@@ -822,7 +1065,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX51">
+<Item class="Part" referent="RBX67">
 <Properties>
 <string name="Name">TreeTrunk0</string>
 <bool name="Anchored">true</bool>
@@ -839,7 +1082,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX52">
+<Item class="Part" referent="RBX68">
 <Properties>
 <string name="Name">TreeTop0</string>
 <bool name="Anchored">true</bool>
@@ -856,7 +1099,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX53">
+<Item class="Part" referent="RBX69">
 <Properties>
 <string name="Name">TreeTop20</string>
 <bool name="Anchored">true</bool>
@@ -873,7 +1116,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX54">
+<Item class="Part" referent="RBX70">
 <Properties>
 <string name="Name">TreeTrunk1</string>
 <bool name="Anchored">true</bool>
@@ -890,7 +1133,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX55">
+<Item class="Part" referent="RBX71">
 <Properties>
 <string name="Name">TreeTop1</string>
 <bool name="Anchored">true</bool>
@@ -907,7 +1150,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX56">
+<Item class="Part" referent="RBX72">
 <Properties>
 <string name="Name">TreeTop21</string>
 <bool name="Anchored">true</bool>
@@ -924,7 +1167,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX57">
+<Item class="Part" referent="RBX73">
 <Properties>
 <string name="Name">TreeTrunk2</string>
 <bool name="Anchored">true</bool>
@@ -941,7 +1184,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX58">
+<Item class="Part" referent="RBX74">
 <Properties>
 <string name="Name">TreeTop2</string>
 <bool name="Anchored">true</bool>
@@ -958,7 +1201,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX59">
+<Item class="Part" referent="RBX75">
 <Properties>
 <string name="Name">TreeTop22</string>
 <bool name="Anchored">true</bool>
@@ -975,7 +1218,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX60">
+<Item class="Part" referent="RBX76">
 <Properties>
 <string name="Name">TreeTrunk3</string>
 <bool name="Anchored">true</bool>
@@ -992,7 +1235,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX61">
+<Item class="Part" referent="RBX77">
 <Properties>
 <string name="Name">TreeTop3</string>
 <bool name="Anchored">true</bool>
@@ -1009,7 +1252,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX62">
+<Item class="Part" referent="RBX78">
 <Properties>
 <string name="Name">TreeTop23</string>
 <bool name="Anchored">true</bool>
@@ -1026,7 +1269,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX63">
+<Item class="Part" referent="RBX79">
 <Properties>
 <string name="Name">TreeTrunk4</string>
 <bool name="Anchored">true</bool>
@@ -1043,7 +1286,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX64">
+<Item class="Part" referent="RBX80">
 <Properties>
 <string name="Name">TreeTop4</string>
 <bool name="Anchored">true</bool>
@@ -1060,7 +1303,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX65">
+<Item class="Part" referent="RBX81">
 <Properties>
 <string name="Name">TreeTop24</string>
 <bool name="Anchored">true</bool>
@@ -1077,7 +1320,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX66">
+<Item class="Part" referent="RBX82">
 <Properties>
 <string name="Name">TreeTrunk5</string>
 <bool name="Anchored">true</bool>
@@ -1094,7 +1337,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX67">
+<Item class="Part" referent="RBX83">
 <Properties>
 <string name="Name">TreeTop5</string>
 <bool name="Anchored">true</bool>
@@ -1111,7 +1354,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX68">
+<Item class="Part" referent="RBX84">
 <Properties>
 <string name="Name">TreeTop25</string>
 <bool name="Anchored">true</bool>
@@ -1128,7 +1371,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX69">
+<Item class="Part" referent="RBX85">
 <Properties>
 <string name="Name">TreeTrunk6</string>
 <bool name="Anchored">true</bool>
@@ -1145,7 +1388,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX70">
+<Item class="Part" referent="RBX86">
 <Properties>
 <string name="Name">TreeTop6</string>
 <bool name="Anchored">true</bool>
@@ -1162,7 +1405,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX71">
+<Item class="Part" referent="RBX87">
 <Properties>
 <string name="Name">TreeTop26</string>
 <bool name="Anchored">true</bool>
@@ -1179,7 +1422,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX72">
+<Item class="Part" referent="RBX88">
 <Properties>
 <string name="Name">TreeTrunk7</string>
 <bool name="Anchored">true</bool>
@@ -1196,7 +1439,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX73">
+<Item class="Part" referent="RBX89">
 <Properties>
 <string name="Name">TreeTop7</string>
 <bool name="Anchored">true</bool>
@@ -1213,7 +1456,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX74">
+<Item class="Part" referent="RBX90">
 <Properties>
 <string name="Name">TreeTop27</string>
 <bool name="Anchored">true</bool>
@@ -1230,7 +1473,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX75">
+<Item class="Part" referent="RBX91">
 <Properties>
 <string name="Name">TreeTrunk8</string>
 <bool name="Anchored">true</bool>
@@ -1247,7 +1490,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX76">
+<Item class="Part" referent="RBX92">
 <Properties>
 <string name="Name">TreeTop8</string>
 <bool name="Anchored">true</bool>
@@ -1264,7 +1507,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX77">
+<Item class="Part" referent="RBX93">
 <Properties>
 <string name="Name">TreeTop28</string>
 <bool name="Anchored">true</bool>
@@ -1281,7 +1524,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX78">
+<Item class="Part" referent="RBX94">
 <Properties>
 <string name="Name">BenchSeat-10</string>
 <bool name="Anchored">true</bool>
@@ -1298,7 +1541,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX79">
+<Item class="Part" referent="RBX95">
 <Properties>
 <string name="Name">BenchBack-10</string>
 <bool name="Anchored">true</bool>
@@ -1315,7 +1558,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX80">
+<Item class="Part" referent="RBX96">
 <Properties>
 <string name="Name">BenchLegL-10</string>
 <bool name="Anchored">true</bool>
@@ -1332,7 +1575,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX81">
+<Item class="Part" referent="RBX97">
 <Properties>
 <string name="Name">BenchLegR-10</string>
 <bool name="Anchored">true</bool>
@@ -1349,7 +1592,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX82">
+<Item class="Part" referent="RBX98">
 <Properties>
 <string name="Name">BenchSeat10</string>
 <bool name="Anchored">true</bool>
@@ -1366,7 +1609,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX83">
+<Item class="Part" referent="RBX99">
 <Properties>
 <string name="Name">BenchBack10</string>
 <bool name="Anchored">true</bool>
@@ -1383,7 +1626,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX84">
+<Item class="Part" referent="RBX100">
 <Properties>
 <string name="Name">BenchLegL10</string>
 <bool name="Anchored">true</bool>
@@ -1400,7 +1643,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX85">
+<Item class="Part" referent="RBX101">
 <Properties>
 <string name="Name">BenchLegR10</string>
 <bool name="Anchored">true</bool>
@@ -1417,7 +1660,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX86">
+<Item class="Part" referent="RBX102">
 <Properties>
 <string name="Name">Hill0</string>
 <bool name="Anchored">true</bool>
@@ -1434,7 +1677,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX87">
+<Item class="Part" referent="RBX103">
 <Properties>
 <string name="Name">Hill1</string>
 <bool name="Anchored">true</bool>
@@ -1451,7 +1694,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX88">
+<Item class="Part" referent="RBX104">
 <Properties>
 <string name="Name">Hill2</string>
 <bool name="Anchored">true</bool>
@@ -1468,7 +1711,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX89">
+<Item class="Part" referent="RBX105">
 <Properties>
 <string name="Name">Hill3</string>
 <bool name="Anchored">true</bool>
@@ -1485,7 +1728,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX90">
+<Item class="Part" referent="RBX106">
 <Properties>
 <string name="Name">Hill4</string>
 <bool name="Anchored">true</bool>
@@ -1502,7 +1745,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX91">
+<Item class="Part" referent="RBX107">
 <Properties>
 <string name="Name">Hill5</string>
 <bool name="Anchored">true</bool>
@@ -1519,7 +1762,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX92">
+<Item class="Part" referent="RBX108">
 <Properties>
 <string name="Name">Hill6</string>
 <bool name="Anchored">true</bool>
@@ -1536,7 +1779,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX93">
+<Item class="Part" referent="RBX109">
 <Properties>
 <string name="Name">Hill7</string>
 <bool name="Anchored">true</bool>
@@ -1553,7 +1796,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX94">
+<Item class="Part" referent="RBX110">
 <Properties>
 <string name="Name">RegisterDesk</string>
 <bool name="Anchored">true</bool>
@@ -1570,7 +1813,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX95">
+<Item class="Part" referent="RBX111">
 <Properties>
 <string name="Name">RegisterTop</string>
 <bool name="Anchored">true</bool>
@@ -1587,7 +1830,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX96">
+<Item class="Part" referent="RBX112">
 <Properties>
 <string name="Name">RegisterSign</string>
 <bool name="Anchored">true</bool>
@@ -1604,7 +1847,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX97">
+<Item class="Part" referent="RBX113">
 <Properties>
 <string name="Name">AssistantPedestal</string>
 <bool name="Anchored">true</bool>
@@ -1621,7 +1864,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX98">
+<Item class="Part" referent="RBX114">
 <Properties>
 <string name="Name">AssistantRobe</string>
 <bool name="Anchored">true</bool>
@@ -1638,7 +1881,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX99">
+<Item class="Part" referent="RBX115">
 <Properties>
 <string name="Name">AssistantHead</string>
 <bool name="Anchored">true</bool>
@@ -1655,7 +1898,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX100">
+<Item class="Part" referent="RBX116">
 <Properties>
 <string name="Name">AssistantNPC</string>
 <bool name="Anchored">true</bool>
@@ -1671,7 +1914,7 @@
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX101">
+<Item class="PointLight" referent="RBX117">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.2</float>
@@ -1680,7 +1923,7 @@
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX102">
+<Item class="Part" referent="RBX118">
 <Properties>
 <string name="Name">LibraryWall</string>
 <bool name="Anchored">true</bool>
@@ -1697,7 +1940,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX103">
+<Item class="Part" referent="RBX119">
 <Properties>
 <string name="Name">Book0</string>
 <bool name="Anchored">true</bool>
@@ -1714,7 +1957,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX104">
+<Item class="Part" referent="RBX120">
 <Properties>
 <string name="Name">Book1</string>
 <bool name="Anchored">true</bool>
@@ -1731,7 +1974,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX105">
+<Item class="Part" referent="RBX121">
 <Properties>
 <string name="Name">Book2</string>
 <bool name="Anchored">true</bool>
@@ -1748,7 +1991,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX106">
+<Item class="Part" referent="RBX122">
 <Properties>
 <string name="Name">Book3</string>
 <bool name="Anchored">true</bool>
@@ -1765,7 +2008,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX107">
+<Item class="Part" referent="RBX123">
 <Properties>
 <string name="Name">Book4</string>
 <bool name="Anchored">true</bool>
@@ -1782,7 +2025,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX108">
+<Item class="Part" referent="RBX124">
 <Properties>
 <string name="Name">Book5</string>
 <bool name="Anchored">true</bool>
@@ -1799,7 +2042,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX109">
+<Item class="Part" referent="RBX125">
 <Properties>
 <string name="Name">Book6</string>
 <bool name="Anchored">true</bool>
@@ -1816,7 +2059,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX110">
+<Item class="Part" referent="RBX126">
 <Properties>
 <string name="Name">Book7</string>
 <bool name="Anchored">true</bool>
@@ -1833,7 +2076,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX111">
+<Item class="Part" referent="RBX127">
 <Properties>
 <string name="Name">Motes</string>
 <bool name="Anchored">true</bool>
@@ -1845,7 +2088,7 @@
 <Vector3 name="size"><X>1</X><Y>1</Y><Z>1</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>9</Y><Z>-44</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
 </Properties>
-<Item class="ParticleEmitter" referent="RBX112">
+<Item class="ParticleEmitter" referent="RBX128">
 <Properties>
 <string name="Name">MotesEmitter</string>
 <float name="Rate">5</float>
@@ -1860,12 +2103,12 @@
 </Item>
 </Item>
 </Item>
-<Item class="ReplicatedStorage" referent="RBX115">
+<Item class="ReplicatedStorage" referent="RBX142">
 <Properties>
 <string name="Name">ReplicatedStorage</string>
 
 </Properties>
-<Item class="ModuleScript" referent="RBX114">
+<Item class="ModuleScript" referent="RBX140">
 <Properties>
 <string name="Name">VerseData</string>
 <ProtectedString name="Source">-- VerseData: scripture library, topics, today's readings, assistant rules.
@@ -2039,17 +2282,766 @@ VerseData.AssistantFallback = {
 return VerseData
 </ProtectedString>
 </Properties>
+</Item><Item class="Folder" referent="RBX141">
+<Properties>
+<string name="Name">LectioModules</string>
+
+</Properties>
+<Item class="ModuleScript" referent="RBX130">
+<Properties>
+<string name="Name">BibleInteraction</string>
+<ProtectedString name="Source">local Players=game:GetService("Players")
+local RunService=game:GetService("RunService")
+local TweenService=game:GetService("TweenService")
+local Interaction={}
+Interaction.__index=Interaction
+
+-- A local visual gesture for the owner and each observer. Never moves the avatar root.
+function Interaction.gesture(character,target,onContact)
+    if not character then return function() end end
+    local humanoid=character:FindFirstChildOfClass("Humanoid")
+    if not humanoid then return function() end end
+    local alive=true
+    local glow=Instance.new("PointLight")
+    glow.Color=Color3.fromRGB(255,222,160); glow.Range=7; glow.Brightness=0.6; glow.Parent=target
+    local ik,shoulder,original
+    local hand=character:FindFirstChild("RightHand")
+    if hand and character:FindFirstChild("RightUpperArm") then
+        ik=Instance.new("IKControl")
+        ik.Type=Enum.IKControlType.Position
+        ik.ChainRoot=character.RightUpperArm; ik.EndEffector=hand
+        ik.Target=target; ik.SmoothTime=0.18; ik.Weight=1; ik.Parent=humanoid
+    else
+        local torso=character:FindFirstChild("Torso")
+        shoulder=torso and torso:FindFirstChild("Right Shoulder")
+        if shoulder then
+            original=shoulder.C0
+            shoulder.C0=original*CFrame.Angles(0,0,math.rad(-70))
+        end
+    end
+    local function cleanup()
+        if not alive then return end
+        alive=false
+        glow:Destroy()
+        if ik then ik:Destroy() end
+        if shoulder and shoulder.Parent then shoulder.C0=original end
+    end
+    task.delay(0.45,function() if alive and character.Parent and onContact then onContact() end end)
+    task.delay(1.0,cleanup)
+    return cleanup
+end
+
+function Interaction.new(anchors,onAction)
+    local self=setmetatable({anchors=anchors,onAction=onAction,connections={},prompts={},detectors={},near=false},Interaction)
+    local function prompt(part,action,key,callback)
+        local p=Instance.new("ProximityPrompt")
+        p.ActionText=action; p.ObjectText="Lectio"; p.HoldDuration=0.2
+        p.MaxActivationDistance=7; p.RequiresLineOfSight=true
+        p.KeyboardKeyCode=key
+        p.Exclusivity=Enum.ProximityPromptExclusivity.OnePerButton
+        p.Parent=part
+        table.insert(self.prompts,p)
+        table.insert(self.connections,p.Triggered:Connect(callback))
+        return p
+    end
+    self.main=prompt(anchors.contact,"Touch Bible",Enum.KeyCode.E,function() onAction({type="activate"}) end)
+    self.main.MaxActivationDistance=3.5
+    self.main.RequiresLineOfSight=false
+    self.options=prompt(anchors.contact,"Reading options",Enum.KeyCode.Q,function() onAction({type="options"}) end)
+    self.options.GamepadKeyCode=Enum.KeyCode.ButtonY
+    self.options.RequiresLineOfSight=false
+    for _,name in ipairs({"CoverLeft","CoverRight"}) do
+        local detector=Instance.new("ClickDetector")
+        detector.MaxActivationDistance=6
+        detector.Parent=anchors.visual:WaitForChild(name)
+        table.insert(self.detectors,detector)
+        table.insert(self.connections,detector.MouseClick:Connect(function(who)
+            if who==Players.LocalPlayer then onAction({type="activate"}) end
+        end))
+    end
+    local modes={{"RibbonDaily","Daily Word","daily",Enum.KeyCode.One},
+        {"RibbonDivina","Lectio Divina","divina",Enum.KeyCode.Two},
+        {"RibbonDeep","Deep Lectio","deep",Enum.KeyCode.Three}}
+    for index,v in ipairs(modes) do
+        local p=prompt(anchors.visual:WaitForChild(v[1]),v[2],v[4],function() onAction({type="mode",mode=v[3]}) end)
+        p.GamepadKeyCode=({Enum.KeyCode.DPadLeft,Enum.KeyCode.DPadUp,Enum.KeyCode.DPadRight})[index]
+    end
+    table.insert(self.connections,RunService.Heartbeat:Connect(function()
+        local char=Players.LocalPlayer.Character
+        local root=char and char:FindFirstChild("HumanoidRootPart")
+        local near=root ~= nil and (root.Position-anchors.altar.Position).Magnitude &lt;= 9
+        if near ~= self.near then
+            self.near=near
+            if not near and self.cancel then self.cancel(); self.cancel=nil end
+            onAction({type="near",value=near})
+        end
+    end))
+    return self
+end
+function Interaction:setEnabled(enabled)
+    self.main.Enabled=enabled
+    for _,detector in ipairs(self.detectors) do detector.MaxActivationDistance=enabled and 6 or 0 end
+end
+function Interaction:isWithinReach()
+    local character=Players.LocalPlayer.Character
+    local root=character and character:FindFirstChild("HumanoidRootPart")
+    return root~=nil and (root.Position-self.anchors.contact.Position).Magnitude&lt;=3.5
+end
+function Interaction:setLanguage(lang,mode,resume)
+    self.options.ActionText=lang=="zh" and "阅读选项" or "Reading options"
+    self.main.ActionText=resume and (lang=="zh" and "继续阅读" or "Resume reading") or (lang=="zh" and "触摸圣经" or "Touch Bible")
+    self.main.ObjectText=({daily=lang=="zh" and "每日圣言" or "Daily Word",divina="Lectio Divina",deep="Deep Lectio",today=lang=="zh" and "今日经课" or "Today's reading"})[mode]
+end
+function Interaction:reach(onContact)
+    if self.cancel then self.cancel() end
+    self.cancel=Interaction.gesture(Players.LocalPlayer.Character,self.anchors.contact,onContact)
+end
+function Interaction:destroy()
+    if self.cancel then self.cancel() end
+    for _,c in ipairs(self.connections) do c:Disconnect() end
+    for _,p in ipairs(self.prompts) do p:Destroy() end
+    for _,d in ipairs(self.detectors) do d:Destroy() end
+end
+return Interaction
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX131">
+<Properties>
+<string name="Name">BiblePresentation</string>
+<ProtectedString name="Source">local TweenService=game:GetService("TweenService")
+local Players=game:GetService("Players")
+local Segments=require(script.Parent.TextSegments)
+local ReadingText=require(script.Parent.ReadingText)
+local ReadingLayout=require(script.Parent.ReadingLayout)
+local Presentation={}
+Presentation.__index=Presentation
+local ink=Color3.fromRGB(63,49,34)
+local paper=Color3.fromRGB(250,241,218)
+local function make(class,props,parent)
+    local o=Instance.new(class)
+    for k,v in pairs(props) do o[k]=v end
+    o.Parent=parent
+    return o
+end
+local function round(o) make("UICorner",{CornerRadius=UDim.new(0,10)},o) end
+function Presentation.new(anchors,onAction)
+    return setmetatable({anchors=anchors,onAction=onAction,segment=1,pages={},bookmarks={},hidden={},hiddenGuis={},tweens={},generation=0},Presentation)
+end
+function Presentation:tween(object,seconds,props)
+    local t=TweenService:Create(object,TweenInfo.new(seconds,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),props)
+    table.insert(self.tweens,t); t:Play()
+end
+function Presentation:clear()
+    self.generation=self.generation+1
+    for _,t in ipairs(self.tweens) do t:Cancel() end
+    self.tweens={}
+    self:releaseCamera()
+    for _,g in ipairs(self.bookmarks) do g:Destroy() end
+    self.bookmarks={}
+    if self.folder then self.folder:Destroy(); self.folder=nil end
+    if self.gui then self.gui:Destroy(); self.gui=nil end
+    for part,value in pairs(self.hidden) do if part.Parent then part.LocalTransparencyModifier=value end end
+    for gui,value in pairs(self.hiddenGuis) do if gui.Parent then gui.Enabled=value end end
+    self.hiddenGuis={}
+    self.hidden={}; self.pages={}; self.key=nil
+end
+function Presentation:releaseCamera()
+    if self.cameraState then
+        local saved=self.cameraState
+        if saved.camera.CameraType==Enum.CameraType.Scriptable then
+            saved.camera.CameraType=saved.kind
+            saved.camera.CFrame=saved.cframe
+        end
+        self.cameraState=nil
+    end
+end
+function Presentation:ensureBook()
+    if self.folder then return end
+    self.folder=make("Folder",{Name="LectioPersonalReading"},workspace)
+    self.book=self.anchors.visual:Clone()
+    for _,o in ipairs(self.book:GetDescendants()) do
+        if o:IsA("ProximityPrompt") or o:IsA("ClickDetector") then o:Destroy()
+        elseif o:IsA("BasePart") then o.CanCollide=false; o.CanTouch=false; o.CanQuery=false end
+    end
+    self.book.Parent=self.folder
+    self.closedLeft=self.book.CoverLeft.CFrame
+    self.closedRight=self.book.CoverRight.CFrame
+    for _,o in ipairs(self.anchors.visual:GetDescendants()) do
+        if o:IsA("BasePart") then self.hidden[o]=o.LocalTransparencyModifier; o.LocalTransparencyModifier=1 end
+        if o:IsA("SurfaceGui") then self.hiddenGuis[o]=o.Enabled; o.Enabled=false end
+    end
+end
+function Presentation:createPage(i,cf)
+    return make("Part",{Name="ReadingPage"..i,Size=Vector3.new(2.1,2.8,0.045),
+        Color=paper,Material=Enum.Material.SmoothPlastic,Anchored=true,CanCollide=false,
+        CanTouch=false,CanQuery=false,CFrame=cf,CastShadow=false},self.folder)
+end
+function Presentation:refreshText()
+    if not self.body or not self.snapshot or not self.snapshot.reading then return end
+    local s=self.snapshot
+    local verse=s.reading.verses[s.page]
+    local text=s.lang=="zh" and verse.textZh or verse.textEn
+    self.chunks=Segments.split(text or "",180)
+    self.segment=math.max(1,math.min(self.segment,math.max(1,#self.chunks)))
+    local content=ReadingText.build(s.reading,s.page,s.lang,self.chunks[self.segment] or "",
+        self.showSummary and "summary" or (self.showReflection and "reflection" or "scripture"))
+    self.body.Text=content.body
+    self.ref.Text=(s.lang=="zh" and verse.refZh or verse.refEn) or ""
+    self.progress.Text=string.format("%d / %d   ·   %d / %d",s.page,#s.reading.verses,self.segment,math.max(1,#self.chunks))
+    self.heading.Text=content.heading
+end
+function Presentation:buildBubble(page)
+    if self.gui then self.gui:Destroy() end
+    local viewport=workspace.CurrentCamera.ViewportSize
+    local layout=ReadingLayout.forViewport(viewport.X,viewport.Y)
+    local width,height=layout.width,layout.height
+    local bodyHeight=height-236
+    self.gui=make("BillboardGui",{Name="PersonalVerseBubble",Adornee=page,
+        Size=UDim2.fromOffset(width,height),StudsOffsetWorldSpace=Vector3.new(layout.offsetX,layout.offsetY,0),
+        AlwaysOnTop=layout.alwaysOnTop,MaxDistance=layout.maxDistance,Active=true,ResetOnSpawn=false,
+        ZIndexBehavior=Enum.ZIndexBehavior.Sibling},Players.LocalPlayer:WaitForChild("PlayerGui"))
+    local frame=make("Frame",{Size=UDim2.fromScale(1,1),BackgroundColor3=paper,BorderSizePixel=0},self.gui)
+    round(frame)
+    local function label(y,h,size)
+        return make("TextLabel",{Position=UDim2.new(0,14,0,y),Size=UDim2.new(1,-28,0,h),
+            BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Gotham,TextSize=size,
+            TextWrapped=true,Text=""},frame)
+    end
+    self.heading=label(8,22,13)
+    local scroll=make("ScrollingFrame",{Position=UDim2.new(0,14,0,34),Size=UDim2.new(1,-28,0,bodyHeight),
+        BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y},frame)
+    self.scroll=scroll
+    self.body=make("TextLabel",{Size=UDim2.new(1,-8,0,0),AutomaticSize=Enum.AutomaticSize.Y,
+        BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Gotham,TextSize=19,
+        TextWrapped=true,TextYAlignment=Enum.TextYAlignment.Top,Text=""},scroll)
+    self.ref=label(37+bodyHeight,24,16); self.progress=label(63+bodyHeight,18,12); self.audio=label(84+bodyHeight,18,12)
+    local zh=self.snapshot.lang=="zh"
+    local function button(text,index,row,callback)
+        local b=make("TextButton",{Text=text,Position=UDim2.new((index-1)/3,5,0,108+bodyHeight+row*40),
+            Size=UDim2.new(1/3,-10,0,36),BackgroundColor3=Color3.fromRGB(225,211,177),
+            TextColor3=ink,TextSize=13,Font=Enum.Font.Gotham,Selectable=true,BorderSizePixel=0},frame)
+        round(b); b.Activated:Connect(callback)
+    end
+    button(zh and "重播" or "Replay",1,0,function() self.onAction({type="replay"}) end)
+    button(zh and "暂停" or "Pause",2,0,function() self.onAction({type="pause"}) end)
+    button(zh and "继续" or "Resume",3,0,function() self.onAction({type="resume"}) end)
+    button(zh and "上一页" or "Previous",1,1,function() self.onAction({type="previous"}) end)
+    button(zh and "下一页" or "Next page",2,1,function() self.onAction({type="next"}) end)
+    button(zh and "结束" or "Finish",3,1,function() self.onAction({type="finish"}) end)
+    button(zh and "下一段" or "More text",1,2,function()
+        self.showReflection=false; self.showSummary=false
+        self.onAction({type="segment"})
+        self.segment=self.segment%math.max(1,#self.chunks)+1; self:refreshText()
+    end)
+    button(zh and "默想 / 经文" or "Reflection",2,2,function()
+        self.showSummary=false; self.showReflection=not self.showReflection; self:refreshText()
+        self.scroll.CanvasPosition=Vector2.new(0,0)
+    end)
+    button(zh and "小结" or "Summary",3,2,function()
+        self.showSummary=true; self:refreshText()
+        self.scroll.CanvasPosition=Vector2.new(0,0)
+    end)
+    self:refreshText()
+end
+function Presentation:setAudioState(state)
+    if type(state)=="table" then
+        self.segment=state.segment or self.segment
+        if not self.showReflection and not self.showSummary then self:refreshText() end
+        state=state.status
+    end
+    if self.audio then
+        local zh=self.snapshot and self.snapshot.lang=="zh"
+        local names=zh and {unavailable="语音暂不可用",loading="准备语音…",playing="正在朗读",paused="已暂停",ended="朗读结束",muted="语音已关闭"} or
+            {unavailable="Audio unavailable",loading="Preparing voice…",playing="Reading aloud",paused="Paused",ended="Reading complete",muted="Narration muted"}
+        self.audio.Text=names[state] or ""
+    end
+end
+function Presentation:render(s,settings)
+    self.snapshot=s
+    if s.phase=="idle" or s.phase=="failed" or s.phase=="uncertain" or s.phase=="paused" then self:clear(); return end
+    self:ensureBook()
+    local duration=settings.reducedMotion and 0.08 or 0.65
+    if s.phase=="reaching" and self.key~="reaching" then
+        self.key="reaching"
+        if not settings.reducedMotion then
+            local camera=workspace.CurrentCamera
+            self.cameraState={camera=camera,kind=camera.CameraType,cframe=camera.CFrame}
+            camera.CameraType=Enum.CameraType.Scriptable
+            local target=self.anchors.contact.Position
+            self:tween(camera,0.3,{CFrame=CFrame.lookAt(target+Vector3.new(4,3,6),target)})
+            local generation=self.generation
+            task.delay(0.95,function() if self.generation==generation then self:releaseCamera() end end)
+        end
+    end
+    if s.phase=="closing" then
+        for _,page in ipairs(self.pages) do self:tween(page,duration,{CFrame=self.anchors.altar.CFrame,Transparency=1}) end
+        self:tween(self.book.CoverLeft,duration,{CFrame=self.closedLeft})
+        self:tween(self.book.CoverRight,duration,{CFrame=self.closedRight})
+        return
+    end
+    if s.phase=="loading" and self.key~="loading" then
+        self.key="loading"
+        local hinge=self.anchors.altar.CFrame
+        local generation=self.generation
+        if not settings.reducedMotion then
+            self:tween(self.book.CoverLeft,duration/2,{CFrame=hinge*CFrame.Angles(0,0,math.rad(-70))*CFrame.new(-1.1,0,0)})
+            self:tween(self.book.CoverRight,duration/2,{CFrame=hinge*CFrame.Angles(0,0,math.rad(70))*CFrame.new(1.1,0,0)})
+        end
+        task.delay(settings.reducedMotion and 0 or duration/2,function()
+            if self.generation~=generation or not self.folder then return end
+            self:tween(self.book.CoverLeft,duration/2,{CFrame=hinge*CFrame.new(-1.1,0,0)})
+            self:tween(self.book.CoverRight,duration/2,{CFrame=hinge*CFrame.new(1.1,0,0)})
+        end)
+        if not settings.reducedMotion then
+            for i=1,3 do
+                local p=self:createPage(i,hinge*CFrame.Angles(math.pi/2,0,0))
+                self:tween(p,0.4+i*0.15,{CFrame=hinge*CFrame.Angles(math.pi/2,0,math.rad(150)),Transparency=1})
+            end
+        end
+    end
+    if not s.reading then return end
+    local key=tostring(s.reading)..":"..s.page..":"..s.lang
+    if key==self.key then return end
+    self.key=key; self.segment=1; self.showReflection=false; self.showSummary=false
+    local destination=self.anchors.destination.CFrame
+    for i=1,s.page do
+        if not self.pages[i] then self.pages[i]=self:createPage(i,self.anchors.altar.CFrame*CFrame.Angles(math.pi/2,0,0)) end
+    end
+    for _,g in ipairs(self.bookmarks) do g:Destroy() end
+    self.bookmarks={}
+    for i,page in ipairs(self.pages) do
+        local target=i==s.page and destination or destination*CFrame.new(2.4+(i-1)*0.06,-1.2+(i-1)*0.07,-0.2)
+        if i==s.page and not settings.reducedMotion then
+            local midpoint=page.CFrame:Lerp(target,0.5)+Vector3.new(0,0.9,0)
+            self:tween(page,duration/2,{CFrame=midpoint,Transparency=0})
+            local generation=self.generation
+            task.delay(duration/2,function()
+                if self.generation==generation and page.Parent and self.key==key then self:tween(page,duration/2,{CFrame=target}) end
+            end)
+        else self:tween(page,duration,{CFrame=target,Transparency=i==s.page and 0 or 0.18}) end
+        if i~=s.page then
+            local bookmark=make("BillboardGui",{Name="PageBookmark",Adornee=page,StudsOffsetWorldSpace=Vector3.new((i-1)*0.35,0,0),Size=UDim2.fromOffset(44,44),AlwaysOnTop=true,Active=true,ResetOnSpawn=false},Players.LocalPlayer.PlayerGui)
+            table.insert(self.bookmarks,bookmark)
+            local b=make("TextButton",{Size=UDim2.fromScale(1,1),Text=tostring(i),BackgroundColor3=paper,TextColor3=ink,TextSize=16},bookmark)
+            b.Activated:Connect(function() self.onAction({type="select",page=i}) end)
+        end
+    end
+    self:buildBubble(self.pages[s.page])
+end
+function Presentation:destroy() self:clear() end
+return Presentation
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX133">
+<Properties>
+<string name="Name">Narration</string>
+<ProtectedString name="Source">-- Pure playback ownership; Roblox driver is supplied at composition time.
+local Narration={}
+Narration.__index=Narration
+function Narration.new(driver,onState)
+    return setmetatable({driver=driver,onState=onState,generation=0},Narration)
+end
+function Narration:stop()
+    self.generation=self.generation+1
+    if self.playback then self.playback.stop(); self.playback=nil end
+end
+function Narration:play(verse,lang)
+    self:stop()
+    local text=lang == "zh" and verse.textZh or verse.textEn
+    if not text or text == "" then self.onState("unavailable"); return end
+    local generation=self.generation
+    self.onState("loading")
+    local ok,playback=pcall(self.driver.start,text,lang,function(state)
+        if self.generation == generation then self.onState(state) end
+    end)
+    if ok then self.playback=playback else self.onState("unavailable") end
+end
+function Narration:pause()
+    if self.playback then self.playback.pause(); self.onState("paused") end
+end
+function Narration:resume()
+    if self.playback then self.playback.resume() end
+end
+function Narration:destroy() self:stop() end
+return Narration
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX134">
+<Properties>
+<string name="Name">NativeReading</string>
+<ProtectedString name="Source">local Players=game:GetService("Players")
+local HttpService=game:GetService("HttpService")
+local Session=require(script.Parent.ReadingSession)
+local Presentation=require(script.Parent.BiblePresentation)
+local Interaction=require(script.Parent.BibleInteraction)
+local Narration=require(script.Parent.Narration)
+local SpeechDriver=require(script.Parent.SpeechDriver)
+local Native={}
+Native.__index=Native
+function Native.new(remotes,options)
+    local self=setmetatable({remotes=remotes,options=options,session=Session.new(),
+        settings={reducedMotion=false,narrationMuted=false},mode="daily"},Native)
+    self.anchors={altar=workspace:WaitForChild("AltarBible"),visual=workspace:WaitForChild("BibleVisual"),
+        contact=workspace:WaitForChild("Contact"),destination=workspace:WaitForChild("PageDestination")}
+    self.presenter=Presentation.new(self.anchors,function(e) self:action(e) end)
+    self.narrator=Narration.new(SpeechDriver,function(state) self.presenter:setAudioState(state) end)
+    self.interaction=Interaction.new(self.anchors,function(e)
+        if e.type=="activate" then self:activate()
+        elseif e.type=="options" then options.openOptions()
+        elseif e.type=="mode" then
+            self.mode=e.mode; options.setMode(e.mode); self:render()
+        elseif e.type=="near" then
+            self.session:dispatch(e)
+            if not e.value then self.narrator:pause() end
+            self:render()
+        end
+    end)
+    self.respawn=Players.LocalPlayer.CharacterRemoving:Connect(function()
+        self.session:dispatch({type="respawn"}); self.narrator:stop(); self:render()
+    end)
+    self.activity=remotes.LectioActivity.OnClientEvent:Connect(function(id)
+        if id==Players.LocalPlayer.UserId then return end
+        local other=Players:GetPlayerByUserId(id)
+        if other then Interaction.gesture(other.Character,self.anchors.contact) end
+    end)
+    return self
+end
+function Native:render()
+    local s=self.session:snapshot()
+    self.presenter:render(s,self.settings)
+    if self.interaction then
+        self.interaction:setEnabled(s.phase=="idle" or s.phase=="failed" or (s.phase=="paused" and s.reading~=nil))
+        self.interaction:setLanguage(s.lang,self.mode,s.phase=="paused")
+    end
+end
+function Native:play()
+    local s=self.session:snapshot()
+    if not s.reading or s.phase~="reading" or not s.near then return end
+    if self.settings.narrationMuted then self.presenter:setAudioState("muted"); return end
+    self.narrator:play(s.reading.verses[s.page],s.lang)
+end
+function Native:setLanguage(lang)
+    self.session:dispatch({type="language",lang=lang})
+    local reading=self.session.reading
+    if reading then
+        reading.labels=self.options.labels(reading.mode,#reading.verses)
+        reading.title=(reading.mode=="today" and (lang=="zh" and reading.titleZh or reading.titleEn)) or self.options.title(reading.mode)
+    end
+    self.narrator:stop(); self:render()
+end
+function Native:activate(mode)
+    local s=self.session:snapshot()
+    if s.phase=="paused" and s.reading then self:action({type="resume"}); return end
+    if mode then self.mode=mode end
+    if not s.near or not self.interaction:isWithinReach() then self.options.toast("approachBible"); return end
+    self.session:dispatch({type="language",lang=self.options.language()})
+    local id=HttpService:GenerateGUID(false)
+    self.session:dispatch({type="begin",id=id})
+    if self.session.requestId~=id then return end
+    self:render()
+    self.remotes.LectioActivity:FireServer()
+    local drawMode=self.mode
+    local drawLang=self.session.lang
+    local topic=self.options.topic()
+    self.interaction:reach(function()
+        if self.session.phase~="reaching" then return end
+        self.session:dispatch({type="contact"}); self:render()
+        if drawMode=="today" then self.remotes.LectioToday:FireServer(drawLang,id)
+        else self.remotes.LectioExplore:FireServer(topic,drawMode,drawLang,id) end
+        task.delay(45,function()
+            if self.session.requestId==id and not self.session.reading then
+                self.session:dispatch({type="failure",id=id,uncertain=true})
+                self.narrator:stop(); self:render(); self.options.toast("drawUncertain")
+            end
+        end)
+    end)
+end
+function Native:receive(envelope,today)
+    if type(envelope)~="table" or envelope.requestId~=self.session.requestId then return end
+    local response=envelope.response
+    if envelope.status~="complete" or type(response)~="table" or not response.ok then
+        self.session:dispatch({type="failure",id=envelope.requestId,uncertain=envelope.status=="uncertain"})
+        self.narrator:stop(); self:render()
+        self.options.toast(envelope.status=="uncertain" and "drawUncertain" or (response and response.errorKey or "backendError"))
+        return
+    end
+    if self.session.reading then return end
+    local verses=today and response.steps or response.verses
+    if type(verses)~="table" or #verses==0 then return end
+    for _,v in ipairs(verses) do v.textEn=v.textEn or v.en or ""; v.textZh=v.textZh or v.zh or "" end
+    local labels=self.options.labels(today and "today" or response.mode or "daily",#verses)
+    local title=today and (self.session.lang=="zh" and response.titleZh or response.titleEn) or self.options.title(response.mode)
+    local reading={verses=verses,labels=labels,title=title or "Lectio",titleEn=response.titleEn,titleZh=response.titleZh,summary=response.summary or "",topic=response.topic or "",mode=response.mode or "today"}
+    self.session:dispatch({type="received",id=envelope.requestId,reading=reading})
+    self.options.accept(reading,response.state)
+    self:render()
+    task.delay(self.settings.reducedMotion and 0.1 or 0.7,function()
+        if self.session.requestId~=envelope.requestId then return end
+        self.session:dispatch({type="revealed"}); self:render(); self:play()
+    end)
+end
+function Native:action(e)
+    local s=self.session:snapshot()
+    if e.type=="replay" then self:play()
+    elseif e.type=="pause" or e.type=="segment" then self.narrator:pause()
+    elseif e.type=="resume" then
+        if s.phase=="paused" then self.session:dispatch({type="resume"}); self:render(); self:play()
+        elseif s.phase=="reading" then self.narrator:resume() end
+    elseif e.type=="next" or e.type=="previous" or e.type=="select" then
+        if not s.reading then return end
+        local page=e.page or (s.page+(e.type=="next" and 1 or -1))
+        if page&lt;1 or page&gt;#s.reading.verses or page==s.page then return end
+        self.narrator:stop(); self.session:dispatch({type="select",page=page}); self:render(); self:play()
+    elseif e.type=="finish" then
+        if not s.reading or s.phase=="closing" then return end
+        self.narrator:stop(); self.session:dispatch({type="finish"}); self:render()
+        task.delay(self.settings.reducedMotion and 0.1 or 0.7,function()
+            self.session:dispatch({type="closed"}); self.options.accept(nil); self:render()
+        end)
+    end
+end
+function Native:toggleMute()
+    self.settings.narrationMuted=not self.settings.narrationMuted
+    self.narrator:stop(); self.presenter:setAudioState(self.settings.narrationMuted and "muted" or "paused")
+    return self.settings.narrationMuted
+end
+function Native:toggleMotion()
+    self.settings.reducedMotion=not self.settings.reducedMotion
+    return self.settings.reducedMotion
+end
+function Native:destroy()
+    self.interaction:destroy(); self.presenter:destroy(); self.narrator:destroy()
+    self.respawn:Disconnect(); self.activity:Disconnect()
+end
+return Native
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX135">
+<Properties>
+<string name="Name">ReadingLayout</string>
+<ProtectedString name="Source">local Layout={}
+function Layout.forViewport(width,height)
+    local compact=width&lt;700 or height&lt;500
+    return {
+        width=compact and 248 or 286,
+        height=compact and 258 or 286,
+        offsetX=compact and 2.7 or 3.6,
+        offsetY=compact and 0.45 or 0.65,
+        maxDistance=compact and 14 or 18,
+        alwaysOnTop=false,
+    }
+end
+return Layout
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX136">
+<Properties>
+<string name="Name">ReadingSession</string>
+<ProtectedString name="Source">local Session = {}
+Session.__index = Session
+function Session.new()
+    return setmetatable({phase="idle",page=1,lang="en",near=false},Session)
+end
+function Session:snapshot()
+    return {phase=self.phase,page=self.page,lang=self.lang,near=self.near,
+        requestId=self.requestId,reading=self.reading}
+end
+function Session:dispatch(e)
+    local t = e.type
+    if t == "near" then
+        self.near = e.value
+        if not self.near and self.phase ~= "idle" and self.phase ~= "failed" and self.phase ~= "uncertain" and self.phase ~= "closing" then
+            if self.phase == "reaching" then self.phase="idle"; self.requestId=nil
+            else self.phase="paused" end
+        end
+    elseif t == "begin" and self.near and (self.phase == "idle" or self.phase == "failed") then
+        self.requestId=e.id; self.phase="reaching"; self.page=1; self.reading=nil
+    elseif t == "contact" and self.phase == "reaching" then self.phase="loading"
+    elseif t == "received" and e.id == self.requestId and not self.reading then
+        self.reading=e.reading; self.page=1
+        self.phase=(self.near and self.phase == "loading") and "revealing" or "paused"
+    elseif t == "revealed" and self.phase == "revealing" then self.phase="reading"
+    elseif t == "select" and self.reading and self.phase ~= "closing" then
+        self.page=math.max(1,math.min(#self.reading.verses,e.page))
+    elseif t == "language" and (e.lang == "en" or e.lang == "zh") then self.lang=e.lang
+    elseif t == "pause" and self.reading then self.phase="paused"
+    elseif t == "resume" and self.near and self.reading and self.phase == "paused" then self.phase="reading"
+    elseif t == "finish" and self.reading then self.phase="closing"
+    elseif t == "closed" and self.phase == "closing" then
+        self.phase="idle"; self.reading=nil; self.requestId=nil; self.page=1
+    elseif t == "failure" and e.id == self.requestId and not self.reading then
+        self.phase=e.uncertain and "uncertain" or "failed"
+        if not e.uncertain then self.requestId=nil end
+    elseif t == "respawn" then
+        self.near=false
+        if self.phase == "reaching" then self.phase="idle"; self.requestId=nil
+        elseif self.phase ~= "idle" and self.phase ~= "uncertain" and self.phase ~= "failed" and self.phase ~= "closing" then self.phase="paused" end
+    end
+    return self:snapshot()
+end
+return Session
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX137">
+<Properties>
+<string name="Name">ReadingText</string>
+<ProtectedString name="Source">-- Presentation content only. Fallback prompts are labeled, never passed off as AI interpretation.
+local ReadingText={}
+local function present(value)
+    return type(value)=="string" and value:find("%S")~=nil
+end
+function ReadingText.build(reading,page,lang,scripture,view)
+    local zh=lang=="zh"
+    local verse=reading.verses[page]
+    local reflection=verse.interp
+    local reflectionTitle=zh and "默想" or "Reflection"
+    if not present(reflection) then
+        reflectionTitle=zh and "默想提示" or "Reflection prompt"
+        reflection=zh and "再读一遍这段经文。哪个词句吸引了你？它与你今天的经历有什么联系？安静片刻，用自己的话回应。" or
+            "Read this passage again. Which word or phrase stands out? How does it connect with your day? Pause, then respond in your own words."
+    end
+    local summary=reading.summary
+    local summaryTitle=zh and "阅读小结" or "Reading summary"
+    if not present(summary) then
+        summaryTitle=zh and "阅读回顾" or "Reading recap"
+        local references={}
+        for _,v in ipairs(reading.verses) do
+            local reference=zh and v.refZh or v.refEn
+            if present(reference) then table.insert(references,reference) end
+        end
+        summary=(zh and "本次阅读：" or "Passages in this reading: ")..table.concat(references,zh and "、" or "; ")..
+            (zh and "。\n\n回顾这些经文，选一句今天愿意记住的话，并想一想如何在生活中回应。" or
+                ".\n\nLook back over these passages. Choose a phrase to carry with you today and consider one way to respond.")
+    end
+    if view=="reflection" then return {heading=reflectionTitle,body=reflection} end
+    if view=="summary" then return {heading=summaryTitle,body=summary} end
+    local body=(scripture or "").."\n\n"..reflectionTitle.."\n"..reflection
+    if page==#reading.verses then body=body.."\n\n"..summaryTitle.."\n"..summary end
+    return {heading=zh and "经文与默想 · 向下滚动" or "Scripture &amp; reflection · scroll to read",body=body}
+end
+return ReadingText
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX138">
+<Properties>
+<string name="Name">SpeechDriver</string>
+<ProtectedString name="Source">-- Client-only exact-text TTS. No public audio emitter or website media URL.
+local Segments=require(script.Parent.TextSegments)
+local Driver={}
+function Driver.start(text,lang,onState)
+    local folder=Instance.new("Folder")
+    folder.Name="LectioPrivateSpeech"
+    folder.Parent=game:GetService("SoundService")
+    local alive,paused,ready=true,false,false
+    local speech,output,wire,ended
+    local chunks=Segments.split(text,180)
+    local index=1
+    local function dispose()
+        if not alive then return end
+        alive=false
+        if ended then ended:Disconnect() end
+        folder:Destroy()
+    end
+    local function failed()
+        if alive then onState("unavailable"); dispose() end
+    end
+    local ok=pcall(function()
+        speech=Instance.new("AudioTextToSpeech")
+        speech.VoiceId="2"
+        speech.Volume=0.8
+        speech.Parent=folder
+        output=Instance.new("AudioDeviceOutput")
+        output.Player=game:GetService("Players").LocalPlayer
+        output.Parent=folder
+        wire=Instance.new("Wire")
+        wire.SourceInstance=speech; wire.TargetInstance=output; wire.Parent=folder
+    end)
+    if not ok then failed(); return {pause=function() end,resume=function() end,stop=dispose} end
+    local generation=0
+    local function loadChunk()
+        generation=generation+1
+        local token=generation
+        ready=false
+        task.spawn(function()
+            local success=pcall(function()
+                speech.Text=chunks[index]
+                speech.TimePosition=0
+                local status=speech:LoadAsync()
+                if not alive or generation ~= token then return end
+                if status ~= Enum.AssetFetchStatus.Success then error("speech unavailable") end
+                ready=true
+                if not paused then speech:Play(); onState({status="playing",segment=index}) end
+            end)
+            if not success then failed() end
+        end)
+        task.delay(20,function()
+            if alive and generation == token and not ready then failed() end
+        end)
+    end
+    ended=speech.Ended:Connect(function()
+        if not alive then return end
+        index=index+1
+        if index &gt; #chunks then onState("ended"); dispose() else loadChunk() end
+    end)
+    loadChunk()
+    return {
+        stop=dispose,
+        pause=function() paused=true; if alive and ready then pcall(function() speech:Pause() end) end end,
+        resume=function()
+            paused=false
+            if alive and ready then
+                local success=pcall(function() speech:Play() end)
+                if success then onState({status="playing",segment=index}) else failed() end
+            end
+        end,
+    }
+end
+return Driver
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX139">
+<Properties>
+<string name="Name">TextSegments</string>
+<ProtectedString name="Source">local Segments={}
+function Segments.split(text,limit)
+    limit=limit or 180
+    local chars,parts={},{}
+    for _,code in utf8.codes(text or "") do table.insert(chars,utf8.char(code)) end
+    local start=1
+    while start &lt;= #chars do
+        local last=math.min(start+limit-1,#chars)
+        if last &lt; #chars then
+            for i=last,math.max(start,last-60),-1 do
+                if chars[i]:match("[%s%.%!%?%;,]") or chars[i]=="。" or chars[i]=="，" or chars[i]=="；" then last=i; break end
+            end
+        end
+        table.insert(parts,table.concat(chars,"",start,last))
+        start=last+1
+    end
+    return parts
+end
+return Segments
+</ProtectedString>
+</Properties>
 </Item>
 </Item>
-<Item class="ServerScriptService" referent="RBX117">
+</Item>
+<Item class="ServerScriptService" referent="RBX144">
 <Properties>
 <string name="Name">ServerScriptService</string>
 
 </Properties>
-<Item class="Script" referent="RBX116">
+<Item class="Script" referent="RBX143">
 <Properties>
 <string name="Name">LectioServer</string>
-<BinaryString name="AttributesSerialize">AQAAAAwAAABMZWN0aW9BcGlLZXkCMAAAADU1MjU4ZmI3ZDQ3NmY1YjZmMGQzN2MyOGUwYTBlNTI0YjhiZmIzMzU4MWFhNGM5NA==</BinaryString>
 <ProtectedString name="Source">-- LectioServer: bridges the world to the Lectio backend (3livescapture.com).
 -- Live mode: every feature is served by the site's API — the real 148-verse
 -- deck, D1-enforced quotas and welcome credits, AI reflections, the AI
@@ -2061,6 +3053,8 @@ local HttpService = game:GetService("HttpService")
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 local VerseData = require(ReplicatedStorage:WaitForChild("VerseData"))
+local DrawRequests = require(script.Parent:WaitForChild("DrawRequests"))
+local drawRequests = DrawRequests.new()
 
 -- Configuration. Script attributes override the constants, so the key can be
 -- set from Studio's properties pane (LectioBackendUrl / LectioApiKey on this
@@ -2071,7 +3065,7 @@ local DEFAULT_API_KEY = ""
 local BACKEND_URL = script:GetAttribute("LectioBackendUrl") or DEFAULT_BACKEND_URL
 local API_KEY = script:GetAttribute("LectioApiKey") or DEFAULT_API_KEY
 
-local remoteNames = { "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary" }
+local remoteNames = { "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary", "LectioActivity" }
 local remotes = {}
 for _, name in ipairs(remoteNames) do
 	local r = Instance.new("RemoteEvent")
@@ -2347,15 +3341,6 @@ boardWho.TextScaled = true
 boardWho.Text = "a verse for everyone who seeks"
 boardWho.Parent = boardBg
 
-local function updateBoard(verse, lang, who)
-	if not verse then return end
-	local text = (lang == "zh") and (verse.textZh or verse.zh) or (verse.textEn or verse.en)
-	local ref = (lang == "zh") and (verse.refZh or "") or (verse.refEn or "")
-	boardVerse.Text = text or ""
-	boardRef.Text = ref or ""
-	boardWho.Text = "offered for " .. who
-end
-
 -- ---- Proximity prompts --------------------------------------------------------
 
 local function addPrompt(part, actionText, objectText, key)
@@ -2370,7 +3355,7 @@ local function addPrompt(part, actionText, objectText, key)
 end
 
 local altar = workspace:FindFirstChild("AltarBible")
-if altar then addPrompt(altar, "Flip open the Bible", "Lectio", "main") end
+-- Bible and ribbon prompts are private client objects; the server validates requests.
 local desk = workspace:FindFirstChild("RegisterDesk")
 if desk then addPrompt(desk, "Register free", "Lectio Registration", "register") end
 local npc = workspace:FindFirstChild("AssistantNPC")
@@ -2404,15 +3389,59 @@ remotes.LectioState.OnServerEvent:Connect(function(player)
 	remotes.LectioState:FireClient(player, stateFor(data))
 end)
 
-remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang)
+local function beginDraw(player, id, remote, signature)
+    if type(id) ~= "string" or #id &lt; 8 or #id &gt; 80 then return false end
+    local root=player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if not root or not altar or (root.Position-altar.Position).Magnitude &gt; 10 then
+        remote:FireClient(player,{requestId=id,status="rejected",response={ok=false,errorKey="approachBible"}})
+        return false
+    end
+    local status,cached=drawRequests:begin(player.UserId,id,signature)
+    if status == "cached" then remote:FireClient(player,cached); return false end
+    if status ~= "start" then
+        if status == "blocked" then remote:FireClient(player,{requestId=id,status="uncertain",response={ok=false,errorKey="drawUncertain"}}) end
+        if status == "expired" or status == "conflict" then remote:FireClient(player,{requestId=id,status="rejected",response={ok=false,errorKey="backendError"}}) end
+        return false
+    end
+    return true
+end
+local function finishDraw(player,id,remote,result)
+    local envelope={requestId=id,status=result.kind == "uncertain" and "uncertain" or
+        (result.response and result.response.ok and "complete" or "rejected"),response=result.response}
+    if result.kind == "uncertain" then
+        drawRequests:uncertain(player.UserId,id)
+    else drawRequests:complete(player.UserId,id,envelope) end
+    if player.Parent then remote:FireClient(player,envelope) end
+end
+
+local lastActivity={}
+remotes.LectioActivity.OnServerEvent:Connect(function(player)
+    local root=player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    local now=os.clock()
+    if root and altar and (root.Position-altar.Position).Magnitude &lt;= 10 and now-(lastActivity[player.UserId] or -10)&gt;1.5 then
+        lastActivity[player.UserId]=now
+        remotes.LectioActivity:FireAllClients(player.UserId)
+    end
+end)
+Players.PlayerRemoving:Connect(function(player)
+    drawRequests:remove(player.UserId); lastActivity[player.UserId]=nil
+end)
+boardVerse.Text="A quiet place to read and reflect."
+boardRef.Text="Walk to the Bible to begin."
+boardWho.Text="Your reading is personal."
+
+remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang, requestId)
 	if mode ~= "daily" and mode ~= "divina" and mode ~= "deep" then return end
 	topic = sanitizeTopic(topic)
 	lang = sanitizeLang(lang)
+    if not beginDraw(player,requestId,remotes.LectioExplore,HttpService:JSONEncode({topic,mode,lang})) then return end
 	if topic == "" then
 		local pick = VerseData.PopularTopics[rng:NextInteger(1, #VerseData.PopularTopics)]
 		topic = pick.en
 	end
 
+    local liveAtStart=LIVE
+    local result=DrawRequests.executeDraw(liveAtStart and "live" or "offline",function()
 	local resp = callBackend("/api/roblox/explore", {
 		playerId = tostring(player.UserId),
 		displayName = player.DisplayName,
@@ -2420,18 +3449,11 @@ remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang)
 		mode = mode,
 		lang = lang,
 	})
-	if resp and resp.ok == false then
-		-- A definite backend answer (quota exhausted, locked layout): pass it on.
-		remotes.LectioExplore:FireClient(player, resp)
-		return
-	end
-	if not (resp and resp.ok and type(resp.verses) == "table") then
-		resp = localExplore(player, topic, mode, lang)
-	end
-	remotes.LectioExplore:FireClient(player, resp)
-	if resp.ok and type(resp.verses) == "table" and #resp.verses &gt; 0 then
-		updateBoard(resp.verses[1], lang, player.DisplayName)
-	end
+    if resp and resp.ok == false then return {kind="rejected",response=resp} end
+    if resp and resp.ok and type(resp.verses)=="table" and #resp.verses&gt;0 then return {kind="complete",response=resp} end
+    return {kind="uncertain"}
+    end,function() return localExplore(player,topic,mode,lang) end)
+    finishDraw(player,requestId,remotes.LectioExplore,result)
 end)
 
 remotes.LectioRegister.OnServerEvent:Connect(function(player)
@@ -2453,11 +3475,12 @@ remotes.LectioRegister.OnServerEvent:Connect(function(player)
 	remotes.LectioRegister:FireClient(player, stateFor(data))
 end)
 
-remotes.LectioToday.OnServerEvent:Connect(function(player, lang)
+remotes.LectioToday.OnServerEvent:Connect(function(player, lang, requestId)
 	lang = sanitizeLang(lang)
+    if not beginDraw(player,requestId,remotes.LectioToday,"today:"..lang) then return end
 	local resp = callBackend("/api/roblox/today", { lang = lang })
 	if resp and resp.ok and type(resp.steps) == "table" and #resp.steps &gt; 0 then
-		remotes.LectioToday:FireClient(player, resp)
+		finishDraw(player,requestId,remotes.LectioToday,{kind="complete",response=resp})
 		return
 	end
 	local idx = tonumber(os.date("!%w")) + 1
@@ -2466,7 +3489,7 @@ remotes.LectioToday.OnServerEvent:Connect(function(player, lang)
 	for _, s in ipairs(reading.steps) do
 		table.insert(steps, { en = s.en, zh = s.zh, refEn = s.refEn, refZh = s.refZh })
 	end
-	remotes.LectioToday:FireClient(player, { ok = true, titleEn = reading.titleEn, titleZh = reading.titleZh, steps = steps })
+	finishDraw(player,requestId,remotes.LectioToday,{kind="complete",response={ ok = true, titleEn = reading.titleEn, titleZh = reading.titleZh, steps = steps }})
 end)
 
 local function sanitizeReadingContext(raw)
@@ -2555,18 +3578,63 @@ print("Lectio server ready" .. (LIVE and " (live backend)" or " (offline fallbac
 </ProtectedString>
 </Properties>
 </Item>
+<Item class="ModuleScript" referent="RBX132">
+<Properties>
+<string name="Name">DrawRequests</string>
+<ProtectedString name="Source">local Requests = {}
+Requests.__index=Requests
+function Requests.new() return setmetatable({players={}},Requests) end
+function Requests:begin(player,id,signature)
+    signature=signature or ""
+    local p=self.players[player]
+    if not p then p={cache={},order={},seen={},count=0}; self.players[player]=p end
+    if p.seen[id] and p.seen[id]~=signature then return "conflict" end
+    if p.cache[id] then return "cached",p.cache[id] end
+    if p.uncertain then return "blocked" end
+    if p.active then return p.active == id and "pending" or "blocked" end
+    if p.seen[id] then return "expired" end
+    if p.count&gt;=256 then return "expired" end
+    p.seen[id]=signature; p.count=p.count+1
+    p.active=id
+    return "start"
+end
+function Requests:complete(player,id,result)
+    local p=self.players[player]
+    if not p or p.active ~= id then return end
+    p.active=nil; p.cache[id]=result
+    table.insert(p.order,id)
+    if #p.order &gt; 16 then p.cache[table.remove(p.order,1)]=nil end
+end
+function Requests:uncertain(player,id)
+    local p=self.players[player]
+    if p and p.active == id then p.uncertain=true end
+end
+function Requests:remove(player) self.players[player]=nil end
+function Requests.executeDraw(mode,backend,offline)
+    if mode == "offline" then
+        local ok,response=pcall(offline)
+        return ok and {kind="complete",response=response} or {kind="uncertain"}
+    end
+    local ok,result=pcall(backend)
+    if not ok or not result then return {kind="uncertain"} end
+    return result
+end
+return Requests
+</ProtectedString>
+</Properties>
 </Item>
-<Item class="StarterPlayer" referent="RBX120">
+</Item>
+<Item class="StarterPlayer" referent="RBX147">
 <Properties>
 <string name="Name">StarterPlayer</string>
 
 </Properties>
-<Item class="StarterPlayerScripts" referent="RBX119">
+<Item class="StarterPlayerScripts" referent="RBX146">
 <Properties>
 <string name="Name">StarterPlayerScripts</string>
 
 </Properties>
-<Item class="LocalScript" referent="RBX118">
+<Item class="LocalScript" referent="RBX145">
 <Properties>
 <string name="Name">LectioClient</string>
 <ProtectedString name="Source">-- LectioClient: rebuilds the Lectio web UI as a Roblox interface.
@@ -2580,9 +3648,11 @@ local SoundService = game:GetService("SoundService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local VerseData = require(ReplicatedStorage:WaitForChild("VerseData"))
+local NativeReading = require(ReplicatedStorage:WaitForChild("LectioModules"):WaitForChild("NativeReading"))
+local native
 
 local remotes = {}
-for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary" }) do
+for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "LectioState", "LectioToday", "LectioLibrary", "LectioActivity" }) do
 	remotes[n] = ReplicatedStorage:WaitForChild(n)
 end
 
@@ -2612,6 +3682,8 @@ local libraryData = nil
 
 local L = {
 	en = {
+        approachBible = "Walk to the Bible to begin your reading.",
+        drawUncertain = "Your reading is still unconfirmed. Another draw is paused to avoid using a second reading.",
 		title = "Lectio — Daily Scripture Reading",
 		sub = "Bring a question, flip open the Bible, and let a verse find you.",
 		calendar = "✦ Or follow the church calendar — Today's reading",
@@ -2656,6 +3728,8 @@ local L = {
 		setTitle = "Settings",
 	},
 	zh = {
+        approachBible = "请走近圣经，开始阅读。",
+        drawUncertain = "本次阅读尚未确认。为避免重复扣次数，暂不能再次抽取。",
 		title = "Lectio — 每日读经默想",
 		sub = "带着一个问题，翻开圣经，让经文找到你。",
 		calendar = "✦ 或跟随教会年历 — 今日读经",
@@ -3019,6 +4093,13 @@ local function buildGui()
 	}, gui)
 	round(main, 14)
 	ui.main = main
+    main.Visible = false
+    local closeOptions=mk("TextButton",{Name="CloseOptions",Position=UDim2.new(1,-42,0,8),Size=UDim2.fromOffset(34,34),Text="×",TextSize=24,TextColor3=C.text,BackgroundColor3=C.panel2,ZIndex=2},main)
+    closeOptions.Activated:Connect(function() main.Visible=false end)
+    local mainScale=mk("UIScale",{Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)},main)
+    workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(function()
+        mainScale.Scale=math.min(1,(workspace.CurrentCamera.ViewportSize.X-24)/720,(workspace.CurrentCamera.ViewportSize.Y-70)/560)
+    end)
 
 	local title = mk("TextLabel", { Position = UDim2.fromOffset(20, 12), Size = UDim2.fromOffset(680, 40), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextScaled = true, Text = t("title") }, main)
 	local sub = mk("TextLabel", { Position = UDim2.fromOffset(20, 54), Size = UDim2.fromOffset(680, 24), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Text = t("sub") }, main)
@@ -3177,6 +4258,7 @@ local function buildGui()
 	local settings = mk("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(360, 220), BackgroundColor3 = C.bg, BackgroundTransparency = 0.04, BorderSizePixel = 0, Visible = false, Active = true }, gui)
 	round(settings, 14)
 	ui.settings = settings
+    settings.Size=UDim2.fromOffset(360,300)
 	local setTitle = mk("TextLabel", { Position = UDim2.fromOffset(20, 12), Size = UDim2.fromOffset(320, 28), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextSize = 22, Text = t("setTitle") }, settings)
 	table.insert(ui.binds, { inst = setTitle, key = "setTitle" })
 	local musicBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 56), Size = UDim2.fromOffset(320, 40), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = "" }, settings)
@@ -3184,6 +4266,16 @@ local function buildGui()
 	local setClose = mk("TextButton", { Position = UDim2.fromOffset(20, 106), Size = UDim2.fromOffset(320, 40), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = Enum.Font.Gotham, TextSize = 15, Text = t("close") }, settings)
 	round(setClose, 8)
 	table.insert(ui.binds, { inst = setClose, key = "close" })
+    setClose.Position=UDim2.fromOffset(20,206)
+    local voiceBtn=mk("TextButton",{Position=UDim2.fromOffset(20,106),Size=UDim2.fromOffset(320,40),Text="Narration: On",TextSize=15,BackgroundColor3=C.panel2,TextColor3=C.text},settings)
+    local motionBtn=mk("TextButton",{Position=UDim2.fromOffset(20,156),Size=UDim2.fromOffset(320,40),Text="Reduced motion: Off",TextSize=15,BackgroundColor3=C.panel2,TextColor3=C.text},settings)
+    ui.voiceBtn=voiceBtn; ui.motionBtn=motionBtn
+    voiceBtn.Activated:Connect(function()
+        native:toggleMute(); refreshLang()
+    end)
+    motionBtn.Activated:Connect(function()
+        native:toggleMotion(); refreshLang()
+    end)
 
 	-- toast
 	local toast = mk("Frame", { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.new(0.5, 0, 1, -30), Size = UDim2.fromOffset(460, 44), BackgroundColor3 = C.panel2, BorderSizePixel = 0, Visible = false }, gui)
@@ -3199,19 +4291,21 @@ local function buildGui()
 
 	-- wiring
 	exploreBtn.MouseButton1Click:Connect(function()
-		local topic = ui.topicBox.Text
-		remotes.LectioExplore:FireServer(topic, selectedMode, lang)
+        ui.main.Visible=false
+        native:activate(selectedMode)
 	end)
 	topicBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
-			remotes.LectioExplore:FireServer(ui.topicBox.Text, selectedMode, lang)
+            ui.main.Visible=false
+            native:activate(selectedMode)
 		end
 	end)
 	regBtn.MouseButton1Click:Connect(function()
 		remotes.LectioRegister:FireServer()
 	end)
 	calendarBtn.MouseButton1Click:Connect(function()
-		remotes.LectioToday:FireServer(lang)
+        ui.main.Visible=false
+        native:activate("today")
 	end)
 	libraryBtn.MouseButton1Click:Connect(function()
 		buildLibrary()
@@ -3284,7 +4378,7 @@ end
 
 -- What is on screen, so the assistant answers with the reading in context.
 function currentReadingContext()
-	if not currentReading or not ui or not ui.reading.Visible then return nil end
+	if not currentReading or not ui then return nil end
 	local items = {}
 	for i, v in ipairs(currentReading.verses) do
 		if i &gt; 12 then break end
@@ -3303,6 +4397,11 @@ end
 
 function refreshLang()
 	if not ui or not ui.gui then return end
+    if native then
+        native:setLanguage(lang)
+        ui.voiceBtn.Text=(lang=="zh" and "语音：" or "Narration: ")..(native.settings.narrationMuted and (lang=="zh" and "关闭" or "Off") or (lang=="zh" and "开启" or "On"))
+        ui.motionBtn.Text=(lang=="zh" and "减少动态：" or "Reduced motion: ")..(native.settings.reducedMotion and (lang=="zh" and "开启" or "On") or (lang=="zh" and "关闭" or "Off"))
+    end
 	for _, b in ipairs(ui.binds) do
 		b.inst.Text = t(b.key)
 	end
@@ -3328,14 +4427,7 @@ remotes.LectioState.OnClientEvent:Connect(function(s)
 end)
 
 remotes.LectioExplore.OnClientEvent:Connect(function(resp)
-	if type(resp) ~= "table" then return end
-	if not resp.ok then
-		showToast(t(resp.errorKey or "backendError"))
-		return
-	end
-	applyState(resp.state)
-	local labels = labelsForMode(resp.mode)
-	startReading(resp.verses, labels, modeTitle(resp.mode), resp.summary, resp.topic)
+    if native then native:receive(resp,false) end
 end)
 
 remotes.LectioRegister.OnClientEvent:Connect(function(s)
@@ -3344,16 +4436,7 @@ remotes.LectioRegister.OnClientEvent:Connect(function(s)
 end)
 
 remotes.LectioToday.OnClientEvent:Connect(function(resp)
-	if type(resp) ~= "table" or not resp.ok then
-		if type(resp) == "table" then showToast(t(resp.errorKey or "backendError")) end
-		return
-	end
-	local labels = {}
-	for i = 1, #resp.steps do
-		table.insert(labels, string.format(t("stepFmt"), i, #resp.steps))
-	end
-	local title = (lang == "zh") and resp.titleZh or resp.titleEn
-	startReading(resp.steps, labels, title, "", "")
+    if native then native:receive(resp,true) end
 end)
 
 remotes.LectioLibrary.OnClientEvent:Connect(function(resp)
@@ -3396,6 +4479,23 @@ workspace.DescendantAdded:Connect(function(d)
 end)
 
 buildGui()
+native=NativeReading.new(remotes,{
+    language=function() return lang end,
+    topic=function() return ui.topicBox.Text end,
+    setMode=function(mode) selectedMode=mode; refreshModeCards() end,
+    openOptions=function() ui.main.Visible=not ui.main.Visible end,
+    labels=function(mode,count)
+        if mode~="today" then return labelsForMode(mode) end
+        local labels={}
+        for i=1,count do labels[i]=string.format(t("stepFmt"),i,count) end
+        return labels
+    end,title=modeTitle,
+    toast=function(key) showToast(t(key)) end,
+    accept=function(reading,newState)
+        currentReading=reading
+        if newState then applyState(newState) end
+    end,
+})
 remotes.LectioState:FireServer()
 print("Lectio client ready")
 </ProtectedString>

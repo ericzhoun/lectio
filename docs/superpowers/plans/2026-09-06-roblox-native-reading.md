@@ -216,3 +216,19 @@ assert(calls.live == 1 and calls.offline == 0)
 ## Plan review
 
 Coverage: approach/ribbons/reach are Tasks 3 and 5; private pages/bubbles/voice are Tasks 1 and 4; pause/resume/request identity are Tasks 2, 5, and 6; secondary features and language are Task 6; cleanup, accessibility, quotas, multiplayer privacy, and real audio acceptance are Tasks 4–7. The implementation must resolve the Task 1 platform-dependent audio decision from evidence before audio integration. This plan does not claim that feasibility or runtime checks have already passed.
+
+## Execution record
+
+Work proceeded directly in `D:/workplace/lectio-native-reading` on `codex/roblox-native-reading`, without subagents. See `docs/roblox-native-validation.md` for test evidence and limitations.
+
+| Task | Current result |
+| --- | --- |
+| 1 | Official API documentation checked; Studio audio and rig probes NOT RUN because no Studio tool is connected. |
+| 2 | Session/request implementation and behavioral assertions pass, including cache eviction, uncertain responses, and cancellation races. |
+| 3 | Articulated model generation, module packaging, opt-in credentials, and Python checks implemented. |
+| 4 | Private presentation and documented speech-driver candidate implemented; automated ownership/UTF-8 checks pass; visual and audible validation pending. |
+| 5 | Physical gesture and private request integration implemented; real server routing tested with controlled engine doubles. |
+| 6 | Primary flow integrated; real client-controller routing tests pass; mobile/controller/visual acceptance pending. |
+| 7 | Secret-free place rebuilt and handover updated; Studio multiplayer release gate remains outstanding. |
+
+The unchecked runtime steps above remain requirements, not completed work. Added `TextSegments`, `SpeechDriver`, and `NativeReading` modules keep engine audio, text segmentation, and composition separate from pure state. Added local Lua execution through lupa for meaningful logic checks where Studio was unavailable.
