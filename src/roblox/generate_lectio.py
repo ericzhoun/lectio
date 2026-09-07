@@ -379,9 +379,11 @@ def build_document(embed_key=False, include_tests=False):
     sps = wrap("StarterPlayerScripts", "StarterPlayerScripts",
                "\n".join(script_item("LocalScript", "LectioClient", client)))
     starter_player = wrap("StarterPlayer", "StarterPlayer", sps)
+    http_service = wrap("HttpService", "HttpService", "", extra='<bool name="HttpEnabled">true</bool>') if api_key else ""
 
     doc = f'''<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
 {services()}
+{http_service}
 {workspace}
 {rstorage}
 {sss}

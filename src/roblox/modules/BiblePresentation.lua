@@ -1,6 +1,7 @@
 local TweenService=game:GetService("TweenService")
 local Players=game:GetService("Players")
 local Segments=require(script.Parent.TextSegments)
+local ReadingText=require(script.Parent.ReadingText)
 local Presentation={}
 Presentation.__index=Presentation
 local ink=Color3.fromRGB(63,49,34)
@@ -71,11 +72,12 @@ function Presentation:refreshText()
     local text=s.lang=="zh" and verse.textZh or verse.textEn
     self.chunks=Segments.split(text or "",180)
     self.segment=math.max(1,math.min(self.segment,math.max(1,#self.chunks)))
-    self.body.Text=self.showReflection and ((verse.interp and verse.interp~="") and verse.interp or (s.lang=="zh" and "暂无默想。" or "No reflection available.")) or (self.chunks[self.segment] or "")
-    if self.showSummary then self.body.Text=s.reading.summary or "" end
+    local content=ReadingText.build(s.reading,s.page,s.lang,self.chunks[self.segment] or "",
+        self.showSummary and "summary" or (self.showReflection and "reflection" or "scripture"))
+    self.body.Text=content.body
     self.ref.Text=(s.lang=="zh" and verse.refZh or verse.refEn) or ""
     self.progress.Text=string.format("%d / %d   ·   %d / %d",s.page,#s.reading.verses,self.segment,math.max(1,#self.chunks))
-    self.heading.Text=self.showSummary and (s.lang=="zh" and "阅读小结" or "Reading summary") or (self.showReflection and (s.lang=="zh" and "默想 · 原始语言" or "Reflection · original language") or ((s.reading.labels or {})[s.page] or (s.lang=="zh" and "经文" or "Scripture")))
+    self.heading.Text=content.heading
 end
 function Presentation:buildBubble(page)
     if self.gui then self.gui:Destroy() end
@@ -96,6 +98,7 @@ function Presentation:buildBubble(page)
     self.heading=label(8,22,13)
     local scroll=make("ScrollingFrame",{Position=UDim2.new(0,14,0,34),Size=UDim2.new(1,-28,0,bodyHeight),
         BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y},frame)
+    self.scroll=scroll
     self.body=make("TextLabel",{Size=UDim2.new(1,-8,0,0),AutomaticSize=Enum.AutomaticSize.Y,
         BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Gotham,TextSize=19,
         TextWrapped=true,TextYAlignment=Enum.TextYAlignment.Top,Text=""},scroll)
@@ -120,9 +123,11 @@ function Presentation:buildBubble(page)
     end)
     button(zh and "默想 / 经文" or "Reflection",2,2,function()
         self.showSummary=false; self.showReflection=not self.showReflection; self:refreshText()
+        self.scroll.CanvasPosition=Vector2.new(0,0)
     end)
     button(zh and "小结" or "Summary",3,2,function()
-        if self.snapshot.page == #self.snapshot.reading.verses then self.showSummary=true; self:refreshText() end
+        self.showSummary=true; self:refreshText()
+        self.scroll.CanvasPosition=Vector2.new(0,0)
     end)
     self:refreshText()
 end

@@ -1,5 +1,5 @@
 <roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
-<Item class="Lighting" referent="RBX146">
+<Item class="Lighting" referent="RBX147">
 <Properties>
 <string name="Name">Lighting</string>
 <float name="Brightness">2.9</float>
@@ -13,7 +13,7 @@
 <Color3 name="ColorShift_Bottom"><R>0</R><G>0</G><B>0</B></Color3>
 <Color3 name="ColorShift_Top"><R>0</R><G>0</G><B>0</B></Color3>
 </Properties>
-<Item class="Atmosphere" referent="RBX147">
+<Item class="Atmosphere" referent="RBX148">
 <Properties>
 <string name="Name">Atmosphere</string>
 <float name="Density">0.32</float>
@@ -25,6 +25,7 @@
 </Properties>
 </Item>
 </Item>
+
 <Item class="Workspace" referent="RBX129">
 <Properties>
 <string name="Name">Workspace</string>
@@ -2102,12 +2103,12 @@ BIBLE
 </Item>
 </Item>
 </Item>
-<Item class="ReplicatedStorage" referent="RBX140">
+<Item class="ReplicatedStorage" referent="RBX141">
 <Properties>
 <string name="Name">ReplicatedStorage</string>
 
 </Properties>
-<Item class="ModuleScript" referent="RBX138">
+<Item class="ModuleScript" referent="RBX139">
 <Properties>
 <string name="Name">VerseData</string>
 <ProtectedString name="Source">-- VerseData: scripture library, topics, today's readings, assistant rules.
@@ -2281,7 +2282,7 @@ VerseData.AssistantFallback = {
 return VerseData
 </ProtectedString>
 </Properties>
-</Item><Item class="Folder" referent="RBX139">
+</Item><Item class="Folder" referent="RBX140">
 <Properties>
 <string name="Name">LectioModules</string>
 
@@ -2411,6 +2412,7 @@ return Interaction
 <ProtectedString name="Source">local TweenService=game:GetService("TweenService")
 local Players=game:GetService("Players")
 local Segments=require(script.Parent.TextSegments)
+local ReadingText=require(script.Parent.ReadingText)
 local Presentation={}
 Presentation.__index=Presentation
 local ink=Color3.fromRGB(63,49,34)
@@ -2481,11 +2483,12 @@ function Presentation:refreshText()
     local text=s.lang=="zh" and verse.textZh or verse.textEn
     self.chunks=Segments.split(text or "",180)
     self.segment=math.max(1,math.min(self.segment,math.max(1,#self.chunks)))
-    self.body.Text=self.showReflection and ((verse.interp and verse.interp~="") and verse.interp or (s.lang=="zh" and "暂无默想。" or "No reflection available.")) or (self.chunks[self.segment] or "")
-    if self.showSummary then self.body.Text=s.reading.summary or "" end
+    local content=ReadingText.build(s.reading,s.page,s.lang,self.chunks[self.segment] or "",
+        self.showSummary and "summary" or (self.showReflection and "reflection" or "scripture"))
+    self.body.Text=content.body
     self.ref.Text=(s.lang=="zh" and verse.refZh or verse.refEn) or ""
     self.progress.Text=string.format("%d / %d   ·   %d / %d",s.page,#s.reading.verses,self.segment,math.max(1,#self.chunks))
-    self.heading.Text=self.showSummary and (s.lang=="zh" and "阅读小结" or "Reading summary") or (self.showReflection and (s.lang=="zh" and "默想 · 原始语言" or "Reflection · original language") or ((s.reading.labels or {})[s.page] or (s.lang=="zh" and "经文" or "Scripture")))
+    self.heading.Text=content.heading
 end
 function Presentation:buildBubble(page)
     if self.gui then self.gui:Destroy() end
@@ -2506,6 +2509,7 @@ function Presentation:buildBubble(page)
     self.heading=label(8,22,13)
     local scroll=make("ScrollingFrame",{Position=UDim2.new(0,14,0,34),Size=UDim2.new(1,-28,0,bodyHeight),
         BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y},frame)
+    self.scroll=scroll
     self.body=make("TextLabel",{Size=UDim2.new(1,-8,0,0),AutomaticSize=Enum.AutomaticSize.Y,
         BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Gotham,TextSize=19,
         TextWrapped=true,TextYAlignment=Enum.TextYAlignment.Top,Text=""},scroll)
@@ -2530,9 +2534,11 @@ function Presentation:buildBubble(page)
     end)
     button(zh and "默想 / 经文" or "Reflection",2,2,function()
         self.showSummary=false; self.showReflection=not self.showReflection; self:refreshText()
+        self.scroll.CanvasPosition=Vector2.new(0,0)
     end)
     button(zh and "小结" or "Summary",3,2,function()
-        if self.snapshot.page == #self.snapshot.reading.verses then self.showSummary=true; self:refreshText() end
+        self.showSummary=true; self:refreshText()
+        self.scroll.CanvasPosition=Vector2.new(0,0)
     end)
     self:refreshText()
 end
@@ -2863,6 +2869,47 @@ return Session
 </Item>
 <Item class="ModuleScript" referent="RBX136">
 <Properties>
+<string name="Name">ReadingText</string>
+<ProtectedString name="Source">-- Presentation content only. Fallback prompts are labeled, never passed off as AI interpretation.
+local ReadingText={}
+local function present(value)
+    return type(value)=="string" and value:find("%S")~=nil
+end
+function ReadingText.build(reading,page,lang,scripture,view)
+    local zh=lang=="zh"
+    local verse=reading.verses[page]
+    local reflection=verse.interp
+    local reflectionTitle=zh and "默想" or "Reflection"
+    if not present(reflection) then
+        reflectionTitle=zh and "默想提示" or "Reflection prompt"
+        reflection=zh and "再读一遍这段经文。哪个词句吸引了你？它与你今天的经历有什么联系？安静片刻，用自己的话回应。" or
+            "Read this passage again. Which word or phrase stands out? How does it connect with your day? Pause, then respond in your own words."
+    end
+    local summary=reading.summary
+    local summaryTitle=zh and "阅读小结" or "Reading summary"
+    if not present(summary) then
+        summaryTitle=zh and "阅读回顾" or "Reading recap"
+        local references={}
+        for _,v in ipairs(reading.verses) do
+            local reference=zh and v.refZh or v.refEn
+            if present(reference) then table.insert(references,reference) end
+        end
+        summary=(zh and "本次阅读：" or "Passages in this reading: ")..table.concat(references,zh and "、" or "; ")..
+            (zh and "。\n\n回顾这些经文，选一句今天愿意记住的话，并想一想如何在生活中回应。" or
+                ".\n\nLook back over these passages. Choose a phrase to carry with you today and consider one way to respond.")
+    end
+    if view=="reflection" then return {heading=reflectionTitle,body=reflection} end
+    if view=="summary" then return {heading=summaryTitle,body=summary} end
+    local body=(scripture or "").."\n\n"..reflectionTitle.."\n"..reflection
+    if page==#reading.verses then body=body.."\n\n"..summaryTitle.."\n"..summary end
+    return {heading=zh and "经文与默想 · 向下滚动" or "Scripture &amp; reflection · scroll to read",body=body}
+end
+return ReadingText
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX137">
+<Properties>
 <string name="Name">SpeechDriver</string>
 <ProtectedString name="Source">-- Client-only exact-text TTS. No public audio emitter or website media URL.
 local Segments=require(script.Parent.TextSegments)
@@ -2939,7 +2986,7 @@ return Driver
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX137">
+<Item class="ModuleScript" referent="RBX138">
 <Properties>
 <string name="Name">TextSegments</string>
 <ProtectedString name="Source">local Segments={}
@@ -2966,12 +3013,12 @@ return Segments
 </Item>
 </Item>
 </Item>
-<Item class="ServerScriptService" referent="RBX142">
+<Item class="ServerScriptService" referent="RBX143">
 <Properties>
 <string name="Name">ServerScriptService</string>
 
 </Properties>
-<Item class="Script" referent="RBX141">
+<Item class="Script" referent="RBX142">
 <Properties>
 <string name="Name">LectioServer</string>
 <ProtectedString name="Source">-- LectioServer: bridges the world to the Lectio backend (3livescapture.com).
@@ -3556,17 +3603,17 @@ return Requests
 </Properties>
 </Item>
 </Item>
-<Item class="StarterPlayer" referent="RBX145">
+<Item class="StarterPlayer" referent="RBX146">
 <Properties>
 <string name="Name">StarterPlayer</string>
 
 </Properties>
-<Item class="StarterPlayerScripts" referent="RBX144">
+<Item class="StarterPlayerScripts" referent="RBX145">
 <Properties>
 <string name="Name">StarterPlayerScripts</string>
 
 </Properties>
-<Item class="LocalScript" referent="RBX143">
+<Item class="LocalScript" referent="RBX144">
 <Properties>
 <string name="Name">LectioClient</string>
 <ProtectedString name="Source">-- LectioClient: rebuilds the Lectio web UI as a Roblox interface.

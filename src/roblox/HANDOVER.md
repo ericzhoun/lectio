@@ -51,6 +51,8 @@ The generator validates the XML is well-formed before writing.
 
 Default generation never reads or embeds the API key. For a private live build, use an explicit untracked output, for example `python generate_lectio.py --embed-api-key --output Lectio.test.rbxlx`. Never commit a credential-bearing build. `--include-tests` packages the Studio assertions; it is off for the normal artifact.
 
+An explicit credential-bearing build also enables HTTP for the backend connection. A private `Lectio-Live.test.rbxlx` has been prepared locally using the existing original-workspace backend configuration; it is ignored by Git. Use that file for AI reflections and summaries. The public/default build remains credential-free and shows labeled reflection prompts and reading recaps when AI content is absent. Reflection appears below scripture; the final page includes summary, and Summary is available from every page.
+
 ---
 
 ## 3. Feature mapping (site → Roblox)

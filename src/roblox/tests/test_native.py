@@ -31,6 +31,10 @@ class NativeTests(unittest.TestCase):
                          'RibbonDivina','RibbonDeep','ReadingSession','DrawRequests'} <= names)
         self.assertNotIn('NativeTests', names)
         self.assertIsNotNone(tree.find('.//float[@name="Gravity"]'))
+        with patch.object(generator, 'load_api_key', return_value='private-test-key'):
+            private = ET.fromstring(generator.build_document(embed_key=True))
+        self.assertEqual(private.findtext('.//bool[@name="HttpEnabled"]'), 'true',
+                         'explicit private live builds must enable backend HTTP')
 
     def test_generated_place_matches_sources_and_has_unique_references(self):
         spec = importlib.util.spec_from_file_location('generator', ROOT / 'generate_lectio.py')
@@ -150,6 +154,27 @@ class NativeTests(unittest.TestCase):
             n:receive({requestId=requestId,status="rejected",response={ok=false,errorKey="limitMsg"}},false)
             timeoutTimers()
             assert(n.session.phase=="failed" and lastToast=="limitMsg")
+        ''')
+
+    def test_reflection_summary_content_is_visible_and_never_blank(self):
+        lua = LuaRuntime(unpack_returned_tuples=True)
+        path = ROOT / 'modules/ReadingText.lua'
+        self.assertTrue(path.exists(), 'reading sections must preserve live content and fill empty display states')
+        lua.globals().ReadingText = lua.execute(path.read_text(encoding='utf-8'))
+        lua.execute('''
+            local reading={verses={{refEn="Psalm 46:10",textEn="Be still",interp="A quiet invitation"},
+                {refEn="John 14:27",textEn="Peace",interp="Receive peace"}},summary="Rest in peace"}
+            local view=ReadingText.build(reading,1,"en","Be still","scripture")
+            assert(view.body:find("A quiet invitation",1,true))
+            view=ReadingText.build(reading,2,"en","Peace","scripture")
+            assert(view.body:find("Receive peace",1,true) and view.body:find("Rest in peace",1,true))
+            view=ReadingText.build(reading,1,"en","Be still","summary")
+            assert(view.body=="Rest in peace")
+            local offline={verses={{refZh="诗篇 46:10",textZh="你们要休息",interp="  "}},summary=""}
+            view=ReadingText.build(offline,1,"zh","你们要休息","reflection")
+            assert(#view.body>0 and view.heading=="默想提示")
+            view=ReadingText.build(offline,1,"zh","你们要休息","summary")
+            assert(view.heading=="阅读回顾" and view.body:find("诗篇 46:10",1,true))
         ''')
 
 if __name__ == '__main__':

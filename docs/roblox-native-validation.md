@@ -49,4 +49,6 @@ The updated Windows computer-use package was discovered and initialized for Stud
 
 ## Execution deviations
 
+Reflection/summary correction: normal pages now include reflection, and the final page includes the reading summary. Summary can be opened from any page; missing AI content becomes a clearly labeled reflection prompt and reading recap. Ten local checks pass, including preserving live text and Chinese fallback states. A separate ignored `src/roblox/Lectio-Live.test.rbxlx` uses the original workspace's existing backend key and enables HTTP. A verified-TLS read-only library request returned HTTP 200, `ok=true`, and 151 verses. This verifies authentication and connectivity, not an actual charged AI draw or Studio rendering. The live file is private and is not staged or committed.
+
 The approved plan's first task asks for real audio/rig feasibility in Studio before audio integration. That verification is blocked by the lack of a connected Studio tool. To prepare a concrete artifact for testing, the implementation includes the documented audio driver and gesture candidates, with explicit unavailable-audio handling. This is not a claim that the first task's runtime gate passed. All visual/audio/device acceptance remains unchecked above.
