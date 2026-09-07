@@ -10,7 +10,6 @@ import { resolveActiveDay } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
 import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, type Step } from '../../lib/dailySteps';
-import { hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../lib/audio';
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
 } from '../../lib/dailySession';
@@ -27,17 +26,15 @@ const day = resolveActiveDay(Astro);
 const entry = getLectionaryDay(day);
 const passage = resolvePassage(focusReference(entry), lang);
 
-// Prebuilt (Chatterbox) audio for this day and language, when the batch job
-// has already covered it. Days without a clip fall back to /api/tts.
+// Resolve clips on the server: a manifest entry does not guarantee that the
+// deployed asset exists. The endpoint falls back to synthesis when missing.
+const stepAudioUrl = (_lang: typeof lang, s: Step) => `/api/tts?step=${s}&lang=${_lang}`;
 const stepAudio = stepAudioUrl(lang, step);
-const prebuiltPassage = passage && hasPrebuiltDayAudio(day, lang)
-  ? prebuiltDayAudioUrl(lang, day)
-  : null;
+const passageAudio = `/api/tts?day=${day}&lang=${lang}`;
 
 // The guided-session playlist, only ever handed to the browser as URLs: the
 // six step prompts with the day's passage in the middle, separated by the
-// page's own silences. A missing clip (no prebuilt audio yet) drops the whole
-// session rather than half of it.
+// page's own silences.
 const guidedItems: { label: string; src: string; pauseSeconds: number }[] = [];
 if (step === 'silencio') {
   const say = (s: Step | 'passage', src: string | null, pauseSeconds: number) => {
@@ -50,7 +47,7 @@ if (step === 'silencio') {
   };
   say('silencio', stepAudioUrl(lang, 'silencio'), 50);
   say('lectio', stepAudioUrl(lang, 'lectio'), 6);
-  say('passage', passage ? (prebuiltPassage ?? `/api/tts?day=${day}&lang=${lang}`) : null, 10);
+  say('passage', passage ? passageAudio : null, 10);
   say('meditatio', stepAudioUrl(lang, 'meditatio'), 90);
   say('oratio', stepAudioUrl(lang, 'oratio'), 90);
   say('contemplatio', stepAudioUrl(lang, 'contemplatio'), 110);
@@ -176,7 +173,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
             <>
               <p class="ref">{passage.ref}</p>
               <p class="text">{passage.text}</p>
-              <button type="button" class="listen" data-listen data-day={day} data-prebuilt={prebuiltPassage}
+              <button type="button" class="listen" data-listen data-day={day}
                 aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
               >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
               <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
@@ -258,6 +255,20 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
 </Layout>
 
 <script>
+  const audioError = (button: HTMLButtonElement) => {
+    let message = button.nextElementSibling;
+    if (!message?.classList.contains('audio-error')) {
+      message = document.createElement('p');
+      message.className = 'audio-error';
+      message.setAttribute('role', 'status');
+      button.parentNode?.insertBefore(message, button.nextSibling);
+    }
+    message.textContent = document.documentElement.lang === 'zh'
+      ? '音频暂时无法播放，请重试。' : 'Audio could not play. Please try again.';
+  };
+  const clearAudioError = (button: HTMLButtonElement) => {
+    if (button.nextElementSibling?.classList.contains('audio-error')) button.nextElementSibling.remove();
+  };
   // Count down, then bring the advance link forward. Never disabled: a reader
   // who is ready before the timer is ready.
   document.querySelectorAll<HTMLElement>('.timer').forEach((el) => {
@@ -315,20 +326,18 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         // A second click while the model is still working would buy a second clip.
         if (loading) return;
         loading = true;
+        clearAudioError(listen);
         listen.textContent = label.loading;
         try {
           // The prebuilt clip, when today has one; on-demand MeloTTS otherwise.
-          const src = listen.dataset.prebuilt ?? `/api/tts?day=${listen.dataset.day}&lang=${lang}`;
-          const res = await fetch(src);
-          if (!res.ok) throw new Error(String(res.status));
-          objectUrl = URL.createObjectURL(await res.blob());
-          audio = new Audio(objectUrl);
+          audio = new Audio(`/api/tts?day=${listen.dataset.day}&lang=${lang}`);
           audio.addEventListener('ended', stop);
-          listen.textContent = label.playing;
           await audio.play();
+          listen.textContent = label.playing;
           window.lectioTrack?.('audio_play', { player: 'passage', step: listen.dataset.day ?? '' });
         } catch {
           stop();
+          audioError(listen);
         } finally {
           loading = false;
         }
@@ -346,7 +355,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
 
   // Shared button contract with the passage Listen button: click plays, click
   // again stops, a second click while loading does nothing.
-  const clipPlayer = (button: HTMLButtonElement, load: () => Promise<string>, idle: string): void => {
+  const clipPlayer = (button: HTMLButtonElement, load: string | (() => Promise<string>), idle: string): void => {
     const label = clipLabels(idle);
     let audio: HTMLAudioElement | null = null;
     let objectUrl: string | null = null;
@@ -362,17 +371,19 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       if (audio) return stop();
       if (loading) return;
       loading = true;
+      clearAudioError(button);
       button.textContent = label.loading;
       try {
-        const src = await load();
+        const src = typeof load === 'string' ? load : await load();
         if (src.startsWith('blob:')) objectUrl = src;
         audio = new Audio(src);
         audio.addEventListener('ended', stop);
-        button.textContent = label.playing;
         await audio.play();
+        button.textContent = label.playing;
         window.lectioTrack?.('audio_play', { player: 'clip', clip: button.dataset.clip ?? '' });
       } catch {
         stop();
+        audioError(button);
       } finally {
         loading = false;
       }
@@ -382,7 +393,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
   // Step guidance clips, prebuilt and committed under /audio/steps/.
   document.querySelectorAll<HTMLButtonElement>('[data-clip]').forEach((btn) => {
     const src = btn.dataset.clip;
-    if (src) clipPlayer(btn, () => Promise.resolve(src), uiLang === 'zh' ? '▶ 引导' : '▶ Guidance');
+    if (src) clipPlayer(btn, src, uiLang === 'zh' ? '▶ 引导' : '▶ Guidance');
   });
 
   // The model's reply, spoken only from what is already stored in D1 for this

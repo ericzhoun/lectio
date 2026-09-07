@@ -8,7 +8,8 @@
 // every reader of that day - so each one is synthesized once, globally.
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
-import { hasPrebuiltDayAudio, prebuiltDayAudioUrl } from '../../lib/audio';
+import { hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../lib/audio';
+import { isStep, STEP_COPY } from '../../lib/dailySteps';
 import { focusReference, getLectionaryDay, hasLectionaryDay } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
 import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech } from '../../lib/tts';
@@ -28,20 +29,25 @@ const json = (data: unknown, status: number) =>
 
 export const GET: APIRoute = async ({ url }) => {
   const day = url.searchParams.get('day') ?? '';
-  if (!DAY_RE.test(day) || !hasLectionaryDay(day)) return json({ error: 'unknown_day' }, 404);
+  const step = url.searchParams.get('step');
+  if (step !== null && !isStep(step)) return json({ error: 'unknown_step' }, 404);
+  if (step === null && (!DAY_RE.test(day) || !hasLectionaryDay(day))) return json({ error: 'unknown_day' }, 404);
   const lang = resolveTtsLang(url.searchParams.get('lang'));
 
-  const passage = resolvePassage(focusReference(getLectionaryDay(day)), lang);
-  const text = sanitizeTtsText(passage?.text);
+  const text = sanitizeTtsText(isStep(step)
+    ? STEP_COPY[step].prompt[lang]
+    : resolvePassage(focusReference(getLectionaryDay(day)), lang)?.text);
   if (!text) return json({ error: 'no_passage' }, 404);
 
   // A prebuilt Chatterbox clip beats on-demand synthesis whenever it exists:
   // better voice, zero per-request cost. Days without one still get MeloTTS.
-  if (hasPrebuiltDayAudio(day, lang)) {
+  const prebuilt = isStep(step) ? stepAudioUrl(lang, step)
+    : hasPrebuiltDayAudio(day, lang) ? prebuiltDayAudioUrl(lang, day) : null;
+  if (prebuilt) {
     const asset = await env.ASSETS.fetch(
-      new Request(new URL(prebuiltDayAudioUrl(lang, day), url.origin).toString())
+      new Request(new URL(prebuilt, url.origin).toString())
     );
-    if (asset.ok) {
+    if (asset.ok && asset.headers.get('Content-Type')?.startsWith('audio/')) {
       return new Response(asset.body, {
         headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': CACHE_CONTROL },
       });
@@ -49,7 +55,7 @@ export const GET: APIRoute = async ({ url }) => {
   }
 
   // Normalized so 'lang=fr' and a missing lang share the 'en' entry.
-  const cacheKey = new Request(new URL(`/api/tts?day=${day}&lang=${lang}`, url).toString());
+  const cacheKey = new Request(new URL(`/api/tts?${step === null ? `day=${day}` : `step=${step}`}&lang=${lang}`, url).toString());
   const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
   const hit = await cache?.match(cacheKey);
   if (hit) return hit;

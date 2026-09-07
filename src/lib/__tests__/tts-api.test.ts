@@ -43,6 +43,21 @@ beforeEach(() => {
 });
 
 describe('GET /api/tts', () => {
+  it('speaks guidance when the prebuilt step file is missing', async () => {
+    const res = await call('?step=lectio&lang=en');
+    expect(res.status).toBe(200);
+    expect(res.headers.get('Content-Type')).toBe('audio/mpeg');
+    expect(new Uint8Array(await res.arrayBuffer())).toEqual(new Uint8Array([73, 68, 51]));
+    expect(store.runs).toEqual([[TTS_MODEL, { prompt: 'Read it slowly, twice. There is no hurry.', lang: 'en' }]]);
+  });
+
+  it('rejects arbitrary guidance text without synthesizing it', async () => {
+    const res = await call('?step=arbitrary-text&lang=en');
+    expect(res.status).toBe(404);
+    expect(await res.json()).toEqual({ error: 'unknown_step' });
+    expect(store.runs).toEqual([]);
+  });
+
   it("speaks the day's passage as audio/mpeg", async () => {
     const res = await call(`?day=${DAY}&lang=en`);
     expect(res.status).toBe(200);
