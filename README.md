@@ -8,7 +8,7 @@ them, reflect on what catches, respond honestly, and rest.
 
 ## Requirements
 
-- Node.js 22.12+
+- Node.js 24.19.0 (pinned in `.nvmrc` and `.node-version`); Node 22.12+ within the 22.x line is also allowed. Avoid Node 26 with this Astro version: its Windows cleanup fallback uses the removed recursive `rmdirSync` API.
 - OpenAI API key
 
 ## Local development
@@ -25,7 +25,15 @@ npm install
 npm run dev
 ```
 
-## Production
+## Local troubleshooting
+
+- Check `node --version` in the terminal running the commands. Version files do not switch Node automatically; select the pinned version with your Node version manager first.
+- If a build reports `EPERM` cleaning `dist/client`, stop the local preview serving that folder before rebuilding. For an independent local build check, use `npm run build -- --outDir ./.astro/local-build`.
+- If an agent reports only `Dev server process exited before becoming ready`, inspect `.astro/dev.log` for the underlying error. The Vite configuration prebundles the passthrough image service to prevent a startup reload from invalidating the Cloudflare Worker's dependencies.
+- Astro automatically backgrounds the server in agent sessions and waits only 30 seconds. If a cold start exceeds this, run it in a managed foreground terminal. In PowerShell, set `$env:ASTRO_DEV_BACKGROUND='1'` before `npm run dev` to bypass auto-backgrounding; remove it afterward with `Remove-Item Env:ASTRO_DEV_BACKGROUND`.
+- Validate changes locally before deploying; a local tooling failure is not a reason to reproduce on production.
+
+## Deployment
 
 ```bash
 npm run build
