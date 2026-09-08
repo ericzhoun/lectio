@@ -39,7 +39,7 @@ npm run dev
 npm run deploy
 ```
 
-Deploys the `lectio` Worker to `3livescapture.com`. This builds, checks the
+Deploys the `lectio` Worker to `enjoyhim.org`. This builds, checks the
 build output, and only then uploads — so a failed build aborts the deploy
 instead of shipping whatever stale `dist/` was left behind.
 

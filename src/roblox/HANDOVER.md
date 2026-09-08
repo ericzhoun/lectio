@@ -10,7 +10,7 @@
 
 ## 1. What this is
 
-A Roblox world that replicates the functionality of **https://3livescapture.com/** — the **Lectio** daily scripture-reading website — as a playable 3D place. The original `/continuecontinue` path returns HTTP 404; the root site was used as the source of truth.
+A Roblox world that replicates the functionality of **https://enjoyhim.org/** — the **Lectio** daily scripture-reading website — as a playable 3D place. The original `/continuecontinue` path returns HTTP 404; the root site was used as the source of truth.
 
 The deliverable is **`Lectio.rbxlx`**, a standard Roblox place file for Roblox Studio. This version makes the physical Bible the primary reading interface: approach, select a ribbon, touch, then read private flying pages and verse bubbles. Narration uses a client-only candidate Roblox speech driver. The agent has not opened or playtested this generated version in Studio.
 
@@ -115,7 +115,7 @@ the server → `503 not_configured`; wrong key → `401`.
 **Setup:**
 
 1. Backend: set the `ROBLOX_API_KEY` wrangler secret (`npx wrangler secret put ROBLOX_API_KEY`), same value locally in `.env` / `.dev.vars`.
-2. Game: on the `LectioServer` Script set the `LectioApiKey` attribute privately in Studio and optionally `LectioBackendUrl` (defaults to `https://3livescapture.com`). The generator embeds the attribute only with `--embed-api-key`; use a separate untracked output. Never put the real secret in a source constant or tracked place.
+2. Game: on the `LectioServer` Script set the `LectioApiKey` attribute privately in Studio and optionally `LectioBackendUrl` (defaults to `https://enjoyhim.org`). The generator embeds the attribute only with `--embed-api-key`; use a separate untracked output. Never put the real secret in a source constant or tracked place.
 3. Studio: enable *Game Settings → Security → Allow HTTP Requests*; a published game has HTTP enabled by default.
 
 **Fallback:** if the key is missing or HTTP is disabled before a draw, the server logs a warning and serves readings from the built-in
@@ -162,5 +162,5 @@ The client/server harnesses execute actual routing and session code with engine 
 
 ## 8. Source-of-truth references
 
-- Site inspected live: `https://3livescapture.com/` (Lectio — Daily Scripture Reading and Reflection); `/continuecontinue` is 404.
+- Site inspected live: `https://enjoyhim.org/` (Lectio — Daily Scripture Reading and Reflection); `/continuecontinue` is 404.
 - Scripture text: KJV (English) and Chinese Union Version (中文), both public domain.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates Lectio.rbxlx — a Roblox place replicating 3livescapture.com (Lectio)."""
+"""Generates Lectio.rbxlx — a Roblox place replicating enjoyhim.org (Lectio)."""
 import math
 import xml.sax.saxutils as sx
 from pathlib import Path
