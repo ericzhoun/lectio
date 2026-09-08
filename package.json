@@ -30,7 +30,8 @@
     "sharp": "^0.35.4",
     "tsx": "^4.23.13",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "wrangler": "^4.126.0"
   },
   "allowScripts": {
     "esbuild": true

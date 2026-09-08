@@ -24,6 +24,16 @@
 			"database_id": "b31145ba-04a6-4fc9-bc01-744f1224e3d8"
 		}
 	],
+	// Prebuilt TTS clips (steps + lectionary days). /audio/* and /api/tts read
+	// them from this binding, so a deploy no longer needs the audio corpus on
+	// the build machine. scripts/seed-audio-r2.mjs keeps the bucket in sync
+	// with the manifests.
+	"r2_buckets": [
+		{
+			"binding": "AUDIO",
+			"bucket_name": "lectio-audio"
+		}
+	],
 	// Open-source TTS (MeloTTS) for listening to the daily passage.
 	"ai": {
 		"binding": "AI"

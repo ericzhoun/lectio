@@ -1,15 +1,14 @@
-// Guards the deploy against shipping a build that does not match the manifests.
+// Guards the deploy against shipping an app whose manifests promise clips
+// that exist nowhere. Prebuilt clips live in R2 (bucket lectio-audio) and are
+// served by /audio/* and /api/tts from the AUDIO binding - they are no longer
+// bundled into dist/. scripts/seed-audio-r2.mjs uploads them and records what
+// it uploaded in src/lib/audioR2Manifest.json, which this check reads.
 //
-// The prebuilt-audio manifests in src/lib are the source of truth for what
-// /api/tts will try to serve from the ASSETS binding, but the clips themselves
-// are gitignored and only exist on the machine that synthesized them. A build
-// made without them still succeeds - the endpoint just falls back to Workers AI
-// and nobody notices until the voice is wrong in production. Worse, `astro
-// build` can fail after emptying dist/, and a plain `wrangler deploy` then
-// happily ships whatever stale output is left behind.
-//
-// So before every deploy: assert the build output exists and contains a clip
-// for every entry the manifests promise.
+// A clip counts as covered when either of these holds:
+//   - its key is listed in src/lib/audioR2Manifest.json (the R2 state), or
+//   - the file exists in dist/client (legacy: clips bundled as static assets).
+// Anything uncovered fails the deploy, because those clips would silently
+// fall back to Workers AI speech in production.
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -23,26 +22,50 @@ const asset = (url) => new URL(`.${url}`, client);
 if (!existsSync(fileURLToPath(new URL('index.html', client))) && !existsSync(fileURLToPath(client))) {
   problems.push('dist/client is missing - the build did not run, or it failed after emptying dist/.');
 } else {
+  let r2Keys = null;
+  try {
+    const manifest = read('src/lib/audioR2Manifest.json');
+    r2Keys = new Set(manifest.keys);
+  } catch {
+    problems.push(
+      'src/lib/audioR2Manifest.json is missing - run `node scripts/seed-audio-r2.mjs` to upload the prebuilt clips to R2.'
+    );
+  }
+
   const steps = read('src/lib/audioSteps.json');
   const days = read('src/lib/audioDays.json');
 
   let expected = 0;
+  const uncovered = [];
+  const check = (url, label) => {
+    expected++;
+    const inR2 = r2Keys?.has(url.replace(/^\/audio\//, ''));
+    const inDist = existsSync(fileURLToPath(asset(url)));
+    if (!inR2 && !inDist) uncovered.push(label);
+  };
+
   for (const [lang, clips] of Object.entries(steps.steps)) {
     for (const [step, clip] of Object.entries(clips)) {
-      expected++;
-      if (!existsSync(fileURLToPath(asset(clip.file)))) {
-        problems.push(`missing step clip ${lang}/${step}: dist/client${clip.file}`);
-      }
+      check(clip.file, `step clip ${lang}/${step}`);
     }
   }
   for (const [day, langs] of Object.entries(days.days)) {
     for (const lang of langs) {
-      expected++;
-      const file = `/audio/days/${lang}/${day}.mp3`;
-      if (!existsSync(fileURLToPath(asset(file)))) problems.push(`missing day clip: dist/client${file}`);
+      check(`/audio/days/${lang}/${day}.mp3`, `day clip ${lang}/${day}`);
     }
   }
-  if (problems.length === 0) console.log(`build output ok - ${expected} prebuilt clips present in dist/client`);
+
+  if (uncovered.length > 0) {
+    problems.push(
+      `${uncovered.length} of ${expected} manifest clips are neither in R2 nor in dist/client` +
+        ` (first few: ${uncovered.slice(0, 5).join(', ')})`
+    );
+  } else if (problems.length === 0) {
+    console.log(
+      `build output ok - all ${expected} prebuilt clips covered (${r2Keys.size} in R2)` +
+        ` - run \`node scripts/seed-audio-r2.mjs\` after adding clips.`
+    );
+  }
 }
 
 if (problems.length > 0) {
@@ -51,10 +74,9 @@ if (problems.length > 0) {
   for (const p of shown) console.error(`  - ${p}`);
   if (problems.length > shown.length) console.error(`  ... and ${problems.length - shown.length} more`);
   console.error(
-    '\nRun `npm run build` and check it completed. Prebuilt clips live in the\n' +
-      'gitignored public/audio/; regenerate them with `npm run tts:steps` and\n' +
-      '`npm run tts:passages`, or deploy from the machine that has them.\n' +
-      'Deploying now would silently fall back to Workers AI speech.\n'
+    '\nPrebuilt clips are served from R2 (bucket lectio-audio). Seed or update\n' +
+      'the bucket with `node scripts/seed-audio-r2.mjs` (resumable; it fills\n' +
+      'src/lib/audioR2Manifest.json), then rebuild.\n'
   );
   process.exit(1);
 }

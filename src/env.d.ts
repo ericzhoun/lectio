@@ -5,9 +5,11 @@ declare namespace Cloudflare {
   interface Env {
     DB: import('@cloudflare/workers-types').D1Database;
     AI: Ai;
-    // Static-assets binding from wrangler.jsonc, used to serve prebuilt
-    // Chatterbox audio straight from dist/ without synthesizing on request.
+    // Static-assets binding from wrangler.jsonc (the site's own files).
     ASSETS: { fetch: (request: Request) => Promise<Response> };
+    // R2 store for prebuilt TTS clips. Keys are the site path minus the
+    // leading "audio/" and are gated by the manifests (see src/lib/audio.ts).
+    AUDIO: import('@cloudflare/workers-types').R2Bucket;
     SESSION_SECRET: string;
     STRIPE_SECRET_KEY: string;
     STRIPE_WEBHOOK_SECRET: string;

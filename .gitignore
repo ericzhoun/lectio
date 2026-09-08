@@ -49,5 +49,6 @@ logo2.png
 # TTS output: manifests in src/lib are the source of truth; clips are
 # regenerated locally and ship via the wrangler assets upload
 public/audio/
+scripts/.audio-r2-state.json
 /.lavish
 /src/roblox/__pycache__
