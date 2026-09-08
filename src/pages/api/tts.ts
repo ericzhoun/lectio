@@ -9,7 +9,7 @@
 // every reader of that day - so each one is synthesized once, globally.
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
-import { hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../lib/audio';
+import { audioR2Key, hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../lib/audio';
 import { isStep, STEP_COPY } from '../../lib/dailySteps';
 import { focusReference, getLectionaryDay, hasLectionaryDay } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
@@ -45,11 +45,13 @@ export const GET: APIRoute = async ({ url }) => {
   const prebuilt = isStep(step) ? stepAudioUrl(lang, step)
     : hasPrebuiltDayAudio(day, lang) ? prebuiltDayAudioUrl(lang, day) : null;
   if (prebuilt) {
-    const asset = await env.ASSETS.fetch(
-      new Request(new URL(prebuilt, url.origin).toString())
-    );
-    if (asset.ok && asset.headers.get('Content-Type')?.startsWith('audio/')) {
-      return new Response(asset.body, {
+    // Prebuilt clips live in R2 (bucket lectio-audio), not in the deploy's
+    // static assets. A miss falls through to on-demand synthesis, exactly
+    // like the old ASSETS lookup missing a file.
+    const key = audioR2Key(prebuilt);
+    const object = key ? await env.AUDIO.get(key) : null;
+    if (object) {
+      return new Response(object.body, {
         headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': CACHE_CONTROL },
       });
     }

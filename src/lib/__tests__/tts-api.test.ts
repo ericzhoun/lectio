@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 const store = vi.hoisted(() => ({
   runs: [] as unknown[],
   run: async (_model: string, _input: unknown) => ({ audio: 'SUQz' }) as unknown,
+  audioGet: (async (_key: string) => null) as (key: string) => Promise<{ body: ReadableStream } | null>,
 }));
 
 vi.mock('cloudflare:workers', () => ({
@@ -14,8 +15,9 @@ vi.mock('cloudflare:workers', () => ({
         return store.run(model, input);
       },
     },
-    // Static-assets binding. The prebuilt-clip lookup runs before synthesis;
-    // a 404 here sends the endpoint down the synthesis path these tests cover.
+    // Prebuilt-clip R2 binding. The prebuilt-clip lookup runs before synthesis;
+    // a miss here sends the endpoint down the synthesis path these tests cover.
+    AUDIO: { get: (key: string) => store.audioGet(key) },
     ASSETS: { fetch: async () => new Response(null, { status: 404 }) },
   },
 }));
@@ -39,6 +41,7 @@ const noCache = { match: async () => undefined, put: async () => {} };
 beforeEach(() => {
   store.runs = [];
   store.run = async () => ({ audio: 'SUQz' });
+  store.audioGet = async () => null;
   (globalThis as { caches?: unknown }).caches = { default: noCache };
 });
 
@@ -50,6 +53,16 @@ describe('GET /api/tts', () => {
 
     expect(new Uint8Array(await res.arrayBuffer())).toEqual(new Uint8Array([73, 68, 51]));
     expect(store.runs).toEqual([[TTS_MODEL, { prompt: 'Read it slowly, twice. There is no hurry.', lang: 'en' }]]);
+  });
+
+  it('serves a prebuilt R2 clip without synthesizing', async () => {
+    store.audioGet = async (key) =>
+      key === 'steps/en/lectio-6eac8450.mp3' ? { body: new Response('ID3').body } : null;
+    const res = await call('?step=lectio&lang=en');
+    expect(res.status).toBe(200);
+    expect(res.headers.get('Content-Type')).toBe('audio/mpeg');
+    expect(new Uint8Array(await res.arrayBuffer())).toEqual(new Uint8Array([73, 68, 51]));
+    expect(store.runs).toEqual([]);
   });
 
   it('rejects arbitrary guidance text without synthesizing it', async () => {

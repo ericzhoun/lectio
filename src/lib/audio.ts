@@ -40,3 +40,32 @@ export function hasPrebuiltDayAudio(day: string, lang: Lang): boolean {
 export function prebuiltDayAudioUrl(lang: Lang, day: string): string {
   return `/audio/days/${lang}/${day}.mp3`;
 }
+
+/**
+ * Every prebuilt clip key the endpoints may ever serve, derived from the
+ * manifests: "steps/<lang>/<name>.mp3" and "days/<lang>/<day>.mp3" — the
+ * site path minus the leading "audio/". Both the /audio/* route and /api/tts
+ * gate on this set, so neither can be tricked into reading an arbitrary
+ * object out of the AUDIO bucket.
+ */
+const R2_KEYS: ReadonlySet<string> = (() => {
+  const keys = new Set<string>();
+  for (const clips of Object.values(STEPS.steps)) {
+    for (const clip of Object.values(clips)) {
+      if (clip) keys.add(clip.file.replace(/^\/audio\//, ''));
+    }
+  }
+  for (const [day, langs] of Object.entries(DAYS.days)) {
+    for (const lang of langs) keys.add(`days/${lang}/${day}.mp3`);
+  }
+  return keys;
+})();
+
+/**
+ * The R2 object key for a site audio URL like "/audio/steps/en/x.mp3", or
+ * null when the URL is not a manifest-listed clip.
+ */
+export function audioR2Key(url: string): string | null {
+  const key = url.replace(/^\/audio\//, '');
+  return R2_KEYS.has(key) ? key : null;
+}
