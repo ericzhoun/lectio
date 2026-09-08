@@ -15,8 +15,7 @@
 		"GOOGLE_REDIRECT_URI": "https://enjoyhim.org/api/auth/google/callback"
 	},
 	"observability": {
-		"enabled": true,
-		"redact_query_string": false
+		"enabled": true
 	},
 	"d1_databases": [
 		{
