@@ -1,7 +1,7 @@
--- LectioClient: rebuilds the Lectio web UI as a Roblox interface.
+-- LectioClient: quiet reading options around the physical chapel Bible.
 -- Readings served by the site backend include the AI reflection per verse
 -- (`interp`) plus an overall `summary`; when the server runs in offline
--- fallback mode those fields are empty and the panel simply shows verses.
+-- fallback mode the native reading offers clearly labeled reflection prompts.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
@@ -17,22 +17,17 @@ for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "Lect
 	remotes[n] = ReplicatedStorage:WaitForChild(n)
 end
 
-local C = {
-	bg = Color3.fromRGB(23, 25, 31),
-	panel = Color3.fromRGB(31, 34, 42),
-	panel2 = Color3.fromRGB(40, 44, 54),
-	line = Color3.fromRGB(62, 67, 80),
-	text = Color3.fromRGB(236, 232, 224),
-	dim = Color3.fromRGB(158, 156, 150),
-	gold = Color3.fromRGB(212, 178, 112),
-	green = Color3.fromRGB(92, 156, 110),
-	red = Color3.fromRGB(196, 92, 92),
-	darkText = Color3.fromRGB(32, 26, 18),
+local C = require(ReplicatedStorage:WaitForChild("LectioModules"):WaitForChild("ReadingTheme"))
+local invitationTopics = {
+    {en="How do I face this season of pressure at work?",zh="我该如何面对工作中的这段压力？"},
+    {en="I want to learn to love better in this relationship.",zh="我想在这段关系里学会更好地去爱。"},
+    {en="What do I need to let go of in the coming weeks?",zh="接下来这段时间，我需要放下什么？"},
+    {en="How can I find stillness in a busy life?",zh="我该如何在忙碌中安静下来？"},
 }
 
 -- declared before L so localization closures can read them
 local lang = "en"
-local selectedMode = "daily"
+local selectedMode = "today"
 local state = { used = 0, limit = 3, registered = false, divina = 0, deep = 0 }
 local currentReading = nil
 local readingStep = 1
@@ -45,11 +40,12 @@ local L = {
 	en = {
         approachBible = "Walk to the Bible to begin your reading.",
         drawUncertain = "Your reading is still unconfirmed. Another draw is paused to avoid using a second reading.",
-		title = "Lectio — Daily Scripture Reading",
-		sub = "Bring a question, flip open the Bible, and let a verse find you.",
-		calendar = "✦ Or follow the church calendar — Today's reading",
-		popular = "Popular Topics:",
-		explore = "Explore",
+		title = "Lectio · Reading options",
+		sub = "A quiet house for contemplative scripture reading",
+		calendar = "Begin today's reading at the Bible",
+		popular = "Or bring a question · Receive a Word",
+		explore = "Open the Bible with this intention",
+		todayTitle = "Today's reading",
 		usageFmt = "Used today: %d / %d · register free for 6/day",
 		m1t = "1 · Daily Word", m1d = "One verse to sit with for this moment",
 		m2t = "3 · Lectio Divina", m2d = "Reading, reflection, and response",
@@ -61,7 +57,7 @@ local L = {
 		library = "Verse Library",
 		settings = "Settings",
 		assistant = "Ask a question",
-		placeholder = "I want to explore…",
+		placeholder = "A question or intention to bring to this reading…",
 		am1 = "Daily Word",
 		am2 = "Lectio Divina",
 		am3 = "Deep Lectio",
@@ -91,26 +87,27 @@ local L = {
 	zh = {
         approachBible = "请走近圣经，开始阅读。",
         drawUncertain = "本次阅读尚未确认。为避免重复扣次数，暂不能再次抽取。",
-		title = "Lectio — 每日读经默想",
-		sub = "带着一个问题，翻开圣经，让经文找到你。",
-		calendar = "✦ 或跟随教会年历 — 今日读经",
-		popular = "热门话题：",
-		explore = "探索",
+		title = "Lectio 圣言诵读 · 阅读选项",
+		sub = "一座为默想读经而建的小圣所",
+		calendar = "在圣经前开始今日诵读",
+		popular = "或带着一个问题 · 领受一句话",
+		explore = "带着这份心意翻开圣经",
+		todayTitle = "今日诵读",
 		usageFmt = "今日已用：%d / %d · 免费注册可达 6 次/天",
-		m1t = "1 · 每日一词", m1d = "一节经文，在此刻默想",
-		m2t = "3 · 灵阅", m2d = "读经、默想、回应",
-		m3t = "10 · 深度灵阅", m3d = "十节经文的默想路径",
+		m1t = "1 · 每日经文", m1d = "一节经文，为当下带来领受与亮光",
+		m2t = "3 · 圣言诵读", m2d = "诵读、默想、祈祷",
+		m3t = "10 · 深度诵读", m3d = "十节经文的完整默观之路",
 		register = "免费注册，读得更多",
-		regBullets = "• 每日一词：3 → 6 次/天\n• 灵阅（3 节经文）体验 ×3\n• 深度灵阅（10 节经文）体验 ×1",
+		regBullets = "• 每日经文：3 → 6 次/天\n• 圣言诵读（3 节经文）体验 ×3\n• 深度诵读（10 节经文）体验 ×1",
 		create = "创建免费账户",
 		registered = "已注册 — 每日 6 次已解锁",
 		library = "经文库",
 		settings = "设置",
 		assistant = "问一个问题",
-		placeholder = "我想探索…",
-		am1 = "每日一词",
-		am2 = "灵阅",
-		am3 = "深度灵阅",
+		placeholder = "带来你此刻的问题或心意……",
+		am1 = "每日经文",
+		am2 = "圣言诵读",
+		am3 = "深度诵读",
 		lblReading = "读经",
 		lblReflection = "默想",
 		lblResponse = "回应",
@@ -125,11 +122,11 @@ local L = {
 		chatWelcome = "有问题吗？可以问经文的意思，或这里怎么使用。",
 		chatPlaceholder = "输入你的问题…",
 		limitMsg = "今日免费读经次数已用完。免费注册可达每天 6 次。",
-		divinaMsg = "灵阅是注册后的礼物 — 创建免费账户解锁体验次数。",
-		deepMsg = "深度灵阅是注册后的礼物 — 创建免费账户解锁体验次数。",
+		divinaMsg = "圣言诵读是注册后的礼物 — 创建免费账户解锁体验次数。",
+		deepMsg = "深度诵读是注册后的礼物 — 创建免费账户解锁体验次数。",
 		assistantLimitMsg = "助手已达到今日消息上限。",
 		backendError = "读经服务暂时无法连接，请稍后再试。",
-		registeredMsg = "注册成功。每日上限已提升至 6 次，并解锁灵阅与深度灵阅体验。",
+		registeredMsg = "注册成功。每日上限已提升至 6 次，并解锁圣言诵读与深度诵读体验。",
 		stepFmt = "第 %d 步，共 %d 步",
 		music = "音乐",
 		setTitle = "设置",
@@ -277,6 +274,7 @@ local function labelsForMode(mode)
 end
 
 local function modeTitle(mode)
+	if mode == "today" then return t("todayTitle") end
 	if mode == "divina" then return t("am2") end
 	if mode == "deep" then return t("am3") end
 	return t("am1")
@@ -285,10 +283,10 @@ end
 local function refreshModeCards()
 	for _, card in ipairs(ui.cards) do
 		local selected = card.mode == selectedMode
-		card.btn.BackgroundColor3 = selected and C.gold or C.panel2
-		card.title.TextColor3 = selected and C.darkText or C.text
-		card.desc.TextColor3 = selected and C.darkText or C.dim
-		card.tag.TextColor3 = selected and C.darkText or C.gold
+		card.btn.BackgroundColor3 = selected and C.accent or C.panel2
+		card.title.TextColor3 = selected and C.cream or C.text
+		card.desc.TextColor3 = selected and C.cream or C.dim
+		card.tag.TextColor3 = selected and C.cream or C.gold
 	end
 end
 
@@ -442,7 +440,7 @@ local function buildGui()
 	gui.Parent = playerGui
 	ui.gui = gui
 
-	-- main landing panel (mirrors the website homepage)
+	-- Optional intentions and settings; the physical Bible remains the entry point.
 	local main = mk("Frame", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
@@ -464,7 +462,8 @@ local function buildGui()
 
 	local title = mk("TextLabel", { Position = UDim2.fromOffset(20, 12), Size = UDim2.fromOffset(680, 40), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextScaled = true, Text = t("title") }, main)
 	local sub = mk("TextLabel", { Position = UDim2.fromOffset(20, 54), Size = UDim2.fromOffset(680, 24), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Text = t("sub") }, main)
-	local calendarBtn = mk("TextButton", { Position = UDim2.fromOffset(210, 82), Size = UDim2.fromOffset(300, 26), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Gotham, TextSize = 14, Text = t("calendar") }, main)
+	local calendarBtn = mk("TextButton", { Position = UDim2.fromOffset(175, 80), Size = UDim2.fromOffset(370, 32), BackgroundColor3 = C.accent, BorderSizePixel = 0, TextColor3 = C.cream, Font = C.uiFont, TextSize = 14, Text = t("calendar") }, main)
+	round(calendarBtn, 8)
 	local popularLabel = mk("TextLabel", { Position = UDim2.fromOffset(20, 114), Size = UDim2.fromOffset(300, 20), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, Text = t("popular") }, main)
 
 	local chipPos = { { 20, 138 }, { 370, 138 }, { 20, 178 }, { 370, 178 } }
@@ -476,11 +475,13 @@ local function buildGui()
 			TextColor3 = C.text,
 			Font = Enum.Font.Gotham,
 			TextSize = 13,
-			Text = VerseData.PopularTopics[i][lang],
+			TextWrapped = true,
+			Text = invitationTopics[i][lang],
 		}, main)
 		round(chip, 8)
 		chip.MouseButton1Click:Connect(function()
-			ui.topicBox.Text = VerseData.PopularTopics[i][lang]
+			ui.topicBox.Text = invitationTopics[i][lang]
+			if selectedMode == "today" then selectedMode="daily"; refreshModeCards() end
 		end)
 		table.insert(ui.chips, chip)
 	end
@@ -522,7 +523,7 @@ local function buildGui()
 		table.insert(ui.cards, card)
 	end
 
-	local exploreBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 374), Size = UDim2.fromOffset(680, 48), BackgroundColor3 = C.gold, TextColor3 = C.darkText, Font = Enum.Font.GothamBold, TextSize = 20, Text = t("explore") }, main)
+	local exploreBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 374), Size = UDim2.fromOffset(680, 48), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = C.uiBoldFont, TextSize = 18, Text = t("explore") }, main)
 	round(exploreBtn, 10)
 
 	local regBox = mk("Frame", { Position = UDim2.fromOffset(20, 430), Size = UDim2.fromOffset(680, 76), BackgroundColor3 = C.panel, BorderSizePixel = 0 }, main)
@@ -653,12 +654,12 @@ local function buildGui()
 	-- wiring
 	exploreBtn.MouseButton1Click:Connect(function()
         ui.main.Visible=false
-        native:activate(selectedMode)
+        native:activate(selectedMode=="today" and "daily" or selectedMode)
 	end)
 	topicBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
             ui.main.Visible=false
-            native:activate(selectedMode)
+            native:activate(selectedMode=="today" and "daily" or selectedMode)
 		end
 	end)
 	regBtn.MouseButton1Click:Connect(function()
@@ -769,7 +770,7 @@ function refreshLang()
 	ui.topicBox.PlaceholderText = t("placeholder")
 	ui.chatBox.PlaceholderText = t("chatPlaceholder")
 	for i, chip in ipairs(ui.chips) do
-		chip.Text = VerseData.PopularTopics[i][lang]
+		chip.Text = invitationTopics[i][lang]
 	end
 	for _, card in ipairs(ui.cards) do
 		card.title.Text = t(card.titleKey)
@@ -845,6 +846,13 @@ native=NativeReading.new(remotes,{
     topic=function() return ui.topicBox.Text end,
     setMode=function(mode) selectedMode=mode; refreshModeCards() end,
     openOptions=function() ui.main.Visible=not ui.main.Visible end,
+    begin=function()
+        ui.main.Visible=false
+        ui.reading.Visible=false
+        ui.settings.Visible=false
+        ui.library.Visible=false
+        ui.assistant.Visible=false
+    end,
     labels=function(mode,count)
         if mode~="today" then return labelsForMode(mode) end
         local labels={}

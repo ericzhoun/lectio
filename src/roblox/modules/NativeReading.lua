@@ -9,7 +9,7 @@ local Native={}
 Native.__index=Native
 function Native.new(remotes,options)
     local self=setmetatable({remotes=remotes,options=options,session=Session.new(),
-        settings={reducedMotion=false,narrationMuted=false},mode="daily"},Native)
+        settings={reducedMotion=false,narrationMuted=false},mode="today"},Native)
     self.anchors={altar=workspace:WaitForChild("AltarBible"),visual=workspace:WaitForChild("BibleVisual"),
         contact=workspace:WaitForChild("Contact"),destination=workspace:WaitForChild("PageDestination")}
     self.presenter=Presentation.new(self.anchors,function(e) self:action(e) end)
@@ -46,6 +46,7 @@ end
 function Native:play()
     local s=self.session:snapshot()
     if not s.reading or s.phase~="reading" or not s.near then return end
+    if self.presenter.allowsNarration and not self.presenter:allowsNarration() then return end
     if self.settings.narrationMuted then self.presenter:setAudioState("muted"); return end
     self.narrator:play(s.reading.verses[s.page],s.lang)
 end
@@ -67,6 +68,7 @@ function Native:activate(mode)
     local id=HttpService:GenerateGUID(false)
     self.session:dispatch({type="begin",id=id})
     if self.session.requestId~=id then return end
+    if self.options.begin then self.options.begin() end
     self:render()
     self.remotes.LectioActivity:FireServer()
     local drawMode=self.mode
@@ -100,7 +102,7 @@ function Native:receive(envelope,today)
     for _,v in ipairs(verses) do v.textEn=v.textEn or v.en or ""; v.textZh=v.textZh or v.zh or "" end
     local labels=self.options.labels(today and "today" or response.mode or "daily",#verses)
     local title=today and (self.session.lang=="zh" and response.titleZh or response.titleEn) or self.options.title(response.mode)
-    local reading={verses=verses,labels=labels,title=title or "Lectio",titleEn=response.titleEn,titleZh=response.titleZh,summary=response.summary or "",topic=response.topic or "",mode=response.mode or "today"}
+    local reading={verses=verses,labels=labels,title=title or "Lectio",titleEn=response.titleEn,titleZh=response.titleZh,summary=response.summary or "",topic=response.topic or "",mode=today and "today" or response.mode or "daily"}
     self.session:dispatch({type="received",id=envelope.requestId,reading=reading})
     self.options.accept(reading,response.state)
     self:render()
@@ -114,8 +116,13 @@ function Native:action(e)
     if e.type=="replay" then self:play()
     elseif e.type=="pause" or e.type=="segment" then self.narrator:pause()
     elseif e.type=="resume" then
-        if s.phase=="paused" then self.session:dispatch({type="resume"}); self:render(); self:play()
-        elseif s.phase=="reading" then self.narrator:resume() end
+        if s.phase=="paused" then
+            self.session:dispatch({type="resume"})
+            if self.session.phase=="reading" and self.options.begin then self.options.begin() end
+            self:render(); self:play()
+        elseif s.phase=="reading" then
+            if self.narrator.playback then self.narrator:resume() else self:play() end
+        end
     elseif e.type=="next" or e.type=="previous" or e.type=="select" then
         if not s.reading then return end
         local page=e.page or (s.page+(e.type=="next" and 1 or -1))

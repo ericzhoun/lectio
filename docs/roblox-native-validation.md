@@ -1,6 +1,18 @@
 # Native reading validation
 
-Implementation workspace: `D:/workplace/lectio-native-reading`, branch `codex/roblox-native-reading`.
+## Current build — website alignment, 2026-09-07
+
+Current source/build directory: `D:\workplace\lectio\src\roblox`. Open `Lectio-Live.test.rbxlx` for the private live build or `Lectio.rbxlx` for the credential-free build. Both have been regenerated from the current website-alignment source. Earlier worktree artifacts are superseded.
+
+- **25 Python/Lua checks pass**, including actual presentation construction with engine doubles: delayed reveal after flight; stale timer cleanup; page/language switching; bilingual page lettering; reflection/summary preservation; quiet-stage narration gating; Rest collapse; compact full-text access; camera-orbit layout avoidance; Today as default; no redraw on replay/resume/navigation; options dismissal on resume; speech restart after language change.
+- **19 Roblox backend tests pass.** API contracts and quotas are unchanged.
+- Authenticated read-only EnjoyHim library call: verified TLS, HTTP 200, `ok=true`, 151 verses. This proves the new domain connection, not a charged AI reading or actual speech playback.
+- Default XML remains credential-free and matches source. The ignored live XML uses the same scripts plus the existing private key and HTTP enabled.
+- The design follows the website's morning palette, Today-first entry and six local stages. Scripture, Reflection and Summary are directly reachable. Bubbles appear after flight and avoid projected scene bounds, with a compact reader before falling back to a retained-reading handle.
+
+**Studio acceptance is still pending.** Desktop automation returned the existing kernel-assets path error; no Studio screenshot, playtest or audible-output evidence was obtained. Also verify: Today ribbon and movement plaques, scene avoidance while orbiting, compact Scripture listen/pause, Rest/Continue, reflection/summary scrolling, and the inward-facing welcome board.
+
+The implementation notes below record earlier iterations; their old layout dimensions and check counts are historical. Original implementation workspace: `D:/workplace/lectio-native-reading`, branch `codex/roblox-native-reading`.
 
 ## Feasibility evidence — 2026-09-06
 

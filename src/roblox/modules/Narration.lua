@@ -7,6 +7,7 @@ end
 function Narration:stop()
     self.generation=self.generation+1
     if self.playback then self.playback.stop(); self.playback=nil end
+    self.onState("idle")
 end
 function Narration:play(verse,lang)
     self:stop()

@@ -252,7 +252,7 @@ boardGui.Parent = board
 
 local boardBg = Instance.new("Frame")
 boardBg.Size = UDim2.fromScale(1, 1)
-boardBg.BackgroundColor3 = Color3.fromRGB(30, 25, 21)
+boardBg.BackgroundColor3 = Color3.fromRGB(252, 248, 236)
 boardBg.BorderSizePixel = 0
 boardBg.Parent = boardGui
 
@@ -262,7 +262,7 @@ boardTitle.Position = UDim2.fromScale(0.3, 0.03)
 boardTitle.Size = UDim2.fromScale(0.4, 0.11)
 boardTitle.Font = Enum.Font.Garamond
 boardTitle.Text = "L e c t i o"
-boardTitle.TextColor3 = Color3.fromRGB(212, 178, 112)
+boardTitle.TextColor3 = Color3.fromRGB(150, 119, 46)
 boardTitle.TextScaled = true
 boardTitle.Parent = boardBg
 
@@ -271,7 +271,7 @@ boardVerse.BackgroundTransparency = 1
 boardVerse.Position = UDim2.fromScale(0.06, 0.17)
 boardVerse.Size = UDim2.fromScale(0.88, 0.56)
 boardVerse.Font = Enum.Font.Garamond
-boardVerse.TextColor3 = Color3.fromRGB(238, 231, 216)
+boardVerse.TextColor3 = Color3.fromRGB(58, 52, 42)
 boardVerse.TextScaled = true
 boardVerse.TextWrapped = true
 boardVerse.Text = "Be still, and know that I am God."
@@ -282,7 +282,7 @@ boardRef.BackgroundTransparency = 1
 boardRef.Position = UDim2.fromScale(0.06, 0.76)
 boardRef.Size = UDim2.fromScale(0.88, 0.12)
 boardRef.Font = Enum.Font.Garamond
-boardRef.TextColor3 = Color3.fromRGB(212, 178, 112)
+boardRef.TextColor3 = Color3.fromRGB(102, 116, 74)
 boardRef.TextScaled = true
 boardRef.Text = "Psalm 46:10"
 boardRef.Parent = boardBg
@@ -292,7 +292,7 @@ boardWho.BackgroundTransparency = 1
 boardWho.Position = UDim2.fromScale(0.06, 0.89)
 boardWho.Size = UDim2.fromScale(0.88, 0.09)
 boardWho.Font = Enum.Font.Gotham
-boardWho.TextColor3 = Color3.fromRGB(150, 142, 128)
+boardWho.TextColor3 = Color3.fromRGB(125, 116, 98)
 boardWho.TextScaled = true
 boardWho.Text = "a verse for everyone who seeks"
 boardWho.Parent = boardBg
@@ -382,9 +382,9 @@ end)
 Players.PlayerRemoving:Connect(function(player)
     drawRequests:remove(player.UserId); lastActivity[player.UserId]=nil
 end)
-boardVerse.Text="A quiet place to read and reflect."
-boardRef.Text="Walk to the Bible to begin."
-boardWho.Text="Your reading is personal."
+boardVerse.Text="A quiet house for contemplative scripture reading.\n一间安读经文的小圣所"
+boardRef.Text="Touch the Bible · Begin today's reading\n触摸圣经 · 开始今日读经"
+boardWho.Text="Shared chapel · Personal reading\n共处一座圣所 · 各自安静阅读"
 
 remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang, requestId)
 	if mode ~= "daily" and mode ~= "divina" and mode ~= "deep" then return end

@@ -25,6 +25,20 @@ MATERIALS = {
 }
 SHAPES = {"Ball": 0, "Block": 1, "Cylinder": 2}
 
+# Morning sanctuary colors, shared visually with ReadingTheme.lua and the site.
+PALETTE = {
+    "parchment": (245, 239, 226),
+    "cream": (252, 248, 236),
+    "wash": (236, 228, 208),
+    "line": (221, 209, 180),
+    "olive": (102, 116, 74),
+    "olive_light": (168, 172, 132),
+    "gold": (150, 119, 46),
+    "gold_soft": (181, 154, 94),
+    "terracotta": (160, 85, 47),
+    "ink": (58, 52, 42),
+}
+
 _refs = [0]
 
 
@@ -166,26 +180,26 @@ def services():
     lighting = f'''<Item class="Lighting" referent="{ref()}">
 <Properties>
 <string name="Name">Lighting</string>
-<float name="Brightness">2.9</float>
-<float name="ClockTime">15.4</float>
+<float name="Brightness">2.5</float>
+<float name="ClockTime">9.5</float>
 <bool name="GlobalShadows">true</bool>
 <float name="EnvironmentDiffuseScale">0.5</float>
 <float name="EnvironmentSpecularScale">0.4</float>
 <float name="ExposureCompensation">0.1</float>
-<Color3 name="Ambient"><R>0.44</R><G>0.44</G><B>0.55</B></Color3>
-<Color3 name="OutdoorAmbient"><R>0.55</R><G>0.55</G><B>0.62</B></Color3>
+<Color3 name="Ambient"><R>0.52</R><G>0.47</G><B>0.37</B></Color3>
+<Color3 name="OutdoorAmbient"><R>0.64</R><G>0.60</G><B>0.49</B></Color3>
 <Color3 name="ColorShift_Bottom"><R>0</R><G>0</G><B>0</B></Color3>
-<Color3 name="ColorShift_Top"><R>0</R><G>0</G><B>0</B></Color3>
+<Color3 name="ColorShift_Top"><R>0.07</R><G>0.04</G><B>0.01</B></Color3>
 </Properties>
 <Item class="Atmosphere" referent="{ref()}">
 <Properties>
 <string name="Name">Atmosphere</string>
-<float name="Density">0.32</float>
+<float name="Density">0.26</float>
 <float name="Offset">0.6</float>
 <float name="Glare">0.2</float>
 <float name="Haze">1.6</float>
-<Color3 name="Color"><R>0.76</R><G>0.8</G><B>0.9</B></Color3>
-<Color3 name="Decay"><R>0.55</R><G>0.55</G><B>0.6</B></Color3>
+<Color3 name="Color"><R>0.90</R><G>0.85</G><B>0.73</B></Color3>
+<Color3 name="Decay"><R>0.58</R><G>0.53</G><B>0.42</B></Color3>
 </Properties>
 </Item>
 </Item>'''
@@ -194,7 +208,7 @@ def services():
 
 def bible_cover(name, x, title):
     """A physical cover with surface lettering, visible without client scripts."""
-    cover = part(name, (2.2, 0.14, 3.2), (x, 5.53, -49), (95, 43, 36), cancollide=False)
+    cover = part(name, (2.2, 0.14, 3.2), (x, 5.53, -49), PALETTE["terracotta"], cancollide=False)
     label = wrap(
         "TextLabel",
         "CoverTitle",
@@ -219,41 +233,64 @@ def bible_cover(name, x, title):
     return cover
 
 
+def movement_plaque(name, x, title, invitation, color):
+    """Inward-facing chapel lettering, visible before any client script runs."""
+    plaque = part(name, (6.0, 3.4, 0.3), (x, 6.7, -55.95), color, yaw=math.pi)
+    text = wrap(
+        "TextLabel", "MovementLettering", "",
+        extra=f"""
+<UDim2 name="Position"><XS>0.06</XS><XO>0</XO><YS>0.08</YS><YO>0</YO></UDim2>
+<UDim2 name="Size"><XS>0.88</XS><XO>0</XO><YS>0.84</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.99</R><G>0.97</G><B>0.93</B></Color3>
+<string name="Text">{esc(title + chr(10) + chr(10) + invitation)}</string>""",
+    )
+    plaque.insert(-1, wrap(
+        "SurfaceGui", "MovementSign", text,
+        extra="""
+<token name="Face">5</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>600</X><Y>340</Y></Vector2>""",
+    ))
+    return plaque
+
+
 def build_world():
     items = []
     P = part
 
     # ground & plaza
-    items += P("Ground", (600, 2, 600), (0, -1, 0), (104, 152, 88), "Grass")
-    items += P("Plaza", (110, 1, 130), (0, 0.5, 5), (188, 184, 175), "Concrete")
-    items += P("ChapelFloor", (36, 1.6, 32), (0, 1.0, -40), (214, 206, 192), "Marble")
-    items += P("ChapelStep", (14, 0.4, 4), (0, 1.2, -26.5), (206, 200, 188), "Marble")
+    items += P("Ground", (600, 2, 600), (0, -1, 0), PALETTE["olive_light"], "Grass")
+    items += P("Plaza", (110, 1, 130), (0, 0.5, 5), PALETTE["wash"], "Concrete")
+    items += P("ChapelFloor", (36, 1.6, 32), (0, 1.0, -40), PALETTE["parchment"], "Marble")
+    items += P("ChapelStep", (14, 0.4, 4), (0, 1.2, -26.5), PALETTE["line"], "Marble")
 
     # colonnade + roof
     for x in (-13, 13):
         for z in (-27, -53):
             items += P(
-                f"Column{x}_{z}", (3, 16, 3), (x, 9.8, z), (224, 218, 206), "Marble"
+                f"Column{x}_{z}", (3, 16, 3), (x, 9.8, z), PALETTE["cream"], "Marble"
             )
-    items += P("Roof", (38, 1.6, 36), (0, 18.6, -40), (138, 92, 70), "Wood")
-    items += P("RoofTrim", (40, 0.8, 3), (0, 19.8, -40), (190, 160, 95), "Metal")
+    items += P("Roof", (38, 1.6, 36), (0, 18.6, -40), PALETTE["terracotta"], "Wood")
+    items += P("RoofTrim", (40, 0.8, 3), (0, 19.8, -40), PALETTE["gold_soft"], "Metal")
 
     # back wall + stained glass
-    items += P("BackWall", (36, 14, 2), (0, 9.4, -57.5), (220, 214, 202), "Marble")
+    items += P("BackWall", (36, 14, 2), (0, 9.4, -57.5), PALETTE["parchment"], "Marble")
     glass_colors = [
-        (196, 66, 76),
-        (78, 116, 200),
-        (222, 172, 64),
-        (92, 168, 112),
-        (150, 92, 190),
+        (196, 158, 138),
+        PALETTE["olive_light"],
+        (214, 178, 116),
+        PALETTE["olive_light"],
+        (196, 158, 138),
     ]
     for i, gx in enumerate((-12, -6, 0, 6, 12)):
         items += P(
-            f"Glass{i}", (4.5, 8, 0.6), (gx, 10.4, -56.3), glass_colors[i], "Neon"
+            f"Glass{i}", (4.5, 8, 0.6), (gx, 10.4, -56.3), glass_colors[i], "Glass", transparency=0.12
         )
 
     # altar + open bible
-    items += P("Altar", (9, 3, 3.5), (0, 3.3, -49), (230, 225, 215), "Marble")
+    items += P("Altar", (9, 3, 3.5), (0, 3.3, -49), PALETTE["cream"], "Marble")
     items += P(
         "AltarBible",
         (4.4, 0.35, 3.1),
@@ -266,30 +303,31 @@ def build_world():
     book += bible_cover("CoverLeft", -1.1, "✝\n\nLECTIO")
     book += bible_cover("CoverRight", 1.1, "HOLY\nBIBLE\n\n圣经")
     book += P(
-        "BackCover", (4.5, 0.13, 3.25), (0, 5.05, -49), (76, 32, 27), cancollide=False
+        "BackCover", (4.5, 0.13, 3.25), (0, 5.05, -49), (132, 69, 31), cancollide=False
     )
     book += P(
         "PageBlock",
         (4.1, 0.30, 2.95),
         (0, 5.28, -49),
-        (247, 238, 212),
+        PALETTE["cream"],
         cancollide=False,
     )
     book += P(
-        "Spine", (0.16, 0.46, 3.2), (0, 5.30, -49), (179, 133, 57), cancollide=False
+        "Spine", (0.16, 0.46, 3.2), (0, 5.30, -49), PALETTE["gold"], cancollide=False
     )
     for index, y in enumerate((5.19, 5.27, 5.35)):
         book += P(
             f"GiltPageEdge{index}",
             (4.12, 0.012, 2.97),
             (0, y, -49),
-            (212, 179, 112),
+            PALETTE["gold_soft"],
             cancollide=False,
         )
     for name, x, color in (
-        ("RibbonDaily", -1.4, (204, 166, 81)),
-        ("RibbonDivina", 0, (116, 146, 119)),
-        ("RibbonDeep", 1.4, (128, 117, 162)),
+        ("RibbonToday", -1.65, PALETTE["olive"]),
+        ("RibbonDaily", -0.55, PALETTE["gold_soft"]),
+        ("RibbonDivina", 0.55, PALETTE["terracotta"]),
+        ("RibbonDeep", 1.65, PALETTE["ink"]),
     ):
         book += P(name, (0.45, 0.06, 1.1), (x, 5.4, -47.55), color, cancollide=False)
     items.append(wrap("Model", "BibleVisual", "\n".join(book)))
@@ -310,11 +348,18 @@ def build_world():
         cancollide=False,
     )
 
-    # scripture board
-    items += P("BoardTrim", (21, 11, 0.6), (0, 15.5, -61.2), (190, 160, 95), "Metal")
+    # Public welcome sits on the chapel's inward face, ahead of the back wall.
+    items += P("BoardTrim", (17, 6.4, 0.4), (0, 12.0, -55.8), PALETTE["gold_soft"], "Metal")
     items += P(
-        "VerseBoard", (20, 10, 1.2), (0, 15.5, -60.5), (58, 46, 38), "Wood", yaw=math.pi
+        "VerseBoard", (16.4, 5.8, 0.35), (0, 12.0, -55.5), PALETTE["ink"], "Wood", yaw=math.pi
     )
+    for name, x, title, invitation, color in (
+        ("MovementRead", -11.4, "LECTIO · Read · 诵读", "Read slowly.\n慢慢地读。", PALETTE["olive"]),
+        ("MovementReflect", -3.8, "MEDITATIO · Reflect · 默想", "Let a word touch your day.\n让经文触到你的生活。", PALETTE["terracotta"]),
+        ("MovementRespond", 3.8, "ORATIO · Respond · 祈祷", "Answer in your own words.\n用自己的话回应。", PALETTE["gold"]),
+        ("MovementRest", 11.4, "CONTEMPLATIO · Rest · 默观", "Be still. Rest here.\n安静下来，在此安歇。", PALETTE["olive"]),
+    ):
+        items += movement_plaque(name, x, title, invitation, color)
 
     # candelights
     for x in (-6, 6):
@@ -358,7 +403,7 @@ def build_world():
     i = 0
     while z >= 10:
         items += P(
-            f"Path{i}", (5, 0.35, 3.4), (0, 1.05, z), (168, 164, 156), "Cobblestone"
+            f"Path{i}", (5, 0.35, 3.4), (0, 1.05, z), PALETTE["line"], "Cobblestone"
         )
         z -= 5
         i += 1
@@ -382,12 +427,12 @@ def build_world():
         )
 
     # pond
-    items += P("PondBed", (20, 0.6, 17), (42, 0.8, 30), (140, 130, 108), "Sand")
+    items += P("PondBed", (20, 0.6, 17), (42, 0.8, 30), PALETTE["line"], "Sand")
     items += P(
         "PondWater",
         (19, 1.2, 16),
         (42, 1.05, 30),
-        (86, 140, 196),
+        (139, 157, 140),
         "Glass",
         transparency=0.45,
         cancollide=False,
@@ -411,7 +456,7 @@ def build_world():
             f"TreeTop{i}",
             (10, 10, 10),
             (tx, 11, tz),
-            (72, 130, 72),
+            PALETTE["olive"],
             "Grass",
             shape="Ball",
         )
@@ -419,7 +464,7 @@ def build_world():
             f"TreeTop2{i}",
             (6.5, 6.5, 6.5),
             (tx + 1.5, 14.5, tz + 0.5),
-            (84, 144, 80),
+            (131, 143, 101),
             "Grass",
             shape="Ball",
         )
@@ -472,24 +517,24 @@ def build_world():
             f"Hill{i}",
             (d, d, d),
             (hx, -d / 2 + 14, hz),
-            (98, 148, 92),
+            (142, 153, 111),
             "Grass",
             shape="Ball",
         )
 
     # register desk
     items += P("RegisterDesk", (7, 3.6, 3), (14, 2.8, 26), (110, 82, 58), "Wood")
-    items += P("RegisterTop", (7.4, 0.4, 3.4), (14, 4.8, 26), (222, 216, 204), "Marble")
+    items += P("RegisterTop", (7.4, 0.4, 3.4), (14, 4.8, 26), PALETTE["cream"], "Marble")
     items += P(
-        "RegisterSign", (3.4, 1.6, 0.3), (14, 6.2, 26), (212, 178, 112), "SmoothPlastic"
+        "RegisterSign", (3.4, 1.6, 0.3), (14, 6.2, 26), PALETTE["gold_soft"], "SmoothPlastic"
     )
 
     # assistant statue
     items += P(
-        "AssistantPedestal", (2.4, 1.2, 2.4), (-16, 1.6, 26), (222, 216, 204), "Marble"
+        "AssistantPedestal", (2.4, 1.2, 2.4), (-16, 1.6, 26), PALETTE["wash"], "Marble"
     )
     items += P(
-        "AssistantRobe", (1.8, 3.4, 1.8), (-16, 3.9, 26), (232, 226, 214), "Marble"
+        "AssistantRobe", (1.8, 3.4, 1.8), (-16, 3.9, 26), PALETTE["cream"], "Marble"
     )
     items += P(
         "AssistantHead",
@@ -511,15 +556,15 @@ def build_world():
     # verse library shelf
     items += P("LibraryWall", (11, 7.5, 1.8), (16, 4.75, 44), (104, 76, 52), "Wood")
     book_colors = [
-        (196, 66, 76),
-        (78, 116, 200),
-        (222, 172, 64),
-        (92, 168, 112),
-        (150, 92, 190),
-        (80, 150, 170),
-        (200, 120, 90),
-        (120, 140, 90),
-        (170, 100, 60),
+        PALETTE["terracotta"],
+        PALETTE["olive"],
+        PALETTE["gold_soft"],
+        PALETTE["olive_light"],
+        PALETTE["ink"],
+        (125, 116, 98),
+        (196, 158, 138),
+        PALETTE["parchment"],
+        PALETTE["gold"],
     ]
     for i, bx in enumerate([12.3, 13.4, 14.5, 15.6, 16.7, 17.8, 18.9, 20.0]):
         items += P(

@@ -67,12 +67,15 @@ function Interaction.new(anchors,onAction)
             if who==Players.LocalPlayer then onAction({type="activate"}) end
         end))
     end
+    self.modePrompts={}
     local modes={{"RibbonDaily","Daily Word","daily",Enum.KeyCode.One},
         {"RibbonDivina","Lectio Divina","divina",Enum.KeyCode.Two},
-        {"RibbonDeep","Deep Lectio","deep",Enum.KeyCode.Three}}
+        {"RibbonDeep","Deep Lectio","deep",Enum.KeyCode.Three},
+        {"RibbonToday","Today's reading","today",Enum.KeyCode.Four}}
     for index,v in ipairs(modes) do
         local p=prompt(anchors.visual:WaitForChild(v[1]),v[2],v[4],function() onAction({type="mode",mode=v[3]}) end)
-        p.GamepadKeyCode=({Enum.KeyCode.DPadLeft,Enum.KeyCode.DPadUp,Enum.KeyCode.DPadRight})[index]
+        p.GamepadKeyCode=({Enum.KeyCode.DPadLeft,Enum.KeyCode.DPadUp,Enum.KeyCode.DPadRight,Enum.KeyCode.DPadDown})[index]
+        self.modePrompts[v[3]]=p
     end
     table.insert(self.connections,RunService.Heartbeat:Connect(function()
         local char=Players.LocalPlayer.Character
@@ -88,6 +91,8 @@ function Interaction.new(anchors,onAction)
 end
 function Interaction:setEnabled(enabled)
     self.main.Enabled=enabled
+    for _,p in pairs(self.modePrompts) do p.Enabled=enabled end
+    self.options.Enabled=enabled
     for _,detector in ipairs(self.detectors) do detector.MaxActivationDistance=enabled and 6 or 0 end
 end
 function Interaction:isWithinReach()
@@ -98,7 +103,13 @@ end
 function Interaction:setLanguage(lang,mode,resume)
     self.options.ActionText=lang=="zh" and "阅读选项" or "Reading options"
     self.main.ActionText=resume and (lang=="zh" and "继续阅读" or "Resume reading") or (lang=="zh" and "触摸圣经" or "Touch Bible")
-    self.main.ObjectText=({daily=lang=="zh" and "每日圣言" or "Daily Word",divina="Lectio Divina",deep="Deep Lectio",today=lang=="zh" and "今日经课" or "Today's reading"})[mode]
+    local names=lang=="zh" and {daily="每日经文",divina="圣言诵读",deep="深度诵读",today="今日读经 · 免费"} or
+        {daily="Daily Word",divina="Lectio Divina",deep="Deep Lectio",today="Today's reading · Free"}
+    self.main.ObjectText=names[mode]
+    for key,p in pairs(self.modePrompts) do
+        p.ActionText=(mode==key and "✓ " or "")..names[key]
+        p.ObjectText=lang=="zh" and "选择书签" or "Choose a ribbon"
+    end
 end
 function Interaction:reach(onContact)
     if self.cancel then self.cancel() end

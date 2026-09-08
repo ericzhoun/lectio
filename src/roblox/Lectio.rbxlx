@@ -1,32 +1,32 @@
 <roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
-<Item class="Lighting" referent="RBX148">
+<Item class="Lighting" referent="RBX163">
 <Properties>
 <string name="Name">Lighting</string>
-<float name="Brightness">2.9</float>
-<float name="ClockTime">15.4</float>
+<float name="Brightness">2.5</float>
+<float name="ClockTime">9.5</float>
 <bool name="GlobalShadows">true</bool>
 <float name="EnvironmentDiffuseScale">0.5</float>
 <float name="EnvironmentSpecularScale">0.4</float>
 <float name="ExposureCompensation">0.1</float>
-<Color3 name="Ambient"><R>0.44</R><G>0.44</G><B>0.55</B></Color3>
-<Color3 name="OutdoorAmbient"><R>0.55</R><G>0.55</G><B>0.62</B></Color3>
+<Color3 name="Ambient"><R>0.52</R><G>0.47</G><B>0.37</B></Color3>
+<Color3 name="OutdoorAmbient"><R>0.64</R><G>0.60</G><B>0.49</B></Color3>
 <Color3 name="ColorShift_Bottom"><R>0</R><G>0</G><B>0</B></Color3>
-<Color3 name="ColorShift_Top"><R>0</R><G>0</G><B>0</B></Color3>
+<Color3 name="ColorShift_Top"><R>0.07</R><G>0.04</G><B>0.01</B></Color3>
 </Properties>
-<Item class="Atmosphere" referent="RBX149">
+<Item class="Atmosphere" referent="RBX164">
 <Properties>
 <string name="Name">Atmosphere</string>
-<float name="Density">0.32</float>
+<float name="Density">0.26</float>
 <float name="Offset">0.6</float>
 <float name="Glare">0.2</float>
 <float name="Haze">1.6</float>
-<Color3 name="Color"><R>0.76</R><G>0.8</G><B>0.9</B></Color3>
-<Color3 name="Decay"><R>0.55</R><G>0.55</G><B>0.6</B></Color3>
+<Color3 name="Color"><R>0.90</R><G>0.85</G><B>0.73</B></Color3>
+<Color3 name="Decay"><R>0.58</R><G>0.53</G><B>0.42</B></Color3>
 </Properties>
 </Item>
 </Item>
 
-<Item class="Workspace" referent="RBX129">
+<Item class="Workspace" referent="RBX142">
 <Properties>
 <string name="Name">Workspace</string>
 <float name="Gravity">196.2</float>
@@ -41,7 +41,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4285044824</Color3uint8>
+<Color3uint8 name="Color3uint8">4289244292</Color3uint8>
 <Vector3 name="size"><X>600</X><Y>2</Y><Z>600</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>-1</Y><Z>0</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -58,7 +58,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">816</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4290558127</Color3uint8>
+<Color3uint8 name="Color3uint8">4293715152</Color3uint8>
 <Vector3 name="size"><X>110</X><Y>1</Y><Z>130</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>0.5</Y><Z>5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -75,7 +75,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292267712</Color3uint8>
+<Color3uint8 name="Color3uint8">4294307810</Color3uint8>
 <Vector3 name="size"><X>36</X><Y>1.6</Y><Z>32</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.0</Y><Z>-40</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -92,7 +92,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4291741884</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>14</X><Y>0.4</Y><Z>4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.2</Y><Z>-26.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -109,7 +109,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292926158</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>3</X><Y>16</Y><Z>3</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-13</X><Y>9.8</Y><Z>-27</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -126,7 +126,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292926158</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>3</X><Y>16</Y><Z>3</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-13</X><Y>9.8</Y><Z>-53</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -143,7 +143,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292926158</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>3</X><Y>16</Y><Z>3</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>13</X><Y>9.8</Y><Z>-27</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -160,7 +160,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292926158</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>3</X><Y>16</Y><Z>3</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>13</X><Y>9.8</Y><Z>-53</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -177,7 +177,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">512</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4287257670</Color3uint8>
+<Color3uint8 name="Color3uint8">4288697647</Color3uint8>
 <Vector3 name="size"><X>38</X><Y>1.6</Y><Z>36</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>18.6</Y><Z>-40</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -194,7 +194,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">1088</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4290682975</Color3uint8>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
 <Vector3 name="size"><X>40</X><Y>0.8</Y><Z>3</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>19.8</Y><Z>-40</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -211,7 +211,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292662986</Color3uint8>
+<Color3uint8 name="Color3uint8">4294307810</Color3uint8>
 <Vector3 name="size"><X>36</X><Y>14</Y><Z>2</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>9.4</Y><Z>-57.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -224,11 +224,11 @@
 <bool name="Anchored">true</bool>
 <bool name="CanCollide">true</bool>
 <bool name="CastShadow">true</bool>
-<float name="Transparency">0.0</float>
+<float name="Transparency">0.12</float>
 <float name="Reflectance">0</float>
-<token name="Material">288</token>
+<token name="Material">1568</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4291052108</Color3uint8>
+<Color3uint8 name="Color3uint8">4291075722</Color3uint8>
 <Vector3 name="size"><X>4.5</X><Y>8</Y><Z>0.6</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-12</X><Y>10.4</Y><Z>-56.3</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -241,11 +241,11 @@
 <bool name="Anchored">true</bool>
 <bool name="CanCollide">true</bool>
 <bool name="CastShadow">true</bool>
-<float name="Transparency">0.0</float>
+<float name="Transparency">0.12</float>
 <float name="Reflectance">0</float>
-<token name="Material">288</token>
+<token name="Material">1568</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4283331784</Color3uint8>
+<Color3uint8 name="Color3uint8">4289244292</Color3uint8>
 <Vector3 name="size"><X>4.5</X><Y>8</Y><Z>0.6</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-6</X><Y>10.4</Y><Z>-56.3</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -258,11 +258,11 @@
 <bool name="Anchored">true</bool>
 <bool name="CanCollide">true</bool>
 <bool name="CastShadow">true</bool>
-<float name="Transparency">0.0</float>
+<float name="Transparency">0.12</float>
 <float name="Reflectance">0</float>
-<token name="Material">288</token>
+<token name="Material">1568</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292783168</Color3uint8>
+<Color3uint8 name="Color3uint8">4292260468</Color3uint8>
 <Vector3 name="size"><X>4.5</X><Y>8</Y><Z>0.6</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>10.4</Y><Z>-56.3</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -275,11 +275,11 @@
 <bool name="Anchored">true</bool>
 <bool name="CanCollide">true</bool>
 <bool name="CastShadow">true</bool>
-<float name="Transparency">0.0</float>
+<float name="Transparency">0.12</float>
 <float name="Reflectance">0</float>
-<token name="Material">288</token>
+<token name="Material">1568</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4284262512</Color3uint8>
+<Color3uint8 name="Color3uint8">4289244292</Color3uint8>
 <Vector3 name="size"><X>4.5</X><Y>8</Y><Z>0.6</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>6</X><Y>10.4</Y><Z>-56.3</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -292,11 +292,11 @@
 <bool name="Anchored">true</bool>
 <bool name="CanCollide">true</bool>
 <bool name="CastShadow">true</bool>
-<float name="Transparency">0.0</float>
+<float name="Transparency">0.12</float>
 <float name="Reflectance">0</float>
-<token name="Material">288</token>
+<token name="Material">1568</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4288044222</Color3uint8>
+<Color3uint8 name="Color3uint8">4291075722</Color3uint8>
 <Vector3 name="size"><X>4.5</X><Y>8</Y><Z>0.6</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>12</X><Y>10.4</Y><Z>-56.3</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -313,7 +313,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4293321175</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>9</X><Y>3</Y><Z>3.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>3.3</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -337,7 +337,7 @@
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Model" referent="RBX34">
+<Item class="Model" referent="RBX35">
 <Properties>
 <string name="Name">BibleVisual</string>
 
@@ -352,7 +352,7 @@
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4284427044</Color3uint8>
+<Color3uint8 name="Color3uint8">4288697647</Color3uint8>
 <Vector3 name="size"><X>2.2</X><Y>0.14</Y><Z>3.2</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-1.1</X><Y>5.53</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -392,7 +392,7 @@ LECTIO</string>
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4284427044</Color3uint8>
+<Color3uint8 name="Color3uint8">4288697647</Color3uint8>
 <Vector3 name="size"><X>2.2</X><Y>0.14</Y><Z>3.2</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>1.1</X><Y>5.53</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -433,7 +433,7 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4283179035</Color3uint8>
+<Color3uint8 name="Color3uint8">4286858527</Color3uint8>
 <Vector3 name="size"><X>4.5</X><Y>0.13</Y><Z>3.25</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>5.05</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -450,7 +450,7 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4294438612</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>4.1</X><Y>0.3</Y><Z>2.95</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>5.28</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -467,7 +467,7 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289955129</Color3uint8>
+<Color3uint8 name="Color3uint8">4288050990</Color3uint8>
 <Vector3 name="size"><X>0.16</X><Y>0.46</Y><Z>3.2</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>5.3</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -484,7 +484,7 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
 <Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>5.19</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -501,7 +501,7 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
 <Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>5.27</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -518,7 +518,7 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292129648</Color3uint8>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
 <Vector3 name="size"><X>4.12</X><Y>0.012</Y><Z>2.97</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>5.35</Y><Z>-49</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
@@ -526,6 +526,23 @@ BIBLE
 </Properties>
 </Item>
 <Item class="Part" referent="RBX31">
+<Properties>
+<string name="Name">RibbonToday</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">false</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
+<Vector3 name="size"><X>0.45</X><Y>0.06</Y><Z>1.1</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>-1.65</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+</Item>
+<Item class="Part" referent="RBX32">
 <Properties>
 <string name="Name">RibbonDaily</string>
 <bool name="Anchored">true</bool>
@@ -535,14 +552,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4291602001</Color3uint8>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
 <Vector3 name="size"><X>0.45</X><Y>0.06</Y><Z>1.1</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>-1.4</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<CoordinateFrame name="CFrame"><X>-0.55</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX32">
+<Item class="Part" referent="RBX33">
 <Properties>
 <string name="Name">RibbonDivina</string>
 <bool name="Anchored">true</bool>
@@ -552,14 +569,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4285829751</Color3uint8>
+<Color3uint8 name="Color3uint8">4288697647</Color3uint8>
 <Vector3 name="size"><X>0.45</X><Y>0.06</Y><Z>1.1</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>0</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<CoordinateFrame name="CFrame"><X>0.55</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX33">
+<Item class="Part" referent="RBX34">
 <Properties>
 <string name="Name">RibbonDeep</string>
 <bool name="Anchored">true</bool>
@@ -569,15 +586,15 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">256</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4286608802</Color3uint8>
+<Color3uint8 name="Color3uint8">4282004522</Color3uint8>
 <Vector3 name="size"><X>0.45</X><Y>0.06</Y><Z>1.1</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>1.4</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<CoordinateFrame name="CFrame"><X>1.65</X><Y>5.4</Y><Z>-47.55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX35">
+<Item class="Part" referent="RBX36">
 <Properties>
 <string name="Name">Contact</string>
 <bool name="Anchored">true</bool>
@@ -594,7 +611,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX36">
+<Item class="Part" referent="RBX37">
 <Properties>
 <string name="Name">PageDestination</string>
 <bool name="Anchored">true</bool>
@@ -611,7 +628,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX37">
+<Item class="Part" referent="RBX38">
 <Properties>
 <string name="Name">BoardTrim</string>
 <bool name="Anchored">true</bool>
@@ -621,14 +638,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1088</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4290682975</Color3uint8>
-<Vector3 name="size"><X>21</X><Y>11</Y><Z>0.6</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>0</X><Y>15.5</Y><Z>-61.2</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
+<Vector3 name="size"><X>17</X><Y>6.4</Y><Z>0.4</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>12.0</Y><Z>-55.8</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX38">
+<Item class="Part" referent="RBX39">
 <Properties>
 <string name="Name">VerseBoard</string>
 <bool name="Anchored">true</bool>
@@ -638,14 +655,182 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">512</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4282002982</Color3uint8>
-<Vector3 name="size"><X>20</X><Y>10</Y><Z>1.2</Z></Vector3>
-<CoordinateFrame name="CFrame"><X>0</X><Y>15.5</Y><Z>-60.5</Z><R00>-1.0</R00><R01>0.0</R01><R02>1.2246467991473532e-16</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-1.2246467991473532e-16</R20><R21>-0.0</R21><R22>-1.0</R22></CoordinateFrame>
+<Color3uint8 name="Color3uint8">4282004522</Color3uint8>
+<Vector3 name="size"><X>16.4</X><Y>5.8</Y><Z>0.35</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>0</X><Y>12.0</Y><Z>-55.5</Z><R00>-1.0</R00><R01>0.0</R01><R02>1.2246467991473532e-16</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-1.2246467991473532e-16</R20><R21>-0.0</R21><R22>-1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX39">
+<Item class="Part" referent="RBX40">
+<Properties>
+<string name="Name">MovementRead</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">true</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
+<Vector3 name="size"><X>6.0</X><Y>3.4</Y><Z>0.3</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>-11.4</X><Y>6.7</Y><Z>-55.95</Z><R00>-1.0</R00><R01>0.0</R01><R02>1.2246467991473532e-16</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-1.2246467991473532e-16</R20><R21>-0.0</R21><R22>-1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+<Item class="SurfaceGui" referent="RBX42">
+<Properties>
+<string name="Name">MovementSign</string>
+
+<token name="Face">5</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>600</X><Y>340</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX41">
+<Properties>
+<string name="Name">MovementLettering</string>
+
+<UDim2 name="Position"><XS>0.06</XS><XO>0</XO><YS>0.08</YS><YO>0</YO></UDim2>
+<UDim2 name="Size"><XS>0.88</XS><XO>0</XO><YS>0.84</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.99</R><G>0.97</G><B>0.93</B></Color3>
+<string name="Text">LECTIO · Read · 诵读
+
+Read slowly.
+慢慢地读。</string>
+</Properties>
+
+</Item>
+</Item>
+</Item>
+<Item class="Part" referent="RBX43">
+<Properties>
+<string name="Name">MovementReflect</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">true</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4288697647</Color3uint8>
+<Vector3 name="size"><X>6.0</X><Y>3.4</Y><Z>0.3</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>-3.8</X><Y>6.7</Y><Z>-55.95</Z><R00>-1.0</R00><R01>0.0</R01><R02>1.2246467991473532e-16</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-1.2246467991473532e-16</R20><R21>-0.0</R21><R22>-1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+<Item class="SurfaceGui" referent="RBX45">
+<Properties>
+<string name="Name">MovementSign</string>
+
+<token name="Face">5</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>600</X><Y>340</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX44">
+<Properties>
+<string name="Name">MovementLettering</string>
+
+<UDim2 name="Position"><XS>0.06</XS><XO>0</XO><YS>0.08</YS><YO>0</YO></UDim2>
+<UDim2 name="Size"><XS>0.88</XS><XO>0</XO><YS>0.84</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.99</R><G>0.97</G><B>0.93</B></Color3>
+<string name="Text">MEDITATIO · Reflect · 默想
+
+Let a word touch your day.
+让经文触到你的生活。</string>
+</Properties>
+
+</Item>
+</Item>
+</Item>
+<Item class="Part" referent="RBX46">
+<Properties>
+<string name="Name">MovementRespond</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">true</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4288050990</Color3uint8>
+<Vector3 name="size"><X>6.0</X><Y>3.4</Y><Z>0.3</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>3.8</X><Y>6.7</Y><Z>-55.95</Z><R00>-1.0</R00><R01>0.0</R01><R02>1.2246467991473532e-16</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-1.2246467991473532e-16</R20><R21>-0.0</R21><R22>-1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+<Item class="SurfaceGui" referent="RBX48">
+<Properties>
+<string name="Name">MovementSign</string>
+
+<token name="Face">5</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>600</X><Y>340</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX47">
+<Properties>
+<string name="Name">MovementLettering</string>
+
+<UDim2 name="Position"><XS>0.06</XS><XO>0</XO><YS>0.08</YS><YO>0</YO></UDim2>
+<UDim2 name="Size"><XS>0.88</XS><XO>0</XO><YS>0.84</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.99</R><G>0.97</G><B>0.93</B></Color3>
+<string name="Text">ORATIO · Respond · 祈祷
+
+Answer in your own words.
+用自己的话回应。</string>
+</Properties>
+
+</Item>
+</Item>
+</Item>
+<Item class="Part" referent="RBX49">
+<Properties>
+<string name="Name">MovementRest</string>
+<bool name="Anchored">true</bool>
+<bool name="CanCollide">true</bool>
+<bool name="CastShadow">true</bool>
+<float name="Transparency">0.0</float>
+<float name="Reflectance">0</float>
+<token name="Material">256</token>
+<token name="shape">1</token>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
+<Vector3 name="size"><X>6.0</X><Y>3.4</Y><Z>0.3</Z></Vector3>
+<CoordinateFrame name="CFrame"><X>11.4</X><Y>6.7</Y><Z>-55.95</Z><R00>-1.0</R00><R01>0.0</R01><R02>1.2246467991473532e-16</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-1.2246467991473532e-16</R20><R21>-0.0</R21><R22>-1.0</R22></CoordinateFrame>
+<token name="TopSurface">0</token>
+<token name="BottomSurface">0</token>
+</Properties>
+<Item class="SurfaceGui" referent="RBX51">
+<Properties>
+<string name="Name">MovementSign</string>
+
+<token name="Face">5</token><bool name="AlwaysOnTop">false</bool>
+<float name="LightInfluence">0</float>
+<Vector2 name="CanvasSize"><X>600</X><Y>340</Y></Vector2>
+</Properties>
+<Item class="TextLabel" referent="RBX50">
+<Properties>
+<string name="Name">MovementLettering</string>
+
+<UDim2 name="Position"><XS>0.06</XS><XO>0</XO><YS>0.08</YS><YO>0</YO></UDim2>
+<UDim2 name="Size"><XS>0.88</XS><XO>0</XO><YS>0.84</YS><YO>0</YO></UDim2>
+<float name="BackgroundTransparency">1</float>
+<bool name="TextScaled">true</bool><bool name="TextWrapped">true</bool>
+<Color3 name="TextColor3"><R>0.99</R><G>0.97</G><B>0.93</B></Color3>
+<string name="Text">CONTEMPLATIO · Rest · 默观
+
+Be still. Rest here.
+安静下来，在此安歇。</string>
+</Properties>
+
+</Item>
+</Item>
+</Item>
+<Item class="Part" referent="RBX52">
 <Properties>
 <string name="Name">CandlePole-6</string>
 <bool name="Anchored">true</bool>
@@ -662,7 +847,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX40">
+<Item class="Part" referent="RBX53">
 <Properties>
 <string name="Name">CandleFlame-6</string>
 <bool name="Anchored">true</bool>
@@ -678,7 +863,7 @@ BIBLE
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX41">
+<Item class="PointLight" referent="RBX54">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.4</float>
@@ -687,7 +872,7 @@ BIBLE
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX42">
+<Item class="Part" referent="RBX55">
 <Properties>
 <string name="Name">CandlePole6</string>
 <bool name="Anchored">true</bool>
@@ -704,7 +889,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX43">
+<Item class="Part" referent="RBX56">
 <Properties>
 <string name="Name">CandleFlame6</string>
 <bool name="Anchored">true</bool>
@@ -720,7 +905,7 @@ BIBLE
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX44">
+<Item class="PointLight" referent="RBX57">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.4</float>
@@ -729,7 +914,7 @@ BIBLE
 </Properties>
 </Item>
 </Item>
-<Item class="SpawnLocation" referent="RBX45">
+<Item class="SpawnLocation" referent="RBX58">
 <Properties>
 <string name="Name">SpawnLocation</string>
 <bool name="Anchored">true</bool>
@@ -744,7 +929,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX46">
+<Item class="Part" referent="RBX59">
 <Properties>
 <string name="Name">Path0</string>
 <bool name="Anchored">true</bool>
@@ -754,14 +939,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">880</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289242268</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>5</X><Y>0.35</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.05</Y><Z>42</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX47">
+<Item class="Part" referent="RBX60">
 <Properties>
 <string name="Name">Path1</string>
 <bool name="Anchored">true</bool>
@@ -771,14 +956,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">880</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289242268</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>5</X><Y>0.35</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.05</Y><Z>37</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX48">
+<Item class="Part" referent="RBX61">
 <Properties>
 <string name="Name">Path2</string>
 <bool name="Anchored">true</bool>
@@ -788,14 +973,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">880</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289242268</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>5</X><Y>0.35</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.05</Y><Z>32</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX49">
+<Item class="Part" referent="RBX62">
 <Properties>
 <string name="Name">Path3</string>
 <bool name="Anchored">true</bool>
@@ -805,14 +990,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">880</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289242268</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>5</X><Y>0.35</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.05</Y><Z>27</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX50">
+<Item class="Part" referent="RBX63">
 <Properties>
 <string name="Name">Path4</string>
 <bool name="Anchored">true</bool>
@@ -822,14 +1007,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">880</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289242268</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>5</X><Y>0.35</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.05</Y><Z>22</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX51">
+<Item class="Part" referent="RBX64">
 <Properties>
 <string name="Name">Path5</string>
 <bool name="Anchored">true</bool>
@@ -839,14 +1024,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">880</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289242268</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>5</X><Y>0.35</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.05</Y><Z>17</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX52">
+<Item class="Part" referent="RBX65">
 <Properties>
 <string name="Name">Path6</string>
 <bool name="Anchored">true</bool>
@@ -856,14 +1041,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">880</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4289242268</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>5</X><Y>0.35</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>1.05</Y><Z>12</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX53">
+<Item class="Part" referent="RBX66">
 <Properties>
 <string name="Name">LanternPost-6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -880,7 +1065,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX54">
+<Item class="Part" referent="RBX67">
 <Properties>
 <string name="Name">LanternGlow-6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -896,7 +1081,7 @@ BIBLE
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX55">
+<Item class="PointLight" referent="RBX68">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -905,7 +1090,7 @@ BIBLE
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX56">
+<Item class="Part" referent="RBX69">
 <Properties>
 <string name="Name">LanternPost6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -922,7 +1107,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX57">
+<Item class="Part" referent="RBX70">
 <Properties>
 <string name="Name">LanternGlow6.5_34</string>
 <bool name="Anchored">true</bool>
@@ -938,7 +1123,7 @@ BIBLE
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX58">
+<Item class="PointLight" referent="RBX71">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -947,7 +1132,7 @@ BIBLE
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX59">
+<Item class="Part" referent="RBX72">
 <Properties>
 <string name="Name">LanternPost-6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -964,7 +1149,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX60">
+<Item class="Part" referent="RBX73">
 <Properties>
 <string name="Name">LanternGlow-6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -980,7 +1165,7 @@ BIBLE
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX61">
+<Item class="PointLight" referent="RBX74">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -989,7 +1174,7 @@ BIBLE
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX62">
+<Item class="Part" referent="RBX75">
 <Properties>
 <string name="Name">LanternPost6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -1006,7 +1191,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX63">
+<Item class="Part" referent="RBX76">
 <Properties>
 <string name="Name">LanternGlow6.5_14</string>
 <bool name="Anchored">true</bool>
@@ -1022,7 +1207,7 @@ BIBLE
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX64">
+<Item class="PointLight" referent="RBX77">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.6</float>
@@ -1031,7 +1216,7 @@ BIBLE
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX65">
+<Item class="Part" referent="RBX78">
 <Properties>
 <string name="Name">PondBed</string>
 <bool name="Anchored">true</bool>
@@ -1041,14 +1226,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1296</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4287398508</Color3uint8>
+<Color3uint8 name="Color3uint8">4292727220</Color3uint8>
 <Vector3 name="size"><X>20</X><Y>0.6</Y><Z>17</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>42</X><Y>0.8</Y><Z>30</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX66">
+<Item class="Part" referent="RBX79">
 <Properties>
 <string name="Name">PondWater</string>
 <bool name="Anchored">true</bool>
@@ -1058,14 +1243,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1568</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4283862212</Color3uint8>
+<Color3uint8 name="Color3uint8">4287339916</Color3uint8>
 <Vector3 name="size"><X>19</X><Y>1.2</Y><Z>16</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>42</X><Y>1.05</Y><Z>30</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX67">
+<Item class="Part" referent="RBX80">
 <Properties>
 <string name="Name">TreeTrunk0</string>
 <bool name="Anchored">true</bool>
@@ -1082,7 +1267,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX68">
+<Item class="Part" referent="RBX81">
 <Properties>
 <string name="Name">TreeTop0</string>
 <bool name="Anchored">true</bool>
@@ -1092,14 +1277,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-40</X><Y>11</Y><Z>30</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX69">
+<Item class="Part" referent="RBX82">
 <Properties>
 <string name="Name">TreeTop20</string>
 <bool name="Anchored">true</bool>
@@ -1109,14 +1294,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-38.5</X><Y>14.5</Y><Z>30.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX70">
+<Item class="Part" referent="RBX83">
 <Properties>
 <string name="Name">TreeTrunk1</string>
 <bool name="Anchored">true</bool>
@@ -1133,7 +1318,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX71">
+<Item class="Part" referent="RBX84">
 <Properties>
 <string name="Name">TreeTop1</string>
 <bool name="Anchored">true</bool>
@@ -1143,14 +1328,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-55</X><Y>11</Y><Z>-5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX72">
+<Item class="Part" referent="RBX85">
 <Properties>
 <string name="Name">TreeTop21</string>
 <bool name="Anchored">true</bool>
@@ -1160,14 +1345,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-53.5</X><Y>14.5</Y><Z>-4.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX73">
+<Item class="Part" referent="RBX86">
 <Properties>
 <string name="Name">TreeTrunk2</string>
 <bool name="Anchored">true</bool>
@@ -1184,7 +1369,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX74">
+<Item class="Part" referent="RBX87">
 <Properties>
 <string name="Name">TreeTop2</string>
 <bool name="Anchored">true</bool>
@@ -1194,14 +1379,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-35</X><Y>11</Y><Z>-35</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX75">
+<Item class="Part" referent="RBX88">
 <Properties>
 <string name="Name">TreeTop22</string>
 <bool name="Anchored">true</bool>
@@ -1211,14 +1396,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-33.5</X><Y>14.5</Y><Z>-34.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX76">
+<Item class="Part" referent="RBX89">
 <Properties>
 <string name="Name">TreeTrunk3</string>
 <bool name="Anchored">true</bool>
@@ -1235,7 +1420,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX77">
+<Item class="Part" referent="RBX90">
 <Properties>
 <string name="Name">TreeTop3</string>
 <bool name="Anchored">true</bool>
@@ -1245,14 +1430,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>45</X><Y>11</Y><Z>-20</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX78">
+<Item class="Part" referent="RBX91">
 <Properties>
 <string name="Name">TreeTop23</string>
 <bool name="Anchored">true</bool>
@@ -1262,14 +1447,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>46.5</X><Y>14.5</Y><Z>-19.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX79">
+<Item class="Part" referent="RBX92">
 <Properties>
 <string name="Name">TreeTrunk4</string>
 <bool name="Anchored">true</bool>
@@ -1286,7 +1471,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX80">
+<Item class="Part" referent="RBX93">
 <Properties>
 <string name="Name">TreeTop4</string>
 <bool name="Anchored">true</bool>
@@ -1296,14 +1481,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>35</X><Y>11</Y><Z>55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX81">
+<Item class="Part" referent="RBX94">
 <Properties>
 <string name="Name">TreeTop24</string>
 <bool name="Anchored">true</bool>
@@ -1313,14 +1498,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>36.5</X><Y>14.5</Y><Z>55.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX82">
+<Item class="Part" referent="RBX95">
 <Properties>
 <string name="Name">TreeTrunk5</string>
 <bool name="Anchored">true</bool>
@@ -1337,7 +1522,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX83">
+<Item class="Part" referent="RBX96">
 <Properties>
 <string name="Name">TreeTop5</string>
 <bool name="Anchored">true</bool>
@@ -1347,14 +1532,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-45</X><Y>11</Y><Z>55</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX84">
+<Item class="Part" referent="RBX97">
 <Properties>
 <string name="Name">TreeTop25</string>
 <bool name="Anchored">true</bool>
@@ -1364,14 +1549,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-43.5</X><Y>14.5</Y><Z>55.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX85">
+<Item class="Part" referent="RBX98">
 <Properties>
 <string name="Name">TreeTrunk6</string>
 <bool name="Anchored">true</bool>
@@ -1388,7 +1573,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX86">
+<Item class="Part" referent="RBX99">
 <Properties>
 <string name="Name">TreeTop6</string>
 <bool name="Anchored">true</bool>
@@ -1398,14 +1583,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>60</X><Y>11</Y><Z>10</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX87">
+<Item class="Part" referent="RBX100">
 <Properties>
 <string name="Name">TreeTop26</string>
 <bool name="Anchored">true</bool>
@@ -1415,14 +1600,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>61.5</X><Y>14.5</Y><Z>10.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX88">
+<Item class="Part" referent="RBX101">
 <Properties>
 <string name="Name">TreeTrunk7</string>
 <bool name="Anchored">true</bool>
@@ -1439,7 +1624,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX89">
+<Item class="Part" referent="RBX102">
 <Properties>
 <string name="Name">TreeTop7</string>
 <bool name="Anchored">true</bool>
@@ -1449,14 +1634,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>55</X><Y>11</Y><Z>42</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX90">
+<Item class="Part" referent="RBX103">
 <Properties>
 <string name="Name">TreeTop27</string>
 <bool name="Anchored">true</bool>
@@ -1466,14 +1651,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>56.5</X><Y>14.5</Y><Z>42.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX91">
+<Item class="Part" referent="RBX104">
 <Properties>
 <string name="Name">TreeTrunk8</string>
 <bool name="Anchored">true</bool>
@@ -1490,7 +1675,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX92">
+<Item class="Part" referent="RBX105">
 <Properties>
 <string name="Name">TreeTop8</string>
 <bool name="Anchored">true</bool>
@@ -1500,14 +1685,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4282942024</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>10</X><Y>10</Y><Z>10</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-60</X><Y>11</Y><Z>20</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX93">
+<Item class="Part" referent="RBX106">
 <Properties>
 <string name="Name">TreeTop28</string>
 <bool name="Anchored">true</bool>
@@ -1517,14 +1702,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4283732048</Color3uint8>
+<Color3uint8 name="Color3uint8">4286812005</Color3uint8>
 <Vector3 name="size"><X>6.5</X><Y>6.5</Y><Z>6.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-58.5</X><Y>14.5</Y><Z>20.5</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX94">
+<Item class="Part" referent="RBX107">
 <Properties>
 <string name="Name">BenchSeat-10</string>
 <bool name="Anchored">true</bool>
@@ -1541,7 +1726,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX95">
+<Item class="Part" referent="RBX108">
 <Properties>
 <string name="Name">BenchBack-10</string>
 <bool name="Anchored">true</bool>
@@ -1558,7 +1743,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX96">
+<Item class="Part" referent="RBX109">
 <Properties>
 <string name="Name">BenchLegL-10</string>
 <bool name="Anchored">true</bool>
@@ -1575,7 +1760,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX97">
+<Item class="Part" referent="RBX110">
 <Properties>
 <string name="Name">BenchLegR-10</string>
 <bool name="Anchored">true</bool>
@@ -1592,7 +1777,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX98">
+<Item class="Part" referent="RBX111">
 <Properties>
 <string name="Name">BenchSeat10</string>
 <bool name="Anchored">true</bool>
@@ -1609,7 +1794,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX99">
+<Item class="Part" referent="RBX112">
 <Properties>
 <string name="Name">BenchBack10</string>
 <bool name="Anchored">true</bool>
@@ -1626,7 +1811,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX100">
+<Item class="Part" referent="RBX113">
 <Properties>
 <string name="Name">BenchLegL10</string>
 <bool name="Anchored">true</bool>
@@ -1643,7 +1828,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX101">
+<Item class="Part" referent="RBX114">
 <Properties>
 <string name="Name">BenchLegR10</string>
 <bool name="Anchored">true</bool>
@@ -1660,7 +1845,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX102">
+<Item class="Part" referent="RBX115">
 <Properties>
 <string name="Name">Hill0</string>
 <bool name="Anchored">true</bool>
@@ -1670,14 +1855,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>80</X><Y>80</Y><Z>80</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>180</X><Y>-26.0</Y><Z>180</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX103">
+<Item class="Part" referent="RBX116">
 <Properties>
 <string name="Name">Hill1</string>
 <bool name="Anchored">true</bool>
@@ -1687,14 +1872,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>80</X><Y>80</Y><Z>80</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-180</X><Y>-26.0</Y><Z>180</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX104">
+<Item class="Part" referent="RBX117">
 <Properties>
 <string name="Name">Hill2</string>
 <bool name="Anchored">true</bool>
@@ -1704,14 +1889,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>80</X><Y>80</Y><Z>80</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>180</X><Y>-26.0</Y><Z>-180</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX105">
+<Item class="Part" referent="RBX118">
 <Properties>
 <string name="Name">Hill3</string>
 <bool name="Anchored">true</bool>
@@ -1721,14 +1906,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>80</X><Y>80</Y><Z>80</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-180</X><Y>-26.0</Y><Z>-180</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX106">
+<Item class="Part" referent="RBX119">
 <Properties>
 <string name="Name">Hill4</string>
 <bool name="Anchored">true</bool>
@@ -1738,14 +1923,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>110</X><Y>110</Y><Z>110</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>-41.0</Y><Z>-240</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX107">
+<Item class="Part" referent="RBX120">
 <Properties>
 <string name="Name">Hill5</string>
 <bool name="Anchored">true</bool>
@@ -1755,14 +1940,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>110</X><Y>110</Y><Z>110</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>240</X><Y>-41.0</Y><Z>0</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX108">
+<Item class="Part" referent="RBX121">
 <Properties>
 <string name="Name">Hill6</string>
 <bool name="Anchored">true</bool>
@@ -1772,14 +1957,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>110</X><Y>110</Y><Z>110</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-240</X><Y>-41.0</Y><Z>0</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX109">
+<Item class="Part" referent="RBX122">
 <Properties>
 <string name="Name">Hill7</string>
 <bool name="Anchored">true</bool>
@@ -1789,14 +1974,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">1280</token>
 <token name="shape">0</token>
-<Color3uint8 name="Color3uint8">4284650588</Color3uint8>
+<Color3uint8 name="Color3uint8">4287535471</Color3uint8>
 <Vector3 name="size"><X>110</X><Y>110</Y><Z>110</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>-41.0</Y><Z>250</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX110">
+<Item class="Part" referent="RBX123">
 <Properties>
 <string name="Name">RegisterDesk</string>
 <bool name="Anchored">true</bool>
@@ -1813,7 +1998,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX111">
+<Item class="Part" referent="RBX124">
 <Properties>
 <string name="Name">RegisterTop</string>
 <bool name="Anchored">true</bool>
@@ -1823,14 +2008,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292794572</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>7.4</X><Y>0.4</Y><Z>3.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>14</X><Y>4.8</Y><Z>26</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX112">
+<Item class="Part" referent="RBX125">
 <Properties>
 <string name="Name">RegisterSign</string>
 <bool name="Anchored">true</bool>
@@ -1840,14 +2025,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292129392</Color3uint8>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
 <Vector3 name="size"><X>3.4</X><Y>1.6</Y><Z>0.3</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>14</X><Y>6.2</Y><Z>26</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX113">
+<Item class="Part" referent="RBX126">
 <Properties>
 <string name="Name">AssistantPedestal</string>
 <bool name="Anchored">true</bool>
@@ -1857,14 +2042,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292794572</Color3uint8>
+<Color3uint8 name="Color3uint8">4293715152</Color3uint8>
 <Vector3 name="size"><X>2.4</X><Y>1.2</Y><Z>2.4</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-16</X><Y>1.6</Y><Z>26</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX114">
+<Item class="Part" referent="RBX127">
 <Properties>
 <string name="Name">AssistantRobe</string>
 <bool name="Anchored">true</bool>
@@ -1874,14 +2059,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">784</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4293452502</Color3uint8>
+<Color3uint8 name="Color3uint8">4294768876</Color3uint8>
 <Vector3 name="size"><X>1.8</X><Y>3.4</Y><Z>1.8</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>-16</X><Y>3.9</Y><Z>26</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX115">
+<Item class="Part" referent="RBX128">
 <Properties>
 <string name="Name">AssistantHead</string>
 <bool name="Anchored">true</bool>
@@ -1898,7 +2083,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX116">
+<Item class="Part" referent="RBX129">
 <Properties>
 <string name="Name">AssistantNPC</string>
 <bool name="Anchored">true</bool>
@@ -1914,7 +2099,7 @@ BIBLE
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
-<Item class="PointLight" referent="RBX117">
+<Item class="PointLight" referent="RBX130">
 <Properties>
 <bool name="Enabled">true</bool>
 <float name="Brightness">1.2</float>
@@ -1923,7 +2108,7 @@ BIBLE
 </Properties>
 </Item>
 </Item>
-<Item class="Part" referent="RBX118">
+<Item class="Part" referent="RBX131">
 <Properties>
 <string name="Name">LibraryWall</string>
 <bool name="Anchored">true</bool>
@@ -1940,7 +2125,7 @@ BIBLE
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX119">
+<Item class="Part" referent="RBX132">
 <Properties>
 <string name="Name">Book0</string>
 <bool name="Anchored">true</bool>
@@ -1950,14 +2135,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4291052108</Color3uint8>
+<Color3uint8 name="Color3uint8">4288697647</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>12.3</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX120">
+<Item class="Part" referent="RBX133">
 <Properties>
 <string name="Name">Book1</string>
 <bool name="Anchored">true</bool>
@@ -1967,14 +2152,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4283331784</Color3uint8>
+<Color3uint8 name="Color3uint8">4284904522</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>13.4</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX121">
+<Item class="Part" referent="RBX134">
 <Properties>
 <string name="Name">Book2</string>
 <bool name="Anchored">true</bool>
@@ -1984,14 +2169,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4292783168</Color3uint8>
+<Color3uint8 name="Color3uint8">4290091614</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>14.5</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX122">
+<Item class="Part" referent="RBX135">
 <Properties>
 <string name="Name">Book3</string>
 <bool name="Anchored">true</bool>
@@ -2001,14 +2186,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4284262512</Color3uint8>
+<Color3uint8 name="Color3uint8">4289244292</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>15.6</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX123">
+<Item class="Part" referent="RBX136">
 <Properties>
 <string name="Name">Book4</string>
 <bool name="Anchored">true</bool>
@@ -2018,14 +2203,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4288044222</Color3uint8>
+<Color3uint8 name="Color3uint8">4282004522</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>16.7</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX124">
+<Item class="Part" referent="RBX137">
 <Properties>
 <string name="Name">Book5</string>
 <bool name="Anchored">true</bool>
@@ -2035,14 +2220,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4283471530</Color3uint8>
+<Color3uint8 name="Color3uint8">4286411874</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>17.8</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX125">
+<Item class="Part" referent="RBX138">
 <Properties>
 <string name="Name">Book6</string>
 <bool name="Anchored">true</bool>
@@ -2052,14 +2237,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4291328090</Color3uint8>
+<Color3uint8 name="Color3uint8">4291075722</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>18.9</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX126">
+<Item class="Part" referent="RBX139">
 <Properties>
 <string name="Name">Book7</string>
 <bool name="Anchored">true</bool>
@@ -2069,14 +2254,14 @@ BIBLE
 <float name="Reflectance">0</float>
 <token name="Material">272</token>
 <token name="shape">1</token>
-<Color3uint8 name="Color3uint8">4286090330</Color3uint8>
+<Color3uint8 name="Color3uint8">4294307810</Color3uint8>
 <Vector3 name="size"><X>0.85</X><Y>4.6</Y><Z>0.5</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>20.0</X><Y>4.4</Y><Z>43.1</Z><R00>1.0</R00><R01>0.0</R01><R02>0.0</R02><R10>0.0</R10><R11>1.0</R11><R12>-0.0</R12><R20>-0.0</R20><R21>0.0</R21><R22>1.0</R22></CoordinateFrame>
 <token name="TopSurface">0</token>
 <token name="BottomSurface">0</token>
 </Properties>
 </Item>
-<Item class="Part" referent="RBX127">
+<Item class="Part" referent="RBX140">
 <Properties>
 <string name="Name">Motes</string>
 <bool name="Anchored">true</bool>
@@ -2088,7 +2273,7 @@ BIBLE
 <Vector3 name="size"><X>1</X><Y>1</Y><Z>1</Z></Vector3>
 <CoordinateFrame name="CFrame"><X>0</X><Y>9</Y><Z>-44</Z><R00>1</R00><R01>0</R01><R02>0</R02><R10>0</R10><R11>1</R11><R12>0</R12><R20>0</R20><R21>0</R21><R22>1</R22></CoordinateFrame>
 </Properties>
-<Item class="ParticleEmitter" referent="RBX128">
+<Item class="ParticleEmitter" referent="RBX141">
 <Properties>
 <string name="Name">MotesEmitter</string>
 <float name="Rate">5</float>
@@ -2103,12 +2288,12 @@ BIBLE
 </Item>
 </Item>
 </Item>
-<Item class="ReplicatedStorage" referent="RBX142">
+<Item class="ReplicatedStorage" referent="RBX157">
 <Properties>
 <string name="Name">ReplicatedStorage</string>
 
 </Properties>
-<Item class="ModuleScript" referent="RBX140">
+<Item class="ModuleScript" referent="RBX155">
 <Properties>
 <string name="Name">VerseData</string>
 <ProtectedString name="Source">-- VerseData: scripture library, topics, today's readings, assistant rules.
@@ -2282,12 +2467,12 @@ VerseData.AssistantFallback = {
 return VerseData
 </ProtectedString>
 </Properties>
-</Item><Item class="Folder" referent="RBX141">
+</Item><Item class="Folder" referent="RBX156">
 <Properties>
 <string name="Name">LectioModules</string>
 
 </Properties>
-<Item class="ModuleScript" referent="RBX130">
+<Item class="ModuleScript" referent="RBX143">
 <Properties>
 <string name="Name">BibleInteraction</string>
 <ProtectedString name="Source">local Players=game:GetService("Players")
@@ -2359,12 +2544,15 @@ function Interaction.new(anchors,onAction)
             if who==Players.LocalPlayer then onAction({type="activate"}) end
         end))
     end
+    self.modePrompts={}
     local modes={{"RibbonDaily","Daily Word","daily",Enum.KeyCode.One},
         {"RibbonDivina","Lectio Divina","divina",Enum.KeyCode.Two},
-        {"RibbonDeep","Deep Lectio","deep",Enum.KeyCode.Three}}
+        {"RibbonDeep","Deep Lectio","deep",Enum.KeyCode.Three},
+        {"RibbonToday","Today's reading","today",Enum.KeyCode.Four}}
     for index,v in ipairs(modes) do
         local p=prompt(anchors.visual:WaitForChild(v[1]),v[2],v[4],function() onAction({type="mode",mode=v[3]}) end)
-        p.GamepadKeyCode=({Enum.KeyCode.DPadLeft,Enum.KeyCode.DPadUp,Enum.KeyCode.DPadRight})[index]
+        p.GamepadKeyCode=({Enum.KeyCode.DPadLeft,Enum.KeyCode.DPadUp,Enum.KeyCode.DPadRight,Enum.KeyCode.DPadDown})[index]
+        self.modePrompts[v[3]]=p
     end
     table.insert(self.connections,RunService.Heartbeat:Connect(function()
         local char=Players.LocalPlayer.Character
@@ -2380,6 +2568,8 @@ function Interaction.new(anchors,onAction)
 end
 function Interaction:setEnabled(enabled)
     self.main.Enabled=enabled
+    for _,p in pairs(self.modePrompts) do p.Enabled=enabled end
+    self.options.Enabled=enabled
     for _,detector in ipairs(self.detectors) do detector.MaxActivationDistance=enabled and 6 or 0 end
 end
 function Interaction:isWithinReach()
@@ -2390,7 +2580,13 @@ end
 function Interaction:setLanguage(lang,mode,resume)
     self.options.ActionText=lang=="zh" and "阅读选项" or "Reading options"
     self.main.ActionText=resume and (lang=="zh" and "继续阅读" or "Resume reading") or (lang=="zh" and "触摸圣经" or "Touch Bible")
-    self.main.ObjectText=({daily=lang=="zh" and "每日圣言" or "Daily Word",divina="Lectio Divina",deep="Deep Lectio",today=lang=="zh" and "今日经课" or "Today's reading"})[mode]
+    local names=lang=="zh" and {daily="每日经文",divina="圣言诵读",deep="深度诵读",today="今日读经 · 免费"} or
+        {daily="Daily Word",divina="Lectio Divina",deep="Deep Lectio",today="Today's reading · Free"}
+    self.main.ObjectText=names[mode]
+    for key,p in pairs(self.modePrompts) do
+        p.ActionText=(mode==key and "✓ " or "")..names[key]
+        p.ObjectText=lang=="zh" and "选择书签" or "Choose a ribbon"
+    end
 end
 function Interaction:reach(onContact)
     if self.cancel then self.cancel() end
@@ -2406,18 +2602,21 @@ return Interaction
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX131">
+<Item class="ModuleScript" referent="RBX144">
 <Properties>
 <string name="Name">BiblePresentation</string>
 <ProtectedString name="Source">local TweenService=game:GetService("TweenService")
 local Players=game:GetService("Players")
+local RunService=game:GetService("RunService")
 local Segments=require(script.Parent.TextSegments)
 local ReadingText=require(script.Parent.ReadingText)
 local ReadingLayout=require(script.Parent.ReadingLayout)
+local Practice=require(script.Parent.ReadingPractice)
+local Theme=require(script.Parent.ReadingTheme)
 local Presentation={}
 Presentation.__index=Presentation
-local ink=Color3.fromRGB(63,49,34)
-local paper=Color3.fromRGB(250,241,218)
+local ink=Theme.text
+local paper=Theme.panel
 local function make(class,props,parent)
     local o=Instance.new(class)
     for k,v in pairs(props) do o[k]=v end
@@ -2436,6 +2635,7 @@ function Presentation:clear()
     self.generation=self.generation+1
     for _,t in ipairs(self.tweens) do t:Cancel() end
     self.tweens={}
+    if self.layoutConnection then self.layoutConnection:Disconnect(); self.layoutConnection=nil end
     self:releaseCamera()
     for _,g in ipairs(self.bookmarks) do g:Destroy() end
     self.bookmarks={}
@@ -2444,7 +2644,7 @@ function Presentation:clear()
     for part,value in pairs(self.hidden) do if part.Parent then part.LocalTransparencyModifier=value end end
     for gui,value in pairs(self.hiddenGuis) do if gui.Parent then gui.Enabled=value end end
     self.hiddenGuis={}
-    self.hidden={}; self.pages={}; self.key=nil
+    self.hidden={}; self.pages={}; self.key=nil; self.body=nil; self.audio=nil
 end
 function Presentation:releaseCamera()
     if self.cameraState then
@@ -2477,6 +2677,18 @@ function Presentation:createPage(i,cf)
         Color=paper,Material=Enum.Material.SmoothPlastic,Anchored=true,CanCollide=false,
         CanTouch=false,CanQuery=false,CFrame=cf,CastShadow=false},self.folder)
 end
+function Presentation:allowsNarration()
+    return Practice.get(self.movement,self.snapshot and self.snapshot.lang).narrate
+end
+function Presentation:selectMovement(movement)
+    self.movement=movement
+    self.manualCollapsed=movement=="contemplatio"
+    self.onAction({type="pause"})
+    self:refreshText()
+    if self.scroll then self.scroll.CanvasPosition=Vector2.new(0,0) end
+    if self:allowsNarration() then self.onAction({type="replay"}) end
+    self:updateLayout()
+end
 function Presentation:refreshText()
     if not self.body or not self.snapshot or not self.snapshot.reading then return end
     local s=self.snapshot
@@ -2484,81 +2696,180 @@ function Presentation:refreshText()
     local text=s.lang=="zh" and verse.textZh or verse.textEn
     self.chunks=Segments.split(text or "",180)
     self.segment=math.max(1,math.min(self.segment,math.max(1,#self.chunks)))
-    local content=ReadingText.build(s.reading,s.page,s.lang,self.chunks[self.segment] or "",
-        self.showSummary and "summary" or (self.showReflection and "reflection" or "scripture"))
-    self.body.Text=content.body
-    self.ref.Text=(s.lang=="zh" and verse.refZh or verse.refEn) or ""
-    self.progress.Text=string.format("%d / %d   ·   %d / %d",s.page,#s.reading.verses,self.segment,math.max(1,#self.chunks))
-    self.heading.Text=content.heading
+    local practice=Practice.get(self.movement,s.lang)
+    local content=ReadingText.build(s.reading,s.page,s.lang,self.compact and text or self.chunks[self.segment] or "",practice.view)
+    self.body.Text=practice.view=="prompt" and practice.prompt or content.body
+    if practice.view=="summary" then self.body.Text=self.body.Text.."\n\n"..practice.prompt end
+    self.ref.Text=string.format("%s   ·   %d / %d",(s.lang=="zh" and verse.refZh or verse.refEn) or "",s.page,#s.reading.verses)
+    self.heading.Text=s.reading.title or "Lectio"
+    local nextMovement=Practice.next(self.movement)
+    self.movementButton.Text=string.format("%d / 6 · %s  →  %s",practice.index,practice.title,
+        nextMovement and Practice.get(nextMovement,s.lang).title or (s.lang=="zh" and "静默" or "Stillness"))
+    for _,tab in ipairs(self.tabs) do
+        tab.button.BackgroundColor3=practice.view==tab.view and Theme.green or Theme.panel2
+        tab.button.TextColor3=practice.view==tab.view and Theme.cream or ink
+    end
+    self.moreButton.Text=s.lang=="zh" and "下一段" or "More text"
+    self.moreButton.Active=#self.chunks&gt;1 and practice.narrate
+    self.moreButton.AutoButtonColor=self.moreButton.Active
+    self.moreButton.TextTransparency=self.moreButton.Active and 0 or 0.55
+    self.handle.Text=self.movement=="contemplatio" and (s.lang=="zh" and "安歇片刻 · 继续 →" or "Rest a while · Continue →") or
+        (s.lang=="zh" and "阅读已保留 · 拉远视角以阅读" or "Reading held · zoom out to read")
+end
+-- Project whole objects, not world-X offsets. A camera orbit must not move text over the book.
+function Presentation:protectedRects(camera)
+    local rects={}
+    local function protect(cf,size)
+        local minX,minY,maxX,maxY=math.huge,math.huge,-math.huge,-math.huge
+        local front,behind=false,false
+        for _,x in ipairs({-0.5,0.5}) do for _,y in ipairs({-0.5,0.5}) do for _,z in ipairs({-0.5,0.5}) do
+            local p=camera:WorldToViewportPoint(cf*Vector3.new(size.X*x,size.Y*y,size.Z*z))
+            if p.Z&gt;0 then
+                front=true; minX=math.min(minX,p.X); minY=math.min(minY,p.Y)
+                maxX=math.max(maxX,p.X); maxY=math.max(maxY,p.Y)
+            else behind=true end
+        end end end
+        if front and behind then
+            table.insert(rects,{x=0,y=0,width=camera.ViewportSize.X,height=camera.ViewportSize.Y})
+        elseif front then table.insert(rects,{x=minX-12,y=minY-12,width=maxX-minX+24,height=maxY-minY+24}) end
+    end
+    protect(self.anchors.visual:GetBoundingBox())
+    if self.book then protect(self.book:GetBoundingBox()) end
+    local character=Players.LocalPlayer.Character
+    if character then protect(character:GetBoundingBox()) end
+    if self.bubblePage and self.bubblePage.Parent then protect(self.bubblePage.CFrame,self.bubblePage.Size) end
+    return rects
+end
+function Presentation:updateLayout()
+    if not self.gui or not self.card then return end
+    local camera=workspace.CurrentCamera
+    if not camera then return end
+    local viewport=camera.ViewportSize
+    local protected=self:protectedRects(camera)
+    local layout=ReadingLayout.place(viewport.X,viewport.Y,protected,self.edge)
+    self.gui.Enabled=layout.visible
+    if not layout.visible then return end
+    self.edge=layout.edge
+    if self.manualCollapsed and not layout.collapsed then
+        layout.height=48; layout.collapsed=true
+    end
+    self.card.Visible=not layout.collapsed
+    self.handle.Visible=layout.collapsed
+    local target=layout.collapsed and self.handle or self.card
+    target.Position=UDim2.fromOffset(layout.x,layout.y)
+    target.Size=UDim2.fromOffset(layout.width,layout.height)
+    if not layout.collapsed then
+        local changed=self.compact~=layout.compact
+        self.compact=layout.compact
+        self.heading.Visible=not self.compact
+        self.minimize.Visible=not self.compact
+        self.movementButton.Position=UDim2.new(0,8,0,self.compact and 0 or 28)
+        for i,tab in ipairs(self.tabs) do tab.button.Position=UDim2.new((i-1)/3,5,0,self.compact and 36 or 62) end
+        self.scroll.Position=UDim2.new(0,14,0,self.compact and 78 or 102)
+        self.scroll.Size=UDim2.new(1,-28,0,layout.bodyHeight)
+        self.ref.Position=UDim2.new(0,14,1,self.compact and -64 or -114)
+        for _,button in ipairs(self.audioButtons) do button.Visible=not self.compact end
+        if changed then self:refreshText() end
+    end
 end
 function Presentation:buildBubble(page)
+    if self.layoutConnection then self.layoutConnection:Disconnect() end
     if self.gui then self.gui:Destroy() end
-    local viewport=workspace.CurrentCamera.ViewportSize
-    local layout=ReadingLayout.forViewport(viewport.X,viewport.Y)
-    local width,height=layout.width,layout.height
-    local bodyHeight=height-236
-    self.gui=make("BillboardGui",{Name="PersonalVerseBubble",Adornee=page,
-        Size=UDim2.fromOffset(width,height),StudsOffsetWorldSpace=Vector3.new(layout.offsetX,layout.offsetY,0),
-        AlwaysOnTop=layout.alwaysOnTop,MaxDistance=layout.maxDistance,Active=true,ResetOnSpawn=false,
-        ZIndexBehavior=Enum.ZIndexBehavior.Sibling},Players.LocalPlayer:WaitForChild("PlayerGui"))
-    local frame=make("Frame",{Size=UDim2.fromScale(1,1),BackgroundColor3=paper,BorderSizePixel=0},self.gui)
-    round(frame)
+    self.bubblePage=page
+    self.gui=make("ScreenGui",{Name="PersonalVerseBubble",IgnoreGuiInset=true,ResetOnSpawn=false,
+        DisplayOrder=3,ZIndexBehavior=Enum.ZIndexBehavior.Sibling},Players.LocalPlayer:WaitForChild("PlayerGui"))
+    local frame=make("Frame",{Name="ReadingBubble",BackgroundColor3=paper,BorderSizePixel=0},self.gui)
+    self.card=frame; round(frame)
+    make("UIStroke",{Color=Theme.line,Thickness=1},frame)
+    self.handle=make("TextButton",{Name="ReadingHandle",Text="",BackgroundColor3=paper,TextColor3=ink,
+        Font=Enum.Font.Gotham,TextSize=13,BorderSizePixel=0,Visible=false,Selectable=true},self.gui)
+    round(self.handle)
+    self.handle.Activated:Connect(function()
+        if self.movement=="contemplatio" then self:selectMovement("actio")
+        else self.manualCollapsed=false; self:updateLayout() end
+    end)
     local function label(y,h,size)
         return make("TextLabel",{Position=UDim2.new(0,14,0,y),Size=UDim2.new(1,-28,0,h),
             BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Gotham,TextSize=size,
             TextWrapped=true,Text=""},frame)
     end
-    self.heading=label(8,22,13)
-    local scroll=make("ScrollingFrame",{Position=UDim2.new(0,14,0,34),Size=UDim2.new(1,-28,0,bodyHeight),
-        BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y},frame)
+    self.heading=label(6,20,13)
+    self.heading.Size=UDim2.new(1,-60,0,20)
+    self.heading.TextTruncate=Enum.TextTruncate.AtEnd
+    self.heading.TextWrapped=false
+    self.heading.TextXAlignment=Enum.TextXAlignment.Left
+    local minimize=make("TextButton",{Text="−",Position=UDim2.new(1,-38,0,0),Size=UDim2.fromOffset(36,28),
+        BackgroundTransparency=1,TextColor3=ink,TextSize=20,Selectable=true},frame)
+    minimize.Activated:Connect(function() self.manualCollapsed=true; self:updateLayout() end)
+    self.minimize=minimize
+    self.movementButton=make("TextButton",{Position=UDim2.new(0,8,0,28),Size=UDim2.new(1,-16,0,32),
+        BackgroundTransparency=1,TextColor3=Theme.gold,Font=Enum.Font.Gotham,TextSize=13,Text="",Selectable=true},frame)
+    self.movementButton.Activated:Connect(function() self:selectMovement(Practice.next(self.movement) or "silencio") end)
+    self.tabs={}
+    local zh=self.snapshot.lang=="zh"
+    for i,v in ipairs({{"lectio","scripture",zh and "经文" or "Scripture"},{"meditatio","reflection",zh and "默想" or "Reflection"},{"actio","summary",zh and "小结" or "Summary"}}) do
+        local tab=make("TextButton",{Text=v[3],Position=UDim2.new((i-1)/3,5,0,62),Size=UDim2.new(1/3,-10,0,36),
+            BackgroundColor3=Theme.panel2,TextColor3=ink,Font=Enum.Font.Gotham,TextSize=13,BorderSizePixel=0,Selectable=true},frame)
+        round(tab); table.insert(self.tabs,{button=tab,view=v[2]})
+        tab.Activated:Connect(function()
+            if self.compact and v[1]=="lectio" and self:allowsNarration() then
+                if self.audioStatus=="playing" or self.audioStatus=="loading" then self.onAction({type="pause"})
+                elseif self.audioStatus=="paused" then self.onAction({type="resume"})
+                else self:selectMovement("lectio") end
+            else self:selectMovement(v[1]) end
+        end)
+    end
+    local scroll=make("ScrollingFrame",{Position=UDim2.new(0,14,0,102),Size=UDim2.new(1,-28,0,150),
+        BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=4,ScrollBarImageColor3=Theme.gold,
+        CanvasSize=UDim2.new(),AutomaticCanvasSize=Enum.AutomaticSize.Y},frame)
     self.scroll=scroll
     self.body=make("TextLabel",{Size=UDim2.new(1,-8,0,0),AutomaticSize=Enum.AutomaticSize.Y,
-        BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Gotham,TextSize=19,
-        TextWrapped=true,TextYAlignment=Enum.TextYAlignment.Top,Text=""},scroll)
-    self.ref=label(37+bodyHeight,24,16); self.progress=label(63+bodyHeight,18,12); self.audio=label(84+bodyHeight,18,12)
-    local zh=self.snapshot.lang=="zh"
+        BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Garamond,TextSize=22,
+        TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,TextYAlignment=Enum.TextYAlignment.Top,Text=""},scroll)
+    self.ref=label(0,20,12); self.ref.Position=UDim2.new(0,14,1,-114)
     local function button(text,index,row,callback)
-        local b=make("TextButton",{Text=text,Position=UDim2.new((index-1)/3,5,0,108+bodyHeight+row*40),
-            Size=UDim2.new(1/3,-10,0,36),BackgroundColor3=Color3.fromRGB(225,211,177),
+        local b=make("TextButton",{Text=text,Position=UDim2.new((index-1)/3,5,1,-88+row*44),
+            Size=UDim2.new(1/3,-10,0,40),BackgroundColor3=Theme.panel2,
             TextColor3=ink,TextSize=13,Font=Enum.Font.Gotham,Selectable=true,BorderSizePixel=0},frame)
-        round(b); b.Activated:Connect(callback)
+        round(b); b.Activated:Connect(callback); return b
     end
-    button(zh and "重播" or "Replay",1,0,function() self.onAction({type="replay"}) end)
-    button(zh and "暂停" or "Pause",2,0,function() self.onAction({type="pause"}) end)
-    button(zh and "继续" or "Resume",3,0,function() self.onAction({type="resume"}) end)
+    self.audioButtons={}
+    table.insert(self.audioButtons,button(zh and "重播" or "Replay",1,0,function() self:selectMovement("lectio") end))
+    self.audio=button(zh and "朗读" or "Listen",2,0,function()
+        if self.audioStatus=="playing" or self.audioStatus=="loading" then self.onAction({type="pause"})
+        elseif self.audioStatus=="paused" and self:allowsNarration() then self.onAction({type="resume"})
+        else self:selectMovement("lectio") end
+    end)
+    self.moreButton=button(zh and "下一段" or "More text",3,0,function()
+        if not self:allowsNarration() or #self.chunks&lt;=1 then return end
+        self.onAction({type="segment"})
+        self.segment=self.segment%#self.chunks+1; self:refreshText(); self.scroll.CanvasPosition=Vector2.new(0,0)
+    end)
+    table.insert(self.audioButtons,self.audio); table.insert(self.audioButtons,self.moreButton)
     button(zh and "上一页" or "Previous",1,1,function() self.onAction({type="previous"}) end)
     button(zh and "下一页" or "Next page",2,1,function() self.onAction({type="next"}) end)
-    button(zh and "结束" or "Finish",3,1,function() self.onAction({type="finish"}) end)
-    button(zh and "下一段" or "More text",1,2,function()
-        self.showReflection=false; self.showSummary=false
-        self.onAction({type="segment"})
-        self.segment=self.segment%math.max(1,#self.chunks)+1; self:refreshText()
-    end)
-    button(zh and "默想 / 经文" or "Reflection",2,2,function()
-        self.showSummary=false; self.showReflection=not self.showReflection; self:refreshText()
-        self.scroll.CanvasPosition=Vector2.new(0,0)
-    end)
-    button(zh and "小结" or "Summary",3,2,function()
-        self.showSummary=true; self:refreshText()
-        self.scroll.CanvasPosition=Vector2.new(0,0)
-    end)
-    self:refreshText()
+    local finish=button(zh and "阿们 · 结束" or "Amen · Finish",3,1,function() self.onAction({type="finish"}) end)
+    finish.BackgroundColor3=Theme.accent; finish.TextColor3=Theme.cream
+    self:refreshText(); self:setAudioState(self.audioStatus or "paused"); self:updateLayout()
+    self.layoutConnection=RunService.RenderStepped:Connect(function() self:updateLayout() end)
 end
 function Presentation:setAudioState(state)
     if type(state)=="table" then
         self.segment=state.segment or self.segment
-        if not self.showReflection and not self.showSummary then self:refreshText() end
+        if self:allowsNarration() then self:refreshText() end
         state=state.status
     end
+    self.audioStatus=state
     if self.audio then
         local zh=self.snapshot and self.snapshot.lang=="zh"
-        local names=zh and {unavailable="语音暂不可用",loading="准备语音…",playing="正在朗读",paused="已暂停",ended="朗读结束",muted="语音已关闭"} or
-            {unavailable="Audio unavailable",loading="Preparing voice…",playing="Reading aloud",paused="Paused",ended="Reading complete",muted="Narration muted"}
+        local names=zh and {idle="朗读",unavailable="语音不可用",loading="准备中…",playing="暂停",paused="继续朗读",ended="重听",muted="已静音"} or
+            {idle="Listen",unavailable="No audio",loading="Loading…",playing="Pause",paused="Listen",ended="Listen again",muted="Muted"}
         self.audio.Text=names[state] or ""
     end
 end
 function Presentation:render(s,settings)
     self.snapshot=s
+    if s.phase=="idle" then self.activeReading=nil end
     if s.phase=="idle" or s.phase=="failed" or s.phase=="uncertain" or s.phase=="paused" then self:clear(); return end
     self:ensureBook()
     local duration=settings.reducedMotion and 0.08 or 0.65
@@ -2575,6 +2886,8 @@ function Presentation:render(s,settings)
         end
     end
     if s.phase=="closing" then
+        if self.gui then self.gui.Enabled=false end
+        if self.layoutConnection then self.layoutConnection:Disconnect(); self.layoutConnection=nil end
         for _,page in ipairs(self.pages) do self:tween(page,duration,{CFrame=self.anchors.altar.CFrame,Transparency=1}) end
         self:tween(self.book.CoverLeft,duration,{CFrame=self.closedLeft})
         self:tween(self.book.CoverRight,duration,{CFrame=self.closedRight})
@@ -2603,10 +2916,35 @@ function Presentation:render(s,settings)
     if not s.reading then return end
     local key=tostring(s.reading)..":"..s.page..":"..s.lang
     if key==self.key then return end
-    self.key=key; self.segment=1; self.showReflection=false; self.showSummary=false
+    if self.activeReading~=s.reading then
+        self.activeReading=s.reading; self.displayedPage=s.page
+        self.movement=s.reading.mode=="today" and "silencio" or "lectio"
+        self.manualCollapsed=false
+    elseif self.displayedPage~=s.page then
+        self.displayedPage=s.page; self.movement="lectio"; self.manualCollapsed=false
+    end
+    self.key=key; self.segment=1
+    if self.layoutConnection then self.layoutConnection:Disconnect(); self.layoutConnection=nil end
+    if self.gui then self.gui:Destroy(); self.gui=nil end
+    self.body=nil; self.audio=nil
     local destination=self.anchors.destination.CFrame
     for i=1,s.page do
-        if not self.pages[i] then self.pages[i]=self:createPage(i,self.anchors.altar.CFrame*CFrame.Angles(math.pi/2,0,0)) end
+        if not self.pages[i] then
+            self.pages[i]=self:createPage(i,self.anchors.altar.CFrame*CFrame.Angles(math.pi/2,0,0))
+            for _,face in ipairs({Enum.NormalId.Front,Enum.NormalId.Back}) do
+                local surface=make("SurfaceGui",{Name="PageLettering",Face=face,CanvasSize=Vector2.new(360,480),
+                    LightInfluence=0,AlwaysOnTop=false},self.pages[i])
+                make("TextLabel",{Name="Scripture",Position=UDim2.fromScale(0.1,0.1),Size=UDim2.fromScale(0.8,0.8),
+                    BackgroundTransparency=1,TextColor3=ink,Font=Enum.Font.Garamond,TextScaled=true,TextWrapped=true,Text=""},surface)
+            end
+        end
+        local verse=s.reading.verses[i]
+        for _,child in ipairs(self.pages[i]:GetChildren()) do
+            if child:IsA("SurfaceGui") then
+                child.Scripture.Text=((s.lang=="zh" and verse.refZh or verse.refEn) or "").."\n\n"..
+                    ((s.lang=="zh" and verse.textZh or verse.textEn) or "")
+            end
+        end
     end
     for _,g in ipairs(self.bookmarks) do g:Destroy() end
     self.bookmarks={}
@@ -2619,22 +2957,29 @@ function Presentation:render(s,settings)
             task.delay(duration/2,function()
                 if self.generation==generation and page.Parent and self.key==key then self:tween(page,duration/2,{CFrame=target}) end
             end)
-        else self:tween(page,duration,{CFrame=target,Transparency=i==s.page and 0 or 0.18}) end
-        if i~=s.page then
-            local bookmark=make("BillboardGui",{Name="PageBookmark",Adornee=page,StudsOffsetWorldSpace=Vector3.new((i-1)*0.35,0,0),Size=UDim2.fromOffset(44,44),AlwaysOnTop=true,Active=true,ResetOnSpawn=false},Players.LocalPlayer.PlayerGui)
+        else self:tween(page,duration,{CFrame=target,Transparency=i==s.page and 0 or (i&lt;s.page and i&gt;=s.page-3 and 0.18 or 1)}) end
+        for _,child in ipairs(page:GetChildren()) do if child:IsA("SurfaceGui") then child.Enabled=i==s.page end end
+        if i&lt;s.page and i&gt;=s.page-3 then
+            local bookmark=make("BillboardGui",{Name="PageBookmark",Adornee=page,Size=UDim2.fromOffset(36,36),AlwaysOnTop=false,MaxDistance=14,Active=true,ResetOnSpawn=false},Players.LocalPlayer.PlayerGui)
             table.insert(self.bookmarks,bookmark)
             local b=make("TextButton",{Size=UDim2.fromScale(1,1),Text=tostring(i),BackgroundColor3=paper,TextColor3=ink,TextSize=16},bookmark)
             b.Activated:Connect(function() self.onAction({type="select",page=i}) end)
         end
     end
-    self:buildBubble(self.pages[s.page])
+    -- Opening and page flight occupy the stage alone. Stale timers cannot restore dismissed text.
+    local generation=self.generation
+    task.delay(duration,function()
+        if self.generation==generation and self.key==key and self.folder and self.snapshot.phase~="closing" then
+            self:buildBubble(self.pages[s.page])
+        end
+    end)
 end
 function Presentation:destroy() self:clear() end
 return Presentation
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX133">
+<Item class="ModuleScript" referent="RBX146">
 <Properties>
 <string name="Name">Narration</string>
 <ProtectedString name="Source">-- Pure playback ownership; Roblox driver is supplied at composition time.
@@ -2646,6 +2991,7 @@ end
 function Narration:stop()
     self.generation=self.generation+1
     if self.playback then self.playback.stop(); self.playback=nil end
+    self.onState("idle")
 end
 function Narration:play(verse,lang)
     self:stop()
@@ -2669,7 +3015,7 @@ return Narration
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX134">
+<Item class="ModuleScript" referent="RBX147">
 <Properties>
 <string name="Name">NativeReading</string>
 <ProtectedString name="Source">local Players=game:GetService("Players")
@@ -2683,7 +3029,7 @@ local Native={}
 Native.__index=Native
 function Native.new(remotes,options)
     local self=setmetatable({remotes=remotes,options=options,session=Session.new(),
-        settings={reducedMotion=false,narrationMuted=false},mode="daily"},Native)
+        settings={reducedMotion=false,narrationMuted=false},mode="today"},Native)
     self.anchors={altar=workspace:WaitForChild("AltarBible"),visual=workspace:WaitForChild("BibleVisual"),
         contact=workspace:WaitForChild("Contact"),destination=workspace:WaitForChild("PageDestination")}
     self.presenter=Presentation.new(self.anchors,function(e) self:action(e) end)
@@ -2720,6 +3066,7 @@ end
 function Native:play()
     local s=self.session:snapshot()
     if not s.reading or s.phase~="reading" or not s.near then return end
+    if self.presenter.allowsNarration and not self.presenter:allowsNarration() then return end
     if self.settings.narrationMuted then self.presenter:setAudioState("muted"); return end
     self.narrator:play(s.reading.verses[s.page],s.lang)
 end
@@ -2741,6 +3088,7 @@ function Native:activate(mode)
     local id=HttpService:GenerateGUID(false)
     self.session:dispatch({type="begin",id=id})
     if self.session.requestId~=id then return end
+    if self.options.begin then self.options.begin() end
     self:render()
     self.remotes.LectioActivity:FireServer()
     local drawMode=self.mode
@@ -2774,7 +3122,7 @@ function Native:receive(envelope,today)
     for _,v in ipairs(verses) do v.textEn=v.textEn or v.en or ""; v.textZh=v.textZh or v.zh or "" end
     local labels=self.options.labels(today and "today" or response.mode or "daily",#verses)
     local title=today and (self.session.lang=="zh" and response.titleZh or response.titleEn) or self.options.title(response.mode)
-    local reading={verses=verses,labels=labels,title=title or "Lectio",titleEn=response.titleEn,titleZh=response.titleZh,summary=response.summary or "",topic=response.topic or "",mode=response.mode or "today"}
+    local reading={verses=verses,labels=labels,title=title or "Lectio",titleEn=response.titleEn,titleZh=response.titleZh,summary=response.summary or "",topic=response.topic or "",mode=today and "today" or response.mode or "daily"}
     self.session:dispatch({type="received",id=envelope.requestId,reading=reading})
     self.options.accept(reading,response.state)
     self:render()
@@ -2788,8 +3136,13 @@ function Native:action(e)
     if e.type=="replay" then self:play()
     elseif e.type=="pause" or e.type=="segment" then self.narrator:pause()
     elseif e.type=="resume" then
-        if s.phase=="paused" then self.session:dispatch({type="resume"}); self:render(); self:play()
-        elseif s.phase=="reading" then self.narrator:resume() end
+        if s.phase=="paused" then
+            self.session:dispatch({type="resume"})
+            if self.session.phase=="reading" and self.options.begin then self.options.begin() end
+            self:render(); self:play()
+        elseif s.phase=="reading" then
+            if self.narrator.playback then self.narrator:resume() else self:play() end
+        end
     elseif e.type=="next" or e.type=="previous" or e.type=="select" then
         if not s.reading then return end
         local page=e.page or (s.page+(e.type=="next" and 1 or -1))
@@ -2820,26 +3173,78 @@ return Native
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX135">
+<Item class="ModuleScript" referent="RBX148">
 <Properties>
 <string name="Name">ReadingLayout</string>
-<ProtectedString name="Source">local Layout={}
-function Layout.forViewport(width,height)
-    local compact=width&lt;700 or height&lt;500
-    return {
-        width=compact and 248 or 286,
-        height=compact and 258 or 286,
-        offsetX=compact and 2.7 or 3.6,
-        offsetY=compact and 0.45 or 0.65,
-        maxDistance=compact and 14 or 18,
-        alwaysOnTop=false,
-    }
+<ProtectedString name="Source">-- Screen-space placement keeps the physical encounter visible at every camera angle.
+local Layout={}
+local function overlaps(a,b)
+    return a.x&lt;b.x+b.width and b.x&lt;a.x+a.width and a.y&lt;b.y+b.height and b.y&lt;a.y+a.height
+end
+function Layout.place(width,height,protected,previousEdge)
+    local margin,top=12,48
+    local function choose(w,h,collapsed,compact)
+        local left,right=margin,width-margin-w
+        local upper,lower=top,height-margin-h
+        if right&lt;left or lower&lt;upper then return end
+        local centerX=(width-w)/2
+        local centerY=math.max(upper,math.min(lower,(height-h)/2))
+        local candidates={
+            {edge="right",x=right,y=centerY},{edge="left",x=left,y=centerY},
+            {edge="top",x=centerX,y=upper},{edge="bottom",x=centerX,y=lower},
+            {edge="top-right",x=right,y=upper},{edge="top-left",x=left,y=upper},
+            {edge="bottom-right",x=right,y=lower},{edge="bottom-left",x=left,y=lower},
+        }
+        local function safe(c)
+            c.width=w; c.height=h; c.collapsed=collapsed; c.compact=compact or false; c.visible=true
+            c.bodyHeight=collapsed and 0 or h-(compact and 144 or 220)
+            for _,rect in ipairs(protected or {}) do if overlaps(c,rect) then return false end end
+            return true
+        end
+        for _,c in ipairs(candidates) do if c.edge==previousEdge and safe(c) then return c end end
+        for _,c in ipairs(candidates) do if safe(c) then return c end end
+    end
+    local w=math.min(320,width-24)
+    local h=math.min(430,height-72)
+    local full=h&gt;=316 and choose(w,h,false)
+    if full then return full end
+    local compact=choose(math.min(280,width-24),240,false,true)
+    if compact then return compact end
+    return choose(math.min(260,width-24),48,true) or {visible=false,collapsed=true,bodyHeight=0}
 end
 return Layout
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX136">
+<Item class="ModuleScript" referent="RBX149">
+<Properties>
+<string name="Name">ReadingPractice</string>
+<ProtectedString name="Source">-- The website's six movements, kept private and local to the current reading.
+local Practice={order={"silencio","lectio","meditatio","oratio","contemplatio","actio"}}
+local copy={
+    silencio={"Stillness","静默","Be still. Let the noise settle before you read.","安静下来。在诵读之前，让心中的喧嚣沉淀。","prompt"},
+    lectio={"Read","诵读","Read it slowly, twice. There is no hurry.","慢慢地读两遍。不用急。","scripture"},
+    meditatio={"Reflect","默想","What word or phrase caught you?","哪一个词、哪一句话触动了你？","reflection"},
+    oratio={"Respond","祈祷","What do you want to say to God about it? Respond quietly, in your own words.","关于这句话，你想对神说什么？安静地用自己的话回应。","prompt"},
+    contemplatio={"Rest","默观","Nothing more to do now. Rest here a while.","现在无需再做什么。在这里安歇片刻。","prompt"},
+    actio={"Carry into today","践行","One thing you will do today. Carry a phrase from this reading with you.","今天你要做的一件事。带着这次阅读中的一句话，走入今天。","summary"},
+}
+function Practice.get(key,lang)
+    key=copy[key] and key or "lectio"
+    local row=copy[key]
+    local index=1
+    for i,name in ipairs(Practice.order) do if name==key then index=i end end
+    return {title=lang=="zh" and row[2] or row[1],prompt=lang=="zh" and row[4] or row[3],
+        view=row[5],narrate=key=="lectio",index=index,key=key}
+end
+function Practice.next(key)
+    for i,name in ipairs(Practice.order) do if name==key then return Practice.order[i+1] end end
+end
+return Practice
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX150">
 <Properties>
 <string name="Name">ReadingSession</string>
 <ProtectedString name="Source">local Session = {}
@@ -2888,7 +3293,7 @@ return Session
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX137">
+<Item class="ModuleScript" referent="RBX151">
 <Properties>
 <string name="Name">ReadingText</string>
 <ProtectedString name="Source">-- Presentation content only. Fallback prompts are labeled, never passed off as AI interpretation.
@@ -2929,7 +3334,31 @@ return ReadingText
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX138">
+<Item class="ModuleScript" referent="RBX152">
+<Properties>
+<string name="Name">ReadingTheme</string>
+<ProtectedString name="Source">-- The morning sanctuary palette from the Lectio website.
+return {
+    bg = Color3.fromRGB(245, 239, 226),
+    panel = Color3.fromRGB(252, 248, 236),
+    panel2 = Color3.fromRGB(236, 227, 204),
+    line = Color3.fromRGB(221, 209, 180),
+    text = Color3.fromRGB(58, 52, 42),
+    dim = Color3.fromRGB(125, 116, 98),
+    gold = Color3.fromRGB(150, 119, 46),
+    green = Color3.fromRGB(102, 116, 74),
+    red = Color3.fromRGB(160, 85, 47),
+    darkText = Color3.fromRGB(58, 52, 42),
+    accent = Color3.fromRGB(102, 116, 74),
+    cream = Color3.fromRGB(252, 248, 236),
+    scriptureFont = Enum.Font.Garamond,
+    uiFont = Enum.Font.Gotham,
+    uiBoldFont = Enum.Font.GothamBold,
+}
+</ProtectedString>
+</Properties>
+</Item>
+<Item class="ModuleScript" referent="RBX153">
 <Properties>
 <string name="Name">SpeechDriver</string>
 <ProtectedString name="Source">-- Client-only exact-text TTS. No public audio emitter or website media URL.
@@ -3007,7 +3436,7 @@ return Driver
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX139">
+<Item class="ModuleScript" referent="RBX154">
 <Properties>
 <string name="Name">TextSegments</string>
 <ProtectedString name="Source">local Segments={}
@@ -3034,12 +3463,12 @@ return Segments
 </Item>
 </Item>
 </Item>
-<Item class="ServerScriptService" referent="RBX144">
+<Item class="ServerScriptService" referent="RBX159">
 <Properties>
 <string name="Name">ServerScriptService</string>
 
 </Properties>
-<Item class="Script" referent="RBX143">
+<Item class="Script" referent="RBX158">
 <Properties>
 <string name="Name">LectioServer</string>
 <ProtectedString name="Source">-- LectioServer: bridges the world to the Lectio backend (enjoyhim.org).
@@ -3296,7 +3725,7 @@ boardGui.Parent = board
 
 local boardBg = Instance.new("Frame")
 boardBg.Size = UDim2.fromScale(1, 1)
-boardBg.BackgroundColor3 = Color3.fromRGB(30, 25, 21)
+boardBg.BackgroundColor3 = Color3.fromRGB(252, 248, 236)
 boardBg.BorderSizePixel = 0
 boardBg.Parent = boardGui
 
@@ -3306,7 +3735,7 @@ boardTitle.Position = UDim2.fromScale(0.3, 0.03)
 boardTitle.Size = UDim2.fromScale(0.4, 0.11)
 boardTitle.Font = Enum.Font.Garamond
 boardTitle.Text = "L e c t i o"
-boardTitle.TextColor3 = Color3.fromRGB(212, 178, 112)
+boardTitle.TextColor3 = Color3.fromRGB(150, 119, 46)
 boardTitle.TextScaled = true
 boardTitle.Parent = boardBg
 
@@ -3315,7 +3744,7 @@ boardVerse.BackgroundTransparency = 1
 boardVerse.Position = UDim2.fromScale(0.06, 0.17)
 boardVerse.Size = UDim2.fromScale(0.88, 0.56)
 boardVerse.Font = Enum.Font.Garamond
-boardVerse.TextColor3 = Color3.fromRGB(238, 231, 216)
+boardVerse.TextColor3 = Color3.fromRGB(58, 52, 42)
 boardVerse.TextScaled = true
 boardVerse.TextWrapped = true
 boardVerse.Text = "Be still, and know that I am God."
@@ -3326,7 +3755,7 @@ boardRef.BackgroundTransparency = 1
 boardRef.Position = UDim2.fromScale(0.06, 0.76)
 boardRef.Size = UDim2.fromScale(0.88, 0.12)
 boardRef.Font = Enum.Font.Garamond
-boardRef.TextColor3 = Color3.fromRGB(212, 178, 112)
+boardRef.TextColor3 = Color3.fromRGB(102, 116, 74)
 boardRef.TextScaled = true
 boardRef.Text = "Psalm 46:10"
 boardRef.Parent = boardBg
@@ -3336,7 +3765,7 @@ boardWho.BackgroundTransparency = 1
 boardWho.Position = UDim2.fromScale(0.06, 0.89)
 boardWho.Size = UDim2.fromScale(0.88, 0.09)
 boardWho.Font = Enum.Font.Gotham
-boardWho.TextColor3 = Color3.fromRGB(150, 142, 128)
+boardWho.TextColor3 = Color3.fromRGB(125, 116, 98)
 boardWho.TextScaled = true
 boardWho.Text = "a verse for everyone who seeks"
 boardWho.Parent = boardBg
@@ -3426,9 +3855,9 @@ end)
 Players.PlayerRemoving:Connect(function(player)
     drawRequests:remove(player.UserId); lastActivity[player.UserId]=nil
 end)
-boardVerse.Text="A quiet place to read and reflect."
-boardRef.Text="Walk to the Bible to begin."
-boardWho.Text="Your reading is personal."
+boardVerse.Text="A quiet house for contemplative scripture reading.\n一间安读经文的小圣所"
+boardRef.Text="Touch the Bible · Begin today's reading\n触摸圣经 · 开始今日读经"
+boardWho.Text="Shared chapel · Personal reading\n共处一座圣所 · 各自安静阅读"
 
 remotes.LectioExplore.OnServerEvent:Connect(function(player, topic, mode, lang, requestId)
 	if mode ~= "daily" and mode ~= "divina" and mode ~= "deep" then return end
@@ -3578,7 +4007,7 @@ print("Lectio server ready" .. (LIVE and " (live backend)" or " (offline fallbac
 </ProtectedString>
 </Properties>
 </Item>
-<Item class="ModuleScript" referent="RBX132">
+<Item class="ModuleScript" referent="RBX145">
 <Properties>
 <string name="Name">DrawRequests</string>
 <ProtectedString name="Source">local Requests = {}
@@ -3624,23 +4053,23 @@ return Requests
 </Properties>
 </Item>
 </Item>
-<Item class="StarterPlayer" referent="RBX147">
+<Item class="StarterPlayer" referent="RBX162">
 <Properties>
 <string name="Name">StarterPlayer</string>
 
 </Properties>
-<Item class="StarterPlayerScripts" referent="RBX146">
+<Item class="StarterPlayerScripts" referent="RBX161">
 <Properties>
 <string name="Name">StarterPlayerScripts</string>
 
 </Properties>
-<Item class="LocalScript" referent="RBX145">
+<Item class="LocalScript" referent="RBX160">
 <Properties>
 <string name="Name">LectioClient</string>
-<ProtectedString name="Source">-- LectioClient: rebuilds the Lectio web UI as a Roblox interface.
+<ProtectedString name="Source">-- LectioClient: quiet reading options around the physical chapel Bible.
 -- Readings served by the site backend include the AI reflection per verse
 -- (`interp`) plus an overall `summary`; when the server runs in offline
--- fallback mode those fields are empty and the panel simply shows verses.
+-- fallback mode the native reading offers clearly labeled reflection prompts.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
@@ -3656,22 +4085,17 @@ for _, n in ipairs({ "LectioExplore", "LectioRegister", "LectioAssistant", "Lect
 	remotes[n] = ReplicatedStorage:WaitForChild(n)
 end
 
-local C = {
-	bg = Color3.fromRGB(23, 25, 31),
-	panel = Color3.fromRGB(31, 34, 42),
-	panel2 = Color3.fromRGB(40, 44, 54),
-	line = Color3.fromRGB(62, 67, 80),
-	text = Color3.fromRGB(236, 232, 224),
-	dim = Color3.fromRGB(158, 156, 150),
-	gold = Color3.fromRGB(212, 178, 112),
-	green = Color3.fromRGB(92, 156, 110),
-	red = Color3.fromRGB(196, 92, 92),
-	darkText = Color3.fromRGB(32, 26, 18),
+local C = require(ReplicatedStorage:WaitForChild("LectioModules"):WaitForChild("ReadingTheme"))
+local invitationTopics = {
+    {en="How do I face this season of pressure at work?",zh="我该如何面对工作中的这段压力？"},
+    {en="I want to learn to love better in this relationship.",zh="我想在这段关系里学会更好地去爱。"},
+    {en="What do I need to let go of in the coming weeks?",zh="接下来这段时间，我需要放下什么？"},
+    {en="How can I find stillness in a busy life?",zh="我该如何在忙碌中安静下来？"},
 }
 
 -- declared before L so localization closures can read them
 local lang = "en"
-local selectedMode = "daily"
+local selectedMode = "today"
 local state = { used = 0, limit = 3, registered = false, divina = 0, deep = 0 }
 local currentReading = nil
 local readingStep = 1
@@ -3684,11 +4108,12 @@ local L = {
 	en = {
         approachBible = "Walk to the Bible to begin your reading.",
         drawUncertain = "Your reading is still unconfirmed. Another draw is paused to avoid using a second reading.",
-		title = "Lectio — Daily Scripture Reading",
-		sub = "Bring a question, flip open the Bible, and let a verse find you.",
-		calendar = "✦ Or follow the church calendar — Today's reading",
-		popular = "Popular Topics:",
-		explore = "Explore",
+		title = "Lectio · Reading options",
+		sub = "A quiet house for contemplative scripture reading",
+		calendar = "Begin today's reading at the Bible",
+		popular = "Or bring a question · Receive a Word",
+		explore = "Open the Bible with this intention",
+		todayTitle = "Today's reading",
 		usageFmt = "Used today: %d / %d · register free for 6/day",
 		m1t = "1 · Daily Word", m1d = "One verse to sit with for this moment",
 		m2t = "3 · Lectio Divina", m2d = "Reading, reflection, and response",
@@ -3700,7 +4125,7 @@ local L = {
 		library = "Verse Library",
 		settings = "Settings",
 		assistant = "Ask a question",
-		placeholder = "I want to explore…",
+		placeholder = "A question or intention to bring to this reading…",
 		am1 = "Daily Word",
 		am2 = "Lectio Divina",
 		am3 = "Deep Lectio",
@@ -3730,26 +4155,27 @@ local L = {
 	zh = {
         approachBible = "请走近圣经，开始阅读。",
         drawUncertain = "本次阅读尚未确认。为避免重复扣次数，暂不能再次抽取。",
-		title = "Lectio — 每日读经默想",
-		sub = "带着一个问题，翻开圣经，让经文找到你。",
-		calendar = "✦ 或跟随教会年历 — 今日读经",
-		popular = "热门话题：",
-		explore = "探索",
+		title = "Lectio 圣言诵读 · 阅读选项",
+		sub = "一座为默想读经而建的小圣所",
+		calendar = "在圣经前开始今日诵读",
+		popular = "或带着一个问题 · 领受一句话",
+		explore = "带着这份心意翻开圣经",
+		todayTitle = "今日诵读",
 		usageFmt = "今日已用：%d / %d · 免费注册可达 6 次/天",
-		m1t = "1 · 每日一词", m1d = "一节经文，在此刻默想",
-		m2t = "3 · 灵阅", m2d = "读经、默想、回应",
-		m3t = "10 · 深度灵阅", m3d = "十节经文的默想路径",
+		m1t = "1 · 每日经文", m1d = "一节经文，为当下带来领受与亮光",
+		m2t = "3 · 圣言诵读", m2d = "诵读、默想、祈祷",
+		m3t = "10 · 深度诵读", m3d = "十节经文的完整默观之路",
 		register = "免费注册，读得更多",
-		regBullets = "• 每日一词：3 → 6 次/天\n• 灵阅（3 节经文）体验 ×3\n• 深度灵阅（10 节经文）体验 ×1",
+		regBullets = "• 每日经文：3 → 6 次/天\n• 圣言诵读（3 节经文）体验 ×3\n• 深度诵读（10 节经文）体验 ×1",
 		create = "创建免费账户",
 		registered = "已注册 — 每日 6 次已解锁",
 		library = "经文库",
 		settings = "设置",
 		assistant = "问一个问题",
-		placeholder = "我想探索…",
-		am1 = "每日一词",
-		am2 = "灵阅",
-		am3 = "深度灵阅",
+		placeholder = "带来你此刻的问题或心意……",
+		am1 = "每日经文",
+		am2 = "圣言诵读",
+		am3 = "深度诵读",
 		lblReading = "读经",
 		lblReflection = "默想",
 		lblResponse = "回应",
@@ -3764,11 +4190,11 @@ local L = {
 		chatWelcome = "有问题吗？可以问经文的意思，或这里怎么使用。",
 		chatPlaceholder = "输入你的问题…",
 		limitMsg = "今日免费读经次数已用完。免费注册可达每天 6 次。",
-		divinaMsg = "灵阅是注册后的礼物 — 创建免费账户解锁体验次数。",
-		deepMsg = "深度灵阅是注册后的礼物 — 创建免费账户解锁体验次数。",
+		divinaMsg = "圣言诵读是注册后的礼物 — 创建免费账户解锁体验次数。",
+		deepMsg = "深度诵读是注册后的礼物 — 创建免费账户解锁体验次数。",
 		assistantLimitMsg = "助手已达到今日消息上限。",
 		backendError = "读经服务暂时无法连接，请稍后再试。",
-		registeredMsg = "注册成功。每日上限已提升至 6 次，并解锁灵阅与深度灵阅体验。",
+		registeredMsg = "注册成功。每日上限已提升至 6 次，并解锁圣言诵读与深度诵读体验。",
 		stepFmt = "第 %d 步，共 %d 步",
 		music = "音乐",
 		setTitle = "设置",
@@ -3916,6 +4342,7 @@ local function labelsForMode(mode)
 end
 
 local function modeTitle(mode)
+	if mode == "today" then return t("todayTitle") end
 	if mode == "divina" then return t("am2") end
 	if mode == "deep" then return t("am3") end
 	return t("am1")
@@ -3924,10 +4351,10 @@ end
 local function refreshModeCards()
 	for _, card in ipairs(ui.cards) do
 		local selected = card.mode == selectedMode
-		card.btn.BackgroundColor3 = selected and C.gold or C.panel2
-		card.title.TextColor3 = selected and C.darkText or C.text
-		card.desc.TextColor3 = selected and C.darkText or C.dim
-		card.tag.TextColor3 = selected and C.darkText or C.gold
+		card.btn.BackgroundColor3 = selected and C.accent or C.panel2
+		card.title.TextColor3 = selected and C.cream or C.text
+		card.desc.TextColor3 = selected and C.cream or C.dim
+		card.tag.TextColor3 = selected and C.cream or C.gold
 	end
 end
 
@@ -4081,7 +4508,7 @@ local function buildGui()
 	gui.Parent = playerGui
 	ui.gui = gui
 
-	-- main landing panel (mirrors the website homepage)
+	-- Optional intentions and settings; the physical Bible remains the entry point.
 	local main = mk("Frame", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Position = UDim2.fromScale(0.5, 0.5),
@@ -4103,7 +4530,8 @@ local function buildGui()
 
 	local title = mk("TextLabel", { Position = UDim2.fromOffset(20, 12), Size = UDim2.fromOffset(680, 40), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Garamond, TextScaled = true, Text = t("title") }, main)
 	local sub = mk("TextLabel", { Position = UDim2.fromOffset(20, 54), Size = UDim2.fromOffset(680, 24), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 14, Text = t("sub") }, main)
-	local calendarBtn = mk("TextButton", { Position = UDim2.fromOffset(210, 82), Size = UDim2.fromOffset(300, 26), BackgroundTransparency = 1, TextColor3 = C.gold, Font = Enum.Font.Gotham, TextSize = 14, Text = t("calendar") }, main)
+	local calendarBtn = mk("TextButton", { Position = UDim2.fromOffset(175, 80), Size = UDim2.fromOffset(370, 32), BackgroundColor3 = C.accent, BorderSizePixel = 0, TextColor3 = C.cream, Font = C.uiFont, TextSize = 14, Text = t("calendar") }, main)
+	round(calendarBtn, 8)
 	local popularLabel = mk("TextLabel", { Position = UDim2.fromOffset(20, 114), Size = UDim2.fromOffset(300, 20), BackgroundTransparency = 1, TextColor3 = C.dim, Font = Enum.Font.Gotham, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left, Text = t("popular") }, main)
 
 	local chipPos = { { 20, 138 }, { 370, 138 }, { 20, 178 }, { 370, 178 } }
@@ -4115,11 +4543,13 @@ local function buildGui()
 			TextColor3 = C.text,
 			Font = Enum.Font.Gotham,
 			TextSize = 13,
-			Text = VerseData.PopularTopics[i][lang],
+			TextWrapped = true,
+			Text = invitationTopics[i][lang],
 		}, main)
 		round(chip, 8)
 		chip.MouseButton1Click:Connect(function()
-			ui.topicBox.Text = VerseData.PopularTopics[i][lang]
+			ui.topicBox.Text = invitationTopics[i][lang]
+			if selectedMode == "today" then selectedMode="daily"; refreshModeCards() end
 		end)
 		table.insert(ui.chips, chip)
 	end
@@ -4161,7 +4591,7 @@ local function buildGui()
 		table.insert(ui.cards, card)
 	end
 
-	local exploreBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 374), Size = UDim2.fromOffset(680, 48), BackgroundColor3 = C.gold, TextColor3 = C.darkText, Font = Enum.Font.GothamBold, TextSize = 20, Text = t("explore") }, main)
+	local exploreBtn = mk("TextButton", { Position = UDim2.fromOffset(20, 374), Size = UDim2.fromOffset(680, 48), BackgroundColor3 = C.panel2, TextColor3 = C.text, Font = C.uiBoldFont, TextSize = 18, Text = t("explore") }, main)
 	round(exploreBtn, 10)
 
 	local regBox = mk("Frame", { Position = UDim2.fromOffset(20, 430), Size = UDim2.fromOffset(680, 76), BackgroundColor3 = C.panel, BorderSizePixel = 0 }, main)
@@ -4292,12 +4722,12 @@ local function buildGui()
 	-- wiring
 	exploreBtn.MouseButton1Click:Connect(function()
         ui.main.Visible=false
-        native:activate(selectedMode)
+        native:activate(selectedMode=="today" and "daily" or selectedMode)
 	end)
 	topicBox.FocusLost:Connect(function(enterPressed)
 		if enterPressed then
             ui.main.Visible=false
-            native:activate(selectedMode)
+            native:activate(selectedMode=="today" and "daily" or selectedMode)
 		end
 	end)
 	regBtn.MouseButton1Click:Connect(function()
@@ -4408,7 +4838,7 @@ function refreshLang()
 	ui.topicBox.PlaceholderText = t("placeholder")
 	ui.chatBox.PlaceholderText = t("chatPlaceholder")
 	for i, chip in ipairs(ui.chips) do
-		chip.Text = VerseData.PopularTopics[i][lang]
+		chip.Text = invitationTopics[i][lang]
 	end
 	for _, card in ipairs(ui.cards) do
 		card.title.Text = t(card.titleKey)
@@ -4484,6 +4914,13 @@ native=NativeReading.new(remotes,{
     topic=function() return ui.topicBox.Text end,
     setMode=function(mode) selectedMode=mode; refreshModeCards() end,
     openOptions=function() ui.main.Visible=not ui.main.Visible end,
+    begin=function()
+        ui.main.Visible=false
+        ui.reading.Visible=false
+        ui.settings.Visible=false
+        ui.library.Visible=false
+        ui.assistant.Visible=false
+    end,
     labels=function(mode,count)
         if mode~="today" then return labelsForMode(mode) end
         local labels={}

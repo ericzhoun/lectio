@@ -1,12 +1,26 @@
 # Handover: Lectio Roblox World (`Lectio.rbxlx`)
 
-**Date:** 2026-09-06
+**Date:** 2026-09-07
 **Author:** Built with ZCode (automated Roblox place generator)
-**Native-reading implementation:** `D:\workplace\lectio-native-reading`, branch `codex/roblox-native-reading`.
+**Current implementation and builds:** `D:\workplace\lectio\src\roblox`. The earlier native-reading branch was merged before this website alignment; the old worktree's files are not the current deliverable.
 
 **Validation status:** Automated checks pass; Roblox Studio visual, audio, input-device, and multiplayer playtests have not been run in the implementation session. See `docs/roblox-native-validation.md` for the exact acceptance checklist. Do not treat generated XML validation as proof of playable behavior.
 
 ---
+
+## Latest website alignment
+
+The live site at https://enjoyhim.org still uses the visible name **Lectio**. Its morning sanctuary palette now carries through the chapel, Bible, ribbons, optional menus, and private reading bubble: parchment and cream, olive, terracotta, muted gold, and charcoal ink.
+
+- Touching the physical Bible defaults to **Today's reading**, the free calendar path. Four ribbons select Today, Daily Word, Lectio Divina, and Deep Lectio. Keys 1/2/3 select question-led modes; 4 returns to Today; the D-pad provides the same choices. Bilingual prompts mark the selected ribbon.
+- Six private stages guide Stillness → Read → Reflect → Respond → Rest → Carry into today. Today starts with Stillness; selecting Scripture begins reading and voice. Reflection and Summary are directly accessible from any page. Stages reuse the reading; they do not create draws or save a journal.
+- Flying pages carry scripture on both faces. The bubble appears after the page lands. It chooses available screen space around the projected avatar, Bible, and active page, updating with the camera and viewport.
+- A compact reader keeps all three content tabs, full scrollable scripture, and page/finish controls. Tap Scripture to listen or pause in compact mode. If neither reader fits safely, a small handle retains the reading until the reader zooms out or turns the camera. Rest intentionally reduces the display to that handle.
+- Starting or resuming dismisses optional menus. Long readings show at most three page-stack shortcuts. The public board and four movement plaques contain general chapel guidance only.
+
+**Open the current file in Studio:** `Lectio-Live.test.rbxlx` is the ignored private live build, rebuilt with the existing key and HTTP enabled for enjoyhim.org. `Lectio.rbxlx` is the credential-free build. Both were regenerated from these sources. The old worktree's private file has not been overwritten.
+
+**Verification:** 25 Python/Lua checks and 19 backend tests pass. Presentation tests execute actual UI construction and timers against engine doubles; they do not render Roblox. An authenticated read-only call to EnjoyHim's library returned HTTP 200 and 151 verses with verified TLS. Studio rendering, input, rigs, and speech still need the acceptance checks in `docs/roblox-native-validation.md`.
 
 ## 1. What this is
 
@@ -36,7 +50,8 @@ The deliverable is **`Lectio.rbxlx`**, a standard Roblox place file for Roblox S
 | `modules/ReadingSession.lua` | Pure reading lifecycle, retained session bookmark, page and language. |
 | `modules/DrawRequests.lua` | Server request identity, bounded result cache, duplicate/uncertain protection. |
 | `modules/BibleInteraction.lua` | Local prompts, ribbon choice, R15 IK/R6 fallback reach, public activity presentation. |
-| `modules/BiblePresentation.lua` | Private book copy, flying pages, verse bubbles, page controls, brief camera framing. |
+| `modules/BiblePresentation.lua` | Private book copy, lettered flying pages, delayed verse bubble, page controls, brief camera framing. |
+| `modules/ReadingLayout.lua`, `ReadingPractice.lua`, `ReadingTheme.lua` | Projected-scene avoidance and compact layout; six local practice stages; website palette. |
 | `modules/Narration.lua`, `SpeechDriver.lua`, `TextSegments.lua` | Single-owner audio, candidate exact-text TTS, complete UTF-8 segments. |
 | `modules/NativeReading.lua` | Connects interaction, session, presentation, narration, and existing remotes. |
 | `tests/` | Pure Lua/controller/server tests through lupa, generator checks, optional Studio assertions. |
@@ -66,7 +81,7 @@ An explicit credential-bearing build also enables HTTP for the backend connectio
 | Verse display | Private verse bubble above the selected page; reference, stage/progress, replay/pause/resume, previous/next, reflection, and final summary. The public board contains general chapel information only. |
 | 3 readings/day, 6/day registered | Server-enforced per-player counters keyed by UTC date, persisted via DataStore `LectioData_v1` (session-memory fallback) |
 | "Create free account" registration | Register panel button (and a desk with prompt in the world) sets `registered=true`, grants 6/day + 3 divina + 1 deep trials |
-| Church calendar "Today's reading" | Deterministic weekday-picked 3-step passage; free (doesn't consume daily readings) |
+| Church calendar "Today's reading" | Default Bible interaction. Live calendar passage with six private practice stages; offline weekday fallback. Free (doesn't consume daily readings). |
 | Verse Library | Scrolling GUI list of all verses grouped by 10 topic categories; also reachable via the bookshelf in the world |
 | Lectio Assistant chat | Chat window wired to keyword-rule assistant with a 10 messages/day cap |
 | EN / 中文 toggle | Full UI + verse re-render in both languages |
@@ -80,10 +95,10 @@ An explicit credential-bearing build also enables HTTP for the backend connectio
 Serene chapel garden, with spawn beside the altar at `(0, 2, -45)` facing the Bible:
 
 - **Chapel:** marble floor, 4 columns, wood roof, back wall with 5 neon stained-glass panels, altar with labeled physical Bible (`BibleVisual`), candelights with PointLights.
-- **VerseBoard** (20×10, named part at `(0, 15.5, -60.5)`, yaw 180°): server builds a SurfaceGui on its Front face at runtime.
+- **VerseBoard** (16.4×5.8, at `(0, 12, -55.5)`, yaw 180°): sits on the chapel's inward face, ahead of the wall. The server builds its public welcome SurfaceGui. Four lettered movement plaques sit below.
 - **Plaza & path:** concrete plaza, cobblestone path from spawn, four lanterns with warm lights.
 - **Landmarks:** RegisterDesk `(14, 2.8, 26)`, AssistantNPC statue `(-16, 1.6, 26)`, LibraryWall bookshelf `(16, 4.75, 44)`, glass pond `(42, 30)`, 9 trees, 2 benches, horizon hills, floating light motes (ParticleEmitter) above the altar.
-- **Lighting:** ClockTime 15.4, Atmosphere (density 0.32, haze) for a calm look.
+- **Lighting:** warm morning ambient light and softened atmosphere, matching the website's morning sanctuary.
 
 ---
 
@@ -155,7 +170,7 @@ The client/server harnesses execute actual routing and session code with engine 
 - **Assistant reflection language**: the AI reflection is generated in the language the reading was requested in; toggling language mid-reading re-renders verses but keeps the reflection as generated.
 - Bookmarks last only for the current server session. Disconnecting does not preserve reading history.
 - Speech uses `AudioTextToSpeech` through a local `AudioDeviceOutput`; actual target-experience permissions, Mandarin output, and rate limits need Studio verification. A failed load leaves readable text with an audio-unavailable indication.
-- The reading bubble is intentionally offset to the right of the floating page, compact, bounded by distance, and not always-on-top so the avatar, Bible, and page flight remain visible. Verify this framing in Studio at desktop and mobile aspect ratios.
+- The bubble uses projected avatar, Bible and page bounds to choose free screen space after flight. It switches to a compact reader or retained-reading handle when space is tight. Verify framing and font metrics in Studio at desktop and mobile aspect ratios.
 - R6 fallback gesture and R15 IK need visual verification with varied avatar sizes. Camera framing is brief; reduced motion skips it.
 - Reused request IDs cannot redraw after result-cache eviction. Up to 256 request identities are retained per player/session; 16 completed payloads are cached.
 - Deferred: persistent history, DataStore migrations, and redesign of secondary menus.
