@@ -1227,7 +1227,7 @@ const description = lang === 'zh'
               <path d="M3 6 L8 11 L13 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
             </svg>
           </button>
-          <div class="plan-body" id={`plan-body-${i}`}>
+          <div class="plan-body" id={`plan-body-${i}`} inert>
             <div class="plan-body-inner">
               <div class="plan-body-pad">
                 <p>{plan.description}</p>
@@ -1310,6 +1310,19 @@ const description = lang === 'zh'
   </footer>
 
   <script>
+    document.querySelectorAll<HTMLButtonElement>('.plan-head').forEach((button) => {
+      const card = button.closest('.plan-card');
+      const body = document.getElementById(button.getAttribute('aria-controls') ?? '');
+      if (!card || !body) return;
+
+      button.addEventListener('click', () => {
+        const expanded = button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(expanded));
+        card.classList.toggle('open', expanded);
+        body.inert = !expanded;
+      });
+    });
+
     function selectSpread(key: string) {
       const input = document.getElementById('spread-input') as HTMLInputElement | null;
       if (input) input.value = key;
