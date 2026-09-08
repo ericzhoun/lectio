@@ -1,8 +1,27 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
-  chunkTtsText, decodeTtsAudio, resolveTtsLang, sanitizeTtsText, synthesizeSpeech,
-  TTS_CHUNK_MAX_CHARS, TTS_MODEL, TTS_TEXT_MAX_CHARS,
+  chunkTtsText, concatWav, decodeTtsAudio, isWav, resolveTtsLang, sanitizeTtsText,
+  synthesizeSpeech, TTS_CHUNK_MAX_CHARS, TTS_MODEL, TTS_OPENAI_CHUNK_MAX_CHARS,
+  TTS_OPENAI_MODEL, TTS_TEXT_MAX_CHARS,
 } from '../tts';
+
+/** A minimal but real WAV file carrying `payload` as its data chunk. */
+function wav(payload: number[]): Uint8Array {
+  const bytes = new Uint8Array(44 + payload.length);
+  const view = new DataView(bytes.buffer);
+  const tag = (at: number, s: string) => {
+    for (let i = 0; i < 4; i++) bytes[at + i] = s.charCodeAt(i);
+  };
+  tag(0, 'RIFF');
+  view.setUint32(4, bytes.length - 8, true);
+  tag(8, 'WAVE');
+  tag(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  tag(36, 'data');
+  view.setUint32(40, payload.length, true);
+  bytes.set(payload, 44);
+  return bytes;
+}
 
 describe('resolveTtsLang', () => {
   it('maps zh to zh', () => {
@@ -65,7 +84,86 @@ describe('synthesizeSpeech', () => {
     } as unknown as Ai;
     const out = await synthesizeSpeech(ai, 'In the beginning', 'en');
     expect(calls).toEqual([[TTS_MODEL, { prompt: 'In the beginning', lang: 'en' }]]);
-    expect(Array.from(out)).toEqual([0x49, 0x44, 0x33]);
+    expect(Array.from(out.bytes)).toEqual([0x49, 0x44, 0x33]);
+  });
+});
+
+describe('isWav', () => {
+  it('recognizes what MeloTTS actually returns, whatever its schema says', () => {
+    expect(isWav(wav([1, 2, 3]))).toBe(true);
+    expect(isWav(new Uint8Array([0x49, 0x44, 0x33]))).toBe(false);
+    expect(isWav(new Uint8Array())).toBe(false);
+  });
+});
+
+describe('concatWav', () => {
+  // The bug: byte-concatenating two WAVs leaves a header describing only the
+  // first, so players stopped there and the rest of the reading was lost.
+  it('joins payloads under one header that covers all of them', () => {
+    const joined = concatWav([wav([1, 2, 3]), wav([4, 5]), wav([6])]);
+    const view = new DataView(joined.buffer);
+    expect(joined.length).toBe(44 + 6);
+    expect(view.getUint32(4, true)).toBe(joined.length - 8);
+    expect(view.getUint32(40, true)).toBe(6);
+    expect(Array.from(joined.subarray(44))).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(joined.indexOf(0x52, 4)).toBe(-1); // no second 'RIFF' mid-stream
+  });
+
+  it('leaves a single file untouched', () => {
+    const only = wav([7, 8]);
+    expect(concatWav([only])).toBe(only);
+  });
+
+  it('falls back to plain concatenation for non-WAV parts', () => {
+    const out = concatWav([new Uint8Array([1, 2]), new Uint8Array([3])]);
+    expect(Array.from(out)).toEqual([1, 2, 3]);
+  });
+});
+
+describe('synthesizeSpeech in Chinese', () => {
+  // MeloTTS on Workers AI answers Chinese with noise - an ASR round-trip of
+  // 神爱世人 comes back as 'ankh ankh ankh' - so Chinese must not reach it.
+  const okResponse = () => new Response(new Uint8Array([0xff, 0xfb, 0x90]));
+
+  it('goes to OpenAI, never to Workers AI', async () => {
+    const ai = { run: async () => { throw new Error('melotts must not speak Chinese'); } } as unknown as Ai;
+    const fetchMock = vi.fn(async (_url: string, _init: RequestInit) => okResponse());
+    vi.stubGlobal('fetch', fetchMock);
+    process.env.OPENAI_API_KEY = 'sk-test';
+
+    const out = await synthesizeSpeech(ai, '神爱世人', 'zh');
+    expect(out.contentType).toBe('audio/mpeg');
+    expect(Array.from(out.bytes)).toEqual([0xff, 0xfb, 0x90]);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe('https://api.openai.com/v1/audio/speech');
+    const body = JSON.parse(init.body as string);
+    expect(body.model).toBe(TTS_OPENAI_MODEL);
+    expect(body.input).toBe('神爱世人');
+    expect(body.response_format).toBe('mp3');
+    vi.unstubAllGlobals();
+  });
+
+  it('chunks past the OpenAI input limit and joins the frames in order', async () => {
+    const ai = { run: async () => { throw new Error('unused'); } } as unknown as Ai;
+    let n = 0;
+    const fetchMock = vi.fn(async (_url: string, _init: RequestInit) => new Response(new Uint8Array([++n])));
+    vi.stubGlobal('fetch', fetchMock);
+    process.env.OPENAI_API_KEY = 'sk-test';
+
+    const text = `${'甲'.repeat(TTS_OPENAI_CHUNK_MAX_CHARS)}。${'乙'.repeat(200)}`;
+    const out = await synthesizeSpeech(ai, text, 'zh');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(Array.from(out.bytes)).toEqual([1, 2]);
+    vi.unstubAllGlobals();
+  });
+
+  it('surfaces an OpenAI failure rather than returning a broken file', async () => {
+    const ai = { run: async () => { throw new Error('unused'); } } as unknown as Ai;
+    vi.stubGlobal('fetch', async () => new Response('nope', { status: 429 }));
+    process.env.OPENAI_API_KEY = 'sk-test';
+    await expect(synthesizeSpeech(ai, '神爱世人', 'zh')).rejects.toThrow('openai tts 429');
+    vi.unstubAllGlobals();
   });
 });
 
@@ -119,7 +217,7 @@ describe('synthesizeSpeech over several chunks', () => {
     const out = await synthesizeSpeech(ai, text, 'en');
     expect(prompts).toHaveLength(2);
     expect(prompts.join(' ')).toBe(text);
-    expect(Array.from(out)).toEqual([1, 2]);
+    expect(Array.from(out.bytes)).toEqual([1, 2]);
   });
 });
 

@@ -1,6 +1,7 @@
 // src/pages/api/tts.ts
-// Reads the day's lectionary passage aloud, via the open-source MeloTTS model
-// on Workers AI. GET /api/tts?day=YYYY-MM-DD&lang=en -> audio/mpeg.
+// Reads the day's lectionary passage aloud. GET /api/tts?day=YYYY-MM-DD&lang=en
+// -> audio. English is synthesized on Workers AI, Chinese on OpenAI (see
+// src/lib/tts.ts for why), and both lose to a prebuilt clip when one exists.
 //
 // The caller names a day, never the text: synthesis costs money, so the set of
 // things this endpoint will ever say is the lectionary table and nothing else.
@@ -12,7 +13,7 @@ import { hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../li
 import { isStep, STEP_COPY } from '../../lib/dailySteps';
 import { focusReference, getLectionaryDay, hasLectionaryDay } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
-import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech } from '../../lib/tts';
+import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech, type TtsAudio } from '../../lib/tts';
 
 export const prerender = false;
 
@@ -60,7 +61,7 @@ export const GET: APIRoute = async ({ url }) => {
   const hit = await cache?.match(cacheKey);
   if (hit) return hit;
 
-  let audio: Uint8Array;
+  let audio: TtsAudio;
   try {
     audio = await synthesizeSpeech(env.AI, text, lang);
   } catch (err) {
@@ -68,9 +69,12 @@ export const GET: APIRoute = async ({ url }) => {
     return json({ error: 'synthesis_failed' }, 502);
   }
 
-  const response = new Response(new Uint8Array(audio), {
+  // The media type comes from the synthesizer, not from a guess: MeloTTS
+  // answers in WAV despite its schema, and the OpenAI voice used for Chinese
+  // answers in MP3.
+  const response = new Response(new Uint8Array(audio.bytes), {
     status: 200,
-    headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': CACHE_CONTROL },
+    headers: { 'Content-Type': audio.contentType, 'Cache-Control': CACHE_CONTROL },
   });
   await cache?.put(cacheKey, response.clone());
   return response;

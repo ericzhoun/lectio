@@ -56,7 +56,7 @@ export function parseEventRows(rows: RawEventRow[]): JourneyEvent[] {
       path: row.path ?? null,
       lang: row.lang ?? null,
       variants: parseJson<Record<string, string>>(row.variants, {}),
-      props: parseJson<EventProps>(row.props, null),
+      props: parseJson<EventProps | null>(row.props, null),
       ts: row.ts,
     });
   }
@@ -64,9 +64,14 @@ export function parseEventRows(rows: RawEventRow[]): JourneyEvent[] {
 }
 
 // ---- Funnel definition ----------------------------------------------------
-// An ordered funnel: a visitor reaches step k only if they did step k-1
-// first, then an event matching step k. `login_success` counts for the
-// account step too, so returning users are not invisible in the funnel.
+// An ordered funnel, but not a rigid one. `visited` is the gate: nothing counts
+// for a visitor who never loaded a page. Past that, a visitor reaches step k by
+// doing something that matches step k *after* the last step they reached, and
+// steps in between may be skipped - a returning reader who signs in without
+// playing the audio has genuinely signed in, and hiding that made the account
+// step read zero for exactly the people who use the site most. Only the steps
+// they actually did are counted; skipping one never fills it in.
+// `login_success` counts for the account step alongside `signup_success`.
 
 export type FunnelKey = 'visited' | 'listened' | 'account' | 'checkout';
 
@@ -153,6 +158,23 @@ function utcDateKey(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+/** The bucket for events that carried no path or language of their own. */
+const UNKNOWN_LABEL = '(unknown)';
+
+/**
+ * Order a slice table: biggest first, then alphabetically, with the
+ * '(unknown)' bucket always at the bottom of its tier. Sorting it in
+ * alphabetically puts it above every real label - '(' sorts before '/' - which
+ * reads as if it were the leading path.
+ */
+function compareSlices(aLabel: string, aCount: number, bLabel: string, bCount: number): number {
+  if (aCount !== bCount) return bCount - aCount;
+  const aUnknown = aLabel === UNKNOWN_LABEL;
+  const bUnknown = bLabel === UNKNOWN_LABEL;
+  if (aUnknown !== bUnknown) return aUnknown ? 1 : -1;
+  return aLabel.localeCompare(bLabel);
+}
+
 export function computeJourneySummary(events: JourneyEvent[], options: JourneyOptions): JourneySummary {
   const { days, now = new Date(), firstSeen } = options;
   const windowStart = utcDateKey(new Date(now.getTime() - (days - 1) * 86400_000));
@@ -176,14 +198,24 @@ export function computeJourneySummary(events: JourneyEvent[], options: JourneyOp
   const totals: Record<string, number> = {};
   for (const event of inWindow) totals[event.name] = (totals[event.name] ?? 0) + 1;
 
-  // Ordered funnel: walk each visitor's events, advancing through steps.
+  // Ordered funnel: walk each visitor's events, advancing through steps. A
+  // visitor must enter at `visited`; after that an event may carry them to any
+  // later step, and only the steps they actually reached are counted.
   const stepVisitors: Record<FunnelKey, number> = { visited: 0, listened: 0, account: 0, checkout: 0 };
   for (const list of byVisitor.values()) {
-    let step = 0;
+    let reached = -1;
+    const done: FunnelKey[] = [];
     for (const event of list) {
-      if (step < FUNNEL_KEYS.length && matchesStep(FUNNEL_KEYS[step], event)) step++;
+      const from = reached < 0 ? 0 : reached + 1;
+      const until = reached < 0 ? 0 : FUNNEL_KEYS.length - 1;
+      for (let k = from; k <= until; k++) {
+        if (!matchesStep(FUNNEL_KEYS[k], event)) continue;
+        done.push(FUNNEL_KEYS[k]);
+        reached = k;
+        break;
+      }
     }
-    for (let i = 0; i < step; i++) stepVisitors[FUNNEL_KEYS[i]]++;
+    for (const key of done) stepVisitors[key]++;
   }
   const funnel: FunnelStep[] = FUNNEL_KEYS.map((key, index) => ({
     key,
@@ -222,7 +254,7 @@ export function computeJourneySummary(events: JourneyEvent[], options: JourneyOp
   const pathStats = new Map<string, { views: number; visitors: Set<string> }>();
   for (const event of inWindow) {
     if (event.name !== 'page_view') continue;
-    const path = event.path ?? '(unknown)';
+    const path = event.path ?? UNKNOWN_LABEL;
     const stat = pathStats.get(path) ?? { views: 0, visitors: new Set<string>() };
     stat.views++;
     stat.visitors.add(event.visitorId);
@@ -230,7 +262,7 @@ export function computeJourneySummary(events: JourneyEvent[], options: JourneyOp
   }
   const topPaths: PathStat[] = [...pathStats.entries()]
     .map(([path, { views, visitors: v }]) => ({ path, views, visitors: v.size }))
-    .sort((a, b) => b.views - a.views || a.path.localeCompare(b.path))
+    .sort((a, b) => compareSlices(a.path, a.views, b.path, b.views))
     .slice(0, 10);
 
   // Language split by the first language seen per visitor.
@@ -240,12 +272,12 @@ export function computeJourneySummary(events: JourneyEvent[], options: JourneyOp
   }
   const langCounts = new Map<string, number>();
   for (const visitorId of byVisitor.keys()) {
-    const lang = langByVisitor.get(visitorId) ?? '(unknown)';
+    const lang = langByVisitor.get(visitorId) ?? UNKNOWN_LABEL;
     langCounts.set(lang, (langCounts.get(lang) ?? 0) + 1);
   }
   const languages = [...langCounts.entries()]
     .map(([lang, count]) => ({ lang, visitors: count }))
-    .sort((a, b) => b.visitors - a.visitors || a.lang.localeCompare(b.lang));
+    .sort((a, b) => compareSlices(a.lang, a.visitors, b.lang, b.visitors));
 
   // Experiment slices: visitors are attributed to every experiment they were
   // bucketed into; visitors without an assignment don't appear in the table.

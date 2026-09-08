@@ -47,6 +47,7 @@ describe('GET /api/tts', () => {
     const res = await call('?step=lectio&lang=en');
     expect(res.status).toBe(200);
     expect(res.headers.get('Content-Type')).toBe('audio/mpeg');
+
     expect(new Uint8Array(await res.arrayBuffer())).toEqual(new Uint8Array([73, 68, 51]));
     expect(store.runs).toEqual([[TTS_MODEL, { prompt: 'Read it slowly, twice. There is no hurry.', lang: 'en' }]]);
   });
@@ -58,7 +59,7 @@ describe('GET /api/tts', () => {
     expect(store.runs).toEqual([]);
   });
 
-  it("speaks the day's passage as audio/mpeg", async () => {
+  it("speaks the day's passage", async () => {
     const res = await call(`?day=${DAY}&lang=en`);
     expect(res.status).toBe(200);
     expect(res.headers.get('Content-Type')).toBe('audio/mpeg');
@@ -70,14 +71,26 @@ describe('GET /api/tts', () => {
     expect(new Uint8Array(await res.arrayBuffer()).length).toBe(3 * runs.length);
   });
 
-  it('reads Chinese when asked, and English for anything else', async () => {
-    const langsFor = async (query: string) => {
-      store.runs = [];
-      await call(query);
-      return [...new Set((store.runs as [string, { lang: string }][]).map(([, i]) => i.lang))];
-    };
-    expect(await langsFor(`?day=${DAY}&lang=zh`)).toEqual(['zh']);
-    expect(await langsFor(`?day=${DAY}&lang=fr`)).toEqual(['en']);
+  // MeloTTS on Workers AI answers Chinese with noise whatever `lang` says, so
+  // a Chinese passage must go to OpenAI and never reach the AI binding.
+  it('sends Chinese to OpenAI and everything else to Workers AI', async () => {
+    const openai = vi.fn(async (_url: string, _init: RequestInit) =>
+      new Response(new Uint8Array([0xff, 0xfb, 0x90])));
+    vi.stubGlobal('fetch', openai);
+    process.env.OPENAI_API_KEY = 'sk-test';
+
+    const zh = await call(`?day=${DAY}&lang=zh`);
+    expect(zh.status).toBe(200);
+    expect(zh.headers.get('Content-Type')).toBe('audio/mpeg');
+    expect(store.runs).toEqual([]);
+    expect(openai).toHaveBeenCalled();
+    expect(openai.mock.calls[0][0]).toBe('https://api.openai.com/v1/audio/speech');
+    vi.unstubAllGlobals();
+
+    store.runs = [];
+    await call(`?day=${DAY}&lang=fr`);
+    const langs = [...new Set((store.runs as [string, { lang: string }][]).map(([, i]) => i.lang))];
+    expect(langs).toEqual(['en']);
   });
 
   // The point of taking a day rather than text: nobody can bill the account

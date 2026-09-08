@@ -1,6 +1,7 @@
 // src/pages/api/reflection-tts.ts
-// Reads the model's reply for one of the reader's writing steps aloud, via the
-// open-source MeloTTS model on Workers AI. POST { day, step } -> audio/mpeg.
+// Reads the model's reply for one of the reader's writing steps aloud.
+// POST { day, step } -> audio. English goes through Workers AI and Chinese
+// through OpenAI; see src/lib/tts.ts for why the split exists.
 //
 // The reply is per-reader and written after they arrive, so it can never be
 // prebuilt like the passage audio. The text is also never taken from the
@@ -12,7 +13,7 @@ import { env } from 'cloudflare:workers';
 import { isStep, WRITING_STEPS } from '../../lib/dailySteps';
 import { getStepEntries, getSession } from '../../lib/dailySession';
 import { verifySessionToken } from '../../lib/session';
-import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech } from '../../lib/tts';
+import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech, type TtsAudio } from '../../lib/tts';
 
 export const prerender = false;
 
@@ -59,7 +60,7 @@ export const POST: APIRoute = async ({ request }) => {
   const text = sanitizeTtsText(entry?.aiText);
   if (!text) return json({ error: 'no_reply' }, 404);
 
-  let audio: Uint8Array;
+  let audio: TtsAudio;
   try {
     audio = await synthesizeSpeech(env.AI, text, lang);
   } catch (err) {
@@ -68,8 +69,8 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   // Per-reader content: never put this in a shared cache.
-  return new Response(new Uint8Array(audio), {
+  return new Response(new Uint8Array(audio.bytes), {
     status: 200,
-    headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'private, no-store' },
+    headers: { 'Content-Type': audio.contentType, 'Cache-Control': 'private, no-store' },
   });
 };

@@ -154,8 +154,10 @@ describe('computeJourneySummary — paths, languages, totals', () => {
       ev({ name: 'page_view', visitor_id: 'v3', ts: '2026-09-01 10:03:00', path: '/today' }),
       ev({ name: 'page_view', visitor_id: 'v4', ts: '2026-09-01 10:04:00', path: null }),
     ]);
+    // Three separate visitors opened /today, so it has three unique visitors -
+    // v1's other view of '/' does not take one away.
     expect(summary.topPaths).toEqual([
-      { path: '/today', views: 3, visitors: 2 },
+      { path: '/today', views: 3, visitors: 3 },
       { path: '/', views: 1, visitors: 1 },
       { path: '(unknown)', views: 1, visitors: 1 },
     ]);

@@ -1,8 +1,19 @@
-// Speech synthesis for the daily passage, via the open-source MeloTTS
-// model (@cf/myshell-ai/melotts) on Cloudflare Workers AI.
+// Speech synthesis for the daily passage.
+//
+// English goes through the open-source MeloTTS model (@cf/myshell-ai/melotts)
+// on Cloudflare Workers AI, which is free with the AI binding. Chinese cannot:
+// MeloTTS on Workers AI produces noise for Chinese text whatever `lang` says -
+// an ASR round-trip of 神爱世人 comes back as "ankh ankh ankh ankh" - and no
+// other Workers AI voice speaks it. So Chinese uses OpenAI's gpt-4o-mini-tts,
+// the same model, voice and delivery instructions the prebuilt clips are cut
+// with in scripts/tts/lib.mts. Prebuilt clips still win wherever they exist;
+// this is only the fallback for a day that has none.
 
 /** What MeloTTS will accept in a single call. */
 export const TTS_CHUNK_MAX_CHARS = 1000;
+
+/** Comfortably inside the 4096-character input limit on OpenAI speech. */
+export const TTS_OPENAI_CHUNK_MAX_CHARS = 3000;
 
 /**
  * The whole reading's ceiling, across however many calls it takes. Most of the
@@ -13,6 +24,12 @@ export const TTS_CHUNK_MAX_CHARS = 1000;
 export const TTS_TEXT_MAX_CHARS = 6000;
 
 export type TtsLang = 'en' | 'zh';
+
+/** Synthesized speech, with the media type it is actually in. */
+export interface TtsAudio {
+  bytes: Uint8Array;
+  contentType: string;
+}
 
 export function resolveTtsLang(raw: unknown): TtsLang {
   return raw === 'zh' ? 'zh' : 'en';
@@ -27,6 +44,14 @@ export function sanitizeTtsText(raw: unknown): string | null {
 }
 
 export const TTS_MODEL = '@cf/myshell-ai/melotts';
+
+export const TTS_OPENAI_MODEL = 'gpt-4o-mini-tts';
+export const TTS_OPENAI_VOICE = 'shimmer';
+
+/** Kept in step with scripts/tts/lib.mts, so the fallback sounds like the clips. */
+const TTS_OPENAI_INSTRUCTIONS =
+  'Speak slowly, calmly and reverently, like a quiet retreat guide reading scripture. ' +
+  '咬字清晰，语速平缓，庄重安详。';
 
 /**
  * Workers AI returns speech either as raw bytes or as base64 in `{ audio }`,
@@ -85,7 +110,7 @@ export function chunkTtsText(text: string, max = TTS_CHUNK_MAX_CHARS): string[] 
   return chunks;
 }
 
-function concatAudio(parts: Uint8Array[]): Uint8Array {
+function concatBytes(parts: Uint8Array[]): Uint8Array {
   if (parts.length === 1) return parts[0];
   const total = parts.reduce((n, p) => n + p.length, 0);
   const joined = new Uint8Array(total);
@@ -97,19 +122,108 @@ function concatAudio(parts: Uint8Array[]): Uint8Array {
   return joined;
 }
 
+const ascii = (b: Uint8Array, at: number) =>
+  String.fromCharCode(b[at], b[at + 1], b[at + 2], b[at + 3]);
+
+/** Whether these bytes open with a RIFF/WAVE header. */
+export function isWav(bytes: Uint8Array): boolean {
+  return bytes.length >= 12 && ascii(bytes, 0) === 'RIFF' && ascii(bytes, 8) === 'WAVE';
+}
+
+/** The [start, end) of the PCM payload, or null if the file has no data chunk. */
+function wavDataRange(bytes: Uint8Array): [number, number] | null {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  let at = 12;
+  while (at + 8 <= bytes.length) {
+    const size = view.getUint32(at + 4, true);
+    const body = at + 8;
+    if (ascii(bytes, at) === 'data') return [body, Math.min(body + size, bytes.length)];
+    at = body + size + (size % 2);
+  }
+  return null;
+}
+
 /**
- * Speak the whole text, in as many model calls as its length demands. The MP3
- * frames are concatenated in order; players read the result as one file.
+ * Join several WAV files into one playable file.
+ *
+ * MeloTTS returns WAV, not the MP3 its Workers AI schema advertises, so plain
+ * byte-concatenation produced a file whose header described only the first
+ * call: players stopped there, and every reading longer than one chunk lost
+ * its tail with nothing to show for it. Here the payloads are joined and the
+ * first file's header is rewritten to cover all of them.
  */
+export function concatWav(parts: Uint8Array[]): Uint8Array {
+  if (parts.length === 1) return parts[0];
+  if (!parts.every(isWav)) return concatBytes(parts);
+  const ranges = parts.map(wavDataRange);
+  if (ranges.some((r) => r === null)) return concatBytes(parts);
+
+  const firstStart = (ranges[0] as [number, number])[0];
+  const header = parts[0].subarray(0, firstStart);
+  const payloads = parts.map((part, i) => {
+    const [start, end] = ranges[i] as [number, number];
+    return part.subarray(start, end);
+  });
+  const dataSize = payloads.reduce((n, p) => n + p.length, 0);
+
+  const joined = new Uint8Array(header.length + dataSize);
+  joined.set(header, 0);
+  let at = header.length;
+  for (const payload of payloads) {
+    joined.set(payload, at);
+    at += payload.length;
+  }
+  const view = new DataView(joined.buffer);
+  view.setUint32(4, joined.length - 8, true); // RIFF chunk size
+  view.setUint32(firstStart - 4, dataSize, true); // data chunk size
+  return joined;
+}
+
+/** English, on Workers AI. Free with the binding, and it answers in WAV. */
+async function synthesizeEnglish(ai: Ai, text: string): Promise<TtsAudio> {
+  const parts: Uint8Array[] = [];
+  for (const chunk of chunkTtsText(text)) {
+    parts.push(decodeTtsAudio(await ai.run(TTS_MODEL, { prompt: chunk, lang: 'en' })));
+  }
+  if (!parts.length) throw new Error('nothing to speak');
+  const bytes = concatWav(parts);
+  return { bytes, contentType: isWav(bytes) ? 'audio/wav' : 'audio/mpeg' };
+}
+
+/**
+ * Chinese, on OpenAI. MP3 frames concatenate cleanly, so a reading longer than
+ * one call still comes back as a single file players read end to end.
+ */
+async function synthesizeChinese(text: string): Promise<TtsAudio> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) throw new Error('OPENAI_API_KEY is not set');
+  const parts: Uint8Array[] = [];
+  for (const chunk of chunkTtsText(text, TTS_OPENAI_CHUNK_MAX_CHARS)) {
+    const res = await fetch('https://api.openai.com/v1/audio/speech', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: TTS_OPENAI_MODEL,
+        voice: TTS_OPENAI_VOICE,
+        input: chunk,
+        instructions: TTS_OPENAI_INSTRUCTIONS,
+        response_format: 'mp3',
+      }),
+    });
+    if (!res.ok) {
+      throw new Error(`openai tts ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    }
+    parts.push(new Uint8Array(await res.arrayBuffer()));
+  }
+  if (!parts.length) throw new Error('nothing to speak');
+  return { bytes: concatBytes(parts), contentType: 'audio/mpeg' };
+}
+
+/** Speak the whole text, in as many model calls as its length demands. */
 export async function synthesizeSpeech(
   ai: Ai,
   text: string,
   lang: TtsLang,
-): Promise<Uint8Array> {
-  const parts: Uint8Array[] = [];
-  for (const chunk of chunkTtsText(text)) {
-    parts.push(decodeTtsAudio(await ai.run(TTS_MODEL, { prompt: chunk, lang })));
-  }
-  if (!parts.length) throw new Error('nothing to speak');
-  return concatAudio(parts);
+): Promise<TtsAudio> {
+  return lang === 'zh' ? synthesizeChinese(text) : synthesizeEnglish(ai, text);
 }
