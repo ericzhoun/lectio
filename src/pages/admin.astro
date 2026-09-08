@@ -1,0 +1,225 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { env } from 'cloudflare:workers';
+import { verifySessionToken } from '../lib/session';
+import { isUserAdmin, listAdminUsers, isPaidTier } from '../lib/admin';
+import { resolveLang } from '../lib/i18n';
+
+const lang = resolveLang(Astro);
+
+const sessionCookie = Astro.cookies.get('session')?.value;
+const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
+if (!userId || !(await isUserAdmin(userId))) {
+  return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent('/admin')}`);
+}
+
+const users = await listAdminUsers();
+const paidCount = users.filter((u) => isPaidTier(u.tier)).length;
+const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+const activeThisWeek = users.filter((u) => {
+  if (!u.lastLoginAt) return false;
+  const t = new Date(u.lastLoginAt.includes('T') ? u.lastLoginAt : u.lastLoginAt.replace(' ', 'T') + 'Z').getTime();
+  return Number.isFinite(t) && t >= weekAgo;
+}).length;
+
+const fmtDate = (iso: string | null | undefined): string => {
+  if (!iso) return '—';
+  const d = new Date(iso.includes('T') ? iso : iso.replace(' ', 'T') + 'Z');
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', { dateStyle: 'short', timeStyle: 'short' });
+};
+const t = (en: string, zh: string) => (lang === 'zh' ? zh : en);
+---
+<Layout title={t('Admin — Lectio', '管理后台 — Lectio')} noindex lang={lang}>
+  <main class="admin-main">
+    <h1 class="admin-title">{t('User management', '用户管理')}</h1>
+
+    <div class="admin-stats">
+      <div class="admin-stat"><strong>{users.length}</strong><span>{t('accounts', '账户')}</span></div>
+      <div class="admin-stat"><strong>{paidCount}</strong><span>{t('paid', '付费')}</span></div>
+      <div class="admin-stat"><strong>{activeThisWeek}</strong><span>{t('active this week', '本周活跃')}</span></div>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>{t('User', '用户')}</th>
+            <th>{t('Plan', '套餐')}</th>
+            <th>{t('Credits', '体验额度')}</th>
+            <th>{t('Last login', '上次登录')}</th>
+            <th>{t('Joined', '注册')}</th>
+            <th>{t('Role', '角色')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((u) => (
+            <tr>
+              <td>
+                <div class="admin-user-cell">
+                  <span class="admin-user-email">{u.email}</span>
+                  {u.name && <span class="admin-user-name">{u.name}</span>}
+                </div>
+              </td>
+              <td>
+                <form class="admin-row-form" method="post" action="/api/admin/users">
+                  <input type="hidden" name="userId" value={u.id} />
+                  <input type="hidden" name="action" value="set_tier" />
+                  <select name="tier" aria-label={t('Plan', '套餐')}>
+                    {['free', 'basic', 'pro'].map((tier) => (
+                      <option value={tier} selected={u.tier === tier}>{tier}</option>
+                    ))}
+                  </select>
+                  <button type="submit" class="admin-save">{t('Save', '保存')}</button>
+                </form>
+                {u.subStatus && u.subStatus !== 'active' && (
+                  <span class="admin-sub-status">{u.subStatus}</span>
+                )}
+              </td>
+              <td>
+                <form class="admin-row-form" method="post" action="/api/admin/users">
+                  <input type="hidden" name="userId" value={u.id} />
+                  <input type="hidden" name="action" value="set_credits" />
+                  <label class="admin-credit-label" title={t('Lectio Divina credits', '圣言诵读额度')}>
+                    3×<input class="admin-credit-input" type="number" min="0" name="credit3card" value={u.credits['3card']} />
+                  </label>
+                  <label class="admin-credit-label" title={t('Deep Lectio credits', '深度诵读额度')}>
+                    ✝<input class="admin-credit-input" type="number" min="0" name="creditCeltic" value={u.credits.celtic_cross} />
+                  </label>
+                  <button type="submit" class="admin-save">{t('Save', '保存')}</button>
+                </form>
+              </td>
+              <td>{fmtDate(u.lastLoginAt)}</td>
+              <td>{fmtDate(u.createdAt)}</td>
+              <td>
+                {u.isAdmin ? (
+                  <form class="admin-row-form" method="post" action="/api/admin/users">
+                    <input type="hidden" name="userId" value={u.id} />
+                    <input type="hidden" name="action" value="set_role" />
+                    <input type="hidden" name="role" value="user" />
+                    <span class="badge-admin">admin</span>
+                    {u.id !== userId && (
+                      <button type="submit" class="admin-save">{t('Revoke', '撤销')}</button>
+                    )}
+                  </form>
+                ) : (
+                  <form class="admin-row-form" method="post" action="/api/admin/users">
+                    <input type="hidden" name="userId" value={u.id} />
+                    <input type="hidden" name="action" value="set_role" />
+                    <input type="hidden" name="role" value="admin" />
+                    <button type="submit" class="admin-save">{t('Make admin', '设为管理员')}</button>
+                  </form>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {users.length === 0 && <p class="admin-empty">{t('No accounts yet.', '还没有注册用户。')}</p>}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .admin-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+  .admin-title {
+    font-family: var(--font-display, serif);
+    margin-bottom: 1rem;
+  }
+  .admin-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .admin-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+    border-radius: 12px;
+  }
+  .admin-stat strong { font-size: 1.5rem; }
+  .admin-stat span {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .admin-table-wrap { overflow-x: auto; }
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .admin-table th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+    white-space: nowrap;
+  }
+  .admin-table td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+    vertical-align: middle;
+  }
+  .admin-user-cell { display: flex; flex-direction: column; }
+  .admin-user-email { font-weight: 600; }
+  .admin-user-name { font-size: 0.8rem; opacity: 0.7; }
+  .admin-row-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .admin-row-form select {
+    padding: 0.25rem 0.4rem;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  }
+  .admin-credit-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+  .admin-credit-input {
+    width: 3.2rem;
+    padding: 0.2rem 0.3rem;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  }
+  .admin-save {
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+    background: transparent;
+    color: inherit;
+  }
+  .admin-save:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+  .badge-admin {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, gold 25%, transparent);
+    border: 1px solid color-mix(in srgb, gold 50%, transparent);
+  }
+  .admin-sub-status {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-top: 0.2rem;
+  }
+  .admin-empty { opacity: 0.7; padding: 1.5rem 0; }
+</style>

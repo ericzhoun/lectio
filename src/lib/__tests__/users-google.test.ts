@@ -25,7 +25,7 @@ describe('users table (Google login support)', () => {
     await getUserByEmail('nobody@example.com', db as never); // triggers ensureTable
     const cols = db.dump('PRAGMA table_info(users)') as Array<{ name: string }>;
     const names = cols.map((c) => c.name).sort();
-    expect(names).toEqual(['avatar_url', 'created_at', 'email', 'google_id', 'id', 'last_login_at', 'name', 'password_hash']);
+    expect(names).toEqual(['avatar_url', 'created_at', 'email', 'google_id', 'id', 'last_login_at', 'name', 'password_hash', 'role']);
   });
 
   it('registers a new Google user with a complete record', async () => {

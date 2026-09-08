@@ -17,10 +17,14 @@ const CREATE_TABLE_SQL =
 
 const initializedDbs = new WeakSet<object>();
 
-async function ensureTable(db: D1Database): Promise<void> {
+export async function ensureCreditsTable(db: D1Database = env.DB): Promise<void> {
   if (initializedDbs.has(db as object)) return;
   await db.exec(CREATE_TABLE_SQL);
   initializedDbs.add(db as object);
+}
+
+async function ensureTable(db: D1Database): Promise<void> {
+  await ensureCreditsTable(db);
 }
 
 function toBalance(row: { credit_3card?: number; credit_celtic?: number } | null): CreditBalance {
@@ -58,6 +62,22 @@ export async function getCreditBalance(userId: string, db: D1Database = env.DB):
     .bind(userId)
     .first<{ credit_3card: number; credit_celtic: number }>();
   return toBalance(row);
+}
+
+/** Admin dashboard action: overwrite a user's trial credit balance. */
+export async function setCreditBalance(
+  userId: string,
+  balance: CreditBalance,
+  db: D1Database = env.DB
+): Promise<void> {
+  await ensureTable(db);
+  await db
+    .prepare(
+      `INSERT INTO welcome_credits (user_id, credit_3card, credit_celtic) VALUES (?, ?, ?)
+       ON CONFLICT(user_id) DO UPDATE SET credit_3card = excluded.credit_3card, credit_celtic = excluded.credit_celtic`
+    )
+    .bind(userId, Math.max(0, Math.floor(balance['3card'])), Math.max(0, Math.floor(balance.celtic_cross)))
+    .run();
 }
 
 /** Spend one credit for a spread; never drops below zero. */

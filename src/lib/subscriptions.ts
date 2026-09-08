@@ -12,13 +12,17 @@ const CREATE_TABLE_SQL = `CREATE TABLE IF NOT EXISTS subscriptions (
 
 let initialized = false;
 
-async function ensureTable(db: D1Database): Promise<void> {
+export async function ensureSubscriptionsTable(db: D1Database = env.DB): Promise<void> {
   if (initialized) return;
   await db.exec(CREATE_TABLE_SQL.replace(/\n\s*/g, ' '));
   await db.exec(
     'CREATE INDEX IF NOT EXISTS idx_subscriptions_stripe_customer_id ON subscriptions(stripe_customer_id)'
   );
   initialized = true;
+}
+
+async function ensureTable(db: D1Database): Promise<void> {
+  await ensureSubscriptionsTable(db);
 }
 
 export interface SubscriptionRow {

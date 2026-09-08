@@ -31,6 +31,7 @@ const MIGRATIONS: string[] = [
   'ALTER TABLE users ADD COLUMN name TEXT',
   'ALTER TABLE users ADD COLUMN avatar_url TEXT',
   'ALTER TABLE users ADD COLUMN last_login_at DATETIME',
+  'ALTER TABLE users ADD COLUMN role TEXT',
 ];
 
 const initializedDbs = new WeakSet<object>();
@@ -56,6 +57,7 @@ export interface UserRecord {
   googleId: string | null;
   name: string | null;
   avatarUrl: string | null;
+  role: string | null;
   createdAt: string | null;
   lastLoginAt: string | null;
 }
@@ -178,43 +180,32 @@ export async function recordLogin(userId: string, db: D1Database = env.DB): Prom
 
 /** Fetch a single user record (used by the account page and audit paths). */
 export async function getUserById(userId: string, db: D1Database = env.DB): Promise<UserRecord | null> {
-  await ensureTable(db);
-  const row = await db
-    .prepare('SELECT id, email, google_id, name, avatar_url, created_at, last_login_at FROM users WHERE id = ?')
-    .bind(userId)
-    .first<{
-      id: string;
-      email: string;
-      google_id: string | null;
-      name: string | null;
-      avatar_url: string | null;
-      created_at: string | null;
-      last_login_at: string | null;
-    }>();
-  if (!row) return null;
-  return {
-    id: row.id,
-    email: row.email,
-    googleId: row.google_id,
-    name: row.name,
-    avatarUrl: row.avatar_url,
-    createdAt: row.created_at,
-    lastLoginAt: row.last_login_at,
-  };
+  return getUserByColumn('id', userId, db);
 }
 
 /** Audit query: find a user by email. */
 export async function getUserByEmail(email: string, db: D1Database = env.DB): Promise<UserRecord | null> {
+  return getUserByColumn('email', email, db);
+}
+
+async function getUserByColumn(
+  column: 'id' | 'email',
+  value: string,
+  db: D1Database
+): Promise<UserRecord | null> {
   await ensureTable(db);
   const row = await db
-    .prepare('SELECT id, email, google_id, name, avatar_url, created_at, last_login_at FROM users WHERE email = ?')
-    .bind(email)
+    .prepare(
+      `SELECT id, email, google_id, name, avatar_url, role, created_at, last_login_at FROM users WHERE ${column} = ?`
+    )
+    .bind(value)
     .first<{
       id: string;
       email: string;
       google_id: string | null;
       name: string | null;
       avatar_url: string | null;
+      role: string | null;
       created_at: string | null;
       last_login_at: string | null;
     }>();
@@ -225,6 +216,7 @@ export async function getUserByEmail(email: string, db: D1Database = env.DB): Pr
     googleId: row.google_id,
     name: row.name,
     avatarUrl: row.avatar_url,
+    role: row.role,
     createdAt: row.created_at,
     lastLoginAt: row.last_login_at,
   };
@@ -235,7 +227,7 @@ export async function listUsers(limit = 100, db: D1Database = env.DB): Promise<U
   await ensureTable(db);
   const result = await db
     .prepare(
-      'SELECT id, email, google_id, name, avatar_url, created_at, last_login_at FROM users ORDER BY created_at DESC LIMIT ?'
+      'SELECT id, email, google_id, name, avatar_url, role, created_at, last_login_at FROM users ORDER BY created_at DESC LIMIT ?'
     )
     .bind(limit)
     .all<{
@@ -244,6 +236,7 @@ export async function listUsers(limit = 100, db: D1Database = env.DB): Promise<U
       google_id: string | null;
       name: string | null;
       avatar_url: string | null;
+      role: string | null;
       created_at: string | null;
       last_login_at: string | null;
     }>();
@@ -253,7 +246,18 @@ export async function listUsers(limit = 100, db: D1Database = env.DB): Promise<U
     googleId: r.google_id,
     name: r.name,
     avatarUrl: r.avatar_url,
+    role: r.role,
     createdAt: r.created_at,
     lastLoginAt: r.last_login_at,
   }));
+}
+
+/** Admin dashboard action: grant or revoke the admin role. */
+export async function setUserRole(
+  userId: string,
+  role: 'user' | 'admin',
+  db: D1Database = env.DB
+): Promise<void> {
+  await ensureTable(db);
+  await db.prepare('UPDATE users SET role = ? WHERE id = ?').bind(role, userId).run();
 }
