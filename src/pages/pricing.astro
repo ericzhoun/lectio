@@ -167,8 +167,8 @@ const title = lang === 'zh'
     "@type": "FAQPage",
     "mainEntity": faq.map((item) => ({
       "@type": "Question",
-      "name": item.q.en,
-      "acceptedAnswer": { "@type": "Answer", "text": item.a.en }
+      "name": item.q[lang],
+      "acceptedAnswer": { "@type": "Answer", "text": item.a[lang] }
     }))
   })} />
 

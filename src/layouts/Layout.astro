@@ -22,17 +22,22 @@ const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSI
 
 // Canonical URL: strip query params (including ?lang=) so search engines
 // see one URL per piece of content.
-const siteUrl = 'https://enjoyhim.org';
+const siteUrl = 'https://3livescapture.com';
 const canonicalPath = Astro.url.pathname;
-const canonicalUrl = `${siteUrl}${canonicalPath}`;
+const canonicalUrl = lang === 'zh'
+  ? `${siteUrl}${canonicalPath}?lang=zh`
+  : `${siteUrl}${canonicalPath}`;
 
 // Active-page highlight (same bold treatment as the language links below).
 const path = Astro.url.pathname;
 const isActive = (p: string) => path === p || path.startsWith(`${p}/`);
 
-// Alternate language URL (for hreflang).
+// Alternate language URL (for hreflang): en → bare path, zh → ?lang=zh,
+// matching the canonical scheme above.
 const altLang: Lang = lang === 'zh' ? 'en' : 'zh';
-const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
+const altLangUrl = lang === 'zh'
+  ? `${siteUrl}${canonicalPath}`
+  : `${siteUrl}${canonicalPath}?lang=zh`;
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -77,7 +82,6 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
   <link rel="alternate" hreflang={lang} href={canonicalUrl} />
   <link rel="alternate" hreflang={altLang} href={altLangUrl} />
   <link rel="alternate" hreflang="x-default" href={`${siteUrl}${canonicalPath}`} />
-
   <!-- SEO: opt out of indexing for private pages -->
   {noindex && <meta name="robots" content="noindex, nofollow" />}
 
@@ -86,12 +90,10 @@ const altLangUrl = `${siteUrl}${canonicalPath}?lang=${altLang}`;
   <meta property="og:title" content={title} />
   {description && <meta property="og:description" content={description} />}
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={`${siteUrl}/og-image.png`} />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Lectio — a quiet house for contemplative scripture reading" />
+  <meta property="og:image" content={`${siteUrl}/logo.webp`} />
   <meta property="og:site_name" content="Lectio" />
   <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
+  <meta property="og:locale:alternate" content={lang === 'zh' ? 'en_US' : 'zh_CN'} />
 
   <!-- Twitter card -->
   <meta name="twitter:card" content="summary_large_image" />

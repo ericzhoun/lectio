@@ -21,12 +21,10 @@ function verseSlug(refEn) {
 }
 
 function urlEntry(path, changefreq, priority) {
-  const alts = ['en', 'zh']
-    .map(
-      (lang) =>
-        `      <xhtml:link rel="alternate" hreflang="${lang}" href="${SITE}${path}?lang=${lang}" />`
-    )
-    .join('\n');
+  const alts = [
+    `      <xhtml:link rel="alternate" hreflang="en" href="${SITE}${path}" />`,
+    `      <xhtml:link rel="alternate" hreflang="zh" href="${SITE}${path}?lang=zh" />`,
+  ].join('\n');
   return `  <url>
     <loc>${SITE}${path}</loc>
     <changefreq>${changefreq}</changefreq>
@@ -48,7 +46,7 @@ const verseUrls = verseRefs.map((ref) => {
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="${SITE}${path}?lang=en" />
+    <xhtml:link rel="alternate" hreflang="en" href="${SITE}${path}" />
     <xhtml:link rel="alternate" hreflang="zh" href="${SITE}${path}?lang=zh" />
   </url>`;
 });

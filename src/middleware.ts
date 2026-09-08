@@ -7,6 +7,18 @@ import { assignVariants, serializeVariantCookie } from './lib/ab';
 const TWO_YEARS = 60 * 60 * 24 * 365 * 2;
 
 export const onRequest = defineMiddleware((context, next) => {
+  // Normalize trailing slashes: /library/ and /library must not both serve 200
+  // with their own self-canonical tag. Redirect once (308 preserves the method)
+  // and leave API routes untouched.
+  const pathname = context.url.pathname;
+  const stripped = pathname.replace(/\/+$/, '');
+  if (stripped && stripped !== pathname && !pathname.startsWith('/api/')) {
+    return new Response(null, {
+      status: 308,
+      headers: { Location: `${stripped}${context.url.search}` },
+    });
+  }
+
   const cookies = context.cookies;
   let vid = cookies.get('vid')?.value;
   if (!vid || !/^[0-9a-f-]{36}$/.test(vid)) {
