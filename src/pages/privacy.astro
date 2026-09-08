@@ -8,6 +8,9 @@ const lang = resolveLang(Astro);
 const t = {
   title: lang === 'zh' ? '隐私政策' : 'Privacy Policy',
   updated: lang === 'zh' ? '最后更新：2026 年 8 月 27 日' : 'Last updated: August 27, 2026',
+  description: lang === 'zh'
+    ? 'Lectio（enjoyhim.org）隐私政策：我们收集哪些信息、如何使用与保护数据、第三方服务与你的权利。'
+    : 'Lectio (enjoyhim.org) privacy policy: what we collect, how we use and protect your data, third-party services, and your rights.',
   intro: lang === 'zh'
     ? 'Lectio（以下简称"本应用"）是一款 AI 辅助的圣言诵读（Lectio Divina）网络应用。我们重视你的隐私。本政策说明我们收集哪些信息、如何使用与保护这些信息，以及你享有的权利。使用本应用即表示你同意本政策。'
     : 'Lectio ("the App") is an AI-assisted Lectio Divina (contemplative scripture reading) web application. We respect your privacy. This policy explains what information we collect, how we use and protect it, and the rights you have. By using the App you agree to this policy.',
@@ -88,7 +91,7 @@ const t = {
     : 'For any questions, requests, or complaints about this privacy policy, contact:',
 };
 ---
-<Layout title={t.title} lang={lang}>
+<Layout title={t.title} description={t.description} lang={lang}>
   <div class="policy-page">
     <div class="policy-head">
       <img src="/logo.webp" alt="Lectio" class="site-logo" width="512" height="512" />

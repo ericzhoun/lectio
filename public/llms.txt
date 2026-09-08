@@ -26,9 +26,11 @@ reflection.
   [Psalm 23:1](https://enjoyhim.org/library/psalm-23-1).
 - [Approach](https://enjoyhim.org/approach): what Lectio Divina is, what
   it is not, and how this app practices it.
-- [Pricing](https://enjoyhim.org/pricing): free tier (6 daily readings),
-  Basic ($4.99/mo, Lectio Divina layout), Pro ($11.99/mo, all layouts,
-  unlimited). First month free on monthly plans; annual billing saves 40%.
+- [Pricing](https://enjoyhim.org/pricing): guests get 3 Daily Word readings
+  a day, free accounts 6 a day plus trial credits (Lectio Divina ×3, Deep
+  Lectio ×1); Basic $4.99/mo (Daily Word and Lectio Divina layouts), Pro
+  $11.99/mo (all layouts, unlimited). First month free on monthly plans;
+  annual billing saves 40%.
 
 ## How it works
 

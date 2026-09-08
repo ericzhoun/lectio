@@ -133,8 +133,83 @@ const hinge = [
   { title: t.h2Title, body: t.h2Body },
   { title: t.h3Title, body: t.h3Body },
 ];
+
+// Bilingual FAQ. Answers are grounded in the site's own verified facts:
+// pricing.astro (plans/quotas), the lectionary source, and the "not
+// divination" statement shared with public/llms.txt.
+const faqCopy = {
+  zh: {
+    heading: '常见问题',
+    items: [
+      {
+        q: '什么是圣言诵读（Lectio Divina）？',
+        a: '一种源自六世纪本笃会传统的基督徒祈祷读经方式：缓慢诵读一段简短经文（诵读），反复默想（默想），以祷告回应（祈祷），最后在静默中安息（默观）。',
+      },
+      {
+        q: 'Lectio 是占卜或算命吗？',
+        a: '不是。Lectio 从不预言未来，也不提供占卜式解读。经文不预言你的明天；这个练习是带你把真实的问题带到经文面前，并停留在它所唤起的地方。',
+      },
+      {
+        q: '每日经文从哪里来？',
+        a: '来自《通用读经表》（Revised Common Lectionary）。每个日历日只有一段经文，所有读者领受的都相同，诵读随教会年历推进，而不随个人口味挑选。',
+      },
+      {
+        q: '开始使用需要注册吗？',
+        a: '不需要。访客可以直接开始今日诵读。注册免费账号后，每日次数更多，还可获得更长布局的体验额度，并拥有永不公开的私人日记本。',
+      },
+      {
+        q: 'Lectio 收费多少？',
+        a: '访客每日 3 次经文默想，注册用户每日 6 次，另附体验额度（圣言诵读 ×3、深度诵读 ×1）。基础版 $4.99/月，专业版 $11.99/月（全部布局、不限次数）。月付首月免费，年付立省 40%。',
+      },
+      {
+        q: '网站支持中文吗？',
+        a: '支持——每个页面都提供中英双语，可通过导航中的语言链接或网址参数 ?lang=zh 切换。',
+      },
+    ],
+  },
+  en: {
+    heading: 'Frequently asked questions',
+    items: [
+      {
+        q: 'What is Lectio Divina?',
+        a: 'An ancient Christian prayer practice handed down from the sixth-century Benedictine tradition. A short passage is read slowly (lectio), reflected on (meditatio), responded to in prayer (oratio), and rested with in silence (contemplatio).',
+      },
+      {
+        q: 'Is Lectio fortune-telling or divination?',
+        a: 'No. Lectio never predicts the future and does not offer fortune-telling. Scripture does not predict your tomorrow; the practice helps you bring your real questions to a passage and stay with what it stirs.',
+      },
+      {
+        q: 'Where do the daily passages come from?',
+        a: 'From the Revised Common Lectionary. Each calendar day has one short passage, the same for every reader, so the reading follows the church year rather than personal taste.',
+      },
+      {
+        q: 'Do I need an account to begin?',
+        a: 'No. Guests can start today\u2019s reading right away. A free account adds more daily readings, trial credits for the longer layouts, and a private journal that is never shared or published.',
+      },
+      {
+        q: 'What does Lectio cost?',
+        a: 'Guests get 3 Daily Word readings a day; free accounts get 6, plus trial credits (Lectio Divina \u00d73, Deep Lectio \u00d71). Basic is $4.99/mo and Pro is $11.99/mo with every layout and unlimited readings. The first month is free on monthly plans, and annual billing saves 40%.',
+      },
+      {
+        q: 'Is the site available in Chinese?',
+        a: 'Yes \u2014 every page is fully bilingual in English and \u4e2d\u6587. Switch with the language links in the navigation or the ?lang=zh URL parameter.',
+      },
+    ],
+  },
+};
+const faq = faqCopy[lang];
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.items.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+};
 ---
 <Layout title={t.title} description={t.description} lang={lang}>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="policy-page">
     <div class="policy-head">
       <img src="/logo.webp" alt="Lectio" class="site-logo" width="512" height="512" />
@@ -215,6 +290,18 @@ const hinge = [
           <li><strong>{h.title}</strong> {h.body}</li>
         ))}
       </ul>
+    </section>
+
+    <section class="policy-section" id="faq">
+      <h2>{faq.heading}</h2>
+      <div class="dt-grid">
+        {faq.items.map((item) => (
+          <div class="dt-card">
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </div>
+        ))}
+      </div>
     </section>
 
     <div class="upsell-cta">

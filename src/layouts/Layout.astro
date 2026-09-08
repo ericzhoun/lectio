@@ -22,7 +22,7 @@ const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSI
 
 // Canonical URL: strip query params (including ?lang=) so search engines
 // see one URL per piece of content.
-const siteUrl = 'https://3livescapture.com';
+const siteUrl = 'https://enjoyhim.org';
 const canonicalPath = Astro.url.pathname;
 const canonicalUrl = lang === 'zh'
   ? `${siteUrl}${canonicalPath}?lang=zh`
@@ -90,7 +90,10 @@ const altLangUrl = lang === 'zh'
   <meta property="og:title" content={title} />
   {description && <meta property="og:description" content={description} />}
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={`${siteUrl}/logo.webp`} />
+  <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Lectio Divina scripture reflection'} />
   <meta property="og:site_name" content="Lectio" />
   <meta property="og:locale" content={lang === 'zh' ? 'zh_CN' : 'en_US'} />
   <meta property="og:locale:alternate" content={lang === 'zh' ? 'en_US' : 'zh_CN'} />
@@ -100,6 +103,7 @@ const altLangUrl = lang === 'zh'
   <meta name="twitter:title" content={title} />
   {description && <meta name="twitter:description" content={description} />}
   <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
+  <meta name="twitter:image:alt" content={lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Lectio Divina scripture reflection'} />
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="icon" type="image/webp" href="/logo.webp" />
