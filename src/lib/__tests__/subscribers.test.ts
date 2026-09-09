@@ -42,10 +42,15 @@ describe('subscriber storage', () => {
 
   it('brings an unsubscribed reader back when they sign up again', async () => {
     await addSubscriber(db, { email: 'reader@example.test', lang: 'en', tz: 'UTC' });
+    await markSent(db, ['reader@example.test'], '2026-09-08');
     await setStatus(db, 'reader@example.test', 'unsubscribed');
     expect(await activeSubscribers(db)).toHaveLength(0);
     await addSubscriber(db, { email: 'reader@example.test', lang: 'en', tz: 'UTC' });
-    expect(await activeSubscribers(db)).toHaveLength(1);
+    const rows = await activeSubscribers(db);
+    expect(rows).toHaveLength(1);
+    // The upsert must not clobber last_sent, or a resubscribe on the same
+    // local day would look unsent and trigger a duplicate delivery.
+    expect(rows[0].lastSent).toBe('2026-09-08');
   });
 
   it('hides unsubscribed and bounced readers from the send list', async () => {
