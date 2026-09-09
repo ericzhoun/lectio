@@ -22,13 +22,13 @@ function escapeHtml(value: string): string {
     .replace(/"/g, '&quot;');
 }
 
-function truncate(text: string, lang: Lang): { body: string; truncated: boolean } {
+export function truncate(text: string, lang: Lang): { body: string; truncated: boolean } {
   if (text.length <= MAX_PASSAGE_CHARS) return { body: text, truncated: false };
   const cut = text.slice(0, MAX_PASSAGE_CHARS);
   // Prefer to end on a sentence so the excerpt does not stop mid-breath.
   const stop = Math.max(cut.lastIndexOf('. '), cut.lastIndexOf('。'));
   const body = stop > MAX_PASSAGE_CHARS / 2 ? cut.slice(0, stop + 1) : cut;
-  return { body: lang === 'zh' ? `${body}...` : `${body}...`, truncated: true };
+  return { body: lang === 'zh' ? `${body}……` : `${body}...`, truncated: true };
 }
 
 const COPY = {
@@ -93,7 +93,7 @@ export function renderDailyEmail(
     <hr style="border:none;border-top:1px solid #e5ded3;margin:0 0 16px;" />
     <p style="margin:0;font-size:12px;color:#a2988c;">
       ${escapeHtml(copy.note)}
-      <a href="${unsubscribeLink}" style="color:#a2988c;">${escapeHtml(copy.unsubscribe)}</a>
+      <a href="${escapeHtml(unsubscribeLink)}" style="color:#a2988c;">${escapeHtml(copy.unsubscribe)}</a>
     </p>
   </div>
 </body>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { renderDailyEmail, unsubscribeUrl } from '../dailyEmail';
+import { renderDailyEmail, unsubscribeUrl, truncate } from '../dailyEmail';
 
 const LINK = 'https://enjoyhim.org/unsubscribe?e=reader%40example.test&t=abc';
 
@@ -16,7 +16,10 @@ describe('renderDailyEmail', () => {
     expect(mail).not.toBeNull();
     expect(mail!.subject.length).toBeGreaterThan(0);
     expect(mail!.html).toContain('https://enjoyhim.org/today');
-    expect(mail!.html).toContain(LINK);
+    // The href attribute must have the link HTML-escaped.
+    const linkEscaped = LINK.replace(/&/g, '&amp;');
+    expect(mail!.html).toContain(`href="${linkEscaped}"`);
+    // The plain text must carry the raw, unescaped URL.
     expect(mail!.text).toContain(LINK);
     // The passage itself must be in the email, not only behind the link.
     expect(mail!.text.length).toBeGreaterThan(120);
@@ -44,5 +47,22 @@ describe('renderDailyEmail', () => {
   it('returns null for a day whose passage cannot be resolved', () => {
     // Far outside the generated lectionary window and the bundled chapters.
     expect(renderDailyEmail('not-a-day', 'en', LINK)).toBeNull();
+  });
+
+  it('uses Chinese full-width ellipsis when truncating zh passages', () => {
+    // Create a passage longer than MAX_PASSAGE_CHARS
+    const longPassage = 'This is a test passage. '.repeat(50);
+    const { body, truncated } = truncate(longPassage, 'zh');
+    expect(truncated).toBe(true);
+    expect(body).toMatch(/……$/);
+    expect(body).not.toMatch(/\.\.\.$/);
+  });
+
+  it('uses ASCII ellipsis when truncating en passages', () => {
+    const longPassage = 'This is a test passage. '.repeat(50);
+    const { body, truncated } = truncate(longPassage, 'en');
+    expect(truncated).toBe(true);
+    expect(body).toMatch(/\.\.\.$/);
+    expect(body).not.toMatch(/……$/);
   });
 });
