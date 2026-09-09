@@ -93,7 +93,7 @@ created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 Three columns are added:
 
 ```
-tz         TEXT NOT NULL DEFAULT 'UTC'
+tz         TEXT NOT NULL DEFAULT 'America/Los_Angeles'
 status     TEXT NOT NULL DEFAULT 'active'
 last_sent  TEXT
 ```
@@ -101,15 +101,15 @@ last_sent  TEXT
 - `tz` is an IANA zone name captured in the browser at signup time with
   `Intl.DateTimeFormat().resolvedOptions().timeZone`, validated server-side by
   the existing `isValidTimeZone` in `src/lib/localDay.ts`. An invalid or
-  missing value falls back to `UTC`.
+  missing value falls back to `America/Los_Angeles`.
 - `status` is one of `active`, `unsubscribed`, `bounced`. Only `active` rows
   receive mail.
 - `last_sent` is the reader's own local day as `YYYY-MM-DD`, written after
   Resend accepts a batch.
 
 Existing rows take the column defaults, so the one production subscriber
-becomes `tz='UTC'`, `status='active'`, `last_sent=NULL` and starts receiving
-mail at 06:00 UTC until that reader's timezone is known.
+becomes `tz='America/Los_Angeles'`, `status='active'`, `last_sent=NULL` and
+receiving mail at 06:00 Pacific until that reader's timezone is known.
 
 The repository has no migrations directory; the established pattern is
 `CREATE TABLE IF NOT EXISTS` executed lazily from application code. This
@@ -236,7 +236,7 @@ upsert, changing `ON CONFLICT DO NOTHING` to an update of `lang`, `tz`, and
 | Individual address fails inside a batch | Mark only the addresses that succeeded. |
 | Passage resolution fails for the day | Skip the entire send for that day rather than mail a broken email. Log loudly. |
 | D1 unavailable | The cron invocation fails and Cloudflare records it. No retry logic beyond the next tick. |
-| Reader has an invalid stored tz | Treated as `UTC` at read time, so they still receive mail. |
+| Reader has an invalid stored tz | Treated as `America/Los_Angeles` at read time, so they still receive mail. |
 
 Every path logs through `console.error` with a `daily-invitation:` prefix,
 matching the existing convention in the API route, and is visible through the
@@ -250,7 +250,7 @@ Unit, with Vitest, following `src/lib/__tests__`:
   rejected, case normalisation.
 - `mailSchedule.test.ts` - due at 06:00 local across several zones, not due at
   other hours, not due twice in one local day, correct behaviour across a
-  spring-forward and a fall-back date, invalid tz treated as UTC.
+  spring-forward and a fall-back date, invalid tz treated as `America/Los_Angeles`.
 - `dailyEmail.test.ts` - en and zh rendering, unsubscribe link present in both
   HTML and text, long passage truncation.
 - `resend.test.ts` - chunking at 100, injected fetch receives the expected
