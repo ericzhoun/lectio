@@ -12,7 +12,12 @@
 :root {
   --font-serif: "Cormorant Garamond", "EB Garamond", Georgia, "Noto Serif SC", "Songti SC", "STSong", serif;
   --font-body: "EB Garamond", Georgia, "Noto Serif SC", "Songti SC", "STSong", serif;
-  --font-ui: "Avenir Next", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-ui: "Avenir Next", "Segoe UI", "Hiragino Sans GB", "PingFang SC", "Microsoft YaHei", sans-serif;
+  /* Hiragino Sans GB deliberately precedes PingFang SC: on recent macOS,
+     Chromium intermittently resolves "PingFang SC" Regular to the LastResort
+     font (CJK paints as tofu) depending on page-load timing, while Hiragino
+     resolves reliably. Bold and serif fallbacks are unaffected. Keep PingFang
+     later in the stack for coverage; revisit after a Chromium fix ships. */
 
   /* Morning (default). Light is the sanctuary's identity; dark is opt-in. */
   --bg: #f5efe2;
