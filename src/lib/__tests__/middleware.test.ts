@@ -162,4 +162,30 @@ describe('middleware cross-origin guard', () => {
     );
     expect(response.status).toBe(403);
   });
+
+  // Resend's webhook is a server-to-server POST: no Origin header, JSON
+  // content type. The JSON content type alone already keeps it out of the
+  // form-like branch (see resend-webhook.test.ts), but a request with NO
+  // content-type header at all falls through to the bare `!isSameOrigin`
+  // check, which a machine-to-machine call with no Origin header would fail.
+  // That is exactly the latent single point of failure this exemption closes
+  // - without it, bounce/complaint suppression would 403 before the route's
+  // own Svix signature check ever ran, with no visible error anywhere.
+  it('exempts /api/resend-webhook from a cross-site POST with no content-type or Origin', async () => {
+    const response = await onRequest(
+      context('https://lectio.test/api/resend-webhook', { method: 'POST' }),
+      () => new Response('ok')
+    );
+    expect(response.status).not.toBe(403);
+  });
+
+  // Exact match only, same discipline as /unsubscribe - a similarly-named
+  // path must stay guarded so the exemption cannot silently widen.
+  it('still guards a near-miss path like /api/resend-webhook-extra', async () => {
+    const response = await onRequest(
+      context('https://lectio.test/api/resend-webhook-extra', { method: 'POST' }),
+      () => new Response('should not reach here')
+    );
+    expect(response.status).toBe(403);
+  });
 });

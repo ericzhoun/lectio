@@ -89,6 +89,45 @@ describe('resend webhook', () => {
   });
 });
 
+describe('resend webhook, malformed inputs', () => {
+  it('fails closed with a clear 500 when the configured secret is not valid base64', async () => {
+    vi.resetModules();
+    vi.doMock('cloudflare:workers', () => ({
+      env: { DB: {}, RESEND_WEBHOOK_SECRET: 'whsec_not-valid-base64!!!' },
+    }));
+    vi.doMock('../subscribers', () => ({
+      ensureSubscriberTable: vi.fn().mockResolvedValue(undefined),
+      setStatus: vi.fn().mockResolvedValue(undefined),
+    }));
+    const { POST: brokenSecretPost } = await import('../../pages/api/resend-webhook');
+    const response = await brokenSecretPost({
+      request: new Request('https://enjoyhim.org/api/resend-webhook', {
+        method: 'POST',
+        body: '{}',
+        headers: { 'svix-id': 'msg_1', 'svix-timestamp': '0', 'svix-signature': 'v1,x' },
+      }),
+    } as any);
+    expect(response.status).toBe(500);
+    vi.resetModules();
+  });
+
+  it('treats a malformed (non-base64) signature entry as non-matching, not a crash', async () => {
+    const response = await POST({
+      request: new Request('https://enjoyhim.org/api/resend-webhook', {
+        method: 'POST',
+        body: '{}',
+        headers: {
+          'svix-id': 'msg_1',
+          'svix-timestamp': String(Math.floor(Date.now() / 1000)),
+          'svix-signature': 'v1,not-valid-base64!!!',
+        },
+      }),
+    } as any);
+    expect(response.status).toBe(401);
+    expect(setStatus).not.toHaveBeenCalled();
+  });
+});
+
 // Pins the CSRF guard's behavior for this route: Resend's webhook is a
 // cross-origin JSON POST with no Origin header. The guard only blocks
 // cross-origin POSTs whose content type is form-like (see originCheck.ts);

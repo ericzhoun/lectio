@@ -1,6 +1,8 @@
 // Unsubscribe links must keep working years after the email was sent, so the
 // token carries no expiry: it is only a proof that this address was issued a
 // link by us, not a session.
+import { constantTimeEqual } from './constantTimeEqual';
+
 const ENCODER = new TextEncoder();
 
 function toBase64Url(bytes: Uint8Array): string {
@@ -37,11 +39,5 @@ export async function verifyMailToken(
 ): Promise<boolean> {
   if (!token) return false;
   const expected = await signMailToken(email, secret);
-  if (expected.length !== token.length) return false;
-  // Constant time: a length-independent early return would leak the prefix.
-  let diff = 0;
-  for (let i = 0; i < expected.length; i++) {
-    diff |= expected.charCodeAt(i) ^ token.charCodeAt(i);
-  }
-  return diff === 0;
+  return constantTimeEqual(expected, token);
 }

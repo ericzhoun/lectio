@@ -32,7 +32,14 @@ const SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS'];
 // Exact strings only, matched against a normalized pathname (see
 // normalizePathname below) - never widen this to a prefix or regex match,
 // or a path like /unsubscribe-all would silently inherit the exemption too.
-const ORIGIN_CHECK_EXEMPT_PATHS = new Set(['/unsubscribe']);
+// /api/resend-webhook is exempt for the same reason: it carries no ambient
+// authority, and a server-to-server webhook call has no Origin header at
+// all, which would otherwise fall through the null-content-type branch below
+// to `!isSameOrigin` and get 403'd before the route's own Svix signature
+// check ever runs - silently breaking bounce/complaint suppression with no
+// visible error. The Svix HMAC signature on the body is a far stronger
+// authenticator than same-origin ever was for this route.
+const ORIGIN_CHECK_EXEMPT_PATHS = new Set(['/unsubscribe', '/api/resend-webhook']);
 
 function hasFormLikeHeader(contentType: string | null): boolean {
   if (!contentType) return false;

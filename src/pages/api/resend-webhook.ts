@@ -4,11 +4,33 @@ import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import type { D1Database } from '@cloudflare/workers-types';
 import { ensureSubscriberTable, setStatus } from '../../lib/subscribers';
+import { constantTimeEqual } from '../../lib/constantTimeEqual';
 
 const ENCODER = new TextEncoder();
 
-function fromBase64(b64: string): Uint8Array {
-  return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+/** Returns null on malformed base64 rather than throwing, so a bad secret or
+ * a bad signature entry can be handled as "does not verify" instead of
+ * crashing the request with an unhandled exception. */
+function fromBase64(b64: string): Uint8Array | null {
+  try {
+    return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Decodes RESEND_WEBHOOK_SECRET's whsec_ prefix into an HMAC key. Returns
+ * null if the configured secret is not valid base64 - a config typo should
+ * surface as a clear "not configured correctly" 500, not an unhandled
+ * exception that crashes the request.
+ */
+async function importSecretKey(secret: string): Promise<CryptoKey | null> {
+  const keyBytes = fromBase64(secret.replace(/^whsec_/, ''));
+  if (!keyBytes) return null;
+  return crypto.subtle.importKey('raw', keyBytes, { name: 'HMAC', hash: 'SHA-256' }, false, [
+    'sign',
+  ]);
 }
 
 /**
@@ -19,7 +41,7 @@ function fromBase64(b64: string): Uint8Array {
  * the space-separated svix-signature header.
  */
 async function verifyWebhook(
-  secret: string,
+  key: CryptoKey,
   headers: Headers,
   rawBody: string
 ): Promise<boolean> {
@@ -33,13 +55,6 @@ async function verifyWebhook(
   const age = Math.abs(Date.now() / 1000 - Number(timestamp));
   if (!Number.isFinite(age) || age > 300) return false;
 
-  const key = await crypto.subtle.importKey(
-    'raw',
-    fromBase64(secret.replace(/^whsec_/, '')),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
   const mac = await crypto.subtle.sign(
     'HMAC',
     key,
@@ -47,10 +62,13 @@ async function verifyWebhook(
   );
   const expected = btoa(String.fromCharCode(...new Uint8Array(mac)));
 
-  // The header carries a space-separated list; any version-1 entry may match.
+  // The header carries a space-separated list; any version-1 entry may
+  // match. A malformed entry (not valid base64) just fails to match rather
+  // than throwing - Resend controls this header, but a proxy or Resend bug
+  // truncating it should not turn into a 500.
   return signatureHeader
     .split(' ')
-    .some((entry) => entry.startsWith('v1,') && entry.slice(3) === expected);
+    .some((entry) => entry.startsWith('v1,') && constantTimeEqual(entry.slice(3), expected));
 }
 
 interface ResendEvent {
@@ -65,8 +83,14 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response('not configured', { status: 500 });
   }
 
+  const key = await importSecretKey(secret);
+  if (!key) {
+    console.error('daily-invitation: RESEND_WEBHOOK_SECRET is not valid base64');
+    return new Response('not configured correctly', { status: 500 });
+  }
+
   const rawBody = await request.text();
-  if (!(await verifyWebhook(secret, request.headers, rawBody))) {
+  if (!(await verifyWebhook(key, request.headers, rawBody))) {
     return new Response('bad signature', { status: 401 });
   }
 
