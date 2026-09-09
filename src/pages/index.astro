@@ -1483,12 +1483,19 @@ const description = lang === 'zh'
         const input = inviteForm.querySelector<HTMLInputElement>('input[name="email"]');
         const email = input?.value.trim() ?? '';
         const lang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
+        // So the invitation arrives in this reader's morning, not ours.
+        let tz = '';
+        try {
+          tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
+        } catch {
+          tz = '';
+        }
         errorNote?.setAttribute('hidden', '');
         try {
           const res = await fetch('/api/daily-invitation', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, lang }),
+            body: JSON.stringify({ email, lang, tz }),
           });
           const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
           if (res.ok && data?.ok) {
