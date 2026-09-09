@@ -139,7 +139,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
           <div class="breath" data-breath>
             <svg class="breath-svg" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
               <defs>
-                <radialGradient id="breath-glow" cx="50%" cy="44%" r="62%">
+                <radialGradient id="breath-glow" cx="50%" cy="36%" r="62%">
                   <stop offset="0%" class="breath-stop-a"></stop>
                   <stop offset="58%" class="breath-stop-b"></stop>
                   <stop offset="100%" class="breath-stop-c"></stop>
@@ -149,7 +149,11 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
                   <stop offset="72%" class="breath-halo-b"></stop>
                   <stop offset="100%" class="breath-halo-c"></stop>
                 </radialGradient>
-                <filter id="breath-waver" x="-30%" y="-30%" width="160%" height="160%">
+                <mask id="breath-cross-mask">
+                  <rect x="107" y="38" width="26" height="164" rx="9" fill="#fff"></rect>
+                  <rect x="57" y="77" width="126" height="26" rx="9" fill="#fff"></rect>
+                </mask>
+                <filter id="breath-soften" x="-60%" y="-60%" width="220%" height="220%">
                   <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="2" seed="11" result="waver">
                     <animate
                       attributeName="baseFrequency"
@@ -160,11 +164,16 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
                       keySplines="0.42 0 0.58 1;0.42 0 0.58 1"
                     ></animate>
                   </feTurbulence>
-                  <feDisplacementMap in="SourceGraphic" in2="waver" scale="18" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+                  <feDisplacementMap in="SourceGraphic" in2="waver" scale="10" result="displaced"></feDisplacementMap>
+                  <feGaussianBlur in="displaced" stdDeviation="7"></feGaussianBlur>
                 </filter>
               </defs>
-              <circle class="breath-halo" cx="120" cy="120" r="86" fill="url(#breath-halo-grad)"></circle>
-              <circle class="breath-ball" cx="120" cy="120" r="70" fill="url(#breath-glow)" filter="url(#breath-waver)"></circle>
+              <circle class="breath-halo" cx="120" cy="120" r="90" fill="url(#breath-halo-grad)"></circle>
+              <g class="breath-cross-glow" filter="url(#breath-soften)">
+                <rect x="107" y="38" width="26" height="164" rx="9"></rect>
+                <rect x="57" y="77" width="126" height="26" rx="9"></rect>
+              </g>
+              <rect class="breath-cross" x="57" y="38" width="126" height="164" fill="url(#breath-glow)" mask="url(#breath-cross-mask)"></rect>
             </svg>
             <p class="breath-hint" aria-live="polite"></p>
           </div>
@@ -218,7 +227,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
           <div class="breath" data-breath>
             <svg class="breath-svg" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
               <defs>
-                <radialGradient id="breath-glow" cx="50%" cy="44%" r="62%">
+                <radialGradient id="breath-glow" cx="50%" cy="36%" r="62%">
                   <stop offset="0%" class="breath-stop-a"></stop>
                   <stop offset="58%" class="breath-stop-b"></stop>
                   <stop offset="100%" class="breath-stop-c"></stop>
@@ -228,7 +237,11 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
                   <stop offset="72%" class="breath-halo-b"></stop>
                   <stop offset="100%" class="breath-halo-c"></stop>
                 </radialGradient>
-                <filter id="breath-waver" x="-30%" y="-30%" width="160%" height="160%">
+                <mask id="breath-cross-mask">
+                  <rect x="107" y="38" width="26" height="164" rx="9" fill="#fff"></rect>
+                  <rect x="57" y="77" width="126" height="26" rx="9" fill="#fff"></rect>
+                </mask>
+                <filter id="breath-soften" x="-60%" y="-60%" width="220%" height="220%">
                   <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="2" seed="11" result="waver">
                     <animate
                       attributeName="baseFrequency"
@@ -239,11 +252,16 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
                       keySplines="0.42 0 0.58 1;0.42 0 0.58 1"
                     ></animate>
                   </feTurbulence>
-                  <feDisplacementMap in="SourceGraphic" in2="waver" scale="18" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+                  <feDisplacementMap in="SourceGraphic" in2="waver" scale="10" result="displaced"></feDisplacementMap>
+                  <feGaussianBlur in="displaced" stdDeviation="7"></feGaussianBlur>
                 </filter>
               </defs>
-              <circle class="breath-halo" cx="120" cy="120" r="86" fill="url(#breath-halo-grad)"></circle>
-              <circle class="breath-ball" cx="120" cy="120" r="70" fill="url(#breath-glow)" filter="url(#breath-waver)"></circle>
+              <circle class="breath-halo" cx="120" cy="120" r="90" fill="url(#breath-halo-grad)"></circle>
+              <g class="breath-cross-glow" filter="url(#breath-soften)">
+                <rect x="107" y="38" width="26" height="164" rx="9"></rect>
+                <rect x="57" y="77" width="126" height="26" rx="9"></rect>
+              </g>
+              <rect class="breath-cross" x="57" y="38" width="126" height="164" fill="url(#breath-glow)" mask="url(#breath-cross-mask)"></rect>
             </svg>
             <p class="breath-hint" aria-live="polite"></p>
           </div>
@@ -325,7 +343,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
   const clearAudioError = (button: HTMLButtonElement) => {
     if (button.nextElementSibling?.classList.contains('audio-error')) button.nextElementSibling.remove();
   };
-  // The breathing ball: three deep breaths across ten seconds — an Apple
+  // The breathing cross: three deep breaths across ten seconds — an Apple
   // Watch style moment in place of the old countdown — then the step is
   // taken. The advance link never waits on it: a reader who is ready early
   // is ready.
@@ -339,19 +357,17 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     const IN = 0.45;   // fraction of a breath spent breathing in
     const HOLD = 0.12; // a short rest at the top of the breath
     const GROW = 0.34; // how far the ball swells at the top of the breath
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) el.querySelectorAll('animate').forEach((a) => a.remove());
 
     const ease = (x: number) => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, x)));
     const settle = () => {
       if (ball) ball.style.transform = '';
-      el.classList.add('settled'); // hands the ball a slow idle float
+      el.classList.add('settled'); // hands the cross a slow idle glow
       if (hint) hint.textContent = '';
       el.closest('section')?.classList.add('ready');
       document.querySelector('.action-bar')?.classList.add('ready');
     };
-    // Reduced motion keeps the pause, just without the movement.
-    if (reduced) { setTimeout(settle, TOTAL_S * 1000); return; }
+    // Deliberately ignores prefers-reduced-motion: this is guidance, not
+    // decoration — the breath leads whether or not the OS asks for stillness.
 
     const started = performance.now();
     const tick = (now: number) => {
@@ -745,8 +761,8 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     padding: 2rem 0;
   }
 
-  /* The breathing ball: a wavery sphere of warm light — three deep breaths
-     across ten seconds, then a slow idle float while the reader lingers. */
+  /* The breathing cross: a luminous cross — three deep breaths across ten
+     seconds, then a slow idle glow while the reader lingers. */
   .breath {
     display: flex;
     flex-direction: column;
@@ -770,9 +786,15 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     opacity: 0.6;
   }
 
-  .breath-stop-a { stop-color: rgba(var(--light-warm), 0.52); }
-  .breath-stop-b { stop-color: rgba(var(--light-rose), 0.3); }
-  .breath-stop-c { stop-color: rgba(var(--light-warm), 0.06); }
+  /* A luminous cross: crisp rounded arms over a warm gradient, a wavering
+     blurred glow breathing behind them, and a faint olive halo around both. */
+  .breath-cross-glow rect {
+    fill: rgba(var(--light-warm), 0.85);
+  }
+
+  .breath-stop-a { stop-color: rgba(var(--light-warm), 0.62); }
+  .breath-stop-b { stop-color: rgba(var(--light-rose), 0.36); }
+  .breath-stop-c { stop-color: rgba(var(--light-warm), 0.08); }
   .breath-halo-a { stop-color: rgba(var(--light-olive), 0); }
   .breath-halo-b { stop-color: rgba(var(--light-olive), 0.16); }
   .breath-halo-c { stop-color: rgba(var(--light-olive), 0); }
@@ -784,10 +806,6 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
   @keyframes breath-float {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.055); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .breath.settled .breath-svg { animation: none; }
   }
 
   .own-words {
