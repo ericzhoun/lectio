@@ -72,6 +72,12 @@
 
 * { box-sizing: border-box; }
 
+/* Form controls don't inherit fonts by default — Chrome's UA style hands
+   buttons Arial, whose missing CJK glyphs drop into the generic fallback and
+   hit the macOS Chromium PingFang-Regular bug (LastResort tofu). Inheriting
+   keeps every control on the site font stacks instead. */
+button, input, select, textarea { font-family: inherit; }
+
 html { scroll-behavior: smooth; }
 
 html, body { margin: 0; padding: 0; }
