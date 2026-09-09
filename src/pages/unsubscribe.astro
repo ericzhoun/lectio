@@ -1,0 +1,36 @@
+---
+// The page renders the same confirmation whether or not the token was good,
+// so it cannot be used to probe the list. It also answers both a GET (a
+// footer link click) and a POST (Gmail/Apple Mail's List-Unsubscribe-Post
+// one-click header) - Astro pages do not export GET/POST handlers the way
+// api/*.ts routes do, so the method is checked inline, same as index.astro
+// and today/[step].astro already do.
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { unsubscribeFromRequest } from '../lib/unsubscribe';
+
+await unsubscribeFromRequest(Astro.url);
+
+const lang = Astro.url.searchParams.get('lang') === 'zh' ? 'zh' : 'en';
+---
+
+<Layout title={lang === 'zh' ? '已退订' : 'Unsubscribed'} noindex lang={lang}>
+  <section class="unsubscribe">
+    <h1>{lang === 'zh' ? '已经取消' : 'That is done'}</h1>
+    <p>
+      {lang === 'zh'
+        ? '早晨的邀请不会再来了。若哪天想再听见，随时回来。'
+        : 'The morning invitation will not arrive again. Come back whenever you would like to hear it.'}
+    </p>
+    <p><a href="/">{lang === 'zh' ? '回到首页' : 'Back to the beginning'}</a></p>
+  </section>
+</Layout>
+
+<style>
+  .unsubscribe {
+    max-width: 34em;
+    margin: 12vh auto;
+    padding: 0 1.5rem;
+    text-align: center;
+  }
+</style>
