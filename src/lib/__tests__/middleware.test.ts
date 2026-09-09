@@ -108,4 +108,58 @@ describe('middleware cross-origin guard', () => {
     );
     expect(response.status).not.toBe(403);
   });
+
+  // The origin check runs before middleware.ts's own trailing-slash redirect,
+  // so a request that arrives with a trailing slash (a link-rewriter, a
+  // proxy, or a future edit to unsubscribeUrl) must not fall through to a
+  // 403 that a redirect never gets a chance to fix. Same for case: mail
+  // clients and intermediaries are not guaranteed to preserve exact case.
+  it('exempts /unsubscribe with a trailing slash', async () => {
+    const response = await onRequest(
+      context('https://lectio.test/unsubscribe/?e=reader%40example.test&t=whatever', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'List-Unsubscribe=One-Click',
+      }),
+      () => new Response('ok')
+    );
+    expect(response.status).not.toBe(403);
+  });
+
+  it('exempts /unsubscribe regardless of case', async () => {
+    const response = await onRequest(
+      context('https://lectio.test/Unsubscribe?e=reader%40example.test&t=whatever', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'List-Unsubscribe=One-Click',
+      }),
+      () => new Response('ok')
+    );
+    expect(response.status).not.toBe(403);
+  });
+
+  // The exemption must stay an exact match, not a prefix match - a
+  // similarly-named route must still be guarded so this hardening cannot
+  // silently widen into "anything starting with /unsubscribe".
+  it('still guards a near-miss path like /unsubscribe-all', async () => {
+    const response = await onRequest(
+      context('https://lectio.test/unsubscribe-all', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }),
+      () => new Response('should not reach here')
+    );
+    expect(response.status).toBe(403);
+  });
+
+  it('still guards a near-miss path like /unsubscribeX', async () => {
+    const response = await onRequest(
+      context('https://lectio.test/unsubscribeX', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }),
+      () => new Response('should not reach here')
+    );
+    expect(response.status).toBe(403);
+  });
 });

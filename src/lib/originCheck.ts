@@ -29,12 +29,27 @@ const SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS'];
 // query string, here) and so do not need the Origin check. Keep this list
 // short and each entry justified - it is the only thing standing between
 // "reimplemented Astro's CSRF guard" and "quietly disabled it everywhere."
+// Exact strings only, matched against a normalized pathname (see
+// normalizePathname below) - never widen this to a prefix or regex match,
+// or a path like /unsubscribe-all would silently inherit the exemption too.
 const ORIGIN_CHECK_EXEMPT_PATHS = new Set(['/unsubscribe']);
 
 function hasFormLikeHeader(contentType: string | null): boolean {
   if (!contentType) return false;
   const lower = contentType.toLowerCase();
   return FORM_CONTENT_TYPES.some((type) => lower.includes(type));
+}
+
+// The origin check runs before middleware.ts's own trailing-slash
+// normalizer, so a request with a trailing slash or different case must
+// still be recognized here rather than falling through to a 403 that only
+// gets fixed after a redirect nobody's mail client will follow. Same
+// normalization shape (strip trailing slash) as the redirect logic in
+// middleware.ts, kept local to this exemption check rather than sharing
+// state across the two, since case-folding is not something the redirect
+// needs.
+function normalizePathname(pathname: string): string {
+  return pathname.toLowerCase().replace(/\/+$/, '') || '/';
 }
 
 export function isForbiddenCrossOriginRequest(
@@ -44,7 +59,7 @@ export function isForbiddenCrossOriginRequest(
 ): boolean {
   if (isPrerendered) return false;
   if (SAFE_METHODS.includes(request.method)) return false;
-  if (ORIGIN_CHECK_EXEMPT_PATHS.has(url.pathname)) return false;
+  if (ORIGIN_CHECK_EXEMPT_PATHS.has(normalizePathname(url.pathname))) return false;
 
   const isSameOrigin = request.headers.get('origin') === url.origin;
   const contentType = request.headers.get('content-type');
