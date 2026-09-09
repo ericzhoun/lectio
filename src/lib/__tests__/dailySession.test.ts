@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { D1Memory } from './helpers/d1-memory';
 import {
   ensureSession, getSession, saveStepEntry, getStepEntries, advanceTo,
-  completeSession, listSessions, canOpenStep,
+  completeSession, listSessions, canOpenStep, claimGuestWalk,
 } from '../dailySession';
 
 let db: any;
@@ -42,16 +42,38 @@ describe('ensureSession', () => {
     expect(again.reachedStep).toBe('oratio');
   });
 
-  it('seeds the reached step for a walk resumed after sign-in', async () => {
-    const s = await ensureSession('u1', '2026-09-04', 'en', db, 'lectio');
-    expect(s.reachedStep).toBe('lectio');
+});
+
+describe('claimGuestWalk', () => {
+  it('moves the guest walk and its entries onto the account', async () => {
+    await ensureSession('guest:v1', '2026-09-04', 'en', db);
+    await advanceTo('guest:v1', '2026-09-04', 'oratio', db);
+    await saveStepEntry('guest:v1', '2026-09-04', 'meditatio', 'mine', 'reply', db);
+
+    await claimGuestWalk('guest:v1', 'u1', db);
+
+    const claimed = await getSession('u1', '2026-09-04', db);
+    expect(claimed?.reachedStep).toBe('oratio');
+    expect(await getStepEntries('u1', '2026-09-04', db)).toEqual([
+      { step: 'meditatio', userText: 'mine', aiText: 'reply' },
+    ]);
+    expect(await getSession('guest:v1', '2026-09-04', db)).toBeNull();
+    expect(await getStepEntries('guest:v1', '2026-09-04', db)).toEqual([]);
   });
 
-  it('ignores the seed when the session already exists', async () => {
+  it('keeps the signed-in walk when the account already has that day', async () => {
     await ensureSession('u1', '2026-09-04', 'en', db);
-    await advanceTo('u1', '2026-09-04', 'oratio', db);
-    const again = await ensureSession('u1', '2026-09-04', 'en', db, 'lectio');
-    expect(again.reachedStep).toBe('oratio');
+    await advanceTo('u1', '2026-09-04', 'contemplatio', db);
+    await saveStepEntry('u1', '2026-09-04', 'meditatio', 'signed in', null, db);
+    await ensureSession('guest:v1', '2026-09-04', 'en', db);
+    await saveStepEntry('guest:v1', '2026-09-04', 'meditatio', 'guest', null, db);
+
+    await claimGuestWalk('guest:v1', 'u1', db);
+
+    const kept = await getSession('u1', '2026-09-04', db);
+    expect(kept?.reachedStep).toBe('contemplatio');
+    expect((await getStepEntries('u1', '2026-09-04', db))[0].userText).toBe('signed in');
+    expect(await getSession('guest:v1', '2026-09-04', db)).toBeNull();
   });
 });
 

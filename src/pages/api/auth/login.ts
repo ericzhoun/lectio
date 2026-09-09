@@ -5,6 +5,8 @@ import { verifyUserCredentials } from '../../../lib/users';
 import { createSessionToken } from '../../../lib/session';
 import { safeAuthReturn } from '../../../lib/authReturn';
 import { trackServerEvent } from '../../../lib/analytics';
+import { claimGuestWalk } from '../../../lib/dailySession';
+import { guestReaderId } from '../../../lib/guestSession';
 
 export const prerender = false;
 
@@ -21,6 +23,10 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     if (json) return Response.json({ error: 'invalid' }, { status: 401 });
     return redirect(`/login?${new URLSearchParams({ error: 'invalid', lang, returnTo })}`, 303);
   }
+
+  // Whatever they walked through as a guest becomes theirs to keep.
+  const vid = cookies.get('vid')?.value;
+  if (vid) await claimGuestWalk(guestReaderId(vid), userId);
 
   const token = await createSessionToken(userId, env.SESSION_SECRET);
   cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });

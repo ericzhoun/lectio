@@ -6,6 +6,8 @@ import { createSessionToken } from '../../../lib/session';
 import { resolveLang } from '../../../lib/i18n';
 import { safeAuthReturn } from '../../../lib/authReturn';
 import { trackServerEvent } from '../../../lib/analytics';
+import { claimGuestWalk } from '../../../lib/dailySession';
+import { guestReaderId } from '../../../lib/guestSession';
 
 export const prerender = false;
 
@@ -25,6 +27,10 @@ export const POST: APIRoute = async ({ request, url, cookies, redirect }) => {
   if ('error' in result) {
     return redirect(`/signup?${new URLSearchParams({ error: 'duplicate', lang, returnTo })}`, 303);
   }
+
+  // Whatever they walked through as a guest becomes theirs to keep.
+  const vid = cookies.get('vid')?.value;
+  if (vid) await claimGuestWalk(guestReaderId(vid), result.id);
 
   const token = await createSessionToken(result.id, env.SESSION_SECRET);
   cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });

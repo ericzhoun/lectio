@@ -22,7 +22,8 @@ export const GET: APIRoute = async ({ params }) => {
   const object = await env.AUDIO.get(key);
   if (!object) return new Response(null, { status: 404 });
 
-  return new Response(object.body, {
+  // R2's stream is typed by workers-types; Response here is the DOM one.
+  return new Response(object.body as unknown as ReadableStream, {
     headers: {
       'Content-Type': 'audio/mpeg',
       'Cache-Control': CACHE_CONTROL,

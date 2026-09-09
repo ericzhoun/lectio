@@ -2,11 +2,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('cloudflare:workers', () => ({ env: { SESSION_SECRET: 'test-secret' } }));
 vi.mock('../users', () => ({ verifyUserCredentials: vi.fn() }));
 vi.mock('../session', () => ({ createSessionToken: vi.fn().mockResolvedValue('signed-session') }));
+vi.mock('../dailySession', () => ({ claimGuestWalk: vi.fn() }));
 import { verifyUserCredentials } from '../users';
+import { claimGuestWalk } from '../dailySession';
 import { POST } from '../../pages/api/auth/login';
 
 async function login(returnTo: string, json = false) {
-  const cookies = { set: vi.fn() };
+  const cookies = { set: vi.fn(), get: vi.fn().mockReturnValue({ value: 'visitor-1' }) };
   const response = await POST({
     request: new Request('https://example.test/api/auth/login', {
       method: 'POST', body: new URLSearchParams({ email: 'user@example.test', password: 'test-password', lang: 'en', returnTo }),
@@ -24,6 +26,11 @@ describe('email login return flow', () => {
     expect(response.headers.get('location')).toBe('/library?lang=en#moon');
     expect(cookies.set).toHaveBeenCalledWith('session', 'signed-session', expect.objectContaining({ httpOnly: true }));
   });
+  it('claims the guest walk for the account that just signed in', async () => {
+    await login('/today/amen');
+    expect(claimGuestWalk).toHaveBeenCalledWith('guest:visitor-1', 'user-id');
+  });
+
   it('supplies the return destination to the overlay after creating a session', async () => {
     const { response, cookies } = await login('/pricing?lang=en', true);
     expect(await response.json()).toEqual({ returnTo: '/pricing?lang=en' });

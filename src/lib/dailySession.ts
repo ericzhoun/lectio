@@ -88,19 +88,17 @@ export async function getSession(
 }
 
 export async function ensureSession(
-  userId: string, day: string, lang: Lang, db: D1Database = env.DB,
-  seedStep: Step | null = null
+  userId: string, day: string, lang: Lang, db: D1Database = env.DB
 ): Promise<DailySessionRow> {
   await ensureTables(db);
   // The language is pinned at creation: switching mid-session would strand the
-  // reader's own words beside a different translation. A reader who signed in
-  // mid-walk resumes at the step their anonymous walk had already reached.
+  // reader's own words beside a different translation.
   await db
     .prepare(
-      `INSERT INTO daily_sessions (user_id, day, lang, reached_step) VALUES (?, ?, ?, ?)
+      `INSERT INTO daily_sessions (user_id, day, lang, reached_step) VALUES (?, ?, ?, 'silencio')
        ON CONFLICT(user_id, day) DO NOTHING`
     )
-    .bind(userId, day, lang, seedStep ?? 'silencio')
+    .bind(userId, day, lang)
     .run();
   const row = await getSession(userId, day, db);
   if (!row) throw new Error(`daily session missing after insert: ${userId} ${day}`);
@@ -181,4 +179,40 @@ export async function listSessions(
     reachedStep: r.reached_step as Step,
     completedAt: r.completed_at,
   }));
+}
+
+/**
+ * Move an anonymous reader's walk onto the account they just created.
+ *
+ * Called on every sign-in and sign-up: whatever the guest wrote before
+ * registering becomes theirs to keep. A day the account already has is left
+ * untouched - the signed-in walk is the authoritative one - and the guest rows
+ * are dropped either way, so a shared browser never hands the next visitor
+ * someone else's words.
+ */
+export async function claimGuestWalk(
+  guestId: string, userId: string, db: D1Database = env.DB
+): Promise<void> {
+  if (!guestId || !userId || guestId === userId) return;
+  await ensureTables(db);
+  await db
+    .prepare(
+      `INSERT INTO daily_sessions (user_id, day, lang, reached_step, completed_at, created_at)
+       SELECT ?, day, lang, reached_step, completed_at, created_at
+       FROM daily_sessions WHERE user_id = ?
+       ON CONFLICT(user_id, day) DO NOTHING`
+    )
+    .bind(userId, guestId)
+    .run();
+  await db
+    .prepare(
+      `INSERT INTO daily_step_entries (user_id, day, step, user_text, ai_text, created_at)
+       SELECT ?, day, step, user_text, ai_text, created_at
+       FROM daily_step_entries WHERE user_id = ?
+       ON CONFLICT(user_id, day, step) DO NOTHING`
+    )
+    .bind(userId, guestId)
+    .run();
+  await db.prepare('DELETE FROM daily_step_entries WHERE user_id = ?').bind(guestId).run();
+  await db.prepare('DELETE FROM daily_sessions WHERE user_id = ?').bind(guestId).run();
 }

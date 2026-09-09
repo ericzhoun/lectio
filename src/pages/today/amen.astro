@@ -10,25 +10,31 @@ import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
 import { STEP_COPY } from '../../lib/dailySteps';
 import { getSession, getStepEntries } from '../../lib/dailySession';
+import { guestReaderId } from '../../lib/guestSession';
 
 const lang = resolveLang(Astro);
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
-if (!userId) {
-  return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent('/today')}`);
-}
+
+// An anonymous reader reaches Amen like anyone else. This is where the walk is
+// complete and asking them to register finally costs them nothing: the day
+// they just prayed is claimed onto the account they create.
+const readerId = userId ?? guestReaderId(Astro.locals.vid);
 
 // `day` reaches the database, so it is validated rather than trusted.
 const requested = Astro.url.searchParams.get('day');
 const day = /^\d{4}-\d{2}-\d{2}$/.test(requested ?? '') ? requested! : resolveActiveDay(Astro);
 
-const session = await getSession(userId, day);
+const session = await getSession(readerId, day);
 if (!session) return Astro.redirect('/today');
 
 const entry = getLectionaryDay(day);
 const passage = resolvePassage(focusReference(entry), session.lang);
-const entries = await getStepEntries(userId, day);
+const entries = await getStepEntries(readerId, day);
 const finished = Boolean(session.completedAt);
+
+// Registering returns here, so the reader lands back on their own words.
+const returnTo = encodeURIComponent(`/today/amen?day=${day}`);
 ---
 
 <Layout title={`${entry.title[lang]} · Amen`} lang={lang} noindex={true} chrome="minimal">
@@ -63,12 +69,31 @@ const finished = Boolean(session.completedAt);
           {e.aiText && <p class="reply">{e.aiText}</p>}
         </section>
       ))}
+
+      {!userId && (
+        <section class="keep">
+          <h2>{lang === 'zh' ? '留下这次诵读' : 'Keep this reading'}</h2>
+          <p>
+            {lang === 'zh'
+              ? '如果你想保存自己的诵读记录，方便日后回顾，请免费注册一个账户。今天写下的内容会一并保存。'
+              : 'If you would like to store your reading history for future reference, please register an account for free. Today’s words come with you.'}
+          </p>
+          <a class="keep-action" href={`/signup?lang=${lang}&returnTo=${returnTo}`}>
+            {lang === 'zh' ? '免费注册' : 'Create a free account'}
+          </a>
+          <a class="keep-secondary" href={`/login?lang=${lang}&returnTo=${returnTo}`}>
+            {lang === 'zh' ? '我已有账户' : 'I already have an account'}
+          </a>
+        </section>
+      )}
     </div>
 
     <nav class="action-bar">
       {!finished && <a class="bar-action" href="/today">{lang === 'zh' ? '继续今天的诵读' : 'Continue today'}</a>}
       {finished && <a class="bar-action" href="/">{lang === 'zh' ? '返回首页' : 'Return home'}</a>}
-      <a class="amen-secondary" href="/history">{lang === 'zh' ? '查看过往' : 'See past days'}</a>
+      {userId && (
+        <a class="amen-secondary" href="/history">{lang === 'zh' ? '查看过往' : 'See past days'}</a>
+      )}
     </nav>
   </article>
 </Layout>
@@ -135,6 +160,52 @@ const finished = Boolean(session.completedAt);
     opacity: 0.6;
     font-style: italic;
   }
+
+  .keep {
+    margin: 2.5rem 0 0;
+    padding: 1.5rem 1.25rem;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 14px;
+    text-align: center;
+  }
+
+  .keep h2 {
+    margin: 0 0 0.6rem;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    opacity: 0.9;
+  }
+
+  .keep p {
+    margin: 0 0 1.25rem;
+    line-height: 1.7;
+    opacity: 0.75;
+    font-size: 0.95rem;
+  }
+
+  .keep-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 1.5rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .keep-secondary {
+    display: block;
+    margin-top: 0.75rem;
+    min-height: 44px;
+    line-height: 44px;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--text-dim, #9aa0b8);
+  }
+
+  .keep-secondary:hover { color: var(--text, #e8e9f0); }
 
   .amen-secondary {
     display: block;

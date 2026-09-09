@@ -51,7 +51,8 @@ export const GET: APIRoute = async ({ url }) => {
     const key = audioR2Key(prebuilt);
     const object = key ? await env.AUDIO.get(key) : null;
     if (object) {
-      return new Response(object.body, {
+      // R2's stream is typed by workers-types; Response here is the DOM one.
+      return new Response(object.body as unknown as ReadableStream, {
         headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': CACHE_CONTROL },
       });
     }

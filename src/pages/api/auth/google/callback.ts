@@ -15,6 +15,8 @@ import {
 import { upsertGoogleUser } from '../../../../lib/users';
 import { createSessionToken } from '../../../../lib/session';
 import { safeAuthReturn } from '../../../../lib/authReturn';
+import { claimGuestWalk } from '../../../../lib/dailySession';
+import { guestReaderId } from '../../../../lib/guestSession';
 
 export const prerender = false;
 
@@ -75,6 +77,10 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
       name: info.name,
       avatarUrl: info.avatarUrl,
     });
+
+    // Whatever they walked through as a guest becomes theirs to keep.
+    const vid = cookies.get('vid')?.value;
+    if (vid) await claimGuestWalk(guestReaderId(vid), id);
 
     const token = await createSessionToken(id, env.SESSION_SECRET);
     cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });

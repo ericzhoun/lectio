@@ -6,7 +6,7 @@ import { verifySessionToken } from '../../lib/session';
 import { resolveLang } from '../../lib/i18n';
 import { resolveLocalDay, DAY_COOKIE } from '../../lib/localDay';
 import { ensureSession, getSession } from '../../lib/dailySession';
-import { takeAnonProgress } from '../../lib/anonProgress';
+import { guestReaderId } from '../../lib/guestSession';
 
 const lang = resolveLang(Astro);
 const day = resolveLocalDay(Astro);
@@ -24,19 +24,12 @@ Astro.cookies.set(DAY_COOKIE, day, {
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
 
-// Anonymous readers start at the beginning; they are asked to sign in at
-// Meditatio, where they would otherwise be writing into nothing.
-if (!userId) return Astro.redirect('/today/silencio');
+// Signed in or not, the reader has a session: an anonymous walk is kept under
+// the visitor id and claimed by the account they create at the end.
+const readerId = userId ?? guestReaderId(Astro.locals.vid);
 
-const existing = await getSession(userId, day);
-if (!existing) {
-  // A reader who signed in mid-walk resumes where their anonymous steps ended,
-  // recorded in the signed anon-progress cookie, instead of starting over.
-  await ensureSession(
-    userId, day, lang, env.DB,
-    await takeAnonProgress(Astro.cookies, day, env.SESSION_SECRET)
-  );
-}
+const existing = await getSession(readerId, day);
+if (!existing) await ensureSession(readerId, day, lang, env.DB);
 
 // A finished day opens at its summary rather than starting over.
 if (existing?.completedAt) return Astro.redirect('/today/amen');

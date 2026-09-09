@@ -57,7 +57,9 @@ describe('GET /api/tts', () => {
 
   it('serves a prebuilt R2 clip without synthesizing', async () => {
     store.audioGet = async (key) =>
-      key === 'steps/en/lectio-6eac8450.mp3' ? { body: new Response('ID3').body } : null;
+      key === 'steps/en/lectio-6eac8450.mp3'
+        ? { body: new Response('ID3').body as ReadableStream }
+        : null;
     const res = await call('?step=lectio&lang=en');
     expect(res.status).toBe(200);
     expect(res.headers.get('Content-Type')).toBe('audio/mpeg');

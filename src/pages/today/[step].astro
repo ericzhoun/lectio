@@ -13,7 +13,7 @@ import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, type Step } from
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
 } from '../../lib/dailySession';
-import { recordAnonProgress, takeAnonProgress } from '../../lib/anonProgress';
+import { guestReaderId } from '../../lib/guestSession';
 import { handleStepSubmit, STEP_TEXT_MAX_CHARS } from '../../lib/dailySubmit';
 import type { WritingStep } from '../../lib/dailyReflection';
 
@@ -58,62 +58,42 @@ const guidedAvailable = guidedItems.length === 7;
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
 
-// Anonymous readers may take the first two steps. Meditatio asks them to sign
-// in, because from there on they are writing something worth keeping.
-const ANON_STEPS: Step[] = ['silencio', 'lectio'];
-if (!userId && !ANON_STEPS.includes(step)) {
-  const returnTo = encodeURIComponent(`/today/${step}`);
-  return Astro.redirect(`/login?lang=${lang}&returnTo=${returnTo}`);
-}
-
-// An anonymous walk leaves no session row to remember it, so the furthest step
-// reached travels in a signed cookie and seeds the session once they sign in.
-if (!userId) await recordAnonProgress(Astro.cookies, day, step, env.SESSION_SECRET);
+// The whole walk is open to anonymous readers. Their session and their words
+// are stored against the first-party visitor id and move onto the account they
+// create later; the invitation to register waits until Amen.
+const readerId = userId ?? guestReaderId(Astro.locals.vid);
 
 const isWriting = (WRITING_STEPS as readonly Step[]).includes(step);
 
-// An anonymous reader has genuinely reached whichever step they are on; there
-// is just no session row to remember it, so the rail would otherwise show them
-// stuck at the first step.
-let reached: Step = userId ? 'silencio' : step;
-if (userId) {
-  let session = await getSession(userId, day);
-  if (!session) {
-    // First session since signing in mid-walk: resume where the anonymous
-    // reader left off rather than restarting at Silencio.
-    session = await ensureSession(
-      userId, day, lang, env.DB,
-      await takeAnonProgress(Astro.cookies, day, env.SESSION_SECRET)
-    );
-  }
-  reached = session.reachedStep;
-  // No jumping ahead: nobody lands on Oratio without having read.
-  if (!canOpenStep(reached, step)) return Astro.redirect(`/today/${reached}`);
-}
+const session = await getSession(readerId, day)
+  ?? await ensureSession(readerId, day, lang, env.DB);
+let reached: Step = session.reachedStep;
+// No jumping ahead: nobody lands on Oratio without having read.
+if (!canOpenStep(reached, step)) return Astro.redirect(`/today/${reached}`);
 
 let submitError: 'empty' | null = null;
 
-if (Astro.request.method === 'POST' && userId && passage && isWriting) {
+if (Astro.request.method === 'POST' && passage && isWriting) {
   const form = await Astro.request.formData();
   const userText = String(form.get('step_text') ?? '');
   const result = await handleStepSubmit({
-    userId, day, step: step as WritingStep, userText, passage, lang,
+    userId: readerId, day, step: step as WritingStep, userText, passage, lang,
   });
   if (result.error === 'empty') submitError = 'empty';
   // Redirect after POST so a refresh never resubmits.
   else return Astro.redirect(`/today/${step}?saved=1`);
 }
 
-const entries = userId ? await getStepEntries(userId, day) : [];
+const entries = await getStepEntries(readerId, day);
 const priorText = (s: Step) => entries.find((e) => e.step === s)?.userText ?? '';
 const myEntry = entries.find((e) => e.step === step) ?? null;
 const saved = Astro.url.searchParams.get('saved') === '1';
 
 // Arriving at a silent step is all it takes to have taken it. A writing step
 // advances on submit instead, which handleStepSubmit does.
-if (userId && !isWriting) {
-  await advanceTo(userId, day, step);
-  const refreshed = await getSession(userId, day);
+if (!isWriting) {
+  await advanceTo(readerId, day, step);
+  const refreshed = await getSession(readerId, day);
   reached = refreshed?.reachedStep ?? reached;
 }
 
