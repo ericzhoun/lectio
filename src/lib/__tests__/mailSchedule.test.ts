@@ -82,4 +82,10 @@ describe('dueNow', () => {
     const at6 = new Date('2026-03-10T13:00:00Z');
     expect(dueNow(at6, [sub({ tz: '' })])).toHaveLength(1);
   });
+
+  it('treats a malformed lastSent as never sent, so a corrupt row fails open rather than going silent forever', () => {
+    const at6 = new Date('2026-03-10T13:00:00Z');
+    expect(dueNow(at6, [sub({ lastSent: 'unknown' })])).toHaveLength(1);
+    expect(dueNow(at6, [sub({ lastSent: '' })])).toHaveLength(1);
+  });
 });

@@ -6,7 +6,7 @@ export const TIMEZONE_COOKIE = 'tz';
 /** The day a session is pinned to, set at /today and honoured by the steps. */
 export const DAY_COOKIE = 'daily_day';
 
-const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+export const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export function isValidTimeZone(tz: unknown): tz is string {
   if (typeof tz !== 'string' || tz.length === 0) return false;

@@ -2,7 +2,7 @@
 // caller supplies the clock and the rows, so the awkward cases (DST, a zone we
 // cannot parse, a resend attempt within the same local day) are all testable
 // without a Worker or a database.
-import { isValidTimeZone } from './localDay';
+import { isValidTimeZone, DAY_RE } from './localDay';
 import type { Lang } from './reading';
 
 /** A reader whose browser never told us a zone still deserves a morning. */
@@ -48,8 +48,10 @@ export function dueNow(now: Date, subscribers: Subscriber[]): DueSubscriber[] {
   for (const subscriber of subscribers) {
     const { day, hour } = localDayAndHour(now, subscriber.tz);
     if (hour !== SEND_HOUR) continue;
-    // A string compare is correct for YYYY-MM-DD and avoids re-parsing dates.
-    if (subscriber.lastSent && subscriber.lastSent >= day) continue;
+    // Treat malformed lastSent as never sent - fail open (at worst one duplicate)
+    // rather than fail closed (subscriber goes silent forever). DAY_RE validates
+    // the YYYY-MM-DD format; corrupt or missing values short-circuit to send.
+    if (subscriber.lastSent && DAY_RE.test(subscriber.lastSent) && subscriber.lastSent >= day) continue;
     due.push({ ...subscriber, localDay: day });
   }
   return due;
