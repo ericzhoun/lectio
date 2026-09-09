@@ -6,17 +6,41 @@ import { assignVariants, serializeVariantCookie } from './lib/ab';
 
 const TWO_YEARS = 60 * 60 * 24 * 365 * 2;
 
-export const onRequest = defineMiddleware((context, next) => {
+// Every HTML response is personalized from cookies (lang, session, A/B
+// variants), and redirects like /today -> /today/<step> depend on per-reader
+// session state, so neither may be shared-cached. The origin used to send no
+// Cache-Control at all, letting a zone cache rule serve cached /today/* HTML
+// in the wrong language. Routes that opt into caching themselves (e.g.
+// content-addressed /audio/*, /api/tts) already set their own header and are
+// left untouched.
+function noStore(response: Response): Response {
+  if (response.headers.has('Cache-Control')) return response;
+  const contentType = response.headers.get('Content-Type') ?? '';
+  const isHtml = contentType.includes('text/html');
+  const isRedirect = response.status >= 300 && response.status < 400;
+  if (!isHtml && !isRedirect) return response;
+  // Rebuild rather than mutate: redirect responses (Response.redirect,
+  // Astro.redirect) carry immutable headers.
+  const headers = new Headers(response.headers);
+  headers.set('Cache-Control', 'private, no-store');
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
+export const onRequest = defineMiddleware(async (context, next) => {
   // Normalize trailing slashes: /library/ and /library must not both serve 200
   // with their own self-canonical tag. Redirect once (308 preserves the method)
   // and leave API routes untouched.
   const pathname = context.url.pathname;
   const stripped = pathname.replace(/\/+$/, '');
   if (stripped && stripped !== pathname && !pathname.startsWith('/api/')) {
-    return new Response(null, {
+    return noStore(new Response(null, {
       status: 308,
       headers: { Location: `${stripped}${context.url.search}` },
-    });
+    }));
   }
 
   const cookies = context.cookies;
@@ -49,5 +73,5 @@ export const onRequest = defineMiddleware((context, next) => {
 
   context.locals.vid = vid;
   context.locals.variants = variants;
-  return next();
+  return noStore(await next());
 });
