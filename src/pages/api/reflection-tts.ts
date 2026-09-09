@@ -13,6 +13,7 @@ import { env } from 'cloudflare:workers';
 import { isStep, WRITING_STEPS } from '../../lib/dailySteps';
 import { getStepEntries, getSession } from '../../lib/dailySession';
 import { verifySessionToken } from '../../lib/session';
+import { guestReaderId } from '../../lib/guestSession';
 import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech, type TtsAudio } from '../../lib/tts';
 
 export const prerender = false;
@@ -33,10 +34,15 @@ function sessionToken(cookieHeader: string): string | null {
   return null;
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
+  // The daily walk is open to anonymous readers, so the reply belongs to the
+  // same reader id the page wrote it under: the signed-in user when there is
+  // one, otherwise this visitor's guest id. Without the guest branch every
+  // anonymous reader got a 401 here and saw "audio could not play".
   const token = sessionToken(request.headers.get('cookie') ?? '');
   const userId = token ? await verifySessionToken(token, env.SESSION_SECRET) : null;
-  if (!userId) return json({ error: 'unauthorized' }, 401);
+  const readerId = userId ?? (locals.vid ? guestReaderId(locals.vid) : null);
+  if (!readerId) return json({ error: 'unauthorized' }, 401);
 
   let body: { day?: unknown; step?: unknown };
   try {
@@ -52,11 +58,11 @@ export const POST: APIRoute = async ({ request }) => {
 
   // The reply is stored against the session's pinned language, not the
   // request's, so the voice always matches the words on screen.
-  const session = await getSession(userId, day);
+  const session = await getSession(readerId, day);
   if (!session) return json({ error: 'no_session' }, 404);
   const lang = resolveTtsLang(session.lang);
 
-  const entry = (await getStepEntries(userId, day)).find((e) => e.step === step);
+  const entry = (await getStepEntries(readerId, day)).find((e) => e.step === step);
   const text = sanitizeTtsText(entry?.aiText);
   if (!text) return json({ error: 'no_reply' }, 404);
 

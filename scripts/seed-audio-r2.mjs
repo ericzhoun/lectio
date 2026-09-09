@@ -128,7 +128,9 @@ function runWranglerPut(key, file) {
   return new Promise((resolveP, rejectP) => {
     const child = spawn(
       process.execPath,
-      [WRANGLER, 'r2', 'object', 'put', `${BUCKET}/${key}`, '--file', file, '--content-type', 'audio/mpeg'],
+      // --remote is required: without it wrangler writes to the local miniflare
+      // simulation, and the deployed Worker sees an empty bucket.
+      [WRANGLER, 'r2', 'object', 'put', `${BUCKET}/${key}`, '--file', file, '--content-type', 'audio/mpeg', '--remote'],
       { stdio: ['ignore', 'ignore', 'pipe'], cwd: ROOT },
     );
     let stderr = '';

@@ -125,9 +125,49 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         )}
       </header>
 
+      {/* The Word stays in view through every movement after the opening
+          silence, so a reader never has to leave their step to find it again. */}
+      {step !== 'silencio' && step !== 'lectio' && passage && (
+        <p class="text passage-again">
+          {passage.text}
+          <span class="passage-ref">{passage.ref}</span>
+        </p>
+      )}
+
       {step === 'silencio' && (
         <section class="silence">
-          <div class="timer" data-seconds="60" aria-live="polite"></div>
+          <div class="breath" data-breath>
+            <svg class="breath-svg" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+              <defs>
+                <radialGradient id="breath-glow" cx="50%" cy="44%" r="62%">
+                  <stop offset="0%" class="breath-stop-a"></stop>
+                  <stop offset="58%" class="breath-stop-b"></stop>
+                  <stop offset="100%" class="breath-stop-c"></stop>
+                </radialGradient>
+                <radialGradient id="breath-halo-grad">
+                  <stop offset="0%" class="breath-halo-a"></stop>
+                  <stop offset="72%" class="breath-halo-b"></stop>
+                  <stop offset="100%" class="breath-halo-c"></stop>
+                </radialGradient>
+                <filter id="breath-waver" x="-30%" y="-30%" width="160%" height="160%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="2" seed="11" result="waver">
+                    <animate
+                      attributeName="baseFrequency"
+                      values="0.022;0.04;0.022"
+                      dur="11s"
+                      repeatCount="indefinite"
+                      calcMode="spline"
+                      keySplines="0.42 0 0.58 1;0.42 0 0.58 1"
+                    ></animate>
+                  </feTurbulence>
+                  <feDisplacementMap in="SourceGraphic" in2="waver" scale="18" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+                </filter>
+              </defs>
+              <circle class="breath-halo" cx="120" cy="120" r="86" fill="url(#breath-halo-grad)"></circle>
+              <circle class="breath-ball" cx="120" cy="120" r="70" fill="url(#breath-glow)" filter="url(#breath-waver)"></circle>
+            </svg>
+            <p class="breath-hint" aria-live="polite"></p>
+          </div>
           <div class="bell-row">
             <button type="button" class="bell-toggle" id="bell-toggle" aria-pressed="false">
               <span class="bell-icon" aria-hidden="true">🔔</span>
@@ -175,13 +215,43 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       {step === 'contemplatio' && (
         <section class="rest">
           {priorText('oratio') && <blockquote class="own-words mine">{priorText('oratio')}</blockquote>}
-          <div class="timer" data-seconds="120" aria-live="polite"></div>
+          <div class="breath" data-breath>
+            <svg class="breath-svg" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
+              <defs>
+                <radialGradient id="breath-glow" cx="50%" cy="44%" r="62%">
+                  <stop offset="0%" class="breath-stop-a"></stop>
+                  <stop offset="58%" class="breath-stop-b"></stop>
+                  <stop offset="100%" class="breath-stop-c"></stop>
+                </radialGradient>
+                <radialGradient id="breath-halo-grad">
+                  <stop offset="0%" class="breath-halo-a"></stop>
+                  <stop offset="72%" class="breath-halo-b"></stop>
+                  <stop offset="100%" class="breath-halo-c"></stop>
+                </radialGradient>
+                <filter id="breath-waver" x="-30%" y="-30%" width="160%" height="160%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="2" seed="11" result="waver">
+                    <animate
+                      attributeName="baseFrequency"
+                      values="0.022;0.04;0.022"
+                      dur="11s"
+                      repeatCount="indefinite"
+                      calcMode="spline"
+                      keySplines="0.42 0 0.58 1;0.42 0 0.58 1"
+                    ></animate>
+                  </feTurbulence>
+                  <feDisplacementMap in="SourceGraphic" in2="waver" scale="18" xChannelSelector="R" yChannelSelector="G"></feDisplacementMap>
+                </filter>
+              </defs>
+              <circle class="breath-halo" cx="120" cy="120" r="86" fill="url(#breath-halo-grad)"></circle>
+              <circle class="breath-ball" cx="120" cy="120" r="70" fill="url(#breath-glow)" filter="url(#breath-waver)"></circle>
+            </svg>
+            <p class="breath-hint" aria-live="polite"></p>
+          </div>
         </section>
       )}
 
       {isWriting && (
         <section class="writing">
-          {step === 'meditatio' && passage && <p class="text passage-again">{passage.text}</p>}
           {step !== 'meditatio' && priorText('meditatio') && (
             <blockquote class="own-words">{priorText('meditatio')}</blockquote>
           )}
@@ -255,22 +325,51 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
   const clearAudioError = (button: HTMLButtonElement) => {
     if (button.nextElementSibling?.classList.contains('audio-error')) button.nextElementSibling.remove();
   };
-  // Count down, then bring the advance link forward. Never disabled: a reader
-  // who is ready before the timer is ready.
-  document.querySelectorAll<HTMLElement>('.timer').forEach((el) => {
-    let left = Number(el.dataset.seconds ?? 60);
-    const render = () => { el.textContent = String(left); };
-    render();
-    const id = setInterval(() => {
-      left -= 1;
-      render();
-      if (left <= 0) {
-        clearInterval(id);
-        el.textContent = '';
-        el.closest('section')?.classList.add('ready');
-        document.querySelector('.action-bar')?.classList.add('ready');
+  // The breathing ball: three deep breaths across ten seconds — an Apple
+  // Watch style moment in place of the old countdown — then the step is
+  // taken. The advance link never waits on it: a reader who is ready early
+  // is ready.
+  document.querySelectorAll<HTMLElement>('[data-breath]').forEach((el) => {
+    const ball = el.querySelector<SVGElement>('.breath-svg');
+    const hint = el.querySelector<HTMLElement>('.breath-hint');
+    const zhPage = document.documentElement.lang === 'zh';
+    const TOTAL_S = 10;
+    const CYCLES = 3;  // three deep breaths across the whole animation
+    const cycleS = TOTAL_S / CYCLES;
+    const IN = 0.45;   // fraction of a breath spent breathing in
+    const HOLD = 0.12; // a short rest at the top of the breath
+    const GROW = 0.34; // how far the ball swells at the top of the breath
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) el.querySelectorAll('animate').forEach((a) => a.remove());
+
+    const ease = (x: number) => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, x)));
+    const settle = () => {
+      if (ball) ball.style.transform = '';
+      el.classList.add('settled'); // hands the ball a slow idle float
+      if (hint) hint.textContent = '';
+      el.closest('section')?.classList.add('ready');
+      document.querySelector('.action-bar')?.classList.add('ready');
+    };
+    // Reduced motion keeps the pause, just without the movement.
+    if (reduced) { setTimeout(settle, TOTAL_S * 1000); return; }
+
+    const started = performance.now();
+    const tick = (now: number) => {
+      const t = (now - started) / 1000;
+      if (t >= TOTAL_S || !ball) return settle();
+      const p = (t % cycleS) / cycleS;
+      const swell = p < IN
+        ? ease(p / IN) // breathing in
+        : p < IN + HOLD ? 1 : ease(1 - (p - IN - HOLD) / (1 - IN - HOLD)); // out
+      ball.style.transform = `scale(${(1 + GROW * swell).toFixed(4)})`;
+      if (hint) {
+        const want = p < IN ? (zhPage ? '吸气…' : 'Breathe in…')
+          : p >= IN + HOLD ? (zhPage ? '呼气…' : 'Breathe out…') : null;
+        if (want && want !== hint.textContent) hint.textContent = want;
       }
-    }, 1000);
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   });
 
   const reading = document.querySelector<HTMLElement>('.reading');
@@ -585,6 +684,15 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     padding-left: 1rem;
   }
 
+  .passage-ref {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    font-style: normal;
+    letter-spacing: 0.03em;
+    opacity: 0.55;
+  }
+
   .ref {
     text-align: center;
     font-size: 0.85rem;
@@ -637,12 +745,49 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     padding: 2rem 0;
   }
 
-  .timer {
-    font-size: 2rem;
-    font-variant-numeric: tabular-nums;
-    opacity: 0.35;
-    min-height: 2.4rem;
-    margin-bottom: 1.5rem;
+  /* The breathing ball: a wavery sphere of warm light — three deep breaths
+     across ten seconds, then a slow idle float while the reader lingers. */
+  .breath {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.5rem 0 1.25rem;
+  }
+
+  .breath-svg {
+    width: min(58vw, 230px);
+    height: auto;
+    overflow: visible;
+    will-change: transform;
+  }
+
+  .breath-hint {
+    margin: 0.9rem 0 0;
+    min-height: 1.5em;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+  }
+
+  .breath-stop-a { stop-color: rgba(var(--light-warm), 0.52); }
+  .breath-stop-b { stop-color: rgba(var(--light-rose), 0.3); }
+  .breath-stop-c { stop-color: rgba(var(--light-warm), 0.06); }
+  .breath-halo-a { stop-color: rgba(var(--light-olive), 0); }
+  .breath-halo-b { stop-color: rgba(var(--light-olive), 0.16); }
+  .breath-halo-c { stop-color: rgba(var(--light-olive), 0); }
+
+  .breath.settled .breath-svg {
+    animation: breath-float 9s ease-in-out infinite;
+  }
+
+  @keyframes breath-float {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.055); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .breath.settled .breath-svg { animation: none; }
   }
 
   .own-words {
