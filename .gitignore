@@ -52,3 +52,5 @@ public/audio/
 scripts/.audio-r2-state.json
 /.lavish
 /src/roblox/__pycache__
+# Subagent-driven-development scratch (ledger, briefs, review packages)
+.superpowers/
