@@ -3,6 +3,7 @@
 // (pages and APIs) shares the same visitor identity.
 import { defineMiddleware } from 'astro:middleware';
 import { assignVariants, serializeVariantCookie } from './lib/ab';
+import { crossOriginForbiddenResponse, isForbiddenCrossOriginRequest } from './lib/originCheck';
 
 const TWO_YEARS = 60 * 60 * 24 * 365 * 2;
 
@@ -31,6 +32,14 @@ function noStore(response: Response): Response {
 }
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  // Astro's own CSRF guard is disabled globally (astro.config.mjs) because it
+  // has no per-route exemption; this reimplements it for every route except
+  // /unsubscribe, which authenticates by URL token instead of same-origin
+  // POSTs. See lib/originCheck.ts for why that one exemption is safe.
+  if (isForbiddenCrossOriginRequest(context.request, context.url, context.isPrerendered)) {
+    return crossOriginForbiddenResponse(context.request);
+  }
+
   // Normalize trailing slashes: /library/ and /library must not both serve 200
   // with their own self-canonical tag. Redirect once (308 preserves the method)
   // and leave API routes untouched.

@@ -59,7 +59,7 @@ const days = await listSessions(userId);
           ? '经文解读的历史记录属于付费方案。'
           : 'Draw history is part of the paid plans.'}
         {' '}
-        <a href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看价格' : 'See pricing'}</a>
+        <a href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看订阅' : 'See subscription'}</a>
       </p>
     ) : (
       <>

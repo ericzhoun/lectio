@@ -86,13 +86,13 @@ const faq = [
 ];
 
 const title = lang === 'zh'
-  ? 'Lectio 价格方案 — 免费、基础版与专业版'
-  : 'Lectio Plans & Pricing — Free, Basic & Pro';const description = lang === 'zh'
+  ? 'Lectio 订阅 — 免费、基础版与专业版'
+  : 'Lectio Subscription — Free, Basic & Pro';const description = lang === 'zh'
   ? '选择适合你的方案：免费每日 6 次每日经文，基础版 $4.99/月含圣言诵读，专业版 $11.99/月解锁全部布局无限默想。月付方案首月免费试用，年付享六折优惠。'
   : 'Choose your Lectio plan: free tier with 6 Daily Word readings a day, Basic at $4.99/mo for Lectio Divina, or Pro at $11.99/mo for every layout unlimited. First month free on monthly plans; save 40% with annual billing.';
 ---
 <Layout title={title} description={description} lang={lang}>
-  <h1>{lang === 'zh' ? '价格方案' : 'Plans & Pricing'}</h1>
+  <h1>{lang === 'zh' ? '订阅' : 'Subscription'}</h1>
 
   {notice && (
     <p class="auth-error" role="alert">

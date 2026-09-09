@@ -132,7 +132,7 @@ const altLangUrl = lang === 'zh'
         <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
       )}
       <a href="/today" data-event="cta_click" data-event-props='{"slot":"nav_today"}' style={isActive('/today') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '今日' : 'Today'}</a>
-      <a href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}' style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '价格' : 'Pricing'}</a>
+      <a href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}' style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '订阅' : 'Subscription'}</a>
       <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '经文库' : 'Verse Library'}</a>
       <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
       <a href="/privacy" style={isActive('/privacy') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '隐私' : 'Privacy'}</a>

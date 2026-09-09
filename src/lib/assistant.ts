@@ -61,13 +61,13 @@ export function evaluateChatQuota(
 /** Site facts the site-guide role must ground on (keep in sync with /pricing). */
 export function buildGroundingFacts(): string {
   return [
-    'Lectio (enjoyhim.org) plans and limits, as shown on /pricing:',
+    'Lectio (enjoyhim.org) subscription plans and limits, as shown on /pricing:',
     `- Free: guests ${ANON_DAILY_DRAWS} Daily Word readings/day; registered users ${REGISTERED_DAILY_DRAWS}/day plus one-time trial credits (Lectio Divina x${3}, Deep Lectio x${1}).`,
     `- Basic: $4.99/mo (annual $2.99/mo, billed $35.88/yr). Daily Word and Lectio Divina layouts, ${QUOTA.basic} readings/day, reading history.`,
     '- Pro: $11.99/mo (annual $7.19/mo, billed $86.28/yr). All layouts including Deep Lectio, unlimited readings, reading history.',
     '- First month free: monthly plans start with a 30-day Stripe trial (payment method collected, nothing charged until the trial ends, cancel anytime, one trial per account).',
     `- Chat assistant limits: guests ${ANON_DAILY_MESSAGES} messages/day, registered free ${CHAT_QUOTA.free} messages/day, Basic and Pro ${CHAT_QUOTA.basic} messages/day.`,
-    'Site pages: / (receive a scripture reading), /library (the verse library), /history (past readings, logged in), /pricing (plans + billing portal access), /account (plan status), /approach, /privacy.',
+    'Site pages: / (receive a scripture reading), /library (the verse library), /history (past readings, logged in), /pricing (subscription + billing portal access), /account (plan status), /approach, /privacy.',
   ].join('\n');
 }
 
@@ -81,7 +81,7 @@ export const ASSISTANT_ACTIONS: readonly { id: string; does: string }[] = [
   { id: 'today', does: "open today's guided reading, step by step" },
   { id: 'library', does: 'open the verse library' },
   { id: 'history', does: 'open past readings' },
-  { id: 'pricing', does: 'open the plans page' },
+  { id: 'pricing', does: 'open the subscription page' },
   { id: 'account', does: 'open plan status' },
   { id: 'signup', does: 'open free registration' },
 ];
