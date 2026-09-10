@@ -196,3 +196,66 @@ describe('GET /api/assistant/quota', () => {
     expect(data).toMatchObject({ ok: false, remaining: 0 });
   });
 });
+
+describe('POST /api/assistant/chat - protocol 2', () => {
+  it('streams newline-delimited events and ends with done', async () => {
+    const anon = 'a:proto2';
+    store.create = vi.fn(async (opts: { stream?: boolean }) =>
+      opts.stream
+        ? (async function* () {
+            yield { choices: [{ delta: { content: 'peace' } }] };
+          })()
+        : { choices: [{ message: { content: null, tool_calls: [] } }] }
+    );
+    const cookies = makeCookies({ chat_anon: anon });
+    const res = await POST(
+      { request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never
+    );
+    expect(res.status).toBe(200);
+    expect(res.headers.get('Content-Type')).toContain('application/x-ndjson');
+    const body = await res.text();
+    const events = body
+      .trim()
+      .split('\n')
+      .map((line) => JSON.parse(line));
+    expect(events[0]).toEqual({ t: 'text', v: 'peace' });
+    expect(events.at(-1)).toMatchObject({ t: 'done' });
+    // One message, charged exactly once on the first delivered text chunk.
+    expect(await getChatUsage(anon, db as never)).toBe(1);
+  });
+
+  it('still streams plain text when protocol is not requested', async () => {
+    store.create = vi.fn(async () =>
+      (async function* () {
+        yield { choices: [{ delta: { content: 'peace' } }] };
+      })()
+    );
+    const cookies = makeCookies({ chat_anon: 'a:proto1' });
+    const res = await POST({ request: makePostRequest({ message: 'hello' }), cookies } as never);
+    expect(res.headers.get('Content-Type')).toContain('text/plain');
+    expect(await res.text()).toBe('peace');
+  });
+
+  it('closes the stream with an error frame and charges nothing when the model throws', async () => {
+    const anon = 'a:proto2-boom';
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    store.create = vi.fn(async () => {
+      throw new Error('boom');
+    });
+    try {
+      const cookies = makeCookies({ chat_anon: anon });
+      const res = await POST(
+        { request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never
+      );
+      expect(res.status).toBe(200);
+      const events = (await res.text())
+        .trim()
+        .split('\n')
+        .map((line) => JSON.parse(line));
+      expect(events).toEqual([{ t: 'done', error: 'upstream_error' }]);
+      expect(await getChatUsage(anon, db as never)).toBe(0);
+    } finally {
+      errorSpy.mockRestore();
+    }
+  });
+});
