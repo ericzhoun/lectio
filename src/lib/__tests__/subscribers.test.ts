@@ -4,6 +4,7 @@ import {
   activeSubscribers,
   addSubscriber,
   ensureSubscriberTable,
+  getSubscriber,
   markSent,
   resetSubscriberTableCache,
   setStatus,
@@ -96,5 +97,20 @@ describe('subscriber storage', () => {
     await addSubscriber(db, { email: 'Reader@Example.test', lang: 'en', tz: 'UTC' });
     await addSubscriber(db, { email: 'reader@example.test', lang: 'en', tz: 'UTC' });
     expect(await activeSubscribers(db)).toHaveLength(1);
+  });
+});
+
+describe('getSubscriber', () => {
+  it('returns null for an address that never subscribed', async () => {
+    expect(await getSubscriber(db, 'nobody@example.com')).toBeNull();
+  });
+
+  it('reports status and preferences, matching the address case-insensitively', async () => {
+    await addSubscriber(db, { email: 'Reader@Example.com', lang: 'zh', tz: 'Asia/Shanghai' });
+    expect(await getSubscriber(db, 'READER@example.com')).toMatchObject({
+      email: 'reader@example.com', lang: 'zh', tz: 'Asia/Shanghai', status: 'active',
+    });
+    await setStatus(db, 'reader@example.com', 'unsubscribed');
+    expect((await getSubscriber(db, 'reader@example.com'))?.status).toBe('unsubscribed');
   });
 });
