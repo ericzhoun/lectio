@@ -2,6 +2,13 @@
 // accepted. The token is the whole authorization: it names the tool and the
 // exact normalized args, binds them to the visitor who was shown the card, and
 // expires. Nothing the model says at confirm time is trusted - only this.
+// Cards are NOT single-use. There is no record of a redeemed card, so a token
+// can be presented again for as long as it lives (ten minutes) by the one
+// visitor it is bound to. That is safe only because every write tool today is
+// either idempotent (subscribe, unsubscribe, open the billing portal) or spends
+// the visitor's own metered quota against their own daily ceiling
+// (start_reading). Anyone adding a new write tool must ask whether running it
+// twice is safe; if it is not, this module needs a used-card record first.
 import { signJsonToken, readJsonToken } from './session';
 
 /** A proposal the visitor has ten minutes to accept. */
