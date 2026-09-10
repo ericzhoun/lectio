@@ -18,3 +18,6 @@ export const GET: APIRoute = async ({ params, request }) => {
   if (!key) return new Response(null, { status: 404 });
   return serveR2Audio(env.AUDIO, key, request, CACHE_CONTROL);
 };
+
+// Astro does not route HEAD to GET; the runtime drops the body on its own.
+export const HEAD = GET;

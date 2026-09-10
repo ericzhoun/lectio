@@ -3,15 +3,33 @@
 // seek) a source that never answers 206, so a plain 200 stream is not enough.
 import type { R2Bucket, R2Range } from '@cloudflare/workers-types';
 
-/** The byte window an R2 range resolved to, clamped to the object size. */
+/**
+ * A single-range "bytes=" header as an R2 range, or undefined when absent or
+ * not something we serve partially (multi-range, other units, garbage) - the
+ * caller then sends the whole clip, which RFC 9110 allows. We parse it
+ * ourselves rather than handing R2 the raw headers, because the range object
+ * R2 echoes back does not reliably say which form it took.
+ */
+export function parseRange(header: string | null): R2Range | undefined {
+  const match = header ? /^bytes=(\d*)-(\d*)$/.exec(header.trim()) : null;
+  if (!match) return undefined;
+  const [, from, to] = match;
+  if (from === '' && to === '') return undefined;
+  if (from === '') return { suffix: Number(to) };
+  if (to === '') return { offset: Number(from) };
+  if (Number(to) < Number(from)) return undefined;
+  return { offset: Number(from), length: Number(to) - Number(from) + 1 };
+}
+
+/** The byte window a range resolves to, clamped to the object size. */
 export function resolveRange(range: R2Range, size: number): { offset: number; length: number } {
-  if ('suffix' in range) {
+  if ('suffix' in range && range.suffix !== undefined) {
     const length = Math.min(range.suffix, size);
     return { offset: size - length, length };
   }
-  const offset = range.offset ?? 0;
-  const length = Math.min(range.length ?? size - offset, size - offset);
-  return { offset, length };
+  const offset = 'offset' in range && range.offset !== undefined ? range.offset : 0;
+  const wanted = 'length' in range && range.length !== undefined ? range.length : size - offset;
+  return { offset, length: Math.min(wanted, size - offset) };
 }
 
 export async function serveR2Audio(
@@ -20,10 +38,10 @@ export async function serveR2Audio(
   request: Request,
   cacheControl: string,
 ): Promise<Response> {
-  const wantsRange = request.headers.has('Range');
+  const range = parseRange(request.headers.get('Range'));
   let object;
   try {
-    object = await bucket.get(key, wantsRange ? { range: request.headers as never } : undefined);
+    object = await bucket.get(key, range ? { range } : undefined);
   } catch {
     // R2 rejects a range it cannot satisfy instead of returning an object.
     return new Response(null, { status: 416, headers: { 'Accept-Ranges': 'bytes' } });
@@ -38,8 +56,8 @@ export async function serveR2Audio(
   });
   // R2's stream is typed by workers-types; Response here is the DOM one.
   const body = object.body as unknown as ReadableStream;
-  if (wantsRange && object.range) {
-    const { offset, length } = resolveRange(object.range, object.size);
+  if (range) {
+    const { offset, length } = resolveRange(range, object.size);
     headers.set('Content-Range', `bytes ${offset}-${offset + length - 1}/${object.size}`);
     headers.set('Content-Length', String(length));
     return new Response(body, { status: 206, headers });
