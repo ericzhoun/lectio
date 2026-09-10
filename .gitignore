@@ -54,3 +54,4 @@ scripts/.audio-r2-state.json
 /src/roblox/__pycache__
 # Subagent-driven-development scratch (ledger, briefs, review packages)
 .superpowers/
+/gui-test-screenshots
