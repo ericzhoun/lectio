@@ -348,6 +348,19 @@ const t = {
     el.append(h, list, summary, link);
     threadEl.append(el);
     scroll();
+
+    // A completed reading really happened, so it belongs in the thread: it must
+    // survive a panel close, and the model's history needs a record of it. Keep
+    // the record short - the question and the references, not the reflection.
+    const refs = (reading.verses ?? [])
+      .filter((v) => v && typeof v.reference === 'string')
+      .map((v) => v.reference)
+      .join(', ');
+    const parts = [zh ? '（已完成一次默想）' : '(Started a reading.)'];
+    if (reading.question) parts.push(`${zh ? '问题' : 'Question'}: ${reading.question}`);
+    if (refs) parts.push(`${zh ? '经文' : 'Verses'}: ${refs}`);
+    thread.push({ role: 'assistant', content: parts.join(' ') });
+    save();
   }
 
   async function confirmCard(el: HTMLElement, token: string) {
@@ -369,8 +382,10 @@ const t = {
     // tool_failed, forbidden_origin, network and anything else share one line.
     if (data.error) return replaceCard(el, CARD_T.failed);
     const result = data.result;
-    if (result && typeof result.url === 'string') {
-      const href = safeHttpUrl(result.url);
+    // Key on the tool name, not on the shape of the result, so a future tool
+    // whose result happens to carry a `url` is never given billing copy.
+    if (data.tool === 'open_billing') {
+      const href = typeof result?.url === 'string' ? safeHttpUrl(result.url) : null;
       if (href) {
         let opened = false;
         try { opened = window.open(href, '_blank', 'noopener') !== null; } catch { opened = false; }
@@ -472,10 +487,14 @@ const t = {
       // Under protocol 2 an upstream failure is an HTTP 200 whose terminal
       // frame carries `error`, so the done frame decides, not the status.
       let streamError = false;
+      // A turn may be card-only (a card frame and no text frames). The empty
+      // bubble must then be dropped, and no empty assistant turn recorded.
+      let sawText = false;
       const handleEvent = (event: { t?: string; v?: string; error?: string; remaining?: number }) => {
         if (!event || typeof event.t !== 'string') return;
         if (event.t === 'text') {
           if (typeof event.v !== 'string') return;
+          sawText = true;
           full += event.v;
           el.innerHTML = renderMarkdownLite(full);
           scroll();
@@ -511,14 +530,19 @@ const t = {
         try { handleEvent(JSON.parse(tail) as { t?: string }); } catch { /* malformed tail is ignored */ }
       }
 
+      if (!sawText || !full) el.remove();
       if (streamError && !full) {
-        el.remove();
         thread.pop();
         addErrorBubble(clean);
         return;
       }
-      thread.push({ role: 'assistant', content: full });
+      // Only a real reply becomes a turn; an empty one would be replayed as
+      // history on the next request.
+      if (full) thread.push({ role: 'assistant', content: full });
       save();
+      // An error after partial prose still needs the retry affordance, or the
+      // visitor is left with a truncated reply and no way to notice.
+      if (streamError) addErrorBubble(clean);
       void refreshQuota();
     } catch {
       thinking.remove();
