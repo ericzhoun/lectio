@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { D1Memory } from './helpers/d1-memory';
 import {
   activeSubscribers,
@@ -15,6 +15,24 @@ beforeEach(async () => {
   resetSubscriberTableCache();
   db = new D1Memory();
   await ensureSubscriberTable(db);
+});
+
+describe('schema drift detection', () => {
+  it('warns when the table predates tz/status/last_sent', async () => {
+    resetSubscriberTableCache();
+    const oldDb: any = new D1Memory();
+    await oldDb.exec(
+      'CREATE TABLE daily_invitations (email TEXT PRIMARY KEY, lang TEXT, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)'
+    );
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await ensureSubscriberTable(oldDb);
+    expect(spy).toHaveBeenCalledWith(
+      expect.stringContaining('missing column'),
+      expect.stringContaining('tz'),
+      expect.stringContaining('migrate-daily-invitations.mjs')
+    );
+    spy.mockRestore();
+  });
 });
 
 describe('subscriber storage', () => {

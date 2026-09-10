@@ -16,9 +16,29 @@ export const CREATE_TABLE_SQL =
 
 let initialized = false;
 
+/** Columns the code assumes exist beyond the original three-column table. */
+const REQUIRED_COLUMNS = ['tz', 'status', 'last_sent'];
+
 export async function ensureSubscriberTable(db: D1Database): Promise<void> {
   if (initialized) return;
+  // CREATE TABLE IF NOT EXISTS is a no-op against production's existing
+  // three-column table, so a deploy that outruns the migration script would
+  // otherwise fail invisibly: every signup INSERT references tz/status, and
+  // the cron's SELECT throws "no such column" into a log nobody reads. This
+  // check makes that failure loud instead of silent.
   await db.exec(CREATE_TABLE_SQL);
+  const { results } = await db.prepare('PRAGMA table_info(daily_invitations)').bind().all<{
+    name: string;
+  }>();
+  const columns = new Set((results ?? []).map((row) => row.name));
+  const missing = REQUIRED_COLUMNS.filter((name) => !columns.has(name));
+  if (missing.length > 0) {
+    console.error(
+      'daily-invitation: daily_invitations table is missing column(s)',
+      missing.join(', '),
+      '- run scripts/migrate-daily-invitations.mjs'
+    );
+  }
   initialized = true;
 }
 
