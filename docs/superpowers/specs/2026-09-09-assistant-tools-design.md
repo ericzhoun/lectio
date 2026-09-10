@@ -1,7 +1,7 @@
 # Session-contextual Lectio Assistant (tool calling)
 
 Date: 2026-09-09
-Status: approved design, not yet implemented
+Status: implemented 2026-09-10
 
 ## Problem
 
@@ -87,9 +87,14 @@ so a page cached across a deploy keeps working.
 ```
 {"t":"text","v":"partial prose"}
 {"t":"card","id":"c1","tool":"subscribe_daily_email","token":"<signed>","summary":{...}}
-{"t":"reading","reading":{ layout, question, verses:[...], summary, href }}
 {"t":"done","remaining":27}
 ```
+
+A failed turn ends `{"t":"done","error":"upstream_error","remaining":N}` at HTTP 200:
+a stream that has begun cannot change its status code, so the widget reads the
+terminal frame rather than the status. There is deliberately no `reading` event -
+a reading is always the result of a confirmed `start_reading` card and so arrives
+in the confirm endpoint's response, not in this stream.
 
 The widget parses per line and ignores unknown `t` values. Existing `action:` pill
 links remain: they are pure navigation and cost nothing.
@@ -129,10 +134,16 @@ the same `run` the loop would never call. Origin-checked with the existing
    email lowercased and format-checked, timezone checked with `isValidTimeZone`,
    layout key checked against `SPREADS` - plus a `summary` of labeled fields the widget
    renders directly. The user confirms the fields, not the model's prose.
-3. **Cards are single-use and bound.** Each token is an HMAC over
+3. **Cards are bound and short-lived, but not single-use.** Each token is an HMAC over
    `{tool, args, visitorKey, exp}` with `SESSION_SECRET`, 10-minute expiry, signed and
-   verified in the style of `src/lib/mailToken.ts`. A card cannot be replayed, edited
-   in devtools, or fired from another origin.
+   verified in the style of `src/lib/mailToken.ts`. A card cannot be edited in devtools
+   or fired from another origin, and only the visitor it was issued to can redeem it.
+   No record of a redeemed card is kept, so within those ten minutes that visitor may
+   redeem the same card more than once. This is safe only because every write tool is
+   either idempotent (subscribe, unsubscribe, open the billing portal) or spends the
+   visitor's own metered quota against their own daily ceiling (`start_reading`).
+   **Anyone adding a new write tool must ask whether running it twice is safe.** If it
+   is not, a used-card record has to come first.
 4. **Unsubscribe requires ownership.** If the address matches the signed-in user's
    email, it applies immediately. Otherwise the tool sends that address the existing
    unsubscribe-link email and the reply says so. Subscribe keeps parity with today's
@@ -190,7 +201,7 @@ Following the existing `src/lib/__tests__` style:
 - Loop: stubbed model - a read hop feeds results back; a write call produces a proposal
   and never calls `run`; the hop cap terminates.
 - `act.ts`: expired token, forged token, args tampered after signing, wrong user,
-  missing session on an `auth:'user'` tool, replay of a used card.
+  missing session on an `auth:'user'` tool.
 - `performDraw`: parity test asserting the page path and the tool path produce the same
   result shape.
 - Injection: a stored reading whose text instructs the assistant to unsubscribe the

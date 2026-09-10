@@ -263,6 +263,188 @@ const t = {
     scroll();
   }
 
+  // --- Tool-calling protocol 2 -------------------------------------------
+  // The chat endpoint streams newline-delimited JSON events. A confirm card
+  // is redeemed against /api/assistant/act, which is the ONLY place a write
+  // happens; every string below passes through a model, so it is rendered
+  // with textContent and never innerHTML.
+  interface CardField { label: string; value: string }
+  interface CardEvent {
+    t: 'card';
+    id?: string | number;
+    tool?: string;
+    token: string;
+    summary: { title: string; fields?: CardField[]; confirmLabel?: string };
+  }
+  interface Verse { reference: string; position?: string; text?: string }
+  interface Reading { kind: 'reading'; readingId?: string; question?: string; verses?: Verse[]; summary?: string }
+
+  const CARD_T = {
+    cancel: zh ? '取消' : 'Cancel',
+    confirm: zh ? '确认' : 'Confirm',
+    expired: zh ? '这个确认已过期，再问我一次，我会重新给你。' : 'That confirmation expired. Ask me again and I will offer it fresh.',
+    signIn: zh ? '请先登录，然后再问我一次。' : 'Please sign in first, then ask me again.',
+    failed: zh ? '没有成功，请再试一次。' : 'That did not go through. Please try again.',
+    done: zh ? '已完成。' : 'Done.',
+    openReading: zh ? '查看完整默想' : 'Open the full reading',
+    billingLabel: zh ? '打开账单页面' : 'Open your billing portal',
+    billingOpened: zh ? '已在新标签页打开账单页面。' : 'Your billing portal opened in a new tab.',
+    billingBlocked: zh ? '浏览器拦截了新窗口，请点下面的链接。' : 'Your browser blocked the new tab - use the link below.',
+  };
+
+  // Only ever hand an http(s) URL to an anchor or window.open.
+  function safeHttpUrl(raw: string): string | null {
+    try {
+      const u = new URL(raw, location.origin);
+      return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : null;
+    } catch { return null; }
+  }
+
+  // The billing card must never dead-end: the anchor is the primary route and
+  // is always rendered, whether or not the popup attempt survived the blocker.
+  function replaceCardWithLink(el: HTMLElement, text: string, href: string, label: string) {
+    replaceCard(el, text);
+    const a = document.createElement('a');
+    a.setAttribute('href', href);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+    a.className = 'assistant-card-link';
+    a.textContent = label;
+    el.append(a);
+    scroll();
+  }
+
+  function replaceCard(el: HTMLElement, text: string) {
+    el.replaceChildren();
+    el.classList.add('assistant-card-resolved');
+    const p = document.createElement('p');
+    p.className = 'assistant-card-note';
+    p.textContent = text;
+    el.append(p);
+    scroll();
+  }
+
+  function renderReading(reading: Reading) {
+    const el = document.createElement('div');
+    el.className = 'assistant-reading-card';
+    const h = document.createElement('div');
+    h.className = 'assistant-reading-question';
+    h.textContent = reading.question ?? '';
+    const list = document.createElement('ul');
+    list.className = 'assistant-reading-verses';
+    for (const verse of reading.verses ?? []) {
+      if (!verse || typeof verse.reference !== 'string') continue;
+      const li = document.createElement('li');
+      li.textContent = verse.position ? `${verse.position}: ${verse.reference}` : verse.reference;
+      list.append(li);
+    }
+    const link = document.createElement('a');
+    link.href = '/';
+    link.className = 'assistant-reading-open';
+    link.textContent = CARD_T.openReading;
+    el.append(h, list);
+    // A single-verse draw has no summary; an empty paragraph would leave a
+    // visible gap between the verses and the link.
+    const summaryText = reading.summary ?? '';
+    if (summaryText) {
+      const summary = document.createElement('p');
+      summary.className = 'assistant-reading-summary';
+      summary.textContent = summaryText;
+      el.append(summary);
+    }
+    el.append(link);
+    threadEl.append(el);
+    scroll();
+
+    // A completed reading really happened, so it belongs in the thread: it must
+    // survive a panel close, and the model's history needs a record of it. Keep
+    // the record short - the question and the references, not the reflection.
+    const refs = (reading.verses ?? [])
+      .filter((v) => v && typeof v.reference === 'string')
+      .map((v) => v.reference)
+      .join(', ');
+    const parts = [zh ? '（已完成一次默想）' : '(Started a reading.)'];
+    if (reading.question) parts.push(`${zh ? '问题' : 'Question'}: ${reading.question}`);
+    if (refs) parts.push(`${zh ? '经文' : 'Verses'}: ${refs}`);
+    thread.push({ role: 'assistant', content: parts.join(' ') });
+    save();
+  }
+
+  async function confirmCard(el: HTMLElement, token: string) {
+    // Disable both buttons up front so a double-tap cannot spend two readings.
+    el.querySelectorAll('button').forEach((b) => { (b as HTMLButtonElement).disabled = true; });
+    let data: { error?: string; ok?: boolean; tool?: string; result?: { url?: string; kind?: string } } = {};
+    try {
+      const res = await fetch('/api/assistant/act', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token }),
+      });
+      data = (await res.json().catch(() => ({ error: 'network' }))) as typeof data;
+    } catch {
+      data = { error: 'network' };
+    }
+    if (data.error === 'invalid_card') return replaceCard(el, CARD_T.expired);
+    if (data.error === 'sign_in_required') return replaceCard(el, CARD_T.signIn);
+    // tool_failed, forbidden_origin, network and anything else share one line.
+    if (data.error) return replaceCard(el, CARD_T.failed);
+    const result = data.result;
+    // Key on the tool name, not on the shape of the result, so a future tool
+    // whose result happens to carry a `url` is never given billing copy.
+    if (data.tool === 'open_billing') {
+      const href = typeof result?.url === 'string' ? safeHttpUrl(result.url) : null;
+      if (href) {
+        let opened = false;
+        try { opened = window.open(href, '_blank', 'noopener') !== null; } catch { opened = false; }
+        replaceCardWithLink(el, opened ? CARD_T.billingOpened : CARD_T.billingBlocked, href, CARD_T.billingLabel);
+        return;
+      }
+      return replaceCard(el, CARD_T.failed);
+    }
+    if (result && result.kind === 'reading') {
+      renderReading(result as unknown as Reading);
+      el.remove();
+      return;
+    }
+    replaceCard(el, CARD_T.done);
+  }
+
+  function renderCard(event: CardEvent) {
+    const summary = event.summary;
+    if (!summary || typeof event.token !== 'string') return;
+    const el = document.createElement('div');
+    el.className = 'assistant-card';
+    const title = document.createElement('div');
+    title.className = 'assistant-card-title';
+    title.textContent = summary.title ?? '';
+    const dl = document.createElement('dl');
+    dl.className = 'assistant-card-fields';
+    for (const field of summary.fields ?? []) {
+      if (!field) continue;
+      const dt = document.createElement('dt');
+      dt.textContent = String(field.label ?? '');
+      const dd = document.createElement('dd');
+      dd.textContent = String(field.value ?? '');
+      dl.append(dt, dd);
+    }
+    const actions = document.createElement('div');
+    actions.className = 'assistant-card-actions';
+    const confirm = document.createElement('button');
+    confirm.type = 'button';
+    confirm.className = 'assistant-card-confirm';
+    confirm.textContent = summary.confirmLabel || CARD_T.confirm;
+    confirm.addEventListener('click', () => { void confirmCard(el, event.token); });
+    const cancel = document.createElement('button');
+    cancel.type = 'button';
+    cancel.className = 'assistant-card-cancel';
+    cancel.textContent = CARD_T.cancel;
+    cancel.addEventListener('click', () => el.remove());
+    actions.append(confirm, cancel);
+    el.append(title, dl, actions);
+    threadEl.append(el);
+    scroll();
+  }
+
   async function send(text: string) {
     const clean = text.trim();
     if (!clean || capped || busy) return;
@@ -285,6 +467,7 @@ const t = {
           message: clean,
           history: thread.slice(0, -1).slice(-HISTORY_SENT),
           context: buildContext(),
+          protocol: 2,
         }),
       });
 
@@ -308,15 +491,65 @@ const t = {
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let full = '';
+      // Under protocol 2 an upstream failure is an HTTP 200 whose terminal
+      // frame carries `error`, so the done frame decides, not the status.
+      let streamError = false;
+      // A turn may be card-only (a card frame and no text frames). The empty
+      // bubble must then be dropped, and no empty assistant turn recorded.
+      let sawText = false;
+      const handleEvent = (event: { t?: string; v?: string; error?: string; remaining?: number }) => {
+        if (!event || typeof event.t !== 'string') return;
+        if (event.t === 'text') {
+          if (typeof event.v !== 'string') return;
+          sawText = true;
+          full += event.v;
+          el.innerHTML = renderMarkdownLite(full);
+          scroll();
+        } else if (event.t === 'card') {
+          renderCard(event as unknown as CardEvent);
+        } else if (event.t === 'done') {
+          if (typeof event.error === 'string' && event.error) streamError = true;
+          else if (typeof event.remaining === 'number') {
+            quotaEl.textContent = T.quotaTemplate.replace('{n}', String(event.remaining));
+          }
+        }
+        // Unknown `t` values are ignored on purpose.
+      };
+
+      let buffered = '';
       for (;;) {
         const { done, value } = await reader.read();
         if (done) break;
-        full += decoder.decode(value, { stream: true });
-        el.innerHTML = renderMarkdownLite(full);
-        scroll();
+        buffered += decoder.decode(value, { stream: true });
+        let nl: number;
+        while ((nl = buffered.indexOf('\n')) >= 0) {
+          const line = buffered.slice(0, nl).trim();
+          buffered = buffered.slice(nl + 1);
+          if (!line) continue;
+          let event: unknown;
+          try { event = JSON.parse(line); } catch { continue; }
+          handleEvent(event as { t?: string });
+        }
       }
-      thread.push({ role: 'assistant', content: full });
+      // A stream cut short may leave a final line with no trailing newline.
+      const tail = buffered.trim();
+      if (tail) {
+        try { handleEvent(JSON.parse(tail) as { t?: string }); } catch { /* malformed tail is ignored */ }
+      }
+
+      if (!sawText || !full) el.remove();
+      if (streamError && !full) {
+        thread.pop();
+        addErrorBubble(clean);
+        return;
+      }
+      // Only a real reply becomes a turn; an empty one would be replayed as
+      // history on the next request.
+      if (full) thread.push({ role: 'assistant', content: full });
       save();
+      // An error after partial prose still needs the retry affordance, or the
+      // visitor is left with a truncated reply and no way to notice.
+      if (streamError) addErrorBubble(clean);
       void refreshQuota();
     } catch {
       thinking.remove();
@@ -448,6 +681,59 @@ const t = {
   }
   .assistant-msg-assistant a[href^="action:"]:hover { background: #f1eef9; }
   .assistant-msg-assistant code { background: rgba(0, 0, 0, 0.07); border-radius: 4px; padding: 0 4px; font-size: 12.5px; }
+  /* Confirm card: a write the visitor must approve before it happens. */
+  .assistant-card {
+    align-self: flex-start; max-width: 100%; width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px; border-radius: 12px;
+    background: #f1eef9; border: 1px solid #5b4b8a;
+    font-size: 14px; line-height: 1.5; overflow-wrap: anywhere;
+  }
+  .assistant-card-title { font-weight: 600; margin-bottom: 6px; }
+  .assistant-card-fields {
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 2px 10px; margin: 0 0 10px;
+  }
+  .assistant-card-fields dt { color: #5b4b8a; font-size: 12.5px; }
+  .assistant-card-fields dd { margin: 0; font-size: 13px; min-width: 0; }
+  @media (max-width: 380px) {
+    .assistant-card-fields { grid-template-columns: 1fr; gap: 0 0; }
+    .assistant-card-fields dd { margin-bottom: 6px; }
+  }
+  .assistant-card-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .assistant-card-actions button {
+    min-height: 44px; padding: 8px 14px; border-radius: 10px; cursor: pointer;
+    font-size: 14px; font-weight: 600;
+  }
+  .assistant-card-confirm { border: none; background: #5b4b8a; color: #fff; }
+  .assistant-card-cancel { border: 1px solid #5b4b8a; background: #fff; color: #5b4b8a; font-weight: 500; }
+  .assistant-card-actions button:disabled { opacity: 0.55; cursor: default; }
+  .assistant-card-resolved { border-style: dashed; }
+  .assistant-card-note { margin: 0; color: #444; }
+  .assistant-card-link {
+    display: inline-flex; align-items: center; min-height: 44px; margin-top: 8px;
+    padding: 4px 14px; border-radius: 999px;
+    background: #5b4b8a; color: #fff; text-decoration: none;
+    font-size: 13px; font-weight: 600;
+  }
+  /* Inline summary of a reading the visitor just confirmed. */
+  .assistant-reading-card {
+    align-self: flex-start; max-width: 100%; width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px; border-radius: 12px;
+    background: #f1eef9; color: #222;
+    font-size: 14px; line-height: 1.5; overflow-wrap: anywhere;
+  }
+  .assistant-reading-question { font-weight: 600; margin-bottom: 6px; }
+  .assistant-reading-verses { margin: 0 0 6px; padding-left: 18px; }
+  .assistant-reading-verses li { margin: 2px 0; }
+  .assistant-reading-summary { margin: 0 0 8px; }
+  .assistant-reading-open {
+    display: inline-flex; align-items: center; min-height: 44px;
+    padding: 4px 12px; border: 1px solid #5b4b8a; border-radius: 999px;
+    color: #5b4b8a; text-decoration: none; font-size: 13px; font-weight: 600;
+  }
+  .assistant-reading-open:hover { background: #fff; }
   .assistant-msg-error { align-self: flex-start; background: #fdecea; color: #7a2b23; display: flex; gap: 8px; align-items: center; }
   .assistant-msg-error button { border: 1px solid #7a2b23; background: none; color: #7a2b23; border-radius: 8px; padding: 2px 8px; cursor: pointer; font-size: 12px; }
   .assistant-msg-thinking { align-self: flex-start; background: #f1eef9; color: #666; font-style: italic; }

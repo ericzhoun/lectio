@@ -9,6 +9,7 @@ import {
 } from '../lib/pendingDraw';
 import { drawVerses, rebuildDrawnVerses, buildBiblePages, type DrawnVerse } from '../lib/scripture';
 import { generateInterpretation, generateFollowUpQuestions } from '../lib/openai';
+import { performDraw } from '../lib/draw';
 import { logReading, getReadingRendering, saveReadingRendering } from '../lib/db';
 import {
   LAST_READING_COOKIE, createLastReadingToken, verifyLastReadingToken,
@@ -233,32 +234,20 @@ if (Astro.request.method === 'POST') {
       // The pending draw is now the reading on screen; drop the previous one.
       Astro.cookies.delete(LAST_READING_COOKIE, { path: '/' });
     } else {
-      const drawnVerses = drawVerses(spread.number);
-      const positions = spread.positions[lang];
-      drawnVerses.forEach((v, i) => { v.position = positions[i] ?? ''; });
-
-      const interp = await generateInterpretation(question, drawnVerses, lang, spreadKey);
-      drawnVerses.forEach((v, i) => {
-        v.interp_text = interp.cards[i]?.text ?? '';
-        v.tags = interp.cards[i]?.tags ?? [];
+      const outcome = await performDraw({
+        question, spreadKey, lang,
+        userId: entitlementUserId, registered, ipAddress,
       });
-      interpretation = interp.summary;
-      verses = drawnVerses;
-
-      const followUpContext = interpretation || verses.map((v) => v.interp_text).join(' ');
-      followUpQuestions = await generateFollowUpQuestions(question, followUpContext, lang);
-
-      await logReading(
-        question,
-        verses.map((v) => ({ en: v.refEn, zh: v.refZh })),
-        interpretation,
-        ipAddress,
-        entitlementUserId
-      );
-      await recordDraw(entitlementUserId, spreadKey, registered);
-      await rememberReading(
-        crypto.randomUUID(), spreadKey, question, verses, interpretation, followUpQuestions
-      );
+      if (outcome.kind === 'reading') {
+        verses = outcome.verses;
+        interpretation = outcome.summary;
+        followUpQuestions = outcome.followUps;
+        await rememberReading(
+          outcome.readingId, outcome.spreadKey, question, verses, interpretation, followUpQuestions
+        );
+      } else if (outcome.kind === 'blocked') {
+        upsellReason = outcome.reason as 'quota' | 'spread_locked' | 'no_credits';
+      }
     }
   }
 } else {

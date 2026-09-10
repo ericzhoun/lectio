@@ -112,6 +112,16 @@ welcome-credit columns are keyed by them.
 - **First month free**: monthly Basic/Pro subscriptions start with a 30-day Stripe free trial
   (payment method collected, nothing charged until the trial ends; full plan features during the
   trial; one trial per account). Details: `docs/2026-09-01-first-month-free-trial.md`.
+- **The assistant knows who is asking**: signed in, the chat assistant can report your plan, the
+  readings and messages you have left today and your trial credits, recall your past readings and
+  discuss one of them, manage your Daily Invitation subscription, start a reading, and open the
+  Stripe billing portal. Anything that changes something is proposed as a confirmation card
+  showing exactly what will happen, and nothing is written until you tap it; the card is signed,
+  bound to the visitor it was shown to, and expires in ten minutes, and the server takes your
+  identity from the session cookie rather than from anything the model or the browser says.
+  Guests get site guidance, the guest reading allowance, and email signup; questions about "my"
+  plan or history get a sign-in prompt instead of invented numbers.
+  Details: `docs/superpowers/specs/2026-09-09-assistant-tools-design.md`.
 
 ## Google sign-in
 

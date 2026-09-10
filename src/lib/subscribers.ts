@@ -83,6 +83,34 @@ export async function activeSubscribers(db: D1Database): Promise<Subscriber[]> {
   }));
 }
 
+/** One reader's row, including inactive ones: the assistant must be able to
+ *  say "you unsubscribed in March", not just "you are not on the list". */
+export interface SubscriberRecord {
+  email: string;
+  lang: Lang;
+  tz: string;
+  status: string;
+  lastSent: string | null;
+}
+
+export async function getSubscriber(
+  db: D1Database,
+  email: string
+): Promise<SubscriberRecord | null> {
+  const row = await db
+    .prepare('SELECT email, lang, tz, status, last_sent FROM daily_invitations WHERE email = ?')
+    .bind(email.trim().toLowerCase())
+    .first<{ email: string; lang: string; tz: string; status: string; last_sent: string | null }>();
+  if (!row) return null;
+  return {
+    email: row.email,
+    lang: row.lang === 'zh' ? 'zh' : 'en',
+    tz: row.tz ?? DEFAULT_TIMEZONE,
+    status: row.status,
+    lastSent: row.last_sent ?? null,
+  };
+}
+
 export async function markSent(
   db: D1Database,
   emails: string[],
