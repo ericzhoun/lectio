@@ -41,6 +41,8 @@ const TARGETS = [
   ['RESEND_WEBHOOK_SECRET', [SITE_CONFIG]],
 ];
 
+let failed = false;
+
 function pushOne(key, value, config) {
   const r = spawnSync('npx', ['wrangler', 'secret', 'put', key, '-c', config], {
     input: value + '\n',
@@ -49,6 +51,7 @@ function pushOne(key, value, config) {
   });
   const out = (r.stdout ?? '') + (r.stderr ?? '');
   const ok = /Success!|updated.*secret/i.test(out) && !/error/i.test(out);
+  if (!ok) failed = true;
   console.log(
     `${key} -> ${config}: ${ok ? 'pushed' : 'FAILED - ' + out.split('\n').filter((l) => /error/i.test(l))[0]?.slice(0, 120)}`
   );
@@ -57,6 +60,7 @@ function pushOne(key, value, config) {
 for (const [key, configs] of TARGETS) {
   if (!env[key]) {
     console.log(`${key}: MISSING in .env, skipped (targets: ${configs.join(', ')})`);
+    failed = true;
     continue;
   }
   for (const config of configs) {
@@ -64,3 +68,6 @@ for (const [key, configs] of TARGETS) {
   }
 }
 console.log('done');
+// A missing secret or a failed push must break a `&&` deploy chain rather
+// than sail through it silently - see FIX 3/FIX 9 in the whole-branch review.
+if (failed) process.exit(1);

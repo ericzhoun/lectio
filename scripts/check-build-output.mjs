@@ -19,6 +19,18 @@ const read = (p) => JSON.parse(readFileSync(new URL(p, root), 'utf8'));
 const problems = [];
 const asset = (url) => new URL(`.${url}`, client);
 
+// The cron Worker (lectio-daily-invitation-cron, wrangler.cron.jsonc) is a
+// separate auxiliary Worker built alongside the site's own - see
+// astro.config.mjs. A missing bundle here must fail the build BEFORE the
+// site deploys, not surface later as an hourly cron that silently never
+// fires.
+const cronEntry = new URL('lectio_daily_invitation_cron/entry.mjs', new URL('dist/', root));
+if (!existsSync(fileURLToPath(cronEntry))) {
+  problems.push(
+    'dist/lectio_daily_invitation_cron/entry.mjs is missing - the Daily Invitation cron Worker did not build.'
+  );
+}
+
 if (!existsSync(fileURLToPath(new URL('index.html', client))) && !existsSync(fileURLToPath(client))) {
   problems.push('dist/client is missing - the build did not run, or it failed after emptying dist/.');
 } else {
