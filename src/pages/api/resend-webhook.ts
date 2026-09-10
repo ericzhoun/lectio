@@ -11,9 +11,13 @@ const ENCODER = new TextEncoder();
 /** Returns null on malformed base64 rather than throwing, so a bad secret or
  * a bad signature entry can be handled as "does not verify" instead of
  * crashing the request with an unhandled exception. */
-function fromBase64(b64: string): Uint8Array | null {
+// Returns a plain ArrayBuffer rather than a Uint8Array view: the DOM lib's
+// BufferSource / ArrayBufferView types require the backing buffer to be
+// exactly ArrayBuffer (not the wider ArrayBufferLike a typed array carries),
+// so importKey below needs the buffer itself, not a view over it.
+function fromBase64(b64: string): ArrayBuffer | null {
   try {
-    return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+    return Uint8Array.from(atob(b64), (c) => c.charCodeAt(0)).buffer as ArrayBuffer;
   } catch {
     return null;
   }
@@ -91,6 +95,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   const rawBody = await request.text();
   if (!(await verifyWebhook(key, request.headers, rawBody))) {
+    // Never log the signature itself - only that verification failed.
+    console.error('daily-invitation: webhook signature did not verify');
     return new Response('bad signature', { status: 401 });
   }
 

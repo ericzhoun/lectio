@@ -17,7 +17,15 @@ export async function unsubscribeFromRequest(url: URL): Promise<boolean> {
     console.error('daily-invitation: MAIL_TOKEN_SECRET is not set; cannot unsubscribe');
     return false;
   }
-  if (!(await verifyMailToken(email, token, secret))) return false;
+  if (!(await verifyMailToken(email, token, secret))) {
+    // The page still renders success (anti-enumeration), so this is the only
+    // signal an operator gets. Never log the token, secret, or full address -
+    // this is reachable by anyone with a captured or guessed link.
+    console.error(
+      'daily-invitation: unsubscribe token did not verify (secret drift between Workers?)'
+    );
+    return false;
+  }
 
   const db = env.DB as D1Database;
   await ensureSubscriberTable(db);
