@@ -338,14 +338,21 @@ const t = {
       li.textContent = verse.position ? `${verse.position}: ${verse.reference}` : verse.reference;
       list.append(li);
     }
-    const summary = document.createElement('p');
-    summary.className = 'assistant-reading-summary';
-    summary.textContent = reading.summary ?? '';
     const link = document.createElement('a');
     link.href = '/';
     link.className = 'assistant-reading-open';
     link.textContent = CARD_T.openReading;
-    el.append(h, list, summary, link);
+    el.append(h, list);
+    // A single-verse draw has no summary; an empty paragraph would leave a
+    // visible gap between the verses and the link.
+    const summaryText = reading.summary ?? '';
+    if (summaryText) {
+      const summary = document.createElement('p');
+      summary.className = 'assistant-reading-summary';
+      summary.textContent = summaryText;
+      el.append(summary);
+    }
+    el.append(link);
     threadEl.append(el);
     scroll();
 
