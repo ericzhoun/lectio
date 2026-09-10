@@ -8,6 +8,7 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { audioR2Key } from '../../lib/audio';
+import { serveR2Audio } from '../../lib/r2Audio';
 
 export const prerender = false;
 
@@ -15,18 +16,8 @@ export const prerender = false;
  * and the edge for a month, matching the old static-asset headers. */
 const CACHE_CONTROL = 'public, max-age=86400, s-maxage=2592000';
 
-export const GET: APIRoute = async ({ params }) => {
+export const GET: APIRoute = async ({ params, request }) => {
   const key = audioR2Key(`/audio/${params.path ?? ''}`);
   if (!key) return new Response(null, { status: 404 });
-
-  const object = await env.AUDIO.get(key);
-  if (!object) return new Response(null, { status: 404 });
-
-  // R2's stream is typed by workers-types; Response here is the DOM one.
-  return new Response(object.body as unknown as ReadableStream, {
-    headers: {
-      'Content-Type': 'audio/mpeg',
-      'Cache-Control': CACHE_CONTROL,
-    },
-  });
+  return serveR2Audio(env.AUDIO, key, request, CACHE_CONTROL);
 };

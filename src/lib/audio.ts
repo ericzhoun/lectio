@@ -4,6 +4,7 @@
 // on-demand Workers AI endpoint, so a missing entry is always safe.
 import stepsManifest from './audioSteps.json';
 import daysManifest from './audioDays.json';
+import musicManifest from './singingBibleClips.json';
 import type { Lang } from './reading';
 import type { Step } from './dailySteps';
 
@@ -68,4 +69,21 @@ const R2_KEYS: ReadonlySet<string> = (() => {
 export function audioR2Key(url: string): string | null {
   const key = url.replace(/^\/audio\//, '');
   return R2_KEYS.has(key) ? key : null;
+}
+
+/**
+ * Pre-cut passage music keys, "music/singing-bible/<name>.mp3" - the site
+ * path minus the leading "/". Like the TTS clips, the files are generated
+ * locally, gitignored, and served from R2 so a git-triggered build (which
+ * never has them) still ships working music.
+ */
+const MUSIC_R2_KEYS: ReadonlySet<string> = new Set(
+  Object.values(musicManifest as Record<string, { file: string }>).map(clip => clip.file.slice(1)),
+);
+
+/** The R2 object key for a music URL like "/music/singing-bible/x.mp3", or null. */
+export function musicR2Key(url: string): string | null {
+  if (!url.startsWith('/music/')) return null;
+  const key = url.slice(1);
+  return MUSIC_R2_KEYS.has(key) ? key : null;
 }

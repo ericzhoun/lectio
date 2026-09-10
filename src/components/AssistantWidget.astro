@@ -310,7 +310,7 @@ const t = {
     a.setAttribute('rel', 'noopener');
     a.className = 'assistant-card-link';
     a.textContent = label;
-    el.append(a);
+    el.appendChild(a);
     scroll();
   }
 
@@ -320,7 +320,7 @@ const t = {
     const p = document.createElement('p');
     p.className = 'assistant-card-note';
     p.textContent = text;
-    el.append(p);
+    el.appendChild(p);
     scroll();
   }
 
@@ -336,13 +336,14 @@ const t = {
       if (!verse || typeof verse.reference !== 'string') continue;
       const li = document.createElement('li');
       li.textContent = verse.position ? `${verse.position}: ${verse.reference}` : verse.reference;
-      list.append(li);
+      list.appendChild(li);
     }
     const link = document.createElement('a');
     link.href = '/';
     link.className = 'assistant-reading-open';
     link.textContent = CARD_T.openReading;
-    el.append(h, list);
+    el.appendChild(h);
+    el.appendChild(list);
     // A single-verse draw has no summary; an empty paragraph would leave a
     // visible gap between the verses and the link.
     const summaryText = reading.summary ?? '';
@@ -350,10 +351,10 @@ const t = {
       const summary = document.createElement('p');
       summary.className = 'assistant-reading-summary';
       summary.textContent = summaryText;
-      el.append(summary);
+      el.appendChild(summary);
     }
-    el.append(link);
-    threadEl.append(el);
+    el.appendChild(link);
+    threadEl.appendChild(el);
     scroll();
 
     // A completed reading really happened, so it belongs in the thread: it must
@@ -425,7 +426,8 @@ const t = {
       dt.textContent = String(field.label ?? '');
       const dd = document.createElement('dd');
       dd.textContent = String(field.value ?? '');
-      dl.append(dt, dd);
+      dl.appendChild(dt);
+      dl.appendChild(dd);
     }
     const actions = document.createElement('div');
     actions.className = 'assistant-card-actions';
@@ -439,9 +441,12 @@ const t = {
     cancel.className = 'assistant-card-cancel';
     cancel.textContent = CARD_T.cancel;
     cancel.addEventListener('click', () => el.remove());
-    actions.append(confirm, cancel);
-    el.append(title, dl, actions);
-    threadEl.append(el);
+    actions.appendChild(confirm);
+    actions.appendChild(cancel);
+    el.appendChild(title);
+    el.appendChild(dl);
+    el.appendChild(actions);
+    threadEl.appendChild(el);
     scroll();
   }
 

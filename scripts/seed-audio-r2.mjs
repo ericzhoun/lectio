@@ -59,6 +59,13 @@ for (const clips of Object.values(steps.steps)) {
 for (const [day, langs] of Object.entries(days.days)) {
   for (const lang of langs) expected.push(`days/${lang}/${day}.mp3`);
 }
+// Pre-cut passage music, keyed by its site path minus the leading "/"
+// ("music/singing-bible/<name>.mp3"), served by the /music/* route.
+const music = JSON.parse(readFileSync(join(ROOT, 'src/lib/singingBibleClips.json'), 'utf8'));
+for (const clip of Object.values(music)) expected.push(clip.file.slice(1));
+
+/** The site path a key is served at: music keys keep their own prefix. */
+const sitePath = (key) => (key.startsWith('music/') ? `/${key}` : `/audio/${key}`);
 
 // ---------------------------------------------------------------------------
 // 2. What still needs uploading.
@@ -100,12 +107,12 @@ let failed = 0;
 const failures = [];
 
 async function uploadOne(key) {
-  const local = join(ROOT, 'public/audio', key);
+  const local = join(ROOT, 'public', sitePath(key));
   let tmp = null;
   try {
     let from = local;
     if (!existsSync(local)) {
-      const res = await fetch(`${sourceBase}/audio/${key}`);
+      const res = await fetch(`${sourceBase}${sitePath(key)}`);
       if (!res.ok) throw new Error(`source ${res.status}`);
       const type = res.headers.get('content-type') ?? '';
       if (!type.startsWith('audio/')) throw new Error(`source content-type "${type}"`);

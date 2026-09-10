@@ -47,17 +47,14 @@ if (!existsSync(fileURLToPath(new URL('index.html', client))) && !existsSync(fil
   const steps = read('src/lib/audioSteps.json');
   const days = read('src/lib/audioDays.json');
   const music = read('src/lib/singingBibleClips.json');
-  for (const clip of Object.values(music)) {
-    if (!existsSync(fileURLToPath(asset(clip.file)))) {
-      problems.push(`Missing music clip ${clip.file}; run npm run music:prepare before building.`);
-    }
-  }
 
   let expected = 0;
   const uncovered = [];
   const check = (url, label) => {
     expected++;
-    const inR2 = r2Keys?.has(url.replace(/^\/audio\//, ''));
+    // TTS keys drop "/audio/"; music keys keep their prefix and drop only "/".
+    const key = url.startsWith('/audio/') ? url.slice('/audio/'.length) : url.slice(1);
+    const inR2 = r2Keys?.has(key);
     const inDist = existsSync(fileURLToPath(asset(url)));
     if (!inR2 && !inDist) uncovered.push(label);
   };
@@ -71,6 +68,9 @@ if (!existsSync(fileURLToPath(new URL('index.html', client))) && !existsSync(fil
     for (const lang of langs) {
       check(`/audio/days/${lang}/${day}.mp3`, `day clip ${lang}/${day}`);
     }
+  }
+  for (const [passage, clip] of Object.entries(music)) {
+    check(clip.file, `music clip ${passage}`);
   }
 
   if (uncovered.length > 0) {
