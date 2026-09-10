@@ -39,6 +39,21 @@ vi.mock('../../lib/entitlements', async (importOriginal) => ({
   resolveTier: vi.fn(async () => store.tier ?? 'free'),
 }));
 
+// Observe the ToolContext the endpoint hands the loop, without reaching OpenAI:
+// the real loop still runs, we just record what it was called with.
+const loopCalls = vi.hoisted(() => [] as Array<import('../../lib/assistantTools').ToolContext>);
+
+vi.mock('../../lib/assistantLoop', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../lib/assistantLoop')>();
+  return {
+    ...actual,
+    runAssistantTurn: (opts: Parameters<typeof actual.runAssistantTurn>[0]) => {
+      loopCalls.push(opts.ctx);
+      return actual.runAssistantTurn(opts);
+    },
+  };
+});
+
 import { POST } from '../../pages/api/assistant/chat';
 import { GET as QUOTA_GET } from '../../pages/api/assistant/quota';
 import { getChatUsage, incrementChatUsage } from '../../lib/chatUsage';
@@ -257,5 +272,60 @@ describe('POST /api/assistant/chat - protocol 2', () => {
     } finally {
       errorSpy.mockRestore();
     }
+  });
+
+  it('reports the pre-turn remaining when the stream delivered no text', async () => {
+    // Nothing was delivered, so nothing was charged: telling the visitor they
+    // have one fewer message than they do would be simply wrong.
+    store.create = vi.fn(async (opts: { stream?: boolean }) =>
+      opts.stream
+        ? (async function* () {
+            /* no content at all */
+          })()
+        : { choices: [{ message: { content: null, tool_calls: [] } }] }
+    );
+    const anon = 'a:proto2-silent';
+    const cookies = makeCookies({ chat_anon: anon });
+    const res = await POST(
+      { request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never
+    );
+    const events = (await res.text())
+      .trim()
+      .split('\n')
+      .map((line) => JSON.parse(line));
+    expect(events).toEqual([{ t: 'done', remaining: ANON_DAILY_MESSAGES }]);
+    expect(await getChatUsage(anon, db as never)).toBe(0);
+  });
+
+  it('passes the user_id cookie to the tool layer as the reading-quota subject', async () => {
+    store.create = vi.fn(async (opts: { stream?: boolean }) =>
+      opts.stream
+        ? (async function* () {
+            yield { choices: [{ delta: { content: 'ok' } }] };
+          })()
+        : { choices: [{ message: { content: null, tool_calls: [] } }] }
+    );
+    loopCalls.length = 0;
+    const cookies = makeCookies({ chat_anon: 'a:subject-cookie', user_id: 'site-user-42' });
+    await POST({ request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never);
+    expect(loopCalls.at(-1)!.usageSubject).toBe('site-user-42');
+    // The chat-quota subject stays its own namespace.
+    expect(loopCalls.at(-1)!.visitorKey).toBe('a:subject-cookie');
+  });
+
+  it('falls back to the visitor key when there is no user_id cookie', async () => {
+    store.create = vi.fn(async (opts: { stream?: boolean }) =>
+      opts.stream
+        ? (async function* () {
+            yield { choices: [{ delta: { content: 'ok' } }] };
+          })()
+        : { choices: [{ message: { content: null, tool_calls: [] } }] }
+    );
+    loopCalls.length = 0;
+    const cookies = makeCookies({ chat_anon: 'a:subject-none' });
+    await POST({ request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never);
+    // Such a visitor has never drawn, so this key looks up nothing - the
+    // truthful answer rather than a stale one.
+    expect(loopCalls.at(-1)!.usageSubject).toBe('a:subject-none');
   });
 });

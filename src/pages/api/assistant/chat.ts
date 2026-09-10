@@ -256,7 +256,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           },
         });
         for await (const event of turn) send(event);
-        send({ t: 'done', remaining: Math.max(0, quota.remaining - 1) });
+        // Report what was actually charged. A turn that delivered no text
+        // charged nothing, and this is the number the widget displays.
+        send({ t: 'done', remaining: Math.max(0, quota.remaining - (charged ? 1 : 0)) });
       } catch (e) {
         // A throw anywhere in the turn still has to close the stream with a
         // frame the client can act on, rather than leaving it hanging.
