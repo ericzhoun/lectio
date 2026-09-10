@@ -149,6 +149,21 @@ describe('POST /api/assistant/act', () => {
     expect((await POST(request({ token }))).status).toBe(400);
   });
 
+  it('rejects a body that is not an object', async () => {
+    // JSON.parse is quite happy with `null`; reading body.token off it used to
+    // throw outside the try and answer 500.
+    const res = await POST({
+      request: new Request('https://enjoyhim.org/api/assistant/act', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', origin: 'https://enjoyhim.org' },
+        body: 'null',
+      }),
+      cookies: { get: () => undefined, set: () => {}, delete: () => {} },
+    } as unknown as Parameters<typeof POST>[0]);
+    expect(res.status).toBe(400);
+    expect((await res.json()) as { error: string }).toEqual({ error: 'invalid_body' });
+  });
+
   it('mints a user_id for a guest and bills the draw to it, not the visitor key', async () => {
     store.userId = null;
     vi.mocked(performDraw).mockClear();

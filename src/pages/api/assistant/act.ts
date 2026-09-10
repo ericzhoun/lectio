@@ -58,12 +58,19 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     return json({ error: 'forbidden_origin' }, 403);
   }
 
-  let body: Record<string, unknown>;
+  // `JSON.parse` accepts `null`, `3` and `"x"` quite happily, and the token
+  // read below would then throw outside the try. A body that is not an object
+  // is simply a bad request.
+  let parsed: unknown;
   try {
-    body = (await request.json()) as Record<string, unknown>;
+    parsed = await request.json();
   } catch {
     return json({ error: 'invalid_body' }, 400);
   }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    return json({ error: 'invalid_body' }, 400);
+  }
+  const body = parsed as Record<string, unknown>;
 
   // One shared builder with the chat endpoint (src/lib/assistantContext.ts),
   // so the two can never disagree about who is asking. This route does not
