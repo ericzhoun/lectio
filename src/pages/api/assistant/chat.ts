@@ -261,9 +261,19 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         // A throw anywhere in the turn still has to close the stream with a
         // frame the client can act on, rather than leaving it hanging.
         console.error('assistant turn error:', e);
-        send({ t: 'done', error: 'upstream_error' });
+        // The client may already be gone, in which case enqueueing throws;
+        // that is not a second failure worth reporting.
+        try {
+          send({ t: 'done', error: 'upstream_error' });
+        } catch {
+          /* stream already closed */
+        }
       }
-      controller.close();
+      try {
+        controller.close();
+      } catch {
+        /* stream already closed */
+      }
     },
   });
   return new Response(responseBody, {
