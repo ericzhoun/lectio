@@ -10,8 +10,11 @@ export const SITE_ORIGIN = 'https://enjoyhim.org';
 /** Long enough to sit with, short enough that no one scrolls an inbox. */
 const MAX_PASSAGE_CHARS = 900;
 
-export function unsubscribeUrl(email: string, token: string): string {
-  return `${SITE_ORIGIN}/unsubscribe?e=${encodeURIComponent(email)}&t=${encodeURIComponent(token)}`;
+export function unsubscribeUrl(email: string, token: string, lang: Lang): string {
+  const base = `${SITE_ORIGIN}/unsubscribe?e=${encodeURIComponent(email)}&t=${encodeURIComponent(token)}`;
+  // The mail-client click carries no cookie, so the page's own language
+  // default (English) is the only thing a Chinese reader would otherwise see.
+  return lang === 'zh' ? `${base}&lang=zh` : base;
 }
 
 function escapeHtml(value: string): string {
@@ -51,7 +54,8 @@ const COPY = {
 export function renderDailyEmail(
   dayKey: string,
   lang: Lang,
-  unsubscribeLink: string
+  unsubscribeLink: string,
+  tz: string
 ): { subject: string; html: string; text: string } | null {
   if (!hasLectionaryDay(dayKey)) return null;
 
@@ -63,7 +67,11 @@ export function renderDailyEmail(
   const copy = COPY[lang];
   const title = day.title[lang];
   const { body, truncated } = truncate(passage.text, lang);
-  const todayUrl = `${SITE_ORIGIN}/today?lang=${lang}`;
+  // The reader's own zone travels with the link: a click carries no cookie,
+  // so without this a reader whose local day has already rolled past UTC's
+  // (e.g. Asia/Shanghai at 06:00 local, still yesterday in UTC) would land on
+  // a day different from the one this email just printed.
+  const todayUrl = `${SITE_ORIGIN}/today?lang=${lang}&tz=${encodeURIComponent(tz)}`;
 
   const subject = `${title} - ${passage.ref}`;
 
@@ -83,6 +91,7 @@ export function renderDailyEmail(
 
   const html = `<!doctype html>
 <html lang="${lang}">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(subject)}</title></head>
 <body style="margin:0;padding:32px 16px;background:#faf8f4;color:#2b2622;font:16px/1.7 Georgia,'Songti SC',serif;">
   <div style="max-width:34em;margin:0 auto;">
     <p style="margin:0 0 24px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#8a7f72;">${escapeHtml(copy.greeting)}</p>

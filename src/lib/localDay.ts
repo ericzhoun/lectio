@@ -32,10 +32,16 @@ export function localDay(now: Date, tz: string): string {
 // in i18n.ts - keeps this module unit-testable without the full Astro types.
 interface CookieContext {
   cookies: { get(name: string): { value: string } | undefined };
+  /** Present on the Astro global; absent in the narrower contexts that only pass cookies. */
+  url?: URL;
 }
 
 export function resolveLocalDay(astro: CookieContext, now: Date = new Date()): string {
-  const tz = astro.cookies.get(TIMEZONE_COOKIE)?.value;
+  // A link from an email carries no cookie, so a validated ?tz= query param
+  // takes precedence over the cookie - never trust it blindly, an invalid
+  // value falls through to the cookie exactly as if the param were absent.
+  const queryTz = astro.url?.searchParams.get('tz');
+  const tz = (isValidTimeZone(queryTz) && queryTz) || astro.cookies.get(TIMEZONE_COOKIE)?.value;
   return localDay(now, isValidTimeZone(tz) ? tz : 'UTC');
 }
 

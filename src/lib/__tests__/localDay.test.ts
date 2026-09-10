@@ -4,7 +4,7 @@ import {
   TIMEZONE_COOKIE, DAY_COOKIE,
 } from '../localDay';
 
-const ctx = (tz?: string, pinnedDay?: string) => ({
+const ctx = (tz?: string, pinnedDay?: string, queryTz?: string) => ({
   cookies: {
     get: (n: string) => {
       if (n === TIMEZONE_COOKIE && tz) return { value: tz };
@@ -12,6 +12,7 @@ const ctx = (tz?: string, pinnedDay?: string) => ({
       return undefined;
     },
   },
+  url: queryTz !== undefined ? new URL(`https://x.test/?tz=${encodeURIComponent(queryTz)}`) : undefined,
 });
 
 describe('isValidTimeZone', () => {
@@ -51,6 +52,20 @@ describe('resolveLocalDay', () => {
     const now = new Date('2026-09-04T23:30:00Z');
     expect(resolveLocalDay(ctx(undefined), now)).toBe('2026-09-04');
     expect(resolveLocalDay(ctx('Mars/Olympus'), now)).toBe('2026-09-04');
+  });
+
+  it('prefers a validated tz query param over the cookie', () => {
+    const now = new Date('2026-09-04T23:30:00Z');
+    expect(resolveLocalDay(ctx('America/Los_Angeles', undefined, 'Asia/Shanghai'), now)).toBe(
+      '2026-09-05'
+    );
+  });
+
+  it('falls back to the cookie when the tz query param is invalid', () => {
+    const now = new Date('2026-09-04T23:30:00Z');
+    expect(resolveLocalDay(ctx('Asia/Shanghai', undefined, 'Mars/Olympus'), now)).toBe(
+      '2026-09-05'
+    );
   });
 });
 
