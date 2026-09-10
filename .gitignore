@@ -49,9 +49,13 @@ logo2.png
 # TTS output: manifests in src/lib are the source of truth; clips are
 # regenerated locally and ship via the wrangler assets upload
 public/audio/
+# Generated passage music; reproduce with scripts/prepare-singing-bible.mts.
+public/music/singing-bible/
 scripts/.audio-r2-state.json
 /.lavish
 /src/roblox/__pycache__
 # Subagent-driven-development scratch (ledger, briefs, review packages)
 .superpowers/
 /gui-test-screenshots
+/downloads
+/tmp

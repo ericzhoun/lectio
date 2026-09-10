@@ -3,6 +3,8 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import DailyProgress from '../../components/DailyProgress.astro';
+import ReadingMusic from '../../components/ReadingMusic.astro';
+import { resolveMusic } from '../../lib/singingBible';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
 import { resolveLang } from '../../lib/i18n';
@@ -25,6 +27,7 @@ const lang = resolveLang(Astro);
 const day = resolveActiveDay(Astro);
 const entry = getLectionaryDay(day);
 const passage = resolvePassage(focusReference(entry), lang);
+const music = passage ? resolveMusic(focusReference(entry)) : null;
 
 // Resolve clips on the server: a manifest entry does not guarantee that the
 // deployed asset exists. The endpoint falls back to synthesis when missing.
@@ -212,6 +215,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
                 aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
               >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
               <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
+              {music && <ReadingMusic clip={music} lang={lang} />}
             </>
           ) : (
             <p class="text">

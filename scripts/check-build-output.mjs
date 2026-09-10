@@ -46,6 +46,12 @@ if (!existsSync(fileURLToPath(new URL('index.html', client))) && !existsSync(fil
 
   const steps = read('src/lib/audioSteps.json');
   const days = read('src/lib/audioDays.json');
+  const music = read('src/lib/singingBibleClips.json');
+  for (const clip of Object.values(music)) {
+    if (!existsSync(fileURLToPath(asset(clip.file)))) {
+      problems.push(`Missing music clip ${clip.file}; run npm run music:prepare before building.`);
+    }
+  }
 
   let expected = 0;
   const uncovered = [];

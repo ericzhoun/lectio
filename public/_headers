@@ -3,6 +3,10 @@
 /audio/*
   Cache-Control: public, max-age=86400, s-maxage=2592000
 
+# Pre-cut music filenames include their source/timing hash.
+/music/singing-bible/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # PWA identity files. The manifest references content-addressed icons, so a
 # one-day client cache is safe and cheap.
 /manifest.webmanifest

@@ -15,7 +15,10 @@
     "og": "node scripts/generate-og-image.mjs",
     "test": "vitest run",
     "tts:steps": "tsx scripts/tts/steps.mts",
-    "tts:passages": "tsx scripts/tts/passages.mts"
+    "tts:passages": "tsx scripts/tts/passages.mts",
+    "music:download": "tsx scripts/download-daily-music.mts",
+    "music:text": "node scripts/fetch-singing-texts.mjs",
+    "music:prepare": "tsx scripts/prepare-singing-bible.mts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.5",

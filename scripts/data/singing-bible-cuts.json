@@ -1,0 +1,3686 @@
+{
+  "43:3:16-3:16": {
+    "reference": "John 3:16",
+    "cuts": [
+      {
+        "file": "43-john/003.mp3",
+        "sha256": "9a0841f5eddd47b25defca437b261c671871b0dcf3103c5c8d8f3c1dde8fc032",
+        "start": 156.44,
+        "end": 167.36
+      }
+    ],
+    "duration": 10.920249
+  },
+  "45:5:8-5:8": {
+    "reference": "Romans 5:8",
+    "cuts": [
+      {
+        "file": "45-romans/005.mp3",
+        "sha256": "3c5323f01e1ef2690b83b92ae8c159e0010501befa685984a55b0d8f836de5e8",
+        "start": 88.31,
+        "end": 101.69999999999999
+      }
+    ],
+    "duration": 13.39
+  },
+  "62:4:18-4:18": {
+    "reference": "1 John 4:18",
+    "cuts": [
+      {
+        "file": "62-1-john/004.mp3",
+        "sha256": "d7da5419e225276aa9ddcf35d3b67770a196e43b738e7febaaef7b74c958f5ce",
+        "start": 186.78,
+        "end": 201.81
+      }
+    ],
+    "duration": 15.03
+  },
+  "60:4:8-4:8": {
+    "reference": "1 Peter 4:8",
+    "cuts": [
+      {
+        "file": "60-1-peter/004.mp3",
+        "sha256": "c51cc04edb81168b23ed39739fbb7733ec3e2d215a8218efdbd93b4c3c9e6f27",
+        "start": 102.8,
+        "end": 109.39
+      }
+    ],
+    "duration": 6.59
+  },
+  "20:17:17-17:17": {
+    "reference": "Proverbs 17:17",
+    "cuts": [
+      {
+        "file": "20-proverbs/017.mp3",
+        "sha256": "331d10e1e482c9b89f22e6c0ca46a2475858fcfe7782d65123f786336a5b680c",
+        "start": 180.84,
+        "end": 187.41
+      }
+    ],
+    "duration": 6.57
+  },
+  "20:15:1-15:1": {
+    "reference": "Proverbs 15:1",
+    "cuts": [
+      {
+        "file": "20-proverbs/015.mp3",
+        "sha256": "fca29832a44ba6238c59154e3a93738781bfc2dda4ca52a3dc5422c5940fb928",
+        "start": 12.66,
+        "end": 19.65
+      }
+    ],
+    "duration": 6.99
+  },
+  "45:12:2-12:2": {
+    "reference": "Romans 12:2",
+    "cuts": [
+      {
+        "file": "45-romans/012.mp3",
+        "sha256": "9183ea68cc53910a7f86acea9fa09fa042c0665fa4b9e12c6a92f6b9ace70594",
+        "start": 28.16,
+        "end": 46.67
+      }
+    ],
+    "duration": 18.51
+  },
+  "20:4:23-4:23": {
+    "reference": "Proverbs 4:23",
+    "cuts": [
+      {
+        "file": "20-proverbs/004.mp3",
+        "sha256": "a2fb3dbf4b190792d50ed8075d182d3752f62f80b90470f56ad32244472c2d82",
+        "start": 228.42,
+        "end": 235.57
+      }
+    ],
+    "duration": 7.15
+  },
+  "9:16:7-16:7": {
+    "reference": "1 Samuel 16:7",
+    "cuts": [
+      {
+        "file": "09-1-samuel/016.mp3",
+        "sha256": "dcd1cd08fd103edc3833b3d91f55dbb77eb8ba148b11238da274d050a30e3477",
+        "start": 122.1,
+        "end": 136.39
+      }
+    ],
+    "duration": 14.290045
+  },
+  "19:139:14-139:14": {
+    "reference": "Psalm 139:14",
+    "cuts": [
+      {
+        "file": "19-psalms/139.mp3",
+        "sha256": "b969654ab5590e2d5cced8da515efb0794ccc54206f4a9b84095fa1eeed8eea1",
+        "start": 118.78,
+        "end": 128.95
+      }
+    ],
+    "duration": 10.17
+  },
+  "47:10:2-10:6": {
+    "reference": "2 Corinthians 10:2-6",
+    "cuts": [
+      {
+        "file": "47-2-corinthians/010.mp3",
+        "sha256": "daba0749c786ad91121a8336900df33766b9e2d86e824eb5750b29b0d4df6608",
+        "start": 32.34,
+        "end": 97.97
+      }
+    ],
+    "duration": 65.63
+  },
+  "47:5:17-5:17": {
+    "reference": "2 Corinthians 5:17",
+    "cuts": [
+      {
+        "file": "47-2-corinthians/005.mp3",
+        "sha256": "05ee88a26b92f1352b0ba7a755397063949090993c3d1b5408a194ffad54ace5",
+        "start": 140.79999999999998,
+        "end": 149.83
+      }
+    ],
+    "duration": 9.03
+  },
+  "48:5:1-5:1": {
+    "reference": "Galatians 5:1",
+    "cuts": [
+      {
+        "file": "48-galatians/005.mp3",
+        "sha256": "9464563d88b46b4b8818a1d381c9652c27452dae88e04e47c395c353264ce932",
+        "start": 12.58,
+        "end": 25.63
+      }
+    ],
+    "duration": 13.05
+  },
+  "49:2:10-2:10": {
+    "reference": "Ephesians 2:10",
+    "cuts": [
+      {
+        "file": "49-ephesians/002.mp3",
+        "sha256": "de59fbebf14a52a35bdb20b8c973b96061af3de41886fbe335b2ff794db46419",
+        "start": 124.08,
+        "end": 137.71
+      }
+    ],
+    "duration": 13.63
+  },
+  "24:29:11-29:11": {
+    "reference": "Jeremiah 29:11",
+    "cuts": [
+      {
+        "file": "24-jeremiah/029.mp3",
+        "sha256": "a9b46d9236b2c3c9b78fbf454a0633c7df4a9ac321dd0d859d58ead2ae5c910e",
+        "start": 136.85999999999999,
+        "end": 148.15
+      }
+    ],
+    "duration": 11.29
+  },
+  "50:1:6-1:6": {
+    "reference": "Philippians 1:6",
+    "cuts": [
+      {
+        "file": "50-philippians/001.mp3",
+        "sha256": "f96fa340c197e8439b75418834e50984105e9f4aa450bae47552a221bd102cb6",
+        "start": 49.220000000000006,
+        "end": 65.29
+      }
+    ],
+    "duration": 16.07
+  },
+  "20:3:5-3:6": {
+    "reference": "Proverbs 3:5-6",
+    "cuts": [
+      {
+        "file": "20-proverbs/003.mp3",
+        "sha256": "b15752568bdaf6c3cafcb8c60f71bc1b52df0ac462eda4dee110126cedee6441",
+        "start": 58.2,
+        "end": 74.35
+      }
+    ],
+    "duration": 16.15
+  },
+  "19:32:8-32:8": {
+    "reference": "Psalm 32:8",
+    "cuts": [
+      {
+        "file": "19-psalms/032.mp3",
+        "sha256": "863925260a753d4aeef3321382eccce8fb6b25681f76de7abc187c454387b550",
+        "start": 95.17999999999999,
+        "end": 105.71
+      }
+    ],
+    "duration": 10.53
+  },
+  "23:30:21-30:21": {
+    "reference": "Isaiah 30:21",
+    "cuts": [
+      {
+        "file": "23-isaiah/030.mp3",
+        "sha256": "dff227833caae0b3b25b78d5afd98848c3db2c8f55f0142bde52b732701d3816",
+        "start": 268.1,
+        "end": 279.31
+      }
+    ],
+    "duration": 11.21
+  },
+  "59:1:5-1:5": {
+    "reference": "James 1:5",
+    "cuts": [
+      {
+        "file": "59-james/001.mp3",
+        "sha256": "3729f134e037a9d24ad45b7e9dcefd3fad71a702d14b0085f5e18d7d164f82a5",
+        "start": 37.36,
+        "end": 50.59
+      }
+    ],
+    "duration": 13.23
+  },
+  "40:7:7-7:7": {
+    "reference": "Matthew 7:7",
+    "cuts": [
+      {
+        "file": "40-matthew/007.mp3",
+        "sha256": "6d2685549be9c76e9a02e09f0a5a71257ebc4fedae76472886d0f4220ccea1df",
+        "start": 107.67999999999999,
+        "end": 127.49
+      }
+    ],
+    "duration": 19.81
+  },
+  "23:41:10-41:10": {
+    "reference": "Isaiah 41:10",
+    "cuts": [
+      {
+        "file": "23-isaiah/041.mp3",
+        "sha256": "e816811638d0f1a4232578a5eaa9bb0916201fb64da1387d3994467a82cb95ee",
+        "start": 99.22,
+        "end": 110.55
+      }
+    ],
+    "duration": 11.33
+  },
+  "6:1:9-1:9": {
+    "reference": "Joshua 1:9",
+    "cuts": [
+      {
+        "file": "06-joshua/001.mp3",
+        "sha256": "1246293f4e1afc97d5da2e838f3b00d6c31f56cd11e5f74dee9c1526881c1b40",
+        "start": 133.78,
+        "end": 147.05
+      }
+    ],
+    "duration": 13.27
+  },
+  "50:4:13-4:13": {
+    "reference": "Philippians 4:13",
+    "cuts": [
+      {
+        "file": "50-philippians/004.mp3",
+        "sha256": "4372a06c1d8b7f2c0b6282fba56ca8f0741c11b76c58922cb91d178c5814ed26",
+        "start": 186.64,
+        "end": 195.71
+      }
+    ],
+    "duration": 9.07
+  },
+  "19:46:1-46:1": {
+    "reference": "Psalm 46:1",
+    "cuts": [
+      {
+        "file": "19-psalms/046.mp3",
+        "sha256": "c5edbfac525da3c6d7b8c44b4631942b375bb7e959806dfda0e83ff1fe822fcb",
+        "start": 28.14,
+        "end": 33.37
+      }
+    ],
+    "duration": 5.23
+  },
+  "19:27:1-27:1": {
+    "reference": "Psalm 27:1",
+    "cuts": [
+      {
+        "file": "19-psalms/027.mp3",
+        "sha256": "120768650f152f5f76756b6c17fa2b2d153c7854aee4cc2617b1483debe2229b",
+        "start": 11.38,
+        "end": 27.75
+      }
+    ],
+    "duration": 16.37
+  },
+  "5:31:6-31:6": {
+    "reference": "Deuteronomy 31:6",
+    "cuts": [
+      {
+        "file": "05-deuteronomy/031.mp3",
+        "sha256": "c6e1f19f35cafdf9b71a0cd04c1eb6669d3754aadfe3ce8806882963b7a8e05a",
+        "start": 70,
+        "end": 84.95
+      }
+    ],
+    "duration": 14.95
+  },
+  "55:1:7-1:7": {
+    "reference": "2 Timothy 1:7",
+    "cuts": [
+      {
+        "file": "55-2-timothy/001.mp3",
+        "sha256": "9ff8a7262527855996ff49aa02ecd0ef8c9d56136371063b19aa9f7bfc884e5f",
+        "start": 93.3,
+        "end": 104.29
+      }
+    ],
+    "duration": 10.99
+  },
+  "45:8:31-8:31": {
+    "reference": "Romans 8:31",
+    "cuts": [
+      {
+        "file": "45-romans/008.mp3",
+        "sha256": "f32fe4990a7310e1df2f4bc2b9b7a665bf594926c73d346013c0834861b7835e",
+        "start": 345.36,
+        "end": 352.67
+      }
+    ],
+    "duration": 7.31
+  },
+  "50:4:6-4:7": {
+    "reference": "Philippians 4:6-7",
+    "cuts": [
+      {
+        "file": "50-philippians/004.mp3",
+        "sha256": "4372a06c1d8b7f2c0b6282fba56ca8f0741c11b76c58922cb91d178c5814ed26",
+        "start": 71.36,
+        "end": 97.39
+      }
+    ],
+    "duration": 26.03
+  },
+  "60:5:7-5:7": {
+    "reference": "1 Peter 5:7",
+    "cuts": [
+      {
+        "file": "60-1-peter/005.mp3",
+        "sha256": "0e2458ebcdb78c33ab9b871df135e00f18cd29e7ae8f27850ce1d7b74f2b215c",
+        "start": 115.47999999999999,
+        "end": 123.21
+      }
+    ],
+    "duration": 7.73
+  },
+  "43:14:27-14:27": {
+    "reference": "John 14:27",
+    "cuts": [
+      {
+        "file": "43-john/014.mp3",
+        "sha256": "d616a33e914cd2c9daf89c8252a0b298f64a7e371b7b0e334d4f3ea2f3d07144",
+        "start": 355.8,
+        "end": 371.52
+      }
+    ],
+    "duration": 15.72
+  },
+  "23:26:3-26:3": {
+    "reference": "Isaiah 26:3",
+    "cuts": [
+      {
+        "file": "23-isaiah/026.mp3",
+        "sha256": "1fe7eedc03104dedff45bbfa1695f65edc9d7ee930a72db71343682cb144b269",
+        "start": 21.9,
+        "end": 29.71
+      }
+    ],
+    "duration": 7.81
+  },
+  "51:3:15-3:15": {
+    "reference": "Colossians 3:15",
+    "cuts": [
+      {
+        "file": "51-colossians/003.mp3",
+        "sha256": "ba456a639322e7ddf3bdefd0c8cb8b1cb8dff474724b905a92a6a29efb0d0d5e",
+        "start": 166.4,
+        "end": 177.55
+      }
+    ],
+    "duration": 11.15
+  },
+  "43:16:33-16:33": {
+    "reference": "John 16:33",
+    "cuts": [
+      {
+        "file": "43-john/016.mp3",
+        "sha256": "a6b10798766f7c87d1073e24c469520248a7a1b1fd4a6ee3a2889714e3275615",
+        "start": 369.24,
+        "end": 384.75
+      }
+    ],
+    "duration": 15.51
+  },
+  "45:15:13-15:13": {
+    "reference": "Romans 15:13",
+    "cuts": [
+      {
+        "file": "45-romans/015.mp3",
+        "sha256": "4617567c467eb9d174ea17d503f4cb0d9523303805cb861b88c4621781e713d2",
+        "start": 143.06,
+        "end": 157.17
+      }
+    ],
+    "duration": 14.11
+  },
+  "40:11:28-11:28": {
+    "reference": "Matthew 11:28",
+    "cuts": [
+      {
+        "file": "40-matthew/011.mp3",
+        "sha256": "3458d04a1687f82b26aa86b78fe4b9d0ae76314db87e0587e7d258e0b341d7b4",
+        "start": 310.82,
+        "end": 318.13
+      }
+    ],
+    "duration": 7.31
+  },
+  "40:11:29-11:29": {
+    "reference": "Matthew 11:29",
+    "cuts": [
+      {
+        "file": "40-matthew/011.mp3",
+        "sha256": "3458d04a1687f82b26aa86b78fe4b9d0ae76314db87e0587e7d258e0b341d7b4",
+        "start": 318.86,
+        "end": 329.69
+      }
+    ],
+    "duration": 10.83
+  },
+  "19:30:5-30:5": {
+    "reference": "Psalm 30:5",
+    "cuts": [
+      {
+        "file": "19-psalms/030.mp3",
+        "sha256": "ca8db982f41939ea2a7c01648f2d3f9d844c9c9f8f7f46f5f1b96708fd10ef77",
+        "start": 63.760000000000005,
+        "end": 75.31
+      }
+    ],
+    "duration": 11.55
+  },
+  "19:147:3-147:3": {
+    "reference": "Psalm 147:3",
+    "cuts": [
+      {
+        "file": "19-psalms/147.mp3",
+        "sha256": "b685b5a1daa60d8146f07ea472fde369c0bfecfffff60867ff2a3847d3ce7ce4",
+        "start": 31.94,
+        "end": 37.91
+      }
+    ],
+    "duration": 5.97
+  },
+  "19:34:18-34:18": {
+    "reference": "Psalm 34:18",
+    "cuts": [
+      {
+        "file": "19-psalms/034.mp3",
+        "sha256": "631cda0aae31f4faaeaec3db8338acd38833f5441c4b3517a571831d969cf005",
+        "start": 130.68,
+        "end": 137.15
+      }
+    ],
+    "duration": 6.47
+  },
+  "47:12:9-12:9": {
+    "reference": "2 Corinthians 12:9",
+    "cuts": [
+      {
+        "file": "47-2-corinthians/012.mp3",
+        "sha256": "6fa10fcc25b4bfb18e4d32c3917e5285eba3fb38108ac4491df69f4f1c49979f",
+        "start": 124.64,
+        "end": 146.31
+      }
+    ],
+    "duration": 21.67
+  },
+  "23:43:2-43:2": {
+    "reference": "Isaiah 43:2",
+    "cuts": [
+      {
+        "file": "23-isaiah/043.mp3",
+        "sha256": "27cd905cd84a52e58ccc23962f340cf9c3c23936e29cbd3be702be54ea0157ee",
+        "start": 17.74,
+        "end": 36.71
+      }
+    ],
+    "duration": 18.97
+  },
+  "59:1:2-1:3": {
+    "reference": "James 1:2-3",
+    "cuts": [
+      {
+        "file": "59-james/001.mp3",
+        "sha256": "3729f134e037a9d24ad45b7e9dcefd3fad71a702d14b0085f5e18d7d164f82a5",
+        "start": 13.180000000000001,
+        "end": 24.25
+      }
+    ],
+    "duration": 11.07
+  },
+  "19:126:5-126:5": {
+    "reference": "Psalm 126:5",
+    "cuts": [
+      {
+        "file": "19-psalms/126.mp3",
+        "sha256": "8c20618aca7af84dcc2fb3fbf918c45a135eca62f41e3c6f78f9f12df4352af0",
+        "start": 45.940000000000005,
+        "end": 51.33
+      }
+    ],
+    "duration": 5.39
+  },
+  "48:6:9-6:9": {
+    "reference": "Galatians 6:9",
+    "cuts": [
+      {
+        "file": "48-galatians/006.mp3",
+        "sha256": "66bafe75ceaeff5920d9e7c691f7f987a6545766baca033d620446787deefd02",
+        "start": 113.33999999999999,
+        "end": 120.45
+      }
+    ],
+    "duration": 7.11
+  },
+  "21:3:1-3:1": {
+    "reference": "Ecclesiastes 3:1",
+    "cuts": [
+      {
+        "file": "21-ecclesiastes/003.mp3",
+        "sha256": "87e1a21b8c5c9e6ee6a3634fd257982ca895bebec16150ac7301c5521bc4e6e5",
+        "start": 14.100000000000001,
+        "end": 22.67
+      }
+    ],
+    "duration": 8.57
+  },
+  "36:3:17-3:17": {
+    "reference": "Zephaniah 3:17",
+    "cuts": [
+      {
+        "file": "36-zephaniah/003.mp3",
+        "sha256": "c4a76d48a3746a152fee5529cdfb65bd4e356dfb06ec1441cf27972545aa320e",
+        "start": 263.98,
+        "end": 283.87
+      }
+    ],
+    "duration": 19.89
+  },
+  "34:1:7-1:7": {
+    "reference": "Nahum 1:7",
+    "cuts": [
+      {
+        "file": "34-nahum/001.mp3",
+        "sha256": "23a2df51e77f870b3f0e87ff6471da44d6cce0bb3259f8b541e98f20d69cb690",
+        "start": 102.39999999999999,
+        "end": 112.17
+      }
+    ],
+    "duration": 9.770862
+  },
+  "19:34:8-34:8": {
+    "reference": "Psalm 34:8",
+    "cuts": [
+      {
+        "file": "19-psalms/034.mp3",
+        "sha256": "631cda0aae31f4faaeaec3db8338acd38833f5441c4b3517a571831d969cf005",
+        "start": 60.06,
+        "end": 66.67
+      }
+    ],
+    "duration": 6.610045
+  },
+  "20:18:10-18:10": {
+    "reference": "Proverbs 18:10",
+    "cuts": [
+      {
+        "file": "20-proverbs/018.mp3",
+        "sha256": "4f0602bc23ae8601cfa299f94999de29d3467c56cc55cb4dbcda7ce18887605c",
+        "start": 113.53999999999999,
+        "end": 121.61
+      }
+    ],
+    "duration": 8.07
+  },
+  "19:121:1-121:2": {
+    "reference": "Psalm 121:1-2",
+    "cuts": [
+      {
+        "file": "19-psalms/121.mp3",
+        "sha256": "8e208abb78c5ba8c55c51644f1dc76f1252cf59c1ac300dd233bb199ac640963",
+        "start": 12.74,
+        "end": 26.43
+      }
+    ],
+    "duration": 13.69
+  },
+  "53:3:3-3:3": {
+    "reference": "2 Thessalonians 3:3",
+    "cuts": [
+      {
+        "file": "53-2-thessalonians/003.mp3",
+        "sha256": "b1f68897b7a9b6f487d24a7066a2af2769ac139404a486e22df0688aaadb5c8b",
+        "start": 40.080000000000005,
+        "end": 52.43
+      }
+    ],
+    "duration": 12.35
+  },
+  "58:13:8-13:8": {
+    "reference": "Hebrews 13:8",
+    "cuts": [
+      {
+        "file": "58-hebrews/013.mp3",
+        "sha256": "61cb4bab64881d8a597ef05757059aa56144a63d7ac746255a603eaf20fdd5c7",
+        "start": 99.22,
+        "end": 105.79
+      }
+    ],
+    "duration": 6.57
+  },
+  "40:6:26-6:26": {
+    "reference": "Matthew 6:26",
+    "cuts": [
+      {
+        "file": "40-matthew/006.mp3",
+        "sha256": "0e3b8884ec513cbe431c619f31be1543063f7dd07435e6b587c8696bbc981360",
+        "start": 400.89,
+        "end": 417.77
+      }
+    ],
+    "duration": 16.88
+  },
+  "19:23:1-23:1": {
+    "reference": "Psalm 23:1",
+    "cuts": [
+      {
+        "file": "19-psalms/023.mp3",
+        "sha256": "5992ae021b7f4e59ebd43468e50ddca9b0c3089624dfffd55273f0257993c048",
+        "start": 12.700000000000001,
+        "end": 18.07
+      }
+    ],
+    "duration": 5.37
+  },
+  "19:37:4-37:4": {
+    "reference": "Psalm 37:4",
+    "cuts": [
+      {
+        "file": "19-psalms/037.mp3",
+        "sha256": "0719475d9edd3d38f79c870ee80775d7f404b4af52ae8e247cf4f2b442b7aae2",
+        "start": 28.02,
+        "end": 32.99
+      }
+    ],
+    "duration": 4.97
+  },
+  "20:16:3-16:3": {
+    "reference": "Proverbs 16:3",
+    "cuts": [
+      {
+        "file": "20-proverbs/016.mp3",
+        "sha256": "6b06817f1962ac00f9322e2b1331ae2dbaf069d746cac5a8d0f3d992bbcdf249",
+        "start": 40.38,
+        "end": 46.75
+      }
+    ],
+    "duration": 6.37
+  },
+  "46:10:31-10:31": {
+    "reference": "1 Corinthians 10:31",
+    "cuts": [
+      {
+        "file": "46-1-corinthians/010.mp3",
+        "sha256": "cf97d7f70db464812108d8338bfc13d6ee9cd74de8600b37bcb3db028fd78f46",
+        "start": 328.46,
+        "end": 336.77
+      }
+    ],
+    "duration": 8.31
+  },
+  "48:5:22-5:23": {
+    "reference": "Galatians 5:22-23",
+    "cuts": [
+      {
+        "file": "48-galatians/005.mp3",
+        "sha256": "9464563d88b46b4b8818a1d381c9652c27452dae88e04e47c395c353264ce932",
+        "start": 241.12,
+        "end": 256.76
+      }
+    ],
+    "duration": 15.64
+  },
+  "33:6:8-6:8": {
+    "reference": "Micah 6:8",
+    "cuts": [
+      {
+        "file": "33-micah/006.mp3",
+        "sha256": "1b44aace0e3f3642d1b1a2f0430ca4f2650a65f2ef173fde85c061ff7a2f5253",
+        "start": 140.26,
+        "end": 154.91
+      }
+    ],
+    "duration": 14.65
+  },
+  "40:5:16-5:16": {
+    "reference": "Matthew 5:16",
+    "cuts": [
+      {
+        "file": "40-matthew/005.mp3",
+        "sha256": "39c688204941777151649f838d2ec37be251efa0d0c81792e815c8f57ca4bdc3",
+        "start": 200.78,
+        "end": 214.33
+      }
+    ],
+    "duration": 13.55
+  },
+  "43:15:5-15:5": {
+    "reference": "John 15:5",
+    "cuts": [
+      {
+        "file": "43-john/015.mp3",
+        "sha256": "e68a75f43adccd3020e06be7fd5bc90a57a061f95b7f5af0a9b40891c2b61b1c",
+        "start": 72.8,
+        "end": 89.91
+      }
+    ],
+    "duration": 17.11
+  },
+  "49:3:20-3:20": {
+    "reference": "Ephesians 3:20",
+    "cuts": [
+      {
+        "file": "49-ephesians/003.mp3",
+        "sha256": "ea159d819160ca7bfeba2eb8dae747a9e52c61f3d76cfee32d93571ff596f3a1",
+        "start": 140.42,
+        "end": 149.59
+      }
+    ],
+    "duration": 9.170045
+  },
+  "41:9:23-9:23": {
+    "reference": "Mark 9:23",
+    "cuts": [
+      {
+        "file": "41-mark/009.mp3",
+        "sha256": "930adde76acf71400a717aa5159787366e80d7ce425d5cff012e8a5c6497ebee",
+        "start": 250.28,
+        "end": 258.15
+      }
+    ],
+    "duration": 7.87
+  },
+  "42:1:37-1:37": {
+    "reference": "Luke 1:37",
+    "cuts": [
+      {
+        "file": "42-luke/001.mp3",
+        "sha256": "af7bc653617a883da6d03dd373eec89ad2463b222244918d7eb858d546dead3a",
+        "start": 363.15999999999997,
+        "end": 366.83
+      }
+    ],
+    "duration": 3.67
+  },
+  "58:11:1-11:1": {
+    "reference": "Hebrews 11:1",
+    "cuts": [
+      {
+        "file": "58-hebrews/011.mp3",
+        "sha256": "6ff63c0d43dc88d5be06d1f1db94b690f539c08da64cc6e059ee70790376ef18",
+        "start": 12.3,
+        "end": 24.93
+      }
+    ],
+    "duration": 12.63
+  },
+  "45:8:28-8:28": {
+    "reference": "Romans 8:28",
+    "cuts": [
+      {
+        "file": "45-romans/008.mp3",
+        "sha256": "f32fe4990a7310e1df2f4bc2b9b7a665bf594926c73d346013c0834861b7835e",
+        "start": 311.3,
+        "end": 321.35
+      }
+    ],
+    "duration": 10.05
+  },
+  "23:55:8-55:9": {
+    "reference": "Isaiah 55:8-9",
+    "cuts": [
+      {
+        "file": "23-isaiah/055.mp3",
+        "sha256": "7678fb3cae925f45c3da793326e0a728614bdc7a5101d2b4a160731fb6710aa6",
+        "start": 154.54,
+        "end": 173.87
+      }
+    ],
+    "duration": 19.33
+  },
+  "19:23:4-23:4": {
+    "reference": "Psalm 23:4",
+    "cuts": [
+      {
+        "file": "19-psalms/023.mp3",
+        "sha256": "5992ae021b7f4e59ebd43468e50ddca9b0c3089624dfffd55273f0257993c048",
+        "start": 44.34,
+        "end": 57.61
+      }
+    ],
+    "duration": 13.27
+  },
+  "40:11:28-11:30": {
+    "reference": "Matthew 11:28-30",
+    "cuts": [
+      {
+        "file": "40-matthew/011.mp3",
+        "sha256": "3458d04a1687f82b26aa86b78fe4b9d0ae76314db87e0587e7d258e0b341d7b4",
+        "start": 310.82,
+        "end": 340.61
+      }
+    ],
+    "duration": 29.79
+  },
+  "19:91:1-91:2": {
+    "reference": "Psalm 91:1-2",
+    "cuts": [
+      {
+        "file": "19-psalms/091.mp3",
+        "sha256": "0f738635c2da187d6ecc17ba81a7cc3b544b9a17bde2b015107124937909979b",
+        "start": 14.92,
+        "end": 27.71
+      }
+    ],
+    "duration": 12.79
+  },
+  "58:6:19-6:19": {
+    "reference": "Hebrews 6:19",
+    "cuts": [
+      {
+        "file": "58-hebrews/006.mp3",
+        "sha256": "1fa88554408d8d89233873f60aceb991e733edd95e24cf668417396a46f97a29",
+        "start": 204.56,
+        "end": 216.91
+      }
+    ],
+    "duration": 12.35
+  },
+  "20:1:7-1:7": {
+    "reference": "Proverbs 1:7",
+    "cuts": [
+      {
+        "file": "20-proverbs/001.mp3",
+        "sha256": "3e42a3a8a6ff4b6db7a6e583e84005300ee45f3e611ecf48be8a78f867047f14",
+        "start": 63.32,
+        "end": 73.69
+      }
+    ],
+    "duration": 10.37
+  },
+  "21:3:1-3:8": {
+    "reference": "Ecclesiastes 3:1-8",
+    "cuts": [
+      {
+        "file": "21-ecclesiastes/003.mp3",
+        "sha256": "87e1a21b8c5c9e6ee6a3634fd257982ca895bebec16150ac7301c5521bc4e6e5",
+        "start": 14.100000000000001,
+        "end": 100.33
+      }
+    ],
+    "duration": 86.23
+  },
+  "20:4:7-4:7": {
+    "reference": "Proverbs 4:7",
+    "cuts": [
+      {
+        "file": "20-proverbs/004.mp3",
+        "sha256": "a2fb3dbf4b190792d50ed8075d182d3752f62f80b90470f56ad32244472c2d82",
+        "start": 90.42,
+        "end": 98.63
+      }
+    ],
+    "duration": 8.21
+  },
+  "20:16:9-16:9": {
+    "reference": "Proverbs 16:9",
+    "cuts": [
+      {
+        "file": "20-proverbs/016.mp3",
+        "sha256": "6b06817f1962ac00f9322e2b1331ae2dbaf069d746cac5a8d0f3d992bbcdf249",
+        "start": 96.8,
+        "end": 103.05
+      }
+    ],
+    "duration": 6.25
+  },
+  "19:37:5-37:5": {
+    "reference": "Psalm 37:5",
+    "cuts": [
+      {
+        "file": "19-psalms/037.mp3",
+        "sha256": "0719475d9edd3d38f79c870ee80775d7f404b4af52ae8e247cf4f2b442b7aae2",
+        "start": 33.120000000000005,
+        "end": 37.51
+      }
+    ],
+    "duration": 4.39
+  },
+  "50:4:10-4:13": {
+    "reference": "Philippians 4:10-13",
+    "cuts": [
+      {
+        "file": "50-philippians/004.mp3",
+        "sha256": "4372a06c1d8b7f2c0b6282fba56ca8f0741c11b76c58922cb91d178c5814ed26",
+        "start": 134.24,
+        "end": 195.71
+      }
+    ],
+    "duration": 61.47
+  },
+  "20:13:20-13:20": {
+    "reference": "Proverbs 13:20",
+    "cuts": [
+      {
+        "file": "20-proverbs/013.mp3",
+        "sha256": "fd456904ba52295406c27ea4a0e1d64f393716a6d6d92b94ccfd04a618319be7",
+        "start": 208.26,
+        "end": 215.05
+      }
+    ],
+    "duration": 6.79
+  },
+  "49:5:15-5:16": {
+    "reference": "Ephesians 5:15-16",
+    "cuts": [
+      {
+        "file": "49-ephesians/005.mp3",
+        "sha256": "a1ddc720414d92010a734f97b5a41cd83f3396795b772a631bab7db878fef4a6",
+        "start": 108.42,
+        "end": 116.27000000000001
+      }
+    ],
+    "duration": 7.85
+  },
+  "20:21:5-21:5": {
+    "reference": "Proverbs 21:5",
+    "cuts": [
+      {
+        "file": "20-proverbs/021.mp3",
+        "sha256": "abcea1d3c6c1035aedb5dbf6817a2efe55492ee5dd20f0eb17a541e581709df1",
+        "start": 49.900000000000006,
+        "end": 56.37
+      }
+    ],
+    "duration": 6.47
+  },
+  "42:14:28-14:28": {
+    "reference": "Luke 14:28",
+    "cuts": [
+      {
+        "file": "42-luke/014.mp3",
+        "sha256": "a058619a296d559446a6d3ad167486652b8112b98301c69d385b788aec2da81f",
+        "start": 294.48,
+        "end": 304.15
+      }
+    ],
+    "duration": 9.67
+  },
+  "20:30:8-30:9": {
+    "reference": "Proverbs 30:8-9",
+    "cuts": [
+      {
+        "file": "20-proverbs/030.mp3",
+        "sha256": "5019477b32188b780ccfb1857c68f55b0f62135ab532364cb04183f5670b3d2b",
+        "start": 92.1,
+        "end": 122.12
+      }
+    ],
+    "duration": 30.02
+  },
+  "20:27:17-27:17": {
+    "reference": "Proverbs 27:17",
+    "cuts": [
+      {
+        "file": "20-proverbs/027.mp3",
+        "sha256": "519782bb386a42060fc436623b5053c88864795128b1ce1598c11e234d0b63aa",
+        "start": 157.79000000000002,
+        "end": 162.29
+      }
+    ],
+    "duration": 4.5
+  },
+  "20:22:6-22:6": {
+    "reference": "Proverbs 22:6",
+    "cuts": [
+      {
+        "file": "20-proverbs/022.mp3",
+        "sha256": "107e21ebef0330b003efc0b753f335c5bf12a36f6db5ed91026dc92dd7a5ab6e",
+        "start": 78.94,
+        "end": 90.55
+      }
+    ],
+    "duration": 11.61
+  },
+  "59:3:17-3:17": {
+    "reference": "James 3:17",
+    "cuts": [
+      {
+        "file": "59-james/003.mp3",
+        "sha256": "e262e0ab5b16a150a4ccfffc5724acc0dbe8961f63e488e9db6324aa4f979f2b",
+        "start": 215.07999999999998,
+        "end": 230.79
+      }
+    ],
+    "duration": 15.71
+  },
+  "49:2:8-2:9": {
+    "reference": "Ephesians 2:8-9",
+    "cuts": [
+      {
+        "file": "49-ephesians/002.mp3",
+        "sha256": "de59fbebf14a52a35bdb20b8c973b96061af3de41886fbe335b2ff794db46419",
+        "start": 107.94,
+        "end": 124.07
+      }
+    ],
+    "duration": 16.13
+  },
+  "62:4:7-4:8": {
+    "reference": "1 John 4:7-8",
+    "cuts": [
+      {
+        "file": "62-1-john/004.mp3",
+        "sha256": "d7da5419e225276aa9ddcf35d3b67770a196e43b738e7febaaef7b74c958f5ce",
+        "start": 67.22,
+        "end": 92.61
+      }
+    ],
+    "duration": 25.39
+  },
+  "56:3:4-3:5": {
+    "reference": "Titus 3:4-5",
+    "cuts": [
+      {
+        "file": "56-titus/003.mp3",
+        "sha256": "1c8076d2c2f93eff84971124787c33729f9685f160091960b19d336bc7d9e2ea",
+        "start": 56.06,
+        "end": 85.97
+      }
+    ],
+    "duration": 29.91
+  },
+  "45:8:38-8:39": {
+    "reference": "Romans 8:38-39",
+    "cuts": [
+      {
+        "file": "45-romans/008.mp3",
+        "sha256": "f32fe4990a7310e1df2f4bc2b9b7a665bf594926c73d346013c0834861b7835e",
+        "start": 411.36,
+        "end": 437.61
+      }
+    ],
+    "duration": 26.25
+  },
+  "23:54:10-54:10": {
+    "reference": "Isaiah 54:10",
+    "cuts": [
+      {
+        "file": "23-isaiah/054.mp3",
+        "sha256": "b85357740653272fc42b7e5beccc8bbc49063bc31e53d85fce7087b5b27428d1",
+        "start": 153.06,
+        "end": 172.65
+      }
+    ],
+    "duration": 19.59
+  },
+  "62:4:19-4:19": {
+    "reference": "1 John 4:19",
+    "cuts": [
+      {
+        "file": "62-1-john/004.mp3",
+        "sha256": "d7da5419e225276aa9ddcf35d3b67770a196e43b738e7febaaef7b74c958f5ce",
+        "start": 203.7,
+        "end": 205.75
+      }
+    ],
+    "duration": 2.05
+  },
+  "45:12:9-12:10": {
+    "reference": "Romans 12:9-10",
+    "cuts": [
+      {
+        "file": "45-romans/012.mp3",
+        "sha256": "9183ea68cc53910a7f86acea9fa09fa042c0665fa4b9e12c6a92f6b9ace70594",
+        "start": 141.26,
+        "end": 162.04
+      }
+    ],
+    "duration": 20.78
+  },
+  "62:3:1-3:1": {
+    "reference": "1 John 3:1",
+    "cuts": [
+      {
+        "file": "62-1-john/003.mp3",
+        "sha256": "b89bc5c553d82aac143681dab071f0b92023004a73cdb5f71747e27d4479b7b2",
+        "start": 4.14,
+        "end": 28.27
+      }
+    ],
+    "duration": 24.13
+  },
+  "49:3:17-3:19": {
+    "reference": "Ephesians 3:17-19",
+    "cuts": [
+      {
+        "file": "49-ephesians/003.mp3",
+        "sha256": "ea159d819160ca7bfeba2eb8dae747a9e52c61f3d76cfee32d93571ff596f3a1",
+        "start": 118.25999999999999,
+        "end": 139.09
+      }
+    ],
+    "duration": 20.83
+  },
+  "48:2:20-2:20": {
+    "reference": "Galatians 2:20",
+    "cuts": [
+      {
+        "file": "48-galatians/002.mp3",
+        "sha256": "449412bfcf2c6596fb09d34bbd7e381994bb51c8ec81eaa33d2a984c056d5c9d",
+        "start": 267.51,
+        "end": 285.97
+      }
+    ],
+    "duration": 18.46
+  },
+  "19:136:1-136:1": {
+    "reference": "Psalm 136:1",
+    "cuts": [
+      {
+        "file": "19-psalms/136.mp3",
+        "sha256": "b01961ad817ce81069a496e4f2cdc14daa48c8360fc8fe3040d9ee2c16e5de86",
+        "start": 21.68,
+        "end": 28.25
+      }
+    ],
+    "duration": 6.57
+  },
+  "49:4:2-4:3": {
+    "reference": "Ephesians 4:2-3",
+    "cuts": [
+      {
+        "file": "49-ephesians/004.mp3",
+        "sha256": "a50a3f1fdd9dd8bb59bfcacdd9957b0ba64d4cd28b9c910d986768ff7cac75f3",
+        "start": 22.8,
+        "end": 39.55
+      }
+    ],
+    "duration": 16.75
+  },
+  "46:13:13-13:13": {
+    "reference": "1 Corinthians 13:13",
+    "cuts": [
+      {
+        "file": "46-1-corinthians/013.mp3",
+        "sha256": "2f5bd7951536a6f382114614e11fffd79dc81ed62acf1c601fd706107d09b1b3",
+        "start": 250.04,
+        "end": 268.45
+      }
+    ],
+    "duration": 18.41
+  },
+  "51:3:12-3:14": {
+    "reference": "Colossians 3:12-14",
+    "cuts": [
+      {
+        "file": "51-colossians/003.mp3",
+        "sha256": "ba456a639322e7ddf3bdefd0c8cb8b1cb8dff474724b905a92a6a29efb0d0d5e",
+        "start": 129.46,
+        "end": 164.95
+      }
+    ],
+    "duration": 35.49
+  },
+  "60:3:7-3:7": {
+    "reference": "1 Peter 3:7",
+    "cuts": [
+      {
+        "file": "60-1-peter/003.mp3",
+        "sha256": "b09f8a20731d244f25c2f9a039bf95c9d7009844d74e1f73b8dbff3aad441ab2",
+        "start": 87.67999999999999,
+        "end": 108.49
+      }
+    ],
+    "duration": 20.81
+  },
+  "20:18:22-18:22": {
+    "reference": "Proverbs 18:22",
+    "cuts": [
+      {
+        "file": "20-proverbs/018.mp3",
+        "sha256": "4f0602bc23ae8601cfa299f94999de29d3467c56cc55cb4dbcda7ce18887605c",
+        "start": 225.12,
+        "end": 233.76
+      }
+    ],
+    "duration": 8.64
+  },
+  "1:2:24-2:24": {
+    "reference": "Genesis 2:24",
+    "cuts": [
+      {
+        "file": "01-genesis/002.mp3",
+        "sha256": "4806b5028475c03a652955356c634a92d8499ede1e6b413e853971e1a0dd3ecd",
+        "start": 242.26,
+        "end": 250.67
+      }
+    ],
+    "duration": 8.41
+  },
+  "43:15:13-15:13": {
+    "reference": "John 15:13",
+    "cuts": [
+      {
+        "file": "43-john/015.mp3",
+        "sha256": "e68a75f43adccd3020e06be7fd5bc90a57a061f95b7f5af0a9b40891c2b61b1c",
+        "start": 185.79999999999998,
+        "end": 193.01
+      }
+    ],
+    "duration": 7.210862
+  },
+  "40:5:9-5:9": {
+    "reference": "Matthew 5:9",
+    "cuts": [
+      {
+        "file": "40-matthew/005.mp3",
+        "sha256": "39c688204941777151649f838d2ec37be251efa0d0c81792e815c8f57ca4bdc3",
+        "start": 97.44,
+        "end": 113.91
+      }
+    ],
+    "duration": 16.47
+  },
+  "45:12:10-12:10": {
+    "reference": "Romans 12:10",
+    "cuts": [
+      {
+        "file": "45-romans/012.mp3",
+        "sha256": "9183ea68cc53910a7f86acea9fa09fa042c0665fa4b9e12c6a92f6b9ace70594",
+        "start": 153,
+        "end": 162.04
+      }
+    ],
+    "duration": 9.04
+  },
+  "21:4:9-4:10": {
+    "reference": "Ecclesiastes 4:9-10",
+    "cuts": [
+      {
+        "file": "21-ecclesiastes/004.mp3",
+        "sha256": "bc08ccc0e5a699a07c5d1ded56ccc9e047b194d9d7d24dd838ea439214230c43",
+        "start": 140.7,
+        "end": 160.09
+      }
+    ],
+    "duration": 19.39
+  },
+  "20:31:10-31:10": {
+    "reference": "Proverbs 31:10",
+    "cuts": [
+      {
+        "file": "20-proverbs/031.mp3",
+        "sha256": "64b5f9d1eab77f0ab8b0eae0634a2d92f6abd4a311e8333cabeaef1ce073e7f1",
+        "start": 68.08,
+        "end": 73.65
+      }
+    ],
+    "duration": 5.57
+  },
+  "58:10:24-10:25": {
+    "reference": "Hebrews 10:24-25",
+    "cuts": [
+      {
+        "file": "58-hebrews/010.mp3",
+        "sha256": "0e09b83dfe4b217b6fe27fc703ddbff1e926bddb2a0a0a244b9aad322ae3b08f",
+        "start": 265.8,
+        "end": 289.03
+      }
+    ],
+    "duration": 23.23
+  },
+  "42:6:31-6:31": {
+    "reference": "Luke 6:31",
+    "cuts": [
+      {
+        "file": "42-luke/006.mp3",
+        "sha256": "d9fd49430b6ef7f47359ae25783e09a5d326979b6b10dd1dcee9a9cdfcdac8c4",
+        "start": 376.28,
+        "end": 380.46000000000004
+      }
+    ],
+    "duration": 4.180658
+  },
+  "46:7:3-7:4": {
+    "reference": "1 Corinthians 7:3-4",
+    "cuts": [
+      {
+        "file": "46-1-corinthians/007.mp3",
+        "sha256": "cd994fafa7e718f13819680714c5b8b43765713ce97f744a5ef24a31e52f1421",
+        "start": 21.619999999999997,
+        "end": 46.97
+      }
+    ],
+    "duration": 25.35
+  },
+  "20:12:4-12:4": {
+    "reference": "Proverbs 12:4",
+    "cuts": [
+      {
+        "file": "20-proverbs/012.mp3",
+        "sha256": "5fc35cfa9ae422d57c2436907dbd4a2830dbdb8ea36464ba34696e5e9ef0a623",
+        "start": 49.980000000000004,
+        "end": 60.37
+      }
+    ],
+    "duration": 10.39
+  },
+  "50:2:3-2:4": {
+    "reference": "Philippians 2:3-4",
+    "cuts": [
+      {
+        "file": "50-philippians/002.mp3",
+        "sha256": "031d24fee734e885b58cd8921109de3765c04ce78227cb8f0af923cdc3276f3b",
+        "start": 26.419999999999998,
+        "end": 43.35
+      }
+    ],
+    "duration": 16.93
+  },
+  "60:4:9-4:9": {
+    "reference": "1 Peter 4:9",
+    "cuts": [
+      {
+        "file": "60-1-peter/004.mp3",
+        "sha256": "c51cc04edb81168b23ed39739fbb7733ec3e2d215a8218efdbd93b4c3c9e6f27",
+        "start": 109.97999999999999,
+        "end": 113.75
+      }
+    ],
+    "duration": 3.77
+  },
+  "45:10:17-10:17": {
+    "reference": "Romans 10:17",
+    "cuts": [
+      {
+        "file": "45-romans/010.mp3",
+        "sha256": "1a1ed4ef6b3f6a1764cf043ea5311095ea591c7dbc881b4c7145d49c2979f3af",
+        "start": 196.24,
+        "end": 202.77
+      }
+    ],
+    "duration": 6.53
+  },
+  "59:1:22-1:22": {
+    "reference": "James 1:22",
+    "cuts": [
+      {
+        "file": "59-james/001.mp3",
+        "sha256": "3729f134e037a9d24ad45b7e9dcefd3fad71a702d14b0085f5e18d7d164f82a5",
+        "start": 237.16,
+        "end": 245.41
+      }
+    ],
+    "duration": 8.25
+  },
+  "59:2:17-2:17": {
+    "reference": "James 2:17",
+    "cuts": [
+      {
+        "file": "59-james/002.mp3",
+        "sha256": "be78f9055b32b5e4e108598d4c8ead0e0008e35cd12806a205e7c34a4a1ef0e6",
+        "start": 294.74,
+        "end": 306.47
+      }
+    ],
+    "duration": 11.730045
+  },
+  "47:5:7-5:7": {
+    "reference": "2 Corinthians 5:7",
+    "cuts": [
+      {
+        "file": "47-2-corinthians/005.mp3",
+        "sha256": "05ee88a26b92f1352b0ba7a755397063949090993c3d1b5408a194ffad54ace5",
+        "start": 58.18,
+        "end": 60.71
+      }
+    ],
+    "duration": 2.53
+  },
+  "60:1:8-1:9": {
+    "reference": "1 Peter 1:8-9",
+    "cuts": [
+      {
+        "file": "60-1-peter/001.mp3",
+        "sha256": "e2f7170ee284f64e91c7d6f3fd03a907334414ef03afd352d2cc5e3c68465e99",
+        "start": 106.38,
+        "end": 130.71
+      }
+    ],
+    "duration": 24.33
+  },
+  "59:1:3-1:3": {
+    "reference": "James 1:3",
+    "cuts": [
+      {
+        "file": "59-james/001.mp3",
+        "sha256": "3729f134e037a9d24ad45b7e9dcefd3fad71a702d14b0085f5e18d7d164f82a5",
+        "start": 19.7,
+        "end": 24.25
+      }
+    ],
+    "duration": 4.55
+  },
+  "62:5:4-5:4": {
+    "reference": "1 John 5:4",
+    "cuts": [
+      {
+        "file": "62-1-john/005.mp3",
+        "sha256": "535bc971d6be5811b1f8564a724f4ee66dbdfaa418b2de83bbc2613af3eb830c",
+        "start": 38.220000000000006,
+        "end": 52.01
+      }
+    ],
+    "duration": 13.79
+  },
+  "41:11:24-11:24": {
+    "reference": "Mark 11:24",
+    "cuts": [
+      {
+        "file": "41-mark/011.mp3",
+        "sha256": "e4326c953faab3bb626ed5231c1b042638777cd1ac3d23a7bd2eca5b20931db0",
+        "start": 248.06,
+        "end": 259.83
+      }
+    ],
+    "duration": 11.77
+  },
+  "40:17:20-17:20": {
+    "reference": "Matthew 17:20",
+    "cuts": [
+      {
+        "file": "40-matthew/017.mp3",
+        "sha256": "6fdf973239f8d6033571ecaeecf6cb4ac30bd268ba0f7a12efb5dfe2026fb107",
+        "start": 260.18,
+        "end": 287.53
+      }
+    ],
+    "duration": 27.35
+  },
+  "58:12:2-12:2": {
+    "reference": "Hebrews 12:2",
+    "cuts": [
+      {
+        "file": "58-hebrews/012.mp3",
+        "sha256": "1174981424929b2649b3285319a5fd8bc73427dfbe52ff251acb2c2411e2195a",
+        "start": 19.959999999999997,
+        "end": 35.53
+      }
+    ],
+    "duration": 15.570045
+  },
+  "43:20:29-20:29": {
+    "reference": "John 20:29",
+    "cuts": [
+      {
+        "file": "43-john/020.mp3",
+        "sha256": "ed3de569f236e82e734e52f0811675ea7b487a1cb060434611f616f063278281",
+        "start": 313.48,
+        "end": 324.53
+      }
+    ],
+    "duration": 11.050862
+  },
+  "58:13:5-13:5": {
+    "reference": "Hebrews 13:5",
+    "cuts": [
+      {
+        "file": "58-hebrews/013.mp3",
+        "sha256": "61cb4bab64881d8a597ef05757059aa56144a63d7ac746255a603eaf20fdd5c7",
+        "start": 52.82,
+        "end": 67.35
+      }
+    ],
+    "duration": 14.53
+  },
+  "40:21:21-21:21": {
+    "reference": "Matthew 21:21",
+    "cuts": [
+      {
+        "file": "40-matthew/021.mp3",
+        "sha256": "33dfbaa99a4f5116cbaa2728785baa6cf7283645b2463e14b9f6a13e21e09bb3",
+        "start": 256.8,
+        "end": 279.31
+      }
+    ],
+    "duration": 22.51
+  },
+  "45:1:17-1:17": {
+    "reference": "Romans 1:17",
+    "cuts": [
+      {
+        "file": "45-romans/001.mp3",
+        "sha256": "5cda05ccddad09fca5be11d825ed2583cc82a30b83241dc1008b20bf016c5ac9",
+        "start": 169.74,
+        "end": 182.61
+      }
+    ],
+    "duration": 12.87
+  },
+  "40:1:18-1:25": {
+    "reference": "Matt. 1:18-25",
+    "cuts": [
+      {
+        "file": "40-matthew/001.mp3",
+        "sha256": "bdd6618063f09b407da891fa03ea6df69a60facbdf009fafcec4ab6ab2d62ec8",
+        "start": 233.92,
+        "end": 360.51
+      }
+    ],
+    "duration": 126.590454
+  },
+  "40:12:14-12:21": {
+    "reference": "Matt. 12:14-21",
+    "cuts": [
+      {
+        "file": "40-matthew/012.mp3",
+        "sha256": "62ae0cb3740d1e77eedeee68f77613723052d37cd353796427458c7048395b4f",
+        "start": 159.51999999999998,
+        "end": 224.93
+      }
+    ],
+    "duration": 65.41
+  },
+  "43:14:6-14:14": {
+    "reference": "John 14:6-14",
+    "cuts": [
+      {
+        "file": "43-john/014.mp3",
+        "sha256": "d616a33e914cd2c9daf89c8252a0b298f64a7e371b7b0e334d4f3ea2f3d07144",
+        "start": 52.56,
+        "end": 169.75
+      }
+    ],
+    "duration": 117.19
+  },
+  "43:3:16-3:21": {
+    "reference": "John 3:16-21",
+    "cuts": [
+      {
+        "file": "43-john/003.mp3",
+        "sha256": "9a0841f5eddd47b25defca437b261c671871b0dcf3103c5c8d8f3c1dde8fc032",
+        "start": 156.44,
+        "end": 217.57
+      }
+    ],
+    "duration": 61.13
+  },
+  "43:3:22-3:36": {
+    "reference": "John 3:22-36",
+    "cuts": [
+      {
+        "file": "43-john/003.mp3",
+        "sha256": "9a0841f5eddd47b25defca437b261c671871b0dcf3103c5c8d8f3c1dde8fc032",
+        "start": 218.9,
+        "end": 359.83
+      }
+    ],
+    "duration": 140.93
+  },
+  "41:8:22-8:30": {
+    "reference": "Mark 8:22-30",
+    "cuts": [
+      {
+        "file": "41-mark/008.mp3",
+        "sha256": "fce64ede3fd3c841bcfc2255a9a4ebf470d9ae3d51590a8a51e65bc3f7c78c63",
+        "start": 208.18,
+        "end": 284.86
+      }
+    ],
+    "duration": 76.68
+  },
+  "41:10:13-10:22": {
+    "reference": "Mark 10:13-22",
+    "cuts": [
+      {
+        "file": "41-mark/010.mp3",
+        "sha256": "bee51da7c4ea22277ae32a0c4c32036a302741c92b00931790cda3f28a1106bb",
+        "start": 145.76,
+        "end": 265.53
+      }
+    ],
+    "duration": 119.77
+  },
+  "42:9:18-9:27": {
+    "reference": "Luke 9:18-27",
+    "cuts": [
+      {
+        "file": "42-luke/009.mp3",
+        "sha256": "2091e51a304ff0bbd7235d9f5c4f22770aeadf752ab30c4c309478779a6536af",
+        "start": 197.78,
+        "end": 315.59
+      }
+    ],
+    "duration": 117.81
+  },
+  "42:18:9-18:14": {
+    "reference": "Luke 18:9-14",
+    "cuts": [
+      {
+        "file": "42-luke/018.mp3",
+        "sha256": "af5949ecf84a68f180f992c43b79ee4e979dc19f52dcb7e6eb69a129052c2657",
+        "start": 81.1,
+        "end": 149.89
+      }
+    ],
+    "duration": 68.79
+  },
+  "41:1:1-1:13": {
+    "reference": "Mark 1:1-13",
+    "cuts": [
+      {
+        "file": "41-mark/001.mp3",
+        "sha256": "db8658265c6bf17f5f01b6df0b547e88c1044fa3c8499d0dfd6778835dcd97e8",
+        "start": 4.52,
+        "end": 145.77
+      }
+    ],
+    "duration": 141.25
+  },
+  "41:1:29-1:45": {
+    "reference": "Mark 1:29-45",
+    "cuts": [
+      {
+        "file": "41-mark/001.mp3",
+        "sha256": "db8658265c6bf17f5f01b6df0b547e88c1044fa3c8499d0dfd6778835dcd97e8",
+        "start": 277.21999999999997,
+        "end": 422.95
+      }
+    ],
+    "duration": 145.73
+  },
+  "41:2:1-2:12": {
+    "reference": "Mark 2:1-12",
+    "cuts": [
+      {
+        "file": "41-mark/002.mp3",
+        "sha256": "7e06ac3325026358c64f2e42e37ef9134ccdca0853f1af963049a7bc93d178ab",
+        "start": 6.24,
+        "end": 149.53
+      }
+    ],
+    "duration": 143.29
+  },
+  "41:2:13-2:22": {
+    "reference": "Mark 2:13-22",
+    "cuts": [
+      {
+        "file": "41-mark/002.mp3",
+        "sha256": "7e06ac3325026358c64f2e42e37ef9134ccdca0853f1af963049a7bc93d178ab",
+        "start": 151.79999999999998,
+        "end": 278.29
+      }
+    ],
+    "duration": 126.49
+  },
+  "41:2:23-3:6": {
+    "reference": "Mark 2:23--3:6",
+    "cuts": [
+      {
+        "file": "41-mark/002.mp3",
+        "sha256": "7e06ac3325026358c64f2e42e37ef9134ccdca0853f1af963049a7bc93d178ab",
+        "start": 279.8,
+        "end": 343.19
+      },
+      {
+        "file": "41-mark/003.mp3",
+        "sha256": "013dd53490d6b0e253b1325b70309eaa9bc7524a6feeecf4038886e190833d5f",
+        "start": 6.38,
+        "end": 78.59
+      }
+    ],
+    "duration": 135.6
+  },
+  "41:4:1-4:20": {
+    "reference": "Mark 4:1-20",
+    "cuts": [
+      {
+        "file": "41-mark/004.mp3",
+        "sha256": "a44d4e3876cd570245722dfbaf60a96c4e4fdadde1d4931467216863a571dd72",
+        "start": 4.04,
+        "end": 199.93
+      }
+    ],
+    "duration": 195.89
+  },
+  "41:4:21-4:34": {
+    "reference": "Mark 4:21-34",
+    "cuts": [
+      {
+        "file": "41-mark/004.mp3",
+        "sha256": "a44d4e3876cd570245722dfbaf60a96c4e4fdadde1d4931467216863a571dd72",
+        "start": 200.46,
+        "end": 310.39
+      }
+    ],
+    "duration": 109.93
+  },
+  "41:4:35-4:41": {
+    "reference": "Mark 4:35-41",
+    "cuts": [
+      {
+        "file": "41-mark/004.mp3",
+        "sha256": "a44d4e3876cd570245722dfbaf60a96c4e4fdadde1d4931467216863a571dd72",
+        "start": 311.6,
+        "end": 374.21
+      }
+    ],
+    "duration": 62.61
+  },
+  "41:5:1-5:20": {
+    "reference": "Mark 5:1-20",
+    "cuts": [
+      {
+        "file": "41-mark/005.mp3",
+        "sha256": "842d3c7fcf3fc6ef92e7cd384bdc6eb603cd422acff9049b416847e84b195b10",
+        "start": 12.64,
+        "end": 217.05
+      }
+    ],
+    "duration": 204.41
+  },
+  "41:6:1-6:13": {
+    "reference": "Mark 6:1-13",
+    "cuts": [
+      {
+        "file": "41-mark/006.mp3",
+        "sha256": "ad96d3335bb8873a13d18eef2bb005c8d93135ec54cf951086d8281936e6c0e4",
+        "start": 2.92,
+        "end": 153.89
+      }
+    ],
+    "duration": 150.97
+  },
+  "41:6:13-6:29": {
+    "reference": "Mark 6:13-29",
+    "cuts": [
+      {
+        "file": "41-mark/006.mp3",
+        "sha256": "ad96d3335bb8873a13d18eef2bb005c8d93135ec54cf951086d8281936e6c0e4",
+        "start": 145.42,
+        "end": 342.67
+      }
+    ],
+    "duration": 197.25
+  },
+  "41:6:30-6:46": {
+    "reference": "Mark 6:30-46",
+    "cuts": [
+      {
+        "file": "41-mark/006.mp3",
+        "sha256": "ad96d3335bb8873a13d18eef2bb005c8d93135ec54cf951086d8281936e6c0e4",
+        "start": 351.38,
+        "end": 508.95
+      }
+    ],
+    "duration": 157.57
+  },
+  "41:6:47-6:56": {
+    "reference": "Mark 6:47-56",
+    "cuts": [
+      {
+        "file": "41-mark/006.mp3",
+        "sha256": "ad96d3335bb8873a13d18eef2bb005c8d93135ec54cf951086d8281936e6c0e4",
+        "start": 509.21999999999997,
+        "end": 617.23
+      }
+    ],
+    "duration": 108.01
+  },
+  "41:8:1-8:10": {
+    "reference": "Mark 8:1-10",
+    "cuts": [
+      {
+        "file": "41-mark/008.mp3",
+        "sha256": "fce64ede3fd3c841bcfc2255a9a4ebf470d9ae3d51590a8a51e65bc3f7c78c63",
+        "start": 2.1,
+        "end": 102.95
+      }
+    ],
+    "duration": 100.85
+  },
+  "41:8:27-9:1": {
+    "reference": "Mark 8:27--9:1",
+    "cuts": [
+      {
+        "file": "41-mark/008.mp3",
+        "sha256": "fce64ede3fd3c841bcfc2255a9a4ebf470d9ae3d51590a8a51e65bc3f7c78c63",
+        "start": 255.24,
+        "end": 382.45
+      },
+      {
+        "file": "41-mark/009.mp3",
+        "sha256": "930adde76acf71400a717aa5159787366e80d7ce425d5cff012e8a5c6497ebee",
+        "start": 3.1,
+        "end": 13.61
+      }
+    ],
+    "duration": 137.72
+  },
+  "41:9:2-9:13": {
+    "reference": "Mark 9:2-13",
+    "cuts": [
+      {
+        "file": "41-mark/009.mp3",
+        "sha256": "930adde76acf71400a717aa5159787366e80d7ce425d5cff012e8a5c6497ebee",
+        "start": 15.58,
+        "end": 148.99
+      }
+    ],
+    "duration": 133.41
+  },
+  "41:9:30-9:41": {
+    "reference": "Mark 9:30-41",
+    "cuts": [
+      {
+        "file": "41-mark/009.mp3",
+        "sha256": "930adde76acf71400a717aa5159787366e80d7ce425d5cff012e8a5c6497ebee",
+        "start": 345.74,
+        "end": 480.47
+      }
+    ],
+    "duration": 134.73
+  },
+  "41:10:1-10:16": {
+    "reference": "Mark 10:1-16",
+    "cuts": [
+      {
+        "file": "41-mark/010.mp3",
+        "sha256": "bee51da7c4ea22277ae32a0c4c32036a302741c92b00931790cda3f28a1106bb",
+        "start": 12.620000000000001,
+        "end": 191.13
+      }
+    ],
+    "duration": 178.51
+  },
+  "41:10:17-10:31": {
+    "reference": "Mark 10:17-31",
+    "cuts": [
+      {
+        "file": "41-mark/010.mp3",
+        "sha256": "bee51da7c4ea22277ae32a0c4c32036a302741c92b00931790cda3f28a1106bb",
+        "start": 191.66,
+        "end": 396.67
+      }
+    ],
+    "duration": 205.010045
+  },
+  "41:10:32-10:45": {
+    "reference": "Mark 10:32-45",
+    "cuts": [
+      {
+        "file": "41-mark/010.mp3",
+        "sha256": "bee51da7c4ea22277ae32a0c4c32036a302741c92b00931790cda3f28a1106bb",
+        "start": 399.04,
+        "end": 545.31
+      }
+    ],
+    "duration": 146.27
+  },
+  "41:11:27-11:33": {
+    "reference": "Mark 11:27-33",
+    "cuts": [
+      {
+        "file": "41-mark/011.mp3",
+        "sha256": "e4326c953faab3bb626ed5231c1b042638777cd1ac3d23a7bd2eca5b20931db0",
+        "start": 273.62,
+        "end": 347.05
+      }
+    ],
+    "duration": 73.43
+  },
+  "41:12:1-12:11": {
+    "reference": "Mark 12:1-11",
+    "cuts": [
+      {
+        "file": "41-mark/012.mp3",
+        "sha256": "115423fae0c1931aa95c72f9f2ba75a2e3ecec71d0e3c20d0547cd0028372d87",
+        "start": 0.6,
+        "end": 125.55
+      }
+    ],
+    "duration": 124.95
+  },
+  "41:14:12-14:25": {
+    "reference": "Mark 14:12-25",
+    "cuts": [
+      {
+        "file": "41-mark/014.mp3",
+        "sha256": "82c06bf922066be71f1e886e86b05666308bdc34ffb60271a75a2cf8e742f2f9",
+        "start": 131.94,
+        "end": 256.73
+      }
+    ],
+    "duration": 124.79
+  },
+  "45:8:1-8:11": {
+    "reference": "Rom. 8:1-11",
+    "cuts": [
+      {
+        "file": "45-romans/008.mp3",
+        "sha256": "f32fe4990a7310e1df2f4bc2b9b7a665bf594926c73d346013c0834861b7835e",
+        "start": 2.92,
+        "end": 139.41
+      }
+    ],
+    "duration": 136.490862
+  },
+  "41:16:1-16:8": {
+    "reference": "Mark 16:1-8",
+    "cuts": [
+      {
+        "file": "41-mark/016.mp3",
+        "sha256": "68c836e960fb23bc0bd35c510f1ead390142faa2bfccedaa2d337276486abde6",
+        "start": 12.940000000000001,
+        "end": 162.83
+      }
+    ],
+    "duration": 149.89
+  },
+  "40:28:1-28:16": {
+    "reference": "Matt. 28:1-16",
+    "cuts": [
+      {
+        "file": "40-matthew/028.mp3",
+        "sha256": "573c0e7e2a15f4311fb225efcff68db8bb87451cbbbc22845143fbf9122210fc",
+        "start": 12.9,
+        "end": 226.33
+      }
+    ],
+    "duration": 213.43
+  },
+  "40:28:16-28:20": {
+    "reference": "Matt. 28:16-20",
+    "cuts": [
+      {
+        "file": "40-matthew/028.mp3",
+        "sha256": "573c0e7e2a15f4311fb225efcff68db8bb87451cbbbc22845143fbf9122210fc",
+        "start": 218.7,
+        "end": 276.89
+      }
+    ],
+    "duration": 58.19
+  },
+  "41:12:18-12:27": {
+    "reference": "Mark 12:18-27",
+    "cuts": [
+      {
+        "file": "41-mark/012.mp3",
+        "sha256": "115423fae0c1931aa95c72f9f2ba75a2e3ecec71d0e3c20d0547cd0028372d87",
+        "start": 222.56,
+        "end": 341.15
+      }
+    ],
+    "duration": 118.59
+  },
+  "43:14:1-14:7": {
+    "reference": "John 14:1-7",
+    "cuts": [
+      {
+        "file": "43-john/014.mp3",
+        "sha256": "d616a33e914cd2c9daf89c8252a0b298f64a7e371b7b0e334d4f3ea2f3d07144",
+        "start": 2.54,
+        "end": 76.89
+      }
+    ],
+    "duration": 74.35
+  },
+  "43:15:1-15:11": {
+    "reference": "John 15:1-11",
+    "cuts": [
+      {
+        "file": "43-john/015.mp3",
+        "sha256": "e68a75f43adccd3020e06be7fd5bc90a57a061f95b7f5af0a9b40891c2b61b1c",
+        "start": 13.96,
+        "end": 175.07
+      }
+    ],
+    "duration": 161.11
+  },
+  "43:16:1-16:15": {
+    "reference": "John 16:1-15",
+    "cuts": [
+      {
+        "file": "43-john/016.mp3",
+        "sha256": "a6b10798766f7c87d1073e24c469520248a7a1b1fd4a6ee3a2889714e3275615",
+        "start": 4.4799999999999995,
+        "end": 166.17
+      }
+    ],
+    "duration": 161.69
+  },
+  "40:3:1-3:6": {
+    "reference": "Matt. 3:1-6",
+    "cuts": [
+      {
+        "file": "40-matthew/003.mp3",
+        "sha256": "6d8e7abd6779f988a93a0cdc5aa02cc0fe11d6f8c802e72488abab4191212749",
+        "start": 12.9,
+        "end": 83.45
+      }
+    ],
+    "duration": 70.55
+  },
+  "40:3:7-3:12": {
+    "reference": "Matt. 3:7-12",
+    "cuts": [
+      {
+        "file": "40-matthew/003.mp3",
+        "sha256": "6d8e7abd6779f988a93a0cdc5aa02cc0fe11d6f8c802e72488abab4191212749",
+        "start": 85.58,
+        "end": 217.76999999999998
+      }
+    ],
+    "duration": 132.19
+  },
+  "40:3:13-3:17": {
+    "reference": "Matt. 3:13-17",
+    "cuts": [
+      {
+        "file": "40-matthew/003.mp3",
+        "sha256": "6d8e7abd6779f988a93a0cdc5aa02cc0fe11d6f8c802e72488abab4191212749",
+        "start": 217.76999999999998,
+        "end": 301.79
+      }
+    ],
+    "duration": 84.02
+  },
+  "40:4:1-4:11": {
+    "reference": "Matt. 4:1-11",
+    "cuts": [
+      {
+        "file": "40-matthew/004.mp3",
+        "sha256": "b11e25453bd270b7acd68e8e01bf2f0de23e164dca910cef0fb512db49f162e9",
+        "start": 12.08,
+        "end": 147.83
+      }
+    ],
+    "duration": 135.75
+  },
+  "41:6:30-6:44": {
+    "reference": "Mark 6:30-44",
+    "cuts": [
+      {
+        "file": "41-mark/006.mp3",
+        "sha256": "ad96d3335bb8873a13d18eef2bb005c8d93135ec54cf951086d8281936e6c0e4",
+        "start": 351.38,
+        "end": 493.79
+      }
+    ],
+    "duration": 142.41
+  },
+  "40:5:11-5:16": {
+    "reference": "Matt. 5:11-16",
+    "cuts": [
+      {
+        "file": "40-matthew/005.mp3",
+        "sha256": "39c688204941777151649f838d2ec37be251efa0d0c81792e815c8f57ca4bdc3",
+        "start": 136.26,
+        "end": 214.33
+      }
+    ],
+    "duration": 78.07
+  },
+  "40:5:17-5:20": {
+    "reference": "Matt. 5:17-20",
+    "cuts": [
+      {
+        "file": "40-matthew/005.mp3",
+        "sha256": "39c688204941777151649f838d2ec37be251efa0d0c81792e815c8f57ca4bdc3",
+        "start": 215.74,
+        "end": 271.49
+      }
+    ],
+    "duration": 55.75
+  },
+  "40:5:21-5:26": {
+    "reference": "Matt. 5:21-26",
+    "cuts": [
+      {
+        "file": "40-matthew/005.mp3",
+        "sha256": "39c688204941777151649f838d2ec37be251efa0d0c81792e815c8f57ca4bdc3",
+        "start": 272.58,
+        "end": 347.31
+      }
+    ],
+    "duration": 74.73
+  },
+  "42:4:16-4:30": {
+    "reference": "Luke 4:16-30",
+    "cuts": [
+      {
+        "file": "42-luke/004.mp3",
+        "sha256": "e87a5f4b6d0fae76e01107969cb946984d1ec84e5ab2020bf90e040b5559246b",
+        "start": 125.17999999999999,
+        "end": 246.73000000000002
+      }
+    ],
+    "duration": 121.55
+  },
+  "42:12:13-12:21": {
+    "reference": "Luke 12:13-21",
+    "cuts": [
+      {
+        "file": "42-luke/012.mp3",
+        "sha256": "b338bef8ae3085e567b8512bb3f41b28756fef32530e890764d4d42beecf79e0",
+        "start": 141.16,
+        "end": 231.09
+      }
+    ],
+    "duration": 89.93
+  },
+  "40:13:1-13:16": {
+    "reference": "Matt. 13:1-16",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 4.84,
+        "end": 169.29
+      }
+    ],
+    "duration": 164.45
+  },
+  "40:13:18-13:23": {
+    "reference": "Matt. 13:18-23",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 184.6,
+        "end": 257.13
+      }
+    ],
+    "duration": 72.53
+  },
+  "42:10:17-10:24": {
+    "reference": "Luke 10:17-24",
+    "cuts": [
+      {
+        "file": "42-luke/010.mp3",
+        "sha256": "031a615b59f7522ef2e0793a4d887fd6288a95e2ad23a3b615d93d51e3306e35",
+        "start": 163.74,
+        "end": 253.21
+      }
+    ],
+    "duration": 89.470454
+  },
+  "40:8:5-8:17": {
+    "reference": "Matt. 8:5-17",
+    "cuts": [
+      {
+        "file": "40-matthew/008.mp3",
+        "sha256": "19f4d3b1f11904fcfd74b50aae6a87e983ab273659497658e5b1f1bfafd1b8c6",
+        "start": 84.16,
+        "end": 280.25
+      }
+    ],
+    "duration": 196.09
+  },
+  "40:9:18-9:26": {
+    "reference": "Matt. 9:18-26",
+    "cuts": [
+      {
+        "file": "40-matthew/009.mp3",
+        "sha256": "c55a38a41f1b474f66e67bc5749905186a43854e502d54793368c7d32cabcb0a",
+        "start": 262.84,
+        "end": 376.27
+      }
+    ],
+    "duration": 113.43
+  },
+  "40:12:22-12:32": {
+    "reference": "Matt. 12:22-32",
+    "cuts": [
+      {
+        "file": "40-matthew/012.mp3",
+        "sha256": "62ae0cb3740d1e77eedeee68f77613723052d37cd353796427458c7048395b4f",
+        "start": 226.72,
+        "end": 394.03
+      }
+    ],
+    "duration": 167.31
+  },
+  "40:13:24-13:30": {
+    "reference": "Matt. 13:24-30",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 258.2,
+        "end": 324.29
+      }
+    ],
+    "duration": 66.090862
+  },
+  "40:13:31-13:35": {
+    "reference": "Matt. 13:31-35",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 325.44,
+        "end": 403.67
+      }
+    ],
+    "duration": 78.23
+  },
+  "40:13:36-13:43": {
+    "reference": "Matt. 13:36-43",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 405.92,
+        "end": 499.13
+      }
+    ],
+    "duration": 93.21
+  },
+  "40:14:1-14:12": {
+    "reference": "Matt. 14:1-12",
+    "cuts": [
+      {
+        "file": "40-matthew/014.mp3",
+        "sha256": "ba5badd1bb3fe9fef691c9d63fb70ce0c95cfea726157e5ce7cff8d9955d7af3",
+        "start": 2.36,
+        "end": 111.48
+      }
+    ],
+    "duration": 109.12
+  },
+  "40:14:13-14:21": {
+    "reference": "Matt. 14:13-21",
+    "cuts": [
+      {
+        "file": "40-matthew/014.mp3",
+        "sha256": "ba5badd1bb3fe9fef691c9d63fb70ce0c95cfea726157e5ce7cff8d9955d7af3",
+        "start": 111.48,
+        "end": 202.47
+      }
+    ],
+    "duration": 90.99
+  },
+  "40:15:1-15:20": {
+    "reference": "Matt. 15:1-20",
+    "cuts": [
+      {
+        "file": "40-matthew/015.mp3",
+        "sha256": "eb291d1e9e8171c37fe41465524d7576f99564398baa890ef48eba5d1877dd9e",
+        "start": 4.3999999999999995,
+        "end": 171.53
+      }
+    ],
+    "duration": 167.13
+  },
+  "42:12:32-12:40": {
+    "reference": "Luke 12:32-40",
+    "cuts": [
+      {
+        "file": "42-luke/012.mp3",
+        "sha256": "b338bef8ae3085e567b8512bb3f41b28756fef32530e890764d4d42beecf79e0",
+        "start": 324.1,
+        "end": 446.85
+      }
+    ],
+    "duration": 122.750454
+  },
+  "40:15:21-15:28": {
+    "reference": "Matt. 15:21-28",
+    "cuts": [
+      {
+        "file": "40-matthew/015.mp3",
+        "sha256": "eb291d1e9e8171c37fe41465524d7576f99564398baa890ef48eba5d1877dd9e",
+        "start": 173.35999999999999,
+        "end": 265.83
+      }
+    ],
+    "duration": 92.47
+  },
+  "40:16:13-16:20": {
+    "reference": "Matt. 16:13-20",
+    "cuts": [
+      {
+        "file": "40-matthew/016.mp3",
+        "sha256": "2b6db504019a666808952dec007447dcfdf92191295d63f9412d5ea3ccdf2131",
+        "start": 207.76,
+        "end": 309.07
+      }
+    ],
+    "duration": 101.31
+  },
+  "40:17:1-17:13": {
+    "reference": "Matt. 17:1-13",
+    "cuts": [
+      {
+        "file": "40-matthew/017.mp3",
+        "sha256": "6fdf973239f8d6033571ecaeecf6cb4ac30bd268ba0f7a12efb5dfe2026fb107",
+        "start": 4.46,
+        "end": 167.81
+      }
+    ],
+    "duration": 163.35
+  },
+  "42:12:41-12:48": {
+    "reference": "Luke 12:41-48",
+    "cuts": [
+      {
+        "file": "42-luke/012.mp3",
+        "sha256": "b338bef8ae3085e567b8512bb3f41b28756fef32530e890764d4d42beecf79e0",
+        "start": 448.26,
+        "end": 557.17
+      }
+    ],
+    "duration": 108.91
+  },
+  "40:17:22-17:27": {
+    "reference": "Matt. 17:22-27",
+    "cuts": [
+      {
+        "file": "40-matthew/017.mp3",
+        "sha256": "6fdf973239f8d6033571ecaeecf6cb4ac30bd268ba0f7a12efb5dfe2026fb107",
+        "start": 287.53,
+        "end": 384.55
+      }
+    ],
+    "duration": 97.02
+  },
+  "40:19:1-19:12": {
+    "reference": "Matt. 19:1-12",
+    "cuts": [
+      {
+        "file": "40-matthew/019.mp3",
+        "sha256": "24e460a664a7946b5877a9d200fe2c3311596d7077f3b321d2f41beebaaa275f",
+        "start": 11.9,
+        "end": 154.39
+      }
+    ],
+    "duration": 142.49
+  },
+  "40:19:13-19:22": {
+    "reference": "Matt. 19:13-22",
+    "cuts": [
+      {
+        "file": "40-matthew/019.mp3",
+        "sha256": "24e460a664a7946b5877a9d200fe2c3311596d7077f3b321d2f41beebaaa275f",
+        "start": 156.2,
+        "end": 266.03
+      }
+    ],
+    "duration": 109.83
+  },
+  "40:19:23-19:30": {
+    "reference": "Matt. 19:23-30",
+    "cuts": [
+      {
+        "file": "40-matthew/019.mp3",
+        "sha256": "24e460a664a7946b5877a9d200fe2c3311596d7077f3b321d2f41beebaaa275f",
+        "start": 267.54,
+        "end": 412.95
+      }
+    ],
+    "duration": 145.41
+  },
+  "40:20:1-20:16": {
+    "reference": "Matt. 20:1-16",
+    "cuts": [
+      {
+        "file": "40-matthew/020.mp3",
+        "sha256": "d6d20d83bf02d65cbed00cb47ea5109cfc73a38707fbbab73eca26bcee61af0f",
+        "start": 4.18,
+        "end": 193.27
+      }
+    ],
+    "duration": 189.09
+  },
+  "40:20:17-20:28": {
+    "reference": "Matt. 20:17-28",
+    "cuts": [
+      {
+        "file": "40-matthew/020.mp3",
+        "sha256": "d6d20d83bf02d65cbed00cb47ea5109cfc73a38707fbbab73eca26bcee61af0f",
+        "start": 208.68,
+        "end": 371.03
+      }
+    ],
+    "duration": 162.35
+  },
+  "40:20:29-20:34": {
+    "reference": "Matt. 20:29-34",
+    "cuts": [
+      {
+        "file": "40-matthew/020.mp3",
+        "sha256": "d6d20d83bf02d65cbed00cb47ea5109cfc73a38707fbbab73eca26bcee61af0f",
+        "start": 372.32,
+        "end": 436.69
+      }
+    ],
+    "duration": 64.37
+  },
+  "42:13:10-13:17": {
+    "reference": "Luke 13:10-17",
+    "cuts": [
+      {
+        "file": "42-luke/013.mp3",
+        "sha256": "a6227549b8bdd4182e0c6c6f18a0af0ded4320d6edda4ad919294c4b8462848d",
+        "start": 99.66,
+        "end": 185.55
+      }
+    ],
+    "duration": 85.89
+  },
+  "40:21:12-21:22": {
+    "reference": "Matt. 21:12-22",
+    "cuts": [
+      {
+        "file": "40-matthew/021.mp3",
+        "sha256": "33dfbaa99a4f5116cbaa2728785baa6cf7283645b2463e14b9f6a13e21e09bb3",
+        "start": 147.96,
+        "end": 291.63
+      }
+    ],
+    "duration": 143.67
+  },
+  "40:21:23-21:32": {
+    "reference": "Matt. 21:23-32",
+    "cuts": [
+      {
+        "file": "40-matthew/021.mp3",
+        "sha256": "33dfbaa99a4f5116cbaa2728785baa6cf7283645b2463e14b9f6a13e21e09bb3",
+        "start": 303.04,
+        "end": 449.47
+      }
+    ],
+    "duration": 146.43
+  },
+  "40:21:33-21:46": {
+    "reference": "Matt. 21:33-46",
+    "cuts": [
+      {
+        "file": "40-matthew/021.mp3",
+        "sha256": "33dfbaa99a4f5116cbaa2728785baa6cf7283645b2463e14b9f6a13e21e09bb3",
+        "start": 450.3,
+        "end": 601.25
+      }
+    ],
+    "duration": 150.95
+  },
+  "41:1:14-1:20": {
+    "reference": "Mark 1:14-20",
+    "cuts": [
+      {
+        "file": "41-mark/001.mp3",
+        "sha256": "db8658265c6bf17f5f01b6df0b547e88c1044fa3c8499d0dfd6778835dcd97e8",
+        "start": 146.96,
+        "end": 205.57
+      }
+    ],
+    "duration": 58.61
+  },
+  "40:23:1-23:12": {
+    "reference": "Matt. 23:1-12",
+    "cuts": [
+      {
+        "file": "40-matthew/023.mp3",
+        "sha256": "38523c0771ed0c92e5e137658e0727082d37652391b7844868325084415eb009",
+        "start": 12.840000000000002,
+        "end": 134.05
+      }
+    ],
+    "duration": 121.21
+  },
+  "40:24:1-24:14": {
+    "reference": "Matt. 24:1-14",
+    "cuts": [
+      {
+        "file": "40-matthew/024.mp3",
+        "sha256": "769977482d3c2d50e5cf8602e413bf286de7b032d47593a7b0094b8cd91cde58",
+        "start": 13.98,
+        "end": 144.61
+      }
+    ],
+    "duration": 130.63
+  },
+  "40:24:15-24:31": {
+    "reference": "Matt. 24:15-31",
+    "cuts": [
+      {
+        "file": "40-matthew/024.mp3",
+        "sha256": "769977482d3c2d50e5cf8602e413bf286de7b032d47593a7b0094b8cd91cde58",
+        "start": 146.51999999999998,
+        "end": 306.51
+      }
+    ],
+    "duration": 159.99
+  },
+  "40:25:14-25:30": {
+    "reference": "Matt. 25:14-30",
+    "cuts": [
+      {
+        "file": "40-matthew/025.mp3",
+        "sha256": "19239f9169e8f2405182775849969b6cef9acb9527c2ea30ead14bd514ee5576",
+        "start": 115.46,
+        "end": 367.55
+      }
+    ],
+    "duration": 252.09
+  },
+  "40:26:1-26:16": {
+    "reference": "Matt. 26:1-16",
+    "cuts": [
+      {
+        "file": "40-matthew/026.mp3",
+        "sha256": "99ddefb7c0f5d7a96130dff1dd4dca0a274f35d76a24330aa4b39bc5fb2c7808",
+        "start": 2.96,
+        "end": 138.83
+      }
+    ],
+    "duration": 135.87
+  },
+  "40:26:17-26:25": {
+    "reference": "Matt. 26:17-25",
+    "cuts": [
+      {
+        "file": "40-matthew/026.mp3",
+        "sha256": "99ddefb7c0f5d7a96130dff1dd4dca0a274f35d76a24330aa4b39bc5fb2c7808",
+        "start": 139.42,
+        "end": 225.01
+      }
+    ],
+    "duration": 85.59
+  },
+  "40:26:47-26:56": {
+    "reference": "Matt. 26:47-56",
+    "cuts": [
+      {
+        "file": "40-matthew/026.mp3",
+        "sha256": "99ddefb7c0f5d7a96130dff1dd4dca0a274f35d76a24330aa4b39bc5fb2c7808",
+        "start": 460.24,
+        "end": 559.45
+      }
+    ],
+    "duration": 99.21
+  },
+  "41:2:23-2:28": {
+    "reference": "Mark 2:23-28",
+    "cuts": [
+      {
+        "file": "41-mark/002.mp3",
+        "sha256": "7e06ac3325026358c64f2e42e37ef9134ccdca0853f1af963049a7bc93d178ab",
+        "start": 279.8,
+        "end": 343.19
+      }
+    ],
+    "duration": 63.39
+  },
+  "40:28:1-28:10": {
+    "reference": "Matt. 28:1-10",
+    "cuts": [
+      {
+        "file": "40-matthew/028.mp3",
+        "sha256": "573c0e7e2a15f4311fb225efcff68db8bb87451cbbbc22845143fbf9122210fc",
+        "start": 12.9,
+        "end": 153.67
+      }
+    ],
+    "duration": 140.77
+  },
+  "40:28:11-28:20": {
+    "reference": "Matt. 28:11-20",
+    "cuts": [
+      {
+        "file": "40-matthew/028.mp3",
+        "sha256": "573c0e7e2a15f4311fb225efcff68db8bb87451cbbbc22845143fbf9122210fc",
+        "start": 168.26,
+        "end": 276.89
+      }
+    ],
+    "duration": 108.63
+  },
+  "43:3:1-3:21": {
+    "reference": "John 3:1-21",
+    "cuts": [
+      {
+        "file": "43-john/003.mp3",
+        "sha256": "9a0841f5eddd47b25defca437b261c671871b0dcf3103c5c8d8f3c1dde8fc032",
+        "start": 3.1999999999999997,
+        "end": 217.57
+      }
+    ],
+    "duration": 214.37
+  },
+  "41:5:25-5:34": {
+    "reference": "Mark 5:25-34",
+    "cuts": [
+      {
+        "file": "41-mark/005.mp3",
+        "sha256": "842d3c7fcf3fc6ef92e7cd384bdc6eb603cd422acff9049b416847e84b195b10",
+        "start": 257.65999999999997,
+        "end": 336.41
+      }
+    ],
+    "duration": 78.75
+  },
+  "41:6:1-6:6": {
+    "reference": "Mark 6:1-6a",
+    "cuts": [
+      {
+        "file": "41-mark/006.mp3",
+        "sha256": "ad96d3335bb8873a13d18eef2bb005c8d93135ec54cf951086d8281936e6c0e4",
+        "start": 2.92,
+        "end": 91.21
+      }
+    ],
+    "duration": 88.29
+  },
+  "40:5:13-5:20": {
+    "reference": "Matt. 5:13-20",
+    "cuts": [
+      {
+        "file": "40-matthew/005.mp3",
+        "sha256": "39c688204941777151649f838d2ec37be251efa0d0c81792e815c8f57ca4bdc3",
+        "start": 155.82,
+        "end": 271.49
+      }
+    ],
+    "duration": 115.67
+  },
+  "43:11:1-11:16": {
+    "reference": "John 11:1-16",
+    "cuts": [
+      {
+        "file": "43-john/011.mp3",
+        "sha256": "64e0b15ff3b56426574244a4d0c85f1d118b3ca78f828c7970609344b42a7e60",
+        "start": 4.84,
+        "end": 156.01
+      }
+    ],
+    "duration": 151.17
+  },
+  "43:11:30-11:44": {
+    "reference": "John 11:30-44",
+    "cuts": [
+      {
+        "file": "43-john/011.mp3",
+        "sha256": "64e0b15ff3b56426574244a4d0c85f1d118b3ca78f828c7970609344b42a7e60",
+        "start": 289.46,
+        "end": 456.17
+      }
+    ],
+    "duration": 166.71
+  },
+  "42:3:1-3:14": {
+    "reference": "Luke 3:1-14",
+    "cuts": [
+      {
+        "file": "42-luke/003.mp3",
+        "sha256": "04798a30f6e5c591f79a222db49ac4a9310ccdf5fc172f1db241732ace97dce2",
+        "start": 6.64,
+        "end": 174.63
+      }
+    ],
+    "duration": 167.99
+  },
+  "42:4:1-4:13": {
+    "reference": "Luke 4:1-13",
+    "cuts": [
+      {
+        "file": "42-luke/004.mp3",
+        "sha256": "e87a5f4b6d0fae76e01107969cb946984d1ec84e5ab2020bf90e040b5559246b",
+        "start": 2.9,
+        "end": 111.62
+      }
+    ],
+    "duration": 108.72
+  },
+  "42:4:14-4:30": {
+    "reference": "Luke 4:14-30",
+    "cuts": [
+      {
+        "file": "42-luke/004.mp3",
+        "sha256": "e87a5f4b6d0fae76e01107969cb946984d1ec84e5ab2020bf90e040b5559246b",
+        "start": 111.72,
+        "end": 246.73000000000002
+      }
+    ],
+    "duration": 135.01
+  },
+  "42:4:31-4:37": {
+    "reference": "Luke 4:31-37",
+    "cuts": [
+      {
+        "file": "42-luke/004.mp3",
+        "sha256": "e87a5f4b6d0fae76e01107969cb946984d1ec84e5ab2020bf90e040b5559246b",
+        "start": 246.73000000000002,
+        "end": 306.67
+      }
+    ],
+    "duration": 59.94
+  },
+  "42:5:1-5:11": {
+    "reference": "Luke 5:1-11",
+    "cuts": [
+      {
+        "file": "42-luke/005.mp3",
+        "sha256": "9eb776b212ff0976b78dfd55bada169187d04377df2397a193f288a38ff1ddcf",
+        "start": 2.6,
+        "end": 135.31
+      }
+    ],
+    "duration": 132.71
+  },
+  "42:5:12-5:26": {
+    "reference": "Luke 5:12-26",
+    "cuts": [
+      {
+        "file": "42-luke/005.mp3",
+        "sha256": "9eb776b212ff0976b78dfd55bada169187d04377df2397a193f288a38ff1ddcf",
+        "start": 136.01999999999998,
+        "end": 313.29
+      }
+    ],
+    "duration": 177.27
+  },
+  "42:6:1-6:11": {
+    "reference": "Luke 6:1-11",
+    "cuts": [
+      {
+        "file": "42-luke/006.mp3",
+        "sha256": "d9fd49430b6ef7f47359ae25783e09a5d326979b6b10dd1dcee9a9cdfcdac8c4",
+        "start": 5.62,
+        "end": 123.45
+      }
+    ],
+    "duration": 117.83
+  },
+  "42:7:1-7:17": {
+    "reference": "Luke 7:1-17",
+    "cuts": [
+      {
+        "file": "42-luke/007.mp3",
+        "sha256": "63f4c72267ff8370b0740b23e6f375e44cdccd8dd3b1eb852f8580dd62f20130",
+        "start": 11.96,
+        "end": 206.69
+      }
+    ],
+    "duration": 194.73
+  },
+  "42:7:18-7:35": {
+    "reference": "Luke 7:18-35",
+    "cuts": [
+      {
+        "file": "42-luke/007.mp3",
+        "sha256": "63f4c72267ff8370b0740b23e6f375e44cdccd8dd3b1eb852f8580dd62f20130",
+        "start": 208.76,
+        "end": 448.05
+      }
+    ],
+    "duration": 239.29
+  },
+  "42:7:36-7:50": {
+    "reference": "Luke 7:36-50",
+    "cuts": [
+      {
+        "file": "42-luke/007.mp3",
+        "sha256": "63f4c72267ff8370b0740b23e6f375e44cdccd8dd3b1eb852f8580dd62f20130",
+        "start": 451.02,
+        "end": 622.41
+      }
+    ],
+    "duration": 171.390454
+  },
+  "42:8:1-8:15": {
+    "reference": "Luke 8:1-15",
+    "cuts": [
+      {
+        "file": "42-luke/008.mp3",
+        "sha256": "3284b99cb77f520f5f95fe106fc8b0cd7a12e7f60cd42cb7a8db2b1b8e624fb2",
+        "start": 3.84,
+        "end": 188.37
+      }
+    ],
+    "duration": 184.530045
+  },
+  "42:8:16-8:25": {
+    "reference": "Luke 8:16-25",
+    "cuts": [
+      {
+        "file": "42-luke/008.mp3",
+        "sha256": "3284b99cb77f520f5f95fe106fc8b0cd7a12e7f60cd42cb7a8db2b1b8e624fb2",
+        "start": 189.56,
+        "end": 304.85
+      }
+    ],
+    "duration": 115.29
+  },
+  "42:8:40-8:56": {
+    "reference": "Luke 8:40-56",
+    "cuts": [
+      {
+        "file": "42-luke/008.mp3",
+        "sha256": "3284b99cb77f520f5f95fe106fc8b0cd7a12e7f60cd42cb7a8db2b1b8e624fb2",
+        "start": 477.54,
+        "end": 656.77
+      }
+    ],
+    "duration": 179.23
+  },
+  "42:9:1-9:17": {
+    "reference": "Luke 9:1-17",
+    "cuts": [
+      {
+        "file": "42-luke/009.mp3",
+        "sha256": "2091e51a304ff0bbd7235d9f5c4f22770aeadf752ab30c4c309478779a6536af",
+        "start": 2.76,
+        "end": 196.79
+      }
+    ],
+    "duration": 194.03
+  },
+  "42:9:28-9:36": {
+    "reference": "Luke 9:28-36",
+    "cuts": [
+      {
+        "file": "42-luke/009.mp3",
+        "sha256": "2091e51a304ff0bbd7235d9f5c4f22770aeadf752ab30c4c309478779a6536af",
+        "start": 325.02,
+        "end": 412.93
+      }
+    ],
+    "duration": 87.91
+  },
+  "42:9:37-9:50": {
+    "reference": "Luke 9:37-50",
+    "cuts": [
+      {
+        "file": "42-luke/009.mp3",
+        "sha256": "2091e51a304ff0bbd7235d9f5c4f22770aeadf752ab30c4c309478779a6536af",
+        "start": 414.56,
+        "end": 550.09
+      }
+    ],
+    "duration": 135.53
+  },
+  "42:10:1-10:16": {
+    "reference": "Luke 10:1-16",
+    "cuts": [
+      {
+        "file": "42-luke/010.mp3",
+        "sha256": "031a615b59f7522ef2e0793a4d887fd6288a95e2ad23a3b615d93d51e3306e35",
+        "start": 4.74,
+        "end": 161.05
+      }
+    ],
+    "duration": 156.31
+  },
+  "42:10:25-10:37": {
+    "reference": "Luke 10:25-37",
+    "cuts": [
+      {
+        "file": "42-luke/010.mp3",
+        "sha256": "031a615b59f7522ef2e0793a4d887fd6288a95e2ad23a3b615d93d51e3306e35",
+        "start": 254.98,
+        "end": 370.13
+      }
+    ],
+    "duration": 115.15
+  },
+  "42:11:1-11:13": {
+    "reference": "Luke 11:1-13",
+    "cuts": [
+      {
+        "file": "42-luke/011.mp3",
+        "sha256": "5fda4b0dfa2eaa2c1f952fe04987a1b06ea41357b8cdede9db2e237903449d47",
+        "start": 12.98,
+        "end": 170.89
+      }
+    ],
+    "duration": 157.91
+  },
+  "40:18:15-18:20": {
+    "reference": "Matt. 18:15-20",
+    "cuts": [
+      {
+        "file": "40-matthew/018.mp3",
+        "sha256": "c14a8a18f48f12cb89124d4b3da75b80de94c5d577b73524e14e47576115956d",
+        "start": 171.62,
+        "end": 248.53
+      }
+    ],
+    "duration": 76.91
+  },
+  "42:11:14-11:26": {
+    "reference": "Luke 11:14-26",
+    "cuts": [
+      {
+        "file": "42-luke/011.mp3",
+        "sha256": "5fda4b0dfa2eaa2c1f952fe04987a1b06ea41357b8cdede9db2e237903449d47",
+        "start": 172.9,
+        "end": 322.29
+      }
+    ],
+    "duration": 149.39
+  },
+  "42:11:27-11:36": {
+    "reference": "Luke 11:27-36",
+    "cuts": [
+      {
+        "file": "42-luke/011.mp3",
+        "sha256": "5fda4b0dfa2eaa2c1f952fe04987a1b06ea41357b8cdede9db2e237903449d47",
+        "start": 323.88,
+        "end": 476.93
+      }
+    ],
+    "duration": 153.05
+  },
+  "42:11:53-12:12": {
+    "reference": "Luke 11:53--12:12",
+    "cuts": [
+      {
+        "file": "42-luke/011.mp3",
+        "sha256": "5fda4b0dfa2eaa2c1f952fe04987a1b06ea41357b8cdede9db2e237903449d47",
+        "start": 658.46,
+        "end": 679.31
+      },
+      {
+        "file": "42-luke/012.mp3",
+        "sha256": "b338bef8ae3085e567b8512bb3f41b28756fef32530e890764d4d42beecf79e0",
+        "start": 2.36,
+        "end": 139.55
+      }
+    ],
+    "duration": 158.04
+  },
+  "42:12:32-12:48": {
+    "reference": "Luke 12:32-48",
+    "cuts": [
+      {
+        "file": "42-luke/012.mp3",
+        "sha256": "b338bef8ae3085e567b8512bb3f41b28756fef32530e890764d4d42beecf79e0",
+        "start": 324.1,
+        "end": 557.17
+      }
+    ],
+    "duration": 233.07
+  },
+  "42:13:1-13:9": {
+    "reference": "Luke 13:1-9",
+    "cuts": [
+      {
+        "file": "42-luke/013.mp3",
+        "sha256": "a6227549b8bdd4182e0c6c6f18a0af0ded4320d6edda4ad919294c4b8462848d",
+        "start": 3.6599999999999997,
+        "end": 97.97
+      }
+    ],
+    "duration": 94.31
+  },
+  "42:13:18-13:30": {
+    "reference": "Luke 13:18-30",
+    "cuts": [
+      {
+        "file": "42-luke/013.mp3",
+        "sha256": "a6227549b8bdd4182e0c6c6f18a0af0ded4320d6edda4ad919294c4b8462848d",
+        "start": 186.14,
+        "end": 300.67
+      }
+    ],
+    "duration": 114.53
+  },
+  "42:14:1-14:11": {
+    "reference": "Luke 14:1-11",
+    "cuts": [
+      {
+        "file": "42-luke/014.mp3",
+        "sha256": "a058619a296d559446a6d3ad167486652b8112b98301c69d385b788aec2da81f",
+        "start": 4.76,
+        "end": 111.43
+      }
+    ],
+    "duration": 106.67
+  },
+  "42:14:12-14:24": {
+    "reference": "Luke 14:12-24",
+    "cuts": [
+      {
+        "file": "42-luke/014.mp3",
+        "sha256": "a058619a296d559446a6d3ad167486652b8112b98301c69d385b788aec2da81f",
+        "start": 113.6,
+        "end": 264.35
+      }
+    ],
+    "duration": 150.75
+  },
+  "42:15:1-15:10": {
+    "reference": "Luke 15:1-10",
+    "cuts": [
+      {
+        "file": "42-luke/015.mp3",
+        "sha256": "689c4631009dfeab215f70fed9da7218ab37fcc604f8f4b63238f1b8b6414950",
+        "start": 13.16,
+        "end": 136.31
+      }
+    ],
+    "duration": 123.15
+  },
+  "42:16:1-16:9": {
+    "reference": "Luke 16:1-9",
+    "cuts": [
+      {
+        "file": "42-luke/016.mp3",
+        "sha256": "ed2c3a939473976d12185e6a8469409d68b345ba0e02846c2cb4d5e8d339ee71",
+        "start": 4.08,
+        "end": 112.23
+      }
+    ],
+    "duration": 108.15
+  },
+  "42:17:1-17:10": {
+    "reference": "Luke 17:1-10",
+    "cuts": [
+      {
+        "file": "42-luke/017.mp3",
+        "sha256": "51519d95f1d747779536f7d4857aaaef5ad2003b118fea08b43f1e7cea6a9776",
+        "start": 12.540000000000001,
+        "end": 123.55
+      }
+    ],
+    "duration": 111.01
+  },
+  "42:18:1-18:8": {
+    "reference": "Luke 18:1-8",
+    "cuts": [
+      {
+        "file": "42-luke/018.mp3",
+        "sha256": "af5949ecf84a68f180f992c43b79ee4e979dc19f52dcb7e6eb69a129052c2657",
+        "start": 4.02,
+        "end": 79.25
+      }
+    ],
+    "duration": 75.23
+  },
+  "42:18:15-18:30": {
+    "reference": "Luke 18:15-30",
+    "cuts": [
+      {
+        "file": "42-luke/018.mp3",
+        "sha256": "af5949ecf84a68f180f992c43b79ee4e979dc19f52dcb7e6eb69a129052c2657",
+        "start": 151.64,
+        "end": 301.25
+      }
+    ],
+    "duration": 149.61
+  },
+  "42:19:1-19:10": {
+    "reference": "Luke 19:1-10",
+    "cuts": [
+      {
+        "file": "42-luke/019.mp3",
+        "sha256": "aa32199cc45c2452c570c0fcaba3e7444ec34cc151e9a19692c7ab66702cc312",
+        "start": 6.66,
+        "end": 100.97
+      }
+    ],
+    "duration": 94.31
+  },
+  "42:19:11-19:27": {
+    "reference": "Luke 19:11-27",
+    "cuts": [
+      {
+        "file": "42-luke/019.mp3",
+        "sha256": "aa32199cc45c2452c570c0fcaba3e7444ec34cc151e9a19692c7ab66702cc312",
+        "start": 102.3,
+        "end": 262.27
+      }
+    ],
+    "duration": 159.97
+  },
+  "42:7:28-7:35": {
+    "reference": "Luke 7:28-35",
+    "cuts": [
+      {
+        "file": "42-luke/007.mp3",
+        "sha256": "63f4c72267ff8370b0740b23e6f375e44cdccd8dd3b1eb852f8580dd62f20130",
+        "start": 358.54,
+        "end": 448.05
+      }
+    ],
+    "duration": 89.51
+  },
+  "43:3:22-3:30": {
+    "reference": "John 3:22-30",
+    "cuts": [
+      {
+        "file": "43-john/003.mp3",
+        "sha256": "9a0841f5eddd47b25defca437b261c671871b0dcf3103c5c8d8f3c1dde8fc032",
+        "start": 218.9,
+        "end": 301.47
+      }
+    ],
+    "duration": 82.57
+  },
+  "41:1:1-1:8": {
+    "reference": "Mark 1:1-8",
+    "cuts": [
+      {
+        "file": "41-mark/001.mp3",
+        "sha256": "db8658265c6bf17f5f01b6df0b547e88c1044fa3c8499d0dfd6778835dcd97e8",
+        "start": 4.52,
+        "end": 98.77
+      }
+    ],
+    "duration": 94.250862
+  },
+  "40:3:1-3:12": {
+    "reference": "Matt. 3:1-12",
+    "cuts": [
+      {
+        "file": "40-matthew/003.mp3",
+        "sha256": "6d8e7abd6779f988a93a0cdc5aa02cc0fe11d6f8c802e72488abab4191212749",
+        "start": 12.9,
+        "end": 217.76999999999998
+      }
+    ],
+    "duration": 204.87
+  },
+  "42:3:1-3:9": {
+    "reference": "Luke 3:1-9",
+    "cuts": [
+      {
+        "file": "42-luke/003.mp3",
+        "sha256": "04798a30f6e5c591f79a222db49ac4a9310ccdf5fc172f1db241732ace97dce2",
+        "start": 6.64,
+        "end": 133.21
+      }
+    ],
+    "duration": 126.57
+  },
+  "42:1:5-1:25": {
+    "reference": "Luke 1:5-25",
+    "cuts": [
+      {
+        "file": "42-luke/001.mp3",
+        "sha256": "af7bc653617a883da6d03dd373eec89ad2463b222244918d7eb858d546dead3a",
+        "start": 32.38,
+        "end": 259.83
+      }
+    ],
+    "duration": 227.45
+  },
+  "42:1:26-1:38": {
+    "reference": "Luke 1:26-38",
+    "cuts": [
+      {
+        "file": "42-luke/001.mp3",
+        "sha256": "af7bc653617a883da6d03dd373eec89ad2463b222244918d7eb858d546dead3a",
+        "start": 261.06,
+        "end": 378.47
+      }
+    ],
+    "duration": 117.41
+  },
+  "43:3:31-3:36": {
+    "reference": "John 3:31-36",
+    "cuts": [
+      {
+        "file": "43-john/003.mp3",
+        "sha256": "9a0841f5eddd47b25defca437b261c671871b0dcf3103c5c8d8f3c1dde8fc032",
+        "start": 301.47,
+        "end": 359.83
+      }
+    ],
+    "duration": 58.36
+  },
+  "41:2:18-2:22": {
+    "reference": "Mark 2:18-22",
+    "cuts": [
+      {
+        "file": "41-mark/002.mp3",
+        "sha256": "7e06ac3325026358c64f2e42e37ef9134ccdca0853f1af963049a7bc93d178ab",
+        "start": 216,
+        "end": 278.29
+      }
+    ],
+    "duration": 62.29
+  },
+  "41:8:31-9:1": {
+    "reference": "Mark 8:31--9:1",
+    "cuts": [
+      {
+        "file": "41-mark/008.mp3",
+        "sha256": "fce64ede3fd3c841bcfc2255a9a4ebf470d9ae3d51590a8a51e65bc3f7c78c63",
+        "start": 284.88,
+        "end": 382.45
+      },
+      {
+        "file": "41-mark/009.mp3",
+        "sha256": "930adde76acf71400a717aa5159787366e80d7ce425d5cff012e8a5c6497ebee",
+        "start": 3.1,
+        "end": 13.61
+      }
+    ],
+    "duration": 108.08
+  },
+  "43:11:28-11:44": {
+    "reference": "John 11:28-44,",
+    "cuts": [
+      {
+        "file": "43-john/011.mp3",
+        "sha256": "64e0b15ff3b56426574244a4d0c85f1d118b3ca78f828c7970609344b42a7e60",
+        "start": 251.78,
+        "end": 456.17
+      }
+    ],
+    "duration": 204.39
+  },
+  "43:14:1-14:14": {
+    "reference": "John 14:1-14",
+    "cuts": [
+      {
+        "file": "43-john/014.mp3",
+        "sha256": "d616a33e914cd2c9daf89c8252a0b298f64a7e371b7b0e334d4f3ea2f3d07144",
+        "start": 2.54,
+        "end": 169.75
+      }
+    ],
+    "duration": 167.210862
+  },
+  "40:13:24-13:34": {
+    "reference": "Matt. 13:24-34a",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 258.2,
+        "end": 388.33
+      }
+    ],
+    "duration": 130.13
+  },
+  "42:10:1-10:17": {
+    "reference": "Luke 10:1-17",
+    "cuts": [
+      {
+        "file": "42-luke/010.mp3",
+        "sha256": "031a615b59f7522ef2e0793a4d887fd6288a95e2ad23a3b615d93d51e3306e35",
+        "start": 4.74,
+        "end": 170.69
+      }
+    ],
+    "duration": 165.95
+  },
+  "42:11:14-11:23": {
+    "reference": "Luke 11:14-23",
+    "cuts": [
+      {
+        "file": "42-luke/011.mp3",
+        "sha256": "5fda4b0dfa2eaa2c1f952fe04987a1b06ea41357b8cdede9db2e237903449d47",
+        "start": 172.9,
+        "end": 286.61
+      }
+    ],
+    "duration": 113.71
+  },
+  "41:6:14-6:29": {
+    "reference": "Mark 6:14-29",
+    "cuts": [
+      {
+        "file": "41-mark/006.mp3",
+        "sha256": "ad96d3335bb8873a13d18eef2bb005c8d93135ec54cf951086d8281936e6c0e4",
+        "start": 155.56,
+        "end": 342.67
+      }
+    ],
+    "duration": 187.11
+  },
+  "41:8:22-8:33": {
+    "reference": "Mark 8:22-33",
+    "cuts": [
+      {
+        "file": "41-mark/008.mp3",
+        "sha256": "fce64ede3fd3c841bcfc2255a9a4ebf470d9ae3d51590a8a51e65bc3f7c78c63",
+        "start": 208.18,
+        "end": 323.69
+      }
+    ],
+    "duration": 115.51
+  },
+  "41:8:34-9:1": {
+    "reference": "Mark 8:34--9:1",
+    "cuts": [
+      {
+        "file": "41-mark/008.mp3",
+        "sha256": "fce64ede3fd3c841bcfc2255a9a4ebf470d9ae3d51590a8a51e65bc3f7c78c63",
+        "start": 324.76,
+        "end": 382.45
+      },
+      {
+        "file": "41-mark/009.mp3",
+        "sha256": "930adde76acf71400a717aa5159787366e80d7ce425d5cff012e8a5c6497ebee",
+        "start": 3.1,
+        "end": 13.61
+      }
+    ],
+    "duration": 68.2
+  },
+  "41:11:1-11:11": {
+    "reference": "Mark 11:1-11",
+    "cuts": [
+      {
+        "file": "41-mark/011.mp3",
+        "sha256": "e4326c953faab3bb626ed5231c1b042638777cd1ac3d23a7bd2eca5b20931db0",
+        "start": 2.48,
+        "end": 117.67
+      }
+    ],
+    "duration": 115.19
+  },
+  "41:11:27-12:12": {
+    "reference": "Mark 11:27--12:12",
+    "cuts": [
+      {
+        "file": "41-mark/011.mp3",
+        "sha256": "e4326c953faab3bb626ed5231c1b042638777cd1ac3d23a7bd2eca5b20931db0",
+        "start": 273.62,
+        "end": 347.05
+      },
+      {
+        "file": "41-mark/012.mp3",
+        "sha256": "115423fae0c1931aa95c72f9f2ba75a2e3ecec71d0e3c20d0547cd0028372d87",
+        "start": 0.6,
+        "end": 138.19
+      }
+    ],
+    "duration": 211.02
+  },
+  "41:12:28-12:34": {
+    "reference": "Mark 12:28-34",
+    "cuts": [
+      {
+        "file": "41-mark/012.mp3",
+        "sha256": "115423fae0c1931aa95c72f9f2ba75a2e3ecec71d0e3c20d0547cd0028372d87",
+        "start": 343.6,
+        "end": 423.83
+      }
+    ],
+    "duration": 80.23
+  },
+  "41:13:1-13:13": {
+    "reference": "Mark 13:1-13",
+    "cuts": [
+      {
+        "file": "41-mark/013.mp3",
+        "sha256": "6e544ae14fdce146356a2d03327f0d3370027c292fb4db4ef8d333bd014312e3",
+        "start": 5.58,
+        "end": 155.29
+      }
+    ],
+    "duration": 149.71
+  },
+  "41:14:1-14:11": {
+    "reference": "Mark 14:1-11",
+    "cuts": [
+      {
+        "file": "41-mark/014.mp3",
+        "sha256": "82c06bf922066be71f1e886e86b05666308bdc34ffb60271a75a2cf8e742f2f9",
+        "start": 3.36,
+        "end": 130.29
+      }
+    ],
+    "duration": 126.930045
+  },
+  "41:14:12-14:26": {
+    "reference": "Mark 14:12-26",
+    "cuts": [
+      {
+        "file": "41-mark/014.mp3",
+        "sha256": "82c06bf922066be71f1e886e86b05666308bdc34ffb60271a75a2cf8e742f2f9",
+        "start": 131.94,
+        "end": 264.23
+      }
+    ],
+    "duration": 132.29
+  },
+  "41:14:43-14:52": {
+    "reference": "Mark 14:43-52",
+    "cuts": [
+      {
+        "file": "41-mark/014.mp3",
+        "sha256": "82c06bf922066be71f1e886e86b05666308bdc34ffb60271a75a2cf8e742f2f9",
+        "start": 418.15999999999997,
+        "end": 502.75
+      }
+    ],
+    "duration": 84.59
+  },
+  "41:14:66-14:72": {
+    "reference": "Mark 14:66-72",
+    "cuts": [
+      {
+        "file": "41-mark/014.mp3",
+        "sha256": "82c06bf922066be71f1e886e86b05666308bdc34ffb60271a75a2cf8e742f2f9",
+        "start": 629.56,
+        "end": 702.97
+      }
+    ],
+    "duration": 73.41
+  },
+  "41:15:1-15:11": {
+    "reference": "Mark 15:1-11",
+    "cuts": [
+      {
+        "file": "41-mark/015.mp3",
+        "sha256": "5ef4db2e2c80c48c2992c16c956a06225a28c5f315bd036000a0b80b23a05825",
+        "start": 9.360000000000001,
+        "end": 101.27
+      }
+    ],
+    "duration": 91.91
+  },
+  "42:3:7-3:18": {
+    "reference": "Luke 3:7-18",
+    "cuts": [
+      {
+        "file": "42-luke/003.mp3",
+        "sha256": "04798a30f6e5c591f79a222db49ac4a9310ccdf5fc172f1db241732ace97dce2",
+        "start": 91.88,
+        "end": 227.09
+      }
+    ],
+    "duration": 135.210862
+  },
+  "40:8:1-8:17": {
+    "reference": "Matt. 8:1-17",
+    "cuts": [
+      {
+        "file": "40-matthew/008.mp3",
+        "sha256": "19f4d3b1f11904fcfd74b50aae6a87e983ab273659497658e5b1f1bfafd1b8c6",
+        "start": 12.780000000000001,
+        "end": 280.25
+      }
+    ],
+    "duration": 267.47
+  },
+  "42:7:11-7:17": {
+    "reference": "Luke 7:11-17",
+    "cuts": [
+      {
+        "file": "42-luke/007.mp3",
+        "sha256": "63f4c72267ff8370b0740b23e6f375e44cdccd8dd3b1eb852f8580dd62f20130",
+        "start": 126.38,
+        "end": 206.69
+      }
+    ],
+    "duration": 80.31
+  },
+  "40:10:16-10:23": {
+    "reference": "Matt. 10:16-23",
+    "cuts": [
+      {
+        "file": "40-matthew/010.mp3",
+        "sha256": "e2960f62fb7ab7844b48d9ceff778e33260a1a551a7143cf8828f4f8827b37ed",
+        "start": 217.56,
+        "end": 321.53
+      }
+    ],
+    "duration": 103.97
+  },
+  "40:10:24-10:33": {
+    "reference": "Matt. 10:24-33",
+    "cuts": [
+      {
+        "file": "40-matthew/010.mp3",
+        "sha256": "e2960f62fb7ab7844b48d9ceff778e33260a1a551a7143cf8828f4f8827b37ed",
+        "start": 323.76,
+        "end": 425.53
+      }
+    ],
+    "duration": 101.77
+  },
+  "40:11:1-11:6": {
+    "reference": "Matt. 11:1-6",
+    "cuts": [
+      {
+        "file": "40-matthew/011.mp3",
+        "sha256": "3458d04a1687f82b26aa86b78fe4b9d0ae76314db87e0587e7d258e0b341d7b4",
+        "start": 6.1,
+        "end": 62.63
+      }
+    ],
+    "duration": 56.530045
+  },
+  "42:10:1-10:20": {
+    "reference": "Luke 10:1-12, 17-20",
+    "cuts": [
+      {
+        "file": "42-luke/010.mp3",
+        "sha256": "031a615b59f7522ef2e0793a4d887fd6288a95e2ad23a3b615d93d51e3306e35",
+        "start": 4.74,
+        "end": 192.61
+      }
+    ],
+    "duration": 187.87
+  },
+  "40:11:25-11:30": {
+    "reference": "Matt. 11:25-30",
+    "cuts": [
+      {
+        "file": "40-matthew/011.mp3",
+        "sha256": "3458d04a1687f82b26aa86b78fe4b9d0ae76314db87e0587e7d258e0b341d7b4",
+        "start": 274.24,
+        "end": 340.61
+      }
+    ],
+    "duration": 66.37
+  },
+  "40:12:15-12:21": {
+    "reference": "Matt. 12:15-21",
+    "cuts": [
+      {
+        "file": "40-matthew/012.mp3",
+        "sha256": "62ae0cb3740d1e77eedeee68f77613723052d37cd353796427458c7048395b4f",
+        "start": 165.42,
+        "end": 224.93
+      }
+    ],
+    "duration": 59.51
+  },
+  "40:13:1-13:9": {
+    "reference": "Matt. 13:1-9",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 4.84,
+        "end": 89.05
+      }
+    ],
+    "duration": 84.21
+  },
+  "40:13:10-13:17": {
+    "reference": "Matt. 13:10-17",
+    "cuts": [
+      {
+        "file": "40-matthew/013.mp3",
+        "sha256": "5fc68c9566fd91aad8338fc59862ebfab8a0172655288244d4c4366d430303ed",
+        "start": 90.86,
+        "end": 184.17
+      }
+    ],
+    "duration": 93.310454
+  },
+  "42:1:57-1:67": {
+    "reference": "Luke 1:57-67",
+    "cuts": [
+      {
+        "file": "42-luke/001.mp3",
+        "sha256": "af7bc653617a883da6d03dd373eec89ad2463b222244918d7eb858d546dead3a",
+        "start": 556.58,
+        "end": 654.55
+      }
+    ],
+    "duration": 97.97
+  },
+  "40:22:23-22:33": {
+    "reference": "Matt. 22:23-33",
+    "cuts": [
+      {
+        "file": "40-matthew/022.mp3",
+        "sha256": "53e21b385b7c6cf99d80e9ad3304bfb052ac96fc31e672c44fc67e94c387d626",
+        "start": 270.6,
+        "end": 392.51
+      }
+    ],
+    "duration": 121.91
+  },
+  "42:1:1-1:25": {
+    "reference": "Luke 1:1-25",
+    "cuts": [
+      {
+        "file": "42-luke/001.mp3",
+        "sha256": "af7bc653617a883da6d03dd373eec89ad2463b222244918d7eb858d546dead3a",
+        "start": 4,
+        "end": 259.83
+      }
+    ],
+    "duration": 255.83
+  },
+  "42:1:57-1:66": {
+    "reference": "Luke 1:57-66",
+    "cuts": [
+      {
+        "file": "42-luke/001.mp3",
+        "sha256": "af7bc653617a883da6d03dd373eec89ad2463b222244918d7eb858d546dead3a",
+        "start": 556.58,
+        "end": 646.95
+      }
+    ],
+    "duration": 90.37
+  },
+  "41:10:23-10:31": {
+    "reference": "Mark 10:23-31",
+    "cuts": [
+      {
+        "file": "41-mark/010.mp3",
+        "sha256": "bee51da7c4ea22277ae32a0c4c32036a302741c92b00931790cda3f28a1106bb",
+        "start": 268.04,
+        "end": 396.67
+      }
+    ],
+    "duration": 128.63
+  },
+  "41:10:35-10:45": {
+    "reference": "Mark 10:35-45",
+    "cuts": [
+      {
+        "file": "41-mark/010.mp3",
+        "sha256": "bee51da7c4ea22277ae32a0c4c32036a302741c92b00931790cda3f28a1106bb",
+        "start": 444.95,
+        "end": 545.31
+      }
+    ],
+    "duration": 100.36
+  },
+  "42:1:67-1:80": {
+    "reference": "Luke 1:67-80",
+    "cuts": [
+      {
+        "file": "42-luke/001.mp3",
+        "sha256": "af7bc653617a883da6d03dd373eec89ad2463b222244918d7eb858d546dead3a",
+        "start": 648.58,
+        "end": 778.71
+      }
+    ],
+    "duration": 130.13
+  }
+}

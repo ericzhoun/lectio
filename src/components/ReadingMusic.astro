@@ -1,0 +1,75 @@
+---
+import type { MusicClip } from '../lib/singingBible';
+import type { Lang } from '../lib/reading';
+interface Props { clip: MusicClip; lang: Lang }
+const { clip, lang } = Astro.props;
+const zh = lang === 'zh';
+const time = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+---
+<section class="reading-music" data-reading-music data-duration={clip.duration}
+  aria-label={zh ? '经文配乐' : 'Scripture music'}>
+  <div class="music-heading">
+    <span>{zh ? '让经文唱起来' : 'Let the Word sing'}</span>
+    <span class="music-credit">The Singing Bible · {zh ? '英语' : 'English'}</span>
+  </div>
+  <audio controls preload="metadata" src={clip.file} aria-label={zh ? '经文配乐' : 'Scripture music'}></audio>
+  <div class="music-custom" hidden>
+    <div class="music-buttons">
+      <button type="button" data-repeat aria-pressed="false" aria-label={zh ? '循环播放' : 'Repeat'} title={zh ? '循环播放' : 'Repeat'}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 2l4 4-4 4M3 11V8a2 2 0 012-2h16M7 22l-4-4 4-4m14-1v3a2 2 0 01-2 2H3" /></svg>
+      </button>
+      <button type="button" data-skip="-10" aria-label={zh ? '后退10秒' : 'Back 10 seconds'} title={zh ? '后退10秒' : 'Back 10 seconds'}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9a9 9 0 111 9M4 3v6h6" /></svg><span class="skip-number">10</span>
+      </button>
+      <button type="button" class="music-play" data-play aria-label={zh ? '播放配乐' : 'Play music'}>
+        <svg data-play-icon viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4l13 8-13 8z" /></svg>
+        <svg data-pause-icon data-inactive viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zM15 5h3v14h-3z" /></svg>
+      </button>
+      <button type="button" data-skip="10" aria-label={zh ? '前进10秒' : 'Forward 10 seconds'} title={zh ? '前进10秒' : 'Forward 10 seconds'}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 9a9 9 0 10-1 9m1-15v6h-6" /></svg><span class="skip-number">10</span>
+      </button>
+      <button type="button" data-restart aria-label={zh ? '从头播放' : 'Restart'} title={zh ? '从头播放' : 'Restart'}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v16M20 4L8 12l12 8z" /></svg>
+      </button>
+    </div>
+    <div class="music-progress">
+      <span data-elapsed>0:00</span>
+      <input type="range" data-seek min="0" max={clip.duration} step="0.1" value="0" aria-label={zh ? '播放进度' : 'Playback position'} aria-valuetext="0:00" />
+      <span data-total>{time(clip.duration)}</span>
+    </div>
+    <label class="music-volume">{zh ? '音量' : 'Volume'}
+      <input type="range" data-volume min="0" max="1" step="0.05" value="0.25" aria-label={zh ? '配乐音量' : 'Music volume'} />
+    </label>
+  </div>
+  <p class="music-error" role="status" data-error hidden>{zh ? '配乐暂时无法播放，请重试。' : 'Music could not play. Please try again.'}</p>
+</section>
+
+<script>
+  import { initReadingMusic } from '../scripts/readingMusic';
+  document.querySelectorAll<HTMLElement>('[data-reading-music]').forEach(initReadingMusic);
+</script>
+
+<style>
+  .reading-music { margin: 1.8rem 0 1rem; padding: 1.2rem 1.1rem .85rem; border: 1px solid var(--line, #e2dfd9); border-radius: 14px; background: rgba(255,255,255,.6); }
+  .music-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .3rem 1rem; font-size: 1.05rem; }
+  .music-credit { color: #76716a; font-size: .75rem; }
+  audio { width: 100%; margin-top: 1rem; }
+  [hidden], [data-inactive] { display: none !important; }
+  .music-buttons { display: flex; align-items: center; justify-content: center; gap: clamp(.45rem, 3vw, 1.4rem); margin: 1rem 0; }
+  button { position: relative; display: grid; place-items: center; border: 0; width: 44px; height: 44px; border-radius: 50%; background: transparent; color: #252824; padding: 10px; cursor: pointer; }
+  button:hover { background: #eeeee8; }
+  button:focus-visible, input:focus-visible { outline: 2px solid #00877d; outline-offset: 4px; }
+  button[aria-pressed="true"] { background: #deeeea; color: #007d73; }
+  svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .music-play { width: 62px; height: 62px; background: #00877d; color: white; }
+  .music-play:hover { background: #006d65; }
+  .music-play svg { fill: currentColor; stroke: none; width: 29px; height: 29px; }
+  .skip-number { position: absolute; font: 9px/1 sans-serif; top: 19px; left: 17px; }
+  .music-progress { display: flex; align-items: center; gap: .8rem; font: .8rem/1.4 system-ui, sans-serif; color: #76716a; font-variant-numeric: tabular-nums; }
+  .music-progress span { min-width: 2.6em; }
+  input { accent-color: #00877d; cursor: pointer; min-width: 0; height: 24px; }
+  [data-seek] { flex: 1; width: 100%; }
+  .music-volume { display: flex; justify-content: flex-end; align-items: center; gap: .7rem; margin-top: .5rem; color: #76716a; font: .7rem/1.4 system-ui, sans-serif; }
+  [data-volume] { width: 85px; }
+  .music-error { color: #8a2837; font-size: .9rem; margin: .5rem 0 0; }
+</style>
