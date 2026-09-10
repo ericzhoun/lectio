@@ -17,37 +17,37 @@ function context(url: string, init?: RequestInit) {
 
 describe('middleware cache-control guard', () => {
   it('marks personalized HTML as private, no-store', async () => {
-    const response = await onRequest(context('https://lectio.test/today/silencio'), () =>
-      new Response('<html lang="zh"></html>', { headers: { 'Content-Type': 'text/html; charset=utf-8' } }));
+    const response = (await onRequest(context('https://lectio.test/today/silencio'), async () =>
+      new Response('<html lang="zh"></html>', { headers: { 'Content-Type': 'text/html; charset=utf-8' } }))) as Response;
     expect(response.headers.get('Cache-Control')).toBe('private, no-store');
   });
 
   it('marks route redirects (e.g. /today -> /today/<step>) as private, no-store', async () => {
     const next = vi.fn(async () => Response.redirect('https://lectio.test/today/silencio', 302));
-    const response = await onRequest(context('https://lectio.test/today'), next);
+    const response = (await onRequest(context('https://lectio.test/today'), next)) as Response;
     expect(response.status).toBe(302);
     expect(response.headers.get('Location')).toBe('https://lectio.test/today/silencio');
     expect(response.headers.get('Cache-Control')).toBe('private, no-store');
   });
 
   it('marks its own trailing-slash 308 redirect as private, no-store', async () => {
-    const response = await onRequest(context('https://lectio.test/library/'), () => new Response(null));
+    const response = (await onRequest(context('https://lectio.test/library/'), async () => new Response(null))) as Response;
     expect(response.status).toBe(308);
     expect(response.headers.get('Location')).toBe('/library');
     expect(response.headers.get('Cache-Control')).toBe('private, no-store');
   });
 
   it('leaves responses that already set Cache-Control untouched', async () => {
-    const response = await onRequest(context('https://lectio.test/audio/en/silencio.mp3'), () =>
+    const response = (await onRequest(context('https://lectio.test/audio/en/silencio.mp3'), async () =>
       new Response('audio', {
         headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'public, max-age=31536000, immutable' },
-      }));
+      }))) as Response;
     expect(response.headers.get('Cache-Control')).toBe('public, max-age=31536000, immutable');
   });
 
   it('leaves non-HTML, non-redirect responses without Cache-Control alone', async () => {
-    const response = await onRequest(context('https://lectio.test/api/assistant/quota'), () =>
-      new Response(JSON.stringify({ ok: true }), { headers: { 'Content-Type': 'application/json' } }));
+    const response = (await onRequest(context('https://lectio.test/api/assistant/quota'), async () =>
+      new Response(JSON.stringify({ ok: true }), { headers: { 'Content-Type': 'application/json' } }))) as Response;
     expect(response.headers.get('Cache-Control')).toBeNull();
   });
 });
@@ -65,18 +65,18 @@ describe('middleware cache-control guard', () => {
 // instead, not by an automated test.
 describe('middleware cross-origin guard', () => {
   it('rejects a cross-site form POST to an ordinary route', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }),
-      () => new Response('should not reach here')
-    );
+      async () => new Response('should not reach here')
+    )) as Response;
     expect(response.status).toBe(403);
   });
 
   it('allows a same-origin form POST to an ordinary route', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/api/auth/login', {
         method: 'POST',
         headers: {
@@ -84,28 +84,28 @@ describe('middleware cross-origin guard', () => {
           Origin: 'https://lectio.test',
         },
       }),
-      () => new Response('ok')
-    );
+      async () => new Response('ok')
+    )) as Response;
     expect(response.status).not.toBe(403);
   });
 
   it('allows a cross-site, no-Origin form POST to /unsubscribe (mail client one-click)', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/unsubscribe?e=reader%40example.test&t=whatever', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'List-Unsubscribe=One-Click',
       }),
-      () => new Response('ok')
-    );
+      async () => new Response('ok')
+    )) as Response;
     expect(response.status).not.toBe(403);
   });
 
   it('leaves safe methods (GET) alone regardless of Origin', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/api/auth/login', { method: 'GET' }),
-      () => new Response('ok')
-    );
+      async () => new Response('ok')
+    )) as Response;
     expect(response.status).not.toBe(403);
   });
 
@@ -115,26 +115,26 @@ describe('middleware cross-origin guard', () => {
   // 403 that a redirect never gets a chance to fix. Same for case: mail
   // clients and intermediaries are not guaranteed to preserve exact case.
   it('exempts /unsubscribe with a trailing slash', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/unsubscribe/?e=reader%40example.test&t=whatever', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'List-Unsubscribe=One-Click',
       }),
-      () => new Response('ok')
-    );
+      async () => new Response('ok')
+    )) as Response;
     expect(response.status).not.toBe(403);
   });
 
   it('exempts /unsubscribe regardless of case', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/Unsubscribe?e=reader%40example.test&t=whatever', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'List-Unsubscribe=One-Click',
       }),
-      () => new Response('ok')
-    );
+      async () => new Response('ok')
+    )) as Response;
     expect(response.status).not.toBe(403);
   });
 
@@ -142,24 +142,24 @@ describe('middleware cross-origin guard', () => {
   // similarly-named route must still be guarded so this hardening cannot
   // silently widen into "anything starting with /unsubscribe".
   it('still guards a near-miss path like /unsubscribe-all', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/unsubscribe-all', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }),
-      () => new Response('should not reach here')
-    );
+      async () => new Response('should not reach here')
+    )) as Response;
     expect(response.status).toBe(403);
   });
 
   it('still guards a near-miss path like /unsubscribeX', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/unsubscribeX', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       }),
-      () => new Response('should not reach here')
-    );
+      async () => new Response('should not reach here')
+    )) as Response;
     expect(response.status).toBe(403);
   });
 
@@ -172,20 +172,20 @@ describe('middleware cross-origin guard', () => {
   // - without it, bounce/complaint suppression would 403 before the route's
   // own Svix signature check ever ran, with no visible error anywhere.
   it('exempts /api/resend-webhook from a cross-site POST with no content-type or Origin', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/api/resend-webhook', { method: 'POST' }),
-      () => new Response('ok')
-    );
+      async () => new Response('ok')
+    )) as Response;
     expect(response.status).not.toBe(403);
   });
 
   // Exact match only, same discipline as /unsubscribe - a similarly-named
   // path must stay guarded so the exemption cannot silently widen.
   it('still guards a near-miss path like /api/resend-webhook-extra', async () => {
-    const response = await onRequest(
+    const response = (await onRequest(
       context('https://lectio.test/api/resend-webhook-extra', { method: 'POST' }),
-      () => new Response('should not reach here')
-    );
+      async () => new Response('should not reach here')
+    )) as Response;
     expect(response.status).toBe(403);
   });
 });

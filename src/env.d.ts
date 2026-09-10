@@ -29,6 +29,12 @@ declare namespace Cloudflare {
     GOOGLE_AUTH_URL: string;
     GOOGLE_TOKEN_URL: string;
     GOOGLE_USERINFO_URL: string;
+    // Daily Invitation secrets (src/worker.ts, src/lib/unsubscribe.ts,
+    // src/pages/api/resend-webhook.ts). Declaring these is the only
+    // mechanism that catches a typo'd secret name at type-check time.
+    MAIL_TOKEN_SECRET: string;
+    RESEND_WEBHOOK_SECRET: string;
+    RESEND_API_KEY: string;
   }
 }
 
