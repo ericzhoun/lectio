@@ -4,7 +4,7 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { readCardToken } from '../../../lib/assistantCards';
-import { getTool, validateArgs } from '../../../lib/assistantTools';
+import { getTool, validateArgs, ToolArgumentError } from '../../../lib/assistantTools';
 import { buildToolContext } from '../../../lib/assistantContext';
 import { LAST_READING_COOKIE, createLastReadingToken } from '../../../lib/lastReading';
 import { saveReadingRendering } from '../../../lib/db';
@@ -115,7 +115,15 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   // shape this one no longer accepts.
   const validated = validateArgs(tool, card.args);
   if (!validated.ok) return json({ error: 'invalid_card' }, 400);
-  const args = tool.normalize ? tool.normalize(validated.args, ctx) : validated.args;
+  let args: Record<string, unknown>;
+  try {
+    args = tool.normalize ? tool.normalize(validated.args, ctx) : validated.args;
+  } catch (e) {
+    // normalize accepted these args when the card was signed, so a rejection
+    // here means the card no longer describes something this deploy can do.
+    if (e instanceof ToolArgumentError) return json({ error: 'invalid_card' }, 400);
+    throw e;
+  }
 
   let result: unknown;
   try {

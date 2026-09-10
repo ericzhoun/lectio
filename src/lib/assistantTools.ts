@@ -45,6 +45,19 @@ export interface ToolContext {
   origin: string;
 }
 
+/**
+ * Thrown by `normalize` when an argument cannot be made into a usable form.
+ * The loop turns it into a tool result the model can act on, rather than a
+ * generic failure, so a bad value is corrected instead of being signed into a
+ * card the visitor is shown and only fails after the tap.
+ */
+export class ToolArgumentError extends Error {
+  constructor(public readonly code: string) {
+    super(code);
+    this.name = 'ToolArgumentError';
+  }
+}
+
 export interface ToolParam {
   type: 'string' | 'number';
   description: string;
@@ -207,8 +220,12 @@ const writeTools: AssistantTool[] = [
       tz: { type: 'string', description: 'IANA timezone, so the email arrives at 6am local time.', maxLength: 80 },
     },
     normalize(args, ctx) {
+      const email = String(args.email ?? '').trim().toLowerCase();
+      // Checked here, not only in `run`: a card is a promise to the visitor,
+      // and an address that cannot work must never reach one.
+      if (!EMAIL_RE.test(email)) throw new ToolArgumentError('invalid_email');
       return {
-        email: String(args.email ?? '').trim().toLowerCase(),
+        email,
         lang: args.lang === 'zh' || args.lang === 'en' ? args.lang : ctx.lang,
         // addSubscriber falls back the same way; doing it here too means the
         // card shows the zone that will actually be stored.

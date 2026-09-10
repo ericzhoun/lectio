@@ -95,6 +95,30 @@ describe('runAssistantTurn', () => {
     expect(card.summary.fields.some((f) => f.value === 'r@e.com')).toBe(true);
   });
 
+  it('shows no card for a malformed email, and tells the model why', async () => {
+    // Validating only in `run` would sign a card, show a Subscribe button, and
+    // fail after the visitor tapped it.
+    const messages: Msg[] = [];
+    const events = await collect(
+      runAssistantTurn({
+        messages: [{ role: 'user', content: 'sign me up as bob@@' }],
+        ctx: await ctx(),
+        secret: 'sekrit',
+        callModel: async (msgs) => {
+          messages.length = 0;
+          messages.push(...(msgs as unknown as Msg[]));
+          return messages.some((m) => m.role === 'tool')
+            ? { toolCalls: [] }
+            : { toolCalls: [{ id: 'c1', name: 'subscribe_daily_email', args: { email: 'bob@@', lang: 'en' } }] };
+        },
+        streamModel: async () => textStream('that address looks wrong')(),
+      })
+    );
+    expect(events.find((e) => (e as { t: string }).t === 'card')).toBeUndefined();
+    const toolMsg = messages.find((m) => m.role === 'tool');
+    expect(JSON.parse(String(toolMsg!.content))).toEqual({ error: 'invalid_email' });
+  });
+
   it('stops after the hop cap instead of looping on tool calls', async () => {
     let modelCalls = 0;
     await collect(

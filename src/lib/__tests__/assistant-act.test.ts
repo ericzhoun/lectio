@@ -219,6 +219,18 @@ describe('POST /api/assistant/act', () => {
     expect(vi.mocked(performDraw).mock.calls[0][0].userId).toBe('site-user-9');
   });
 
+  it('refuses a card whose email no longer normalizes', async () => {
+    // A card minted before subscribe_daily_email checked the address in
+    // normalize must not reach `run` on this deploy.
+    const token = await signCardToken(
+      { tool: 'subscribe_daily_email', args: { email: 'not-an-email', lang: 'en', tz: 'UTC' }, visitorKey: 'u:u1' },
+      'sekrit'
+    );
+    const res = await POST(request({ token }));
+    expect(res.status).toBe(400);
+    expect((await res.json()) as { error: string }).toEqual({ error: 'invalid_card' });
+  });
+
   it('remembers a confirmed reading in the last_reading cookie', async () => {
     const token = await signCardToken(
       { tool: 'start_reading', args: { question: 'What now?', layout: 'single' }, visitorKey: 'u:u1' },

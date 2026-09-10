@@ -3,7 +3,14 @@
 // Write tools are proposals, never actions - they leave here as signed cards
 // and only /api/assistant/act can redeem one.
 import type OpenAI from 'openai';
-import { getTool, validateArgs, toolSchemasFor, type CardSummary, type ToolContext } from './assistantTools';
+import {
+  getTool,
+  validateArgs,
+  toolSchemasFor,
+  ToolArgumentError,
+  type CardSummary,
+  type ToolContext,
+} from './assistantTools';
 import { signCardToken } from './assistantCards';
 
 /** Hard cap: a model that keeps asking for tools gets cut off, not indulged. */
@@ -102,6 +109,13 @@ export async function* runAssistantTurn(opts: {
         ranRead = true;
         messages.push(toolResult(call, await tool.run(args, opts.ctx)));
       } catch (e) {
+        // A rejected argument is the model's mistake to correct, not a fault:
+        // report the reason and let it ask the visitor again.
+        if (e instanceof ToolArgumentError) {
+          messages.push(toolResult(call, { error: e.code }));
+          ranRead = true;
+          continue;
+        }
         console.error(`assistant tool ${tool.name} failed:`, e);
         messages.push(toolResult(call, { error: 'tool_failed' }));
         // A failed write never produced a card, so the model still needs a hop
