@@ -1,0 +1,30 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	// A separate Worker from "lectio" (see astro.config.mjs's auxiliaryWorkers
+	// entry). @astrojs/cloudflare v14 builds the site's own Worker with only a
+	// `fetch` export and has no config knob to add `scheduled` to it, so the
+	// Daily Invitation's hourly cron lives in its own small Worker instead -
+	// deployed together with the main one by the same `wrangler deploy`, but
+	// unable to break request handling for the site even if it misbehaves.
+	"name": "lectio-daily-invitation-cron",
+	"main": "./src/worker.ts",
+	"compatibility_date": "2026-08-27",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "lectio-readings",
+			"database_id": "b31145ba-04a6-4fc9-bc01-744f1224e3d8"
+		}
+	],
+	"observability": {
+		"enabled": true
+	},
+	// Hourly, not daily: subscribers are spread across timezones and each is
+	// sent at 06:00 in their own. Most ticks do no work.
+	"triggers": {
+		"crons": ["0 * * * *"]
+	}
+}

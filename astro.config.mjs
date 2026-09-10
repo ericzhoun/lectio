@@ -22,5 +22,10 @@ export default defineConfig({
   },
   adapter: cloudflare({
     imageService: 'passthrough',
+    // The Daily Invitation's hourly cron runs as its own Worker (see
+    // src/worker.ts and wrangler.cron.jsonc) rather than as a `scheduled`
+    // export on this Worker - v14 of this adapter has no config for adding
+    // one to the Worker it builds for `fetch`.
+    auxiliaryWorkers: [{ configPath: './wrangler.cron.jsonc' }],
   }),
 });

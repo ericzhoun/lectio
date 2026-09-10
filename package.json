@@ -9,7 +9,7 @@
     "dev": "astro dev",
     "prebuild": "node scripts/check-node.mjs && node scripts/build-lectionary.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-og-image.mjs",
     "build": "astro build",
-    "deploy": "npm run build && node scripts/check-build-output.mjs && wrangler deploy",
+    "deploy": "npm run build && node scripts/check-build-output.mjs && wrangler deploy && wrangler deploy -c dist/lectio_daily_invitation_cron/wrangler.json",
     "preview": "astro preview",
     "astro": "astro",
     "og": "node scripts/generate-og-image.mjs",
