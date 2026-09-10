@@ -287,7 +287,32 @@ const t = {
     failed: zh ? '没有成功，请再试一次。' : 'That did not go through. Please try again.',
     done: zh ? '已完成。' : 'Done.',
     openReading: zh ? '查看完整默想' : 'Open the full reading',
+    billingLabel: zh ? '打开账单页面' : 'Open your billing portal',
+    billingOpened: zh ? '已在新标签页打开账单页面。' : 'Your billing portal opened in a new tab.',
+    billingBlocked: zh ? '浏览器拦截了新窗口，请点下面的链接。' : 'Your browser blocked the new tab - use the link below.',
   };
+
+  // Only ever hand an http(s) URL to an anchor or window.open.
+  function safeHttpUrl(raw: string): string | null {
+    try {
+      const u = new URL(raw, location.origin);
+      return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : null;
+    } catch { return null; }
+  }
+
+  // The billing card must never dead-end: the anchor is the primary route and
+  // is always rendered, whether or not the popup attempt survived the blocker.
+  function replaceCardWithLink(el: HTMLElement, text: string, href: string, label: string) {
+    replaceCard(el, text);
+    const a = document.createElement('a');
+    a.setAttribute('href', href);
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+    a.className = 'assistant-card-link';
+    a.textContent = label;
+    el.append(a);
+    scroll();
+  }
 
   function replaceCard(el: HTMLElement, text: string) {
     el.replaceChildren();
@@ -344,7 +369,16 @@ const t = {
     // tool_failed, forbidden_origin, network and anything else share one line.
     if (data.error) return replaceCard(el, CARD_T.failed);
     const result = data.result;
-    if (result && typeof result.url === 'string') window.open(result.url, '_blank', 'noopener');
+    if (result && typeof result.url === 'string') {
+      const href = safeHttpUrl(result.url);
+      if (href) {
+        let opened = false;
+        try { opened = window.open(href, '_blank', 'noopener') !== null; } catch { opened = false; }
+        replaceCardWithLink(el, opened ? CARD_T.billingOpened : CARD_T.billingBlocked, href, CARD_T.billingLabel);
+        return;
+      }
+      return replaceCard(el, CARD_T.failed);
+    }
     if (result && result.kind === 'reading') {
       renderReading(result as unknown as Reading);
       el.remove();
@@ -645,6 +679,12 @@ const t = {
   .assistant-card-actions button:disabled { opacity: 0.55; cursor: default; }
   .assistant-card-resolved { border-style: dashed; }
   .assistant-card-note { margin: 0; color: #444; }
+  .assistant-card-link {
+    display: inline-flex; align-items: center; min-height: 44px; margin-top: 8px;
+    padding: 4px 14px; border-radius: 999px;
+    background: #5b4b8a; color: #fff; text-decoration: none;
+    font-size: 13px; font-weight: 600;
+  }
   /* Inline summary of a reading the visitor just confirmed. */
   .assistant-reading-card {
     align-self: flex-start; max-width: 100%; width: 100%;
