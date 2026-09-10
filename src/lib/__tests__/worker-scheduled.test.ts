@@ -16,7 +16,10 @@ const SIX_AM_PACIFIC = new Date('2026-09-09T13:00:00Z');
 let db: any;
 
 function okFetch() {
-  return vi.fn().mockResolvedValue(new Response(JSON.stringify({ data: [] }), { status: 200 }));
+  // A fresh Response per call: mockResolvedValue would hand back the SAME
+  // instance every time, and a Response body can only be read once - a
+  // second call in the same test would throw on a consumed body.
+  return vi.fn().mockImplementation(async () => new Response(JSON.stringify({ data: [] }), { status: 200 }));
 }
 
 beforeEach(async () => {
@@ -126,6 +129,6 @@ describe('sendDailyInvitations', () => {
       fetchImpl: fetchImpl as unknown as typeof fetch,
     });
     expect(fetchImpl).not.toHaveBeenCalled();
-    expect(result.skipped).toBeGreaterThanOrEqual(0);
+    expect(result.skipped).toBe(1);
   });
 });
