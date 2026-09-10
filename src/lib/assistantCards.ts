@@ -23,15 +23,31 @@ export async function signCardToken(
   return signJsonToken({ v: 1, ...payload, ts: Date.now() } satisfies CardPayload, secret);
 }
 
+/**
+ * The card's own claims: signature, shape and expiry, with the visitor binding
+ * deliberately left unchecked. Authorizes nothing on its own - a caller that
+ * acts on the payload must still confirm `visitorKey`. It exists so the confirm
+ * endpoint can tell "this card was issued to a signed-in visitor who is no
+ * longer signed in" (answer: sign in again) from "this card belongs to somebody
+ * else" (answer: nothing at all).
+ */
+export async function readCardToken(
+  token: string | undefined | null,
+  secret: string
+): Promise<CardPayload | null> {
+  const data = await readJsonToken(token, secret);
+  if (!isCardPayload(data)) return null;
+  if (Date.now() - data.ts > CARD_TTL_MS) return null;
+  return data;
+}
+
 export async function verifyCardToken(
   token: string | undefined | null,
   visitorKey: string,
   secret: string
 ): Promise<CardPayload | null> {
-  const data = await readJsonToken(token, secret);
-  if (!isCardPayload(data)) return null;
-  if (data.visitorKey !== visitorKey) return null;
-  if (Date.now() - data.ts > CARD_TTL_MS) return null;
+  const data = await readCardToken(token, secret);
+  if (!data || data.visitorKey !== visitorKey) return null;
   return data;
 }
 

@@ -336,8 +336,14 @@ const writeTools: AssistantTool[] = [
         question: String(args.question ?? ''),
         verses: outcome.verses.map((v) => ({
           reference: ctx.lang === 'zh' ? (v.refZh ?? v.refEn) : v.refEn,
+          // The English ref is the verse's identity, not a display string:
+          // rebuildDrawnVerses keys off it when the last_reading cookie is
+          // redeemed, so it has to survive even a zh reading. Same for tags,
+          // which the cached rendering needs.
+          refEn: v.refEn,
           position: v.position ?? '',
           text: v.interp_text ?? '',
+          tags: v.tags ?? [],
         })),
         summary: outcome.summary,
         followUps: outcome.followUps,
