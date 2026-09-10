@@ -4,15 +4,13 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { readCardToken } from '../../../lib/assistantCards';
-import { getTool, validateArgs, type ToolContext } from '../../../lib/assistantTools';
-import { verifySessionToken } from '../../../lib/session';
-import { resolveTier } from '../../../lib/entitlements';
+import { getTool, validateArgs } from '../../../lib/assistantTools';
+import { buildToolContext } from '../../../lib/assistantContext';
 import { LAST_READING_COOKIE, createLastReadingToken } from '../../../lib/lastReading';
 import { saveReadingRendering } from '../../../lib/db';
 
 export const prerender = false;
 
-const ANON_COOKIE = 'chat_anon';
 const LAST_READING_MAX_AGE = 60 * 60 * 24 * 7;
 
 function json(data: unknown, status: number): Response {
@@ -67,15 +65,19 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     return json({ error: 'invalid_body' }, 400);
   }
 
-  const sessionCookie = cookies.get('session')?.value;
-  const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
-  const anonKey = cookies.get(ANON_COOKIE)?.value ?? '';
-  // Same prefix guard the chat endpoint applies: chat_anon is self-issued and
-  // httpOnly, but a visitor can still present whatever they like in their own
-  // browser, and only the `a:` namespace is theirs to claim. Without this, a
-  // signed-out request carrying chat_anon=u:<someone> would be treated as that
-  // someone for card-binding purposes.
-  const visitorKey = userId ? `u:${userId}` : /^a:[A-Za-z0-9-]{1,64}$/.test(anonKey) ? anonKey : '';
+  // One shared builder with the chat endpoint (src/lib/assistantContext.ts),
+  // so the two can never disagree about who is asking. This route does not
+  // issue a chat_anon cookie - a confirm arriving without one can never match
+  // a card's binding, and minting a key here would only hide that - but it
+  // does mint the site's `user_id` when a guest has none, because this is
+  // where reading quota is actually spent.
+  const ctx = await buildToolContext({
+    request,
+    cookies,
+    issueVisitorCookie: false,
+    issueUsageCookie: true,
+  });
+  const { userId, visitorKey, lang } = ctx;
 
   // Signature, shape and expiry only - the visitor binding is checked below,
   // after the tool is known, so a card whose session has lapsed can be told
@@ -99,21 +101,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   // An empty visitorKey (signed out, no usable chat_anon cookie) matches
   // nothing, since a card is never signed without one.
   if (!visitorKey || card.visitorKey !== visitorKey) return json({ error: 'invalid_card' }, 400);
-
-  const lang: 'zh' | 'en' = cookies.get('lang')?.value === 'zh' ? 'zh' : 'en';
-  const ctx: ToolContext = {
-    userId,
-    registered: Boolean(userId),
-    tier: userId ? await resolveTier(userId) : 'free',
-    lang,
-    visitorKey,
-    // Same reading-quota subject the chat endpoint builds: user id, else the
-    // site's own user_id cookie, else the visitor key. Anything else bills a
-    // draw to a bucket the site never reads.
-    usageSubject: userId ?? cookies.get('user_id')?.value ?? visitorKey,
-    db: env.DB,
-    origin: url.origin,
-  };
 
   // card.args, not body.args: the visitor confirmed what the card showed. They
   // were validated and normalized when the card was signed; re-running both is

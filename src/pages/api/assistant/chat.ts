@@ -14,15 +14,11 @@ import {
   type PageContext,
 } from '../../../lib/assistant';
 import { runAssistantTurn } from '../../../lib/assistantLoop';
-import type { ToolContext } from '../../../lib/assistantTools';
+import { buildToolContext } from '../../../lib/assistantContext';
 import { getChatUsage, incrementChatUsage } from '../../../lib/chatUsage';
-import { verifySessionToken } from '../../../lib/session';
-import { resolveTier } from '../../../lib/entitlements';
 
 export const prerender = false;
 
-const ANON_COOKIE = 'chat_anon';
-const ANON_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 const MESSAGE_MAX_CHARS = 2000;
 
 function json(data: unknown, status: number): Response {
@@ -76,10 +72,6 @@ function sanitizeContext(raw: unknown): PageContext | null {
   return { path, title, reading };
 }
 
-function sanitizeLang(cookies: { get(name: string): { value: string } | undefined }): 'zh' | 'en' {
-  return cookies.get('lang')?.value === 'zh' ? 'zh' : 'en';
-}
-
 /** Tool arguments arrive as a model-written JSON string; anything else is no arguments. */
 function safeParseArgs(raw: string | undefined): Record<string, unknown> {
   if (!raw) return {};
@@ -104,36 +96,19 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const message = sanitizeMessage(body.message);
   if (!message) return json({ error: 'empty_message' }, 400);
 
-  // Resolve the visitor: registered user, else anonymous cookie (created on
-  // the first message - page renders never set cookies).
-  const sessionCookie = cookies.get('session')?.value;
-  const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
-
-  let visitorKey: string;
-  let registered: boolean;
-  let tier: 'free' | 'basic' | 'pro' = 'free';
-  if (userId) {
-    registered = true;
-    tier = await resolveTier(userId);
-    visitorKey = `u:${userId}`;
-  } else {
-    registered = false;
-    const existing = cookies.get(ANON_COOKIE)?.value;
-    // Accept any a:-namespaced key (the cookie is httpOnly and self-issued);
-    // the prefix check keeps forged cookies out of registered users' u: buckets.
-    if (existing && /^a:[A-Za-z0-9-]{1,64}$/.test(existing)) {
-      visitorKey = existing;
-    } else {
-      visitorKey = `a:${crypto.randomUUID()}`;
-      cookies.set(ANON_COOKIE, visitorKey, {
-        path: '/',
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: true,
-        maxAge: ANON_COOKIE_MAX_AGE,
-      });
-    }
-  }
+  // Resolve the visitor and everything the tool layer needs in one place
+  // (src/lib/assistantContext.ts), so this endpoint and the confirm endpoint
+  // can never disagree about who is asking. Only chat issues the anonymous
+  // chat cookie - page renders never set cookies, so the first message is
+  // where an anonymous visitor gets their key - and only the confirm endpoint
+  // mints a `user_id`, because only it spends reading quota.
+  const ctx = await buildToolContext({
+    request,
+    cookies,
+    issueVisitorCookie: true,
+    issueUsageCookie: false,
+  });
+  const { visitorKey, registered, tier } = ctx;
 
   const used = await getChatUsage(visitorKey, env.DB);
   const quota = evaluateChatQuota({ registered, tier }, used);
@@ -142,7 +117,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   }
 
   const system = buildSystemPrompt({
-    lang: sanitizeLang(cookies),
+    lang: ctx.lang,
     context: sanitizeContext(body.context),
     grounding: buildGroundingFacts(),
   });
@@ -201,21 +176,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     });
   }
 
-  const ctx: ToolContext = {
-    userId,
-    registered,
-    tier,
-    lang: sanitizeLang(cookies),
-    visitorKey,
-    // The reading quota lives in a different namespace from the chat quota:
-    // `usage_daily` is keyed by user id, else by the site's `user_id` cookie.
-    // A visitor with neither has never drawn, so falling back to the visitor
-    // key looks up nothing, which is the truthful answer rather than a stale one.
-    usageSubject: userId ?? cookies.get('user_id')?.value ?? visitorKey,
-    db: env.DB,
-    origin: new URL(request.url).origin,
-  };
-
   const responseBody = new ReadableStream<Uint8Array>({
     async start(controller) {
       const send = (event: unknown) =>
@@ -266,7 +226,14 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         // The client may already be gone, in which case enqueueing throws;
         // that is not a second failure worth reporting.
         try {
-          send({ t: 'done', error: 'upstream_error' });
+          // Carry the same remaining the success frame would have: a turn
+          // that delivered text was charged for it, and the widget's counter
+          // must not be left showing the pre-turn number.
+          send({
+            t: 'done',
+            error: 'upstream_error',
+            remaining: Math.max(0, quota.remaining - (charged ? 1 : 0)),
+          });
         } catch {
           /* stream already closed */
         }

@@ -267,8 +267,45 @@ describe('POST /api/assistant/chat - protocol 2', () => {
         .trim()
         .split('\n')
         .map((line) => JSON.parse(line));
-      expect(events).toEqual([{ t: 'done', error: 'upstream_error' }]);
+      // Nothing was delivered, so nothing was charged - but the frame still
+      // carries a remaining, or the widget's counter is left stale.
+      expect(events).toEqual([
+        { t: 'done', error: 'upstream_error', remaining: ANON_DAILY_MESSAGES },
+      ]);
       expect(await getChatUsage(anon, db as never)).toBe(0);
+    } finally {
+      errorSpy.mockRestore();
+    }
+  });
+
+  it('reports the charged remaining in the error frame when the turn already delivered text', async () => {
+    const anon = 'a:proto2-late-boom';
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    store.create = vi.fn(async (opts: { stream?: boolean }) =>
+      opts.stream
+        ? (async function* () {
+            yield { choices: [{ delta: { content: 'peace' } }] };
+            throw new Error('died after delivering');
+          })()
+        : { choices: [{ message: { content: null, tool_calls: [] } }] }
+    );
+    try {
+      const cookies = makeCookies({ chat_anon: anon });
+      const res = await POST(
+        { request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never
+      );
+      const events = (await res.text())
+        .trim()
+        .split('\n')
+        .map((line) => JSON.parse(line));
+      expect(events[0]).toEqual({ t: 'text', v: 'peace' });
+      // The message was charged, so the counter the widget shows has to drop.
+      expect(await getChatUsage(anon, db as never)).toBe(1);
+      expect(events.at(-1)).toEqual({
+        t: 'done',
+        error: 'upstream_error',
+        remaining: ANON_DAILY_MESSAGES - 1,
+      });
     } finally {
       errorSpy.mockRestore();
     }
@@ -325,7 +362,25 @@ describe('POST /api/assistant/chat - protocol 2', () => {
     const cookies = makeCookies({ chat_anon: 'a:subject-none' });
     await POST({ request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never);
     // Such a visitor has never drawn, so this key looks up nothing - the
-    // truthful answer rather than a stale one.
+    // truthful answer rather than a stale one. Chat never mints a user_id:
+    // it spends no reading quota, so it has nothing to bill.
     expect(loopCalls.at(-1)!.usageSubject).toBe('a:subject-none');
+    expect(cookies.setCalls.find((c) => c.name === 'user_id')).toBeUndefined();
+  });
+
+  it('does not let an empty user_id cookie collapse visitors into one bucket', async () => {
+    store.create = vi.fn(async (opts: { stream?: boolean }) =>
+      opts.stream
+        ? (async function* () {
+            yield { choices: [{ delta: { content: 'ok' } }] };
+          })()
+        : { choices: [{ message: { content: null, tool_calls: [] } }] }
+    );
+    loopCalls.length = 0;
+    // `??` would have kept the empty string here and billed every such
+    // visitor to one shared '' bucket.
+    const cookies = makeCookies({ chat_anon: 'a:subject-empty', user_id: '   ' });
+    await POST({ request: makePostRequest({ message: 'hello', protocol: 2 }), cookies } as never);
+    expect(loopCalls.at(-1)!.usageSubject).toBe('a:subject-empty');
   });
 });

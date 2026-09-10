@@ -34,9 +34,11 @@ export interface ToolContext {
    * The reading-quota subject, which is a different namespace from `visitorKey`:
    * the signed-in user id, else the site's `user_id` cookie value, else the
    * visitor key. `usage_daily` rows are keyed this way, so anything else looks
-   * up nothing and reports a full allowance to someone who has spent it. A
-   * visitor with no `user_id` cookie has never drawn, so the last fallback
-   * missing is the right answer rather than a stale one.
+   * up nothing and reports a full allowance to someone who has spent it.
+   * Built in src/lib/assistantContext.ts, which mints a `user_id` for a guest
+   * on the confirm path rather than billing them to a bucket the site never
+   * reads; the visitor-key fallback is only ever reached on the read path,
+   * where a visitor with no site id has genuinely never drawn.
    */
   usageSubject: string;
   db: D1Database;
