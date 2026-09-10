@@ -47,7 +47,13 @@ export function dueNow(now: Date, subscribers: Subscriber[]): DueSubscriber[] {
   const due: DueSubscriber[] = [];
   for (const subscriber of subscribers) {
     const { day, hour } = localDayAndHour(now, subscriber.tz);
-    if (hour !== SEND_HOUR) continue;
+    // A window, not an instant: Resend can 429/500, or Cloudflare can skip a
+    // tick, and an hourly cron only gets one shot per hour anyway. Four
+    // chances (06:00-09:00 local) let a failed send retry on a later tick
+    // within the same morning - last_sent is what keeps that safe, since a
+    // subscriber who already has today's date recorded is skipped regardless
+    // of how many of these hours still fire.
+    if (hour < SEND_HOUR || hour > SEND_HOUR + 3) continue;
     // Treat malformed lastSent as never sent - fail open (at worst one duplicate)
     // rather than fail closed (subscriber goes silent forever). DAY_RE validates
     // the YYYY-MM-DD format; corrupt or missing values short-circuit to send.

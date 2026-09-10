@@ -128,7 +128,17 @@ so a fresh database needs no migration.
 only when `last_sent` is null or strictly less than the reader's current local
 day. The write happens after Resend accepts the batch, never before. A crash
 between the API call and the write therefore risks one duplicate on the next
-hourly tick, which is strictly better than a silent skipped day.
+eligible tick, which is strictly better than a silent skipped day.
+
+A subscriber is not due on a single instant - they are due across a window,
+06:00 through 09:00 local (four hourly ticks). This is what makes retry
+possible at all: if Resend returns 429/500, or Cloudflare skips a tick, the
+subscriber is still due on the next tick inside the window, because
+`last_sent` was never written. Without a window, a single-instant check would
+make a failed 06:00 send permanent for that day - there would be no later
+tick left to retry it on. The window cannot cause a double-send: as soon as
+one tick's batch succeeds and `last_sent` is written for today, every later
+tick in the same window sees that row as no longer eligible.
 
 ## Modules
 
@@ -232,10 +242,10 @@ upsert, changing `ON CONFLICT DO NOTHING` to an update of `lang`, `tz`, and
 | Failure | Behaviour |
 |---------|-----------|
 | `RESEND_API_KEY` unset | `scheduled()` logs an error and returns. No throw, no partial state. |
-| Resend returns non-2xx | Log the status and body, do not write `last_sent`. The next hourly tick retries. |
-| Individual address fails inside a batch | Mark only the addresses that succeeded. |
+| Resend returns non-2xx | Log the status and body, do not write `last_sent`. Retried on the following ticks within the same 06:00-09:00 local window. |
+| Individual address fails inside a batch | Mark only the addresses that succeeded; the rest retry on the following ticks within the window, same as a whole-batch failure. |
 | Passage resolution fails for the day | Skip the entire send for that day rather than mail a broken email. Log loudly. |
-| D1 unavailable | The cron invocation fails and Cloudflare records it. No retry logic beyond the next tick. |
+| D1 unavailable | The cron invocation fails and Cloudflare records it. Retried on the following ticks within the window, same as any other failure. |
 | Reader has an invalid stored tz | Treated as `America/Los_Angeles` at read time, so they still receive mail. |
 
 Every path logs through `console.error` with a `daily-invitation:` prefix,

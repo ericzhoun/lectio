@@ -32,8 +32,8 @@ export async function sendDailyInvitations(
 
   for (const subscriber of due) {
     const token = await signMailToken(subscriber.email, deps.tokenSecret);
-    const link = unsubscribeUrl(subscriber.email, token);
-    const rendered = renderDailyEmail(subscriber.localDay, subscriber.lang, link);
+    const link = unsubscribeUrl(subscriber.email, token, subscriber.lang);
+    const rendered = renderDailyEmail(subscriber.localDay, subscriber.lang, link, subscriber.tz);
     if (!rendered) {
       // No passage for this day: a missed morning beats a broken one.
       console.error(
@@ -58,7 +58,8 @@ export async function sendDailyInvitations(
 
   const { delivered, failed } = await sendBatch(messages, deps.apiKey, deps.fetchImpl);
   if (failed.length > 0) {
-    // Deliberately not marked: the next hourly tick tries them again.
+    // Deliberately not marked: dueNow's send window (06:00-09:00 local)
+    // means a later tick within this same morning tries them again.
     console.error('daily-invitation: failed to deliver to', failed.length, 'readers');
   }
 

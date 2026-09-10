@@ -32,11 +32,27 @@ describe('localDayAndHour', () => {
 });
 
 describe('dueNow', () => {
-  it('sends at 06:00 local and not at other hours', () => {
+  it('sends at 06:00 local and not before or after the retry window', () => {
+    const at5 = new Date('2026-03-10T12:00:00Z');
     const at6 = new Date('2026-03-10T13:00:00Z');
-    const at7 = new Date('2026-03-10T14:00:00Z');
+    const at10 = new Date('2026-03-10T17:00:00Z');
+    expect(dueNow(at5, [sub()])).toHaveLength(0);
     expect(dueNow(at6, [sub()])).toHaveLength(1);
-    expect(dueNow(at7, [sub()])).toHaveLength(0);
+    expect(dueNow(at10, [sub()])).toHaveLength(0);
+  });
+
+  it('is due at 6, 7, 8 and 9 local but not at 5 or 10', () => {
+    const hours = [5, 6, 7, 8, 9, 10];
+    const results = hours.map((h) =>
+      dueNow(new Date(`2026-03-10T${String(13 + (h - 6)).padStart(2, '0')}:00:00Z`), [sub()])
+        .length
+    );
+    expect(results).toEqual([0, 1, 1, 1, 1, 0]);
+  });
+
+  it('a subscriber already sent today is not due at 7 even though the window is open', () => {
+    const at7 = new Date('2026-03-10T14:00:00Z');
+    expect(dueNow(at7, [sub({ lastSent: '2026-03-10' })])).toHaveLength(0);
   });
 
   it('picks each zone at its own 06:00 from one hourly tick', () => {

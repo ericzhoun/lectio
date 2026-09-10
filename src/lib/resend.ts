@@ -56,7 +56,8 @@ export async function sendBatch(
         body: JSON.stringify(chunk.map(toPayload)),
       });
       if (!response.ok) {
-        // Leave last_sent alone for these; the next hourly tick retries.
+        // Leave last_sent alone for these; dueNow's send window (06:00-09:00
+        // local) means a later tick this same morning retries them.
         console.error(
           'daily-invitation: resend rejected a batch:',
           response.status,
