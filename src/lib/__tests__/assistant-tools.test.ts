@@ -84,6 +84,14 @@ describe('get_me', () => {
     expect(me.daily_email).toMatchObject({ subscribed: true, status: 'active' });
   });
 
+  it('says "unlimited" rather than a value JSON turns into null', async () => {
+    // QUOTA.pro is Infinity, and JSON.stringify(Infinity) is null, which the
+    // model would read as zero readings left.
+    const me = (await getTool('get_me')!.run({}, await ctx({ tier: 'pro' }))) as Record<string, unknown>;
+    expect(me.readings_left_today).toBe('unlimited');
+    expect(JSON.parse(JSON.stringify(me)).readings_left_today).toBe('unlimited');
+  });
+
   it('reports a guest without inventing account data', async () => {
     const me = (await getTool('get_me')!.run(
       {}, await ctx({ userId: null, registered: false, visitorKey: 'a:x' })

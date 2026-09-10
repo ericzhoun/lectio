@@ -5,7 +5,7 @@
 import type { D1Database } from '@cloudflare/workers-types';
 import type { Lang } from './reading';
 import {
-  ANON_DAILY_DRAWS, REGISTERED_DAILY_DRAWS, QUOTA, type Tier,
+  ANON_DAILY_DRAWS, QUOTA, type Tier,
 } from './entitlements';
 import { chatQuotaFor } from './assistant';
 import { getTodayUsage } from './usage';
@@ -66,15 +66,17 @@ const readTools: AssistantTool[] = [
       const usageSubject = ctx.userId ?? ctx.visitorKey;
       const usedToday = await getTodayUsage(usageSubject);
       const chatUsed = await getChatUsage(ctx.visitorKey, ctx.db);
-      const readingLimit = ctx.registered
-        ? ctx.tier === 'free'
-          ? REGISTERED_DAILY_DRAWS
-          : QUOTA[ctx.tier]
-        : ANON_DAILY_DRAWS;
+      // QUOTA.free is REGISTERED_DAILY_DRAWS, so the tier lookup covers every
+      // registered visitor; only anonymous ones have a separate allowance.
+      const readingLimit = ctx.registered ? QUOTA[ctx.tier] : ANON_DAILY_DRAWS;
       const base: Record<string, unknown> = {
         registered: ctx.registered,
         tier: ctx.tier,
-        readings_left_today: Math.max(0, readingLimit - usedToday),
+        // QUOTA.pro is Infinity, and JSON.stringify(Infinity) is null, which a
+        // model reads as none left. Say so in words instead.
+        readings_left_today: Number.isFinite(readingLimit)
+          ? Math.max(0, readingLimit - usedToday)
+          : 'unlimited',
         chat_messages_left_today: Math.max(0, chatQuotaFor({ registered: ctx.registered, tier: ctx.tier }) - chatUsed),
       };
       if (!ctx.userId) return base;
