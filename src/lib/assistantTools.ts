@@ -14,7 +14,7 @@ import { getChatUsage } from './chatUsage';
 import { getCreditBalance } from './credits';
 import { getReadingsForUser } from './db';
 import { getUserById } from './users';
-import { addSubscriber, getSubscriber, setStatus } from './subscribers';
+import { addSubscriber, ensureSubscriberTable, getSubscriber, setStatus } from './subscribers';
 import { getLibraryVerses } from './scripture';
 import { isValidTimeZone } from './localDay';
 import { DEFAULT_TIMEZONE } from './mailSchedule';
@@ -100,6 +100,11 @@ const readTools: AssistantTool[] = [
       base.credits = await getCreditBalance(ctx.userId, ctx.db);
       if (user?.email) {
         base.email = user.email;
+        // Nothing creates daily_invitations at deploy time, and the "already
+        // created" guard is per-isolate: an isolate whose first touch of the
+        // table is the assistant would otherwise query a table that is missing
+        // (or production's legacy three-column one).
+        await ensureSubscriberTable(ctx.db);
         const sub = await getSubscriber(ctx.db, user.email);
         base.daily_email = sub
           ? { subscribed: sub.status === 'active', status: sub.status, lang: sub.lang, timezone: sub.tz }
@@ -212,7 +217,7 @@ const writeTools: AssistantTool[] = [
       return {
         title: 'Subscribe to the Daily Invitation',
         fields: [
-          { label: 'Email', value: String(args.email) },
+          { label: 'Email', value: String(args.email ?? '') },
           { label: 'Language', value: args.lang === 'zh' ? '中文' : 'English' },
           { label: 'Arrives', value: `6am ${String(args.tz ?? DEFAULT_TIMEZONE)}` },
           { label: 'Costs', value: 'nothing; unsubscribe from any email' },
@@ -223,6 +228,11 @@ const writeTools: AssistantTool[] = [
     async run(args, ctx) {
       const email = String(args.email ?? '').trim().toLowerCase();
       if (!EMAIL_RE.test(email)) return { error: 'invalid_email' };
+      // addSubscriber does not create the table, and the guard behind this call
+      // is per-isolate module state: without it, an isolate whose first
+      // subscriber write is the assistant's INSERT fails after the visitor has
+      // already tapped confirm.
+      await ensureSubscriberTable(ctx.db);
       await addSubscriber(ctx.db, {
         email,
         lang: args.lang === 'zh' ? 'zh' : 'en',
@@ -247,7 +257,7 @@ const writeTools: AssistantTool[] = [
       return {
         title: 'Stop the Daily Invitation',
         fields: [
-          { label: 'Email', value: String(args.email) },
+          { label: 'Email', value: String(args.email ?? '') },
           {
             label: 'What happens',
             value:
@@ -266,6 +276,7 @@ const writeTools: AssistantTool[] = [
       // nothing at all, so they always get the link.
       const owner = ctx.userId ? await getUserById(ctx.userId, ctx.db) : null;
       if (owner?.email && owner.email.trim().toLowerCase() === email) {
+        await ensureSubscriberTable(ctx.db);
         await setStatus(ctx.db, email, 'unsubscribed');
         return { applied: true, email };
       }
@@ -293,7 +304,7 @@ const writeTools: AssistantTool[] = [
       return {
         title: 'Receive a reading',
         fields: [
-          { label: 'Question', value: String(args.question) },
+          { label: 'Question', value: String(args.question ?? '') },
           { label: 'Layout', value: spread.name[ctx.lang] },
           {
             label: 'Costs',

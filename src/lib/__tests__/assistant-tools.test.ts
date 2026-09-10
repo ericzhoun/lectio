@@ -181,6 +181,20 @@ describe('write tools', () => {
     expect((await getSubscriber(c.db, 'reader@example.com'))?.status).toBe('active');
   });
 
+  it('creates the subscriber table before writing to it', async () => {
+    // Nothing creates daily_invitations at deploy time and the "already
+    // created" guard is per-isolate module state, so an isolate whose first
+    // subscriber write is the assistant's must still create it - otherwise the
+    // INSERT throws after the visitor has already tapped confirm. The ctx()
+    // helper ensures the table itself, which would hide this.
+    resetSubscriberTableCache();
+    const db = new D1Memory() as unknown as D1Database;
+    const c = { ...(await ctx()), db };
+    resetSubscriberTableCache();
+    await getTool('subscribe_daily_email')!.run({ email: 'fresh@example.com', lang: 'en', tz: 'UTC' }, c);
+    expect((await getSubscriber(db, 'fresh@example.com'))?.status).toBe('active');
+  });
+
   it('refuses to unsubscribe an address the visitor does not own', async () => {
     const c = await ctx();
     await addSubscriber(c.db, { email: 'someone@else.com', lang: 'en', tz: 'UTC' });
