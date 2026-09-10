@@ -22,11 +22,19 @@ export interface ModelToolCall {
 
 export interface ModelReply {
   toolCalls: ModelToolCall[];
+  /**
+   * The assistant turn that asked for those calls, verbatim from the provider
+   * when the caller has it. The API rejects a `role: 'tool'` message whose
+   * `tool_call_id` is not on the immediately preceding assistant message, so
+   * one of these has to go into the history before the results. When it is
+   * absent the loop synthesizes an equivalent from `toolCalls`.
+   */
+  assistantMessage?: OpenAI.Chat.Completions.ChatCompletionMessageParam;
 }
 
-export type LoopEvent =
-  | { t: 'text'; v: string }
-  | { t: 'card'; id: string; tool: string; token: string; summary: CardSummary };
+export type CardEvent = { t: 'card'; id: string; tool: string; token: string; summary: CardSummary };
+
+export type LoopEvent = { t: 'text'; v: string } | CardEvent;
 
 type Messages = OpenAI.Chat.Completions.ChatCompletionMessageParam[];
 
@@ -40,11 +48,14 @@ export async function* runAssistantTurn(opts: {
 }): AsyncGenerator<LoopEvent> {
   const messages: Messages = [...opts.messages];
   const tools = toolSchemasFor(opts.ctx);
-  const cards: LoopEvent[] = [];
+  const cards: CardEvent[] = [];
 
   for (let hop = 0; hop < MAX_TOOL_HOPS; hop += 1) {
     const reply = await opts.callModel(messages, tools);
     if (reply.toolCalls.length === 0) break;
+
+    // Every tool result below answers this turn, and must follow it directly.
+    messages.push(reply.assistantMessage ?? assistantToolCallTurn(reply.toolCalls));
 
     let ranRead = false;
     for (const call of reply.toolCalls) {
@@ -113,6 +124,20 @@ export async function* runAssistantTurn(opts: {
     yield { t: 'text', v: delta };
   }
   for (const card of cards) yield card;
+}
+
+function assistantToolCallTurn(
+  calls: ModelToolCall[]
+): OpenAI.Chat.Completions.ChatCompletionMessageParam {
+  return {
+    role: 'assistant',
+    content: null,
+    tool_calls: calls.map((c) => ({
+      id: c.id,
+      type: 'function' as const,
+      function: { name: c.name, arguments: JSON.stringify(c.args ?? {}) },
+    })),
+  } as OpenAI.Chat.Completions.ChatCompletionMessageParam;
 }
 
 function toolResult(call: ModelToolCall, result: unknown): OpenAI.Chat.Completions.ChatCompletionMessageParam {
