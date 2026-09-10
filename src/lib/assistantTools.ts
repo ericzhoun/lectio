@@ -21,8 +21,17 @@ export interface ToolContext {
   registered: boolean;
   tier: Tier;
   lang: Lang;
-  /** `u:<userId>` or `a:<uuid>`; the card-binding subject. */
+  /** `u:<userId>` or `a:<uuid>`; the card-binding and chat-quota subject. */
   visitorKey: string;
+  /**
+   * The reading-quota subject, which is a different namespace from `visitorKey`:
+   * the signed-in user id, else the site's `user_id` cookie value, else the
+   * visitor key. `usage_daily` rows are keyed this way, so anything else looks
+   * up nothing and reports a full allowance to someone who has spent it. A
+   * visitor with no `user_id` cookie has never drawn, so the last fallback
+   * missing is the right answer rather than a stale one.
+   */
+  usageSubject: string;
   db: D1Database;
   origin: string;
 }
@@ -63,8 +72,7 @@ const readTools: AssistantTool[] = [
     auth: 'any',
     params: {},
     async run(_args, ctx) {
-      const usageSubject = ctx.userId ?? ctx.visitorKey;
-      const usedToday = await getTodayUsage(usageSubject);
+      const usedToday = await getTodayUsage(ctx.usageSubject);
       const chatUsed = await getChatUsage(ctx.visitorKey, ctx.db);
       // QUOTA.free is REGISTERED_DAILY_DRAWS, so the tier lookup covers every
       // registered visitor; only anonymous ones have a separate allowance.
@@ -218,6 +226,8 @@ export function toolSchemasFor(
               type: spec.type,
               description: spec.description,
               ...(spec.enum ? { enum: spec.enum } : {}),
+              // Tell the model the bound it is held to, or validateArgs truncates silently.
+              ...(spec.maxLength ? { maxLength: spec.maxLength } : {}),
             },
           ])
         ),
