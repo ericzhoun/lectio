@@ -3,7 +3,8 @@
 // the context from cookies. No tool takes an identity parameter, so a model
 // that invents one has nothing to bind it to.
 import type { D1Database } from '@cloudflare/workers-types';
-import type { Lang } from './reading';
+import { env } from 'cloudflare:workers';
+import { SPREADS, type Lang } from './reading';
 import {
   ANON_DAILY_DRAWS, QUOTA, type Tier,
 } from './entitlements';
@@ -13,8 +14,14 @@ import { getChatUsage } from './chatUsage';
 import { getCreditBalance } from './credits';
 import { getReadingsForUser } from './db';
 import { getUserById } from './users';
-import { getSubscriber } from './subscribers';
+import { addSubscriber, getSubscriber, setStatus } from './subscribers';
 import { getLibraryVerses } from './scripture';
+import { isValidTimeZone } from './localDay';
+import { DEFAULT_TIMEZONE } from './mailSchedule';
+import { performDraw } from './draw';
+import { getSubscription } from './subscriptions';
+import { getStripeClient } from './stripe';
+import { sendUnsubscribeLink } from './unsubscribe';
 
 export interface ToolContext {
   userId: string | null;
@@ -173,7 +180,198 @@ const readTools: AssistantTool[] = [
   },
 ];
 
-export const ASSISTANT_TOOLS: AssistantTool[] = [...readTools];
+// A write tool is a proposal, never an action. The chat loop never calls `run`:
+// it builds a signed confirm card from `normalize` + `summarize`, and only the
+// visitor's tap on that card reaches `run`. So `normalize` has to produce the
+// exact form that will be stored, and `summarize` has to name everything that
+// will happen, including what it costs.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const writeTools: AssistantTool[] = [
+  {
+    name: 'subscribe_daily_email',
+    description:
+      'Propose signing an address up for the Daily Invitation email (one passage each morning). The visitor confirms before anything is stored.',
+    kind: 'write',
+    auth: 'any',
+    params: {
+      email: { type: 'string', description: 'The address to subscribe.', required: true, maxLength: 254 },
+      lang: { type: 'string', description: 'Language of the email.', enum: ['en', 'zh'] },
+      tz: { type: 'string', description: 'IANA timezone, so the email arrives at 6am local time.', maxLength: 80 },
+    },
+    normalize(args, ctx) {
+      return {
+        email: String(args.email ?? '').trim().toLowerCase(),
+        lang: args.lang === 'zh' || args.lang === 'en' ? args.lang : ctx.lang,
+        // addSubscriber falls back the same way; doing it here too means the
+        // card shows the zone that will actually be stored.
+        tz: isValidTimeZone(args.tz) ? args.tz : DEFAULT_TIMEZONE,
+      };
+    },
+    summarize(args) {
+      return {
+        title: 'Subscribe to the Daily Invitation',
+        fields: [
+          { label: 'Email', value: String(args.email) },
+          { label: 'Language', value: args.lang === 'zh' ? '中文' : 'English' },
+          { label: 'Arrives', value: `6am ${String(args.tz ?? DEFAULT_TIMEZONE)}` },
+          { label: 'Costs', value: 'nothing; unsubscribe from any email' },
+        ],
+        confirmLabel: 'Subscribe',
+      };
+    },
+    async run(args, ctx) {
+      const email = String(args.email ?? '').trim().toLowerCase();
+      if (!EMAIL_RE.test(email)) return { error: 'invalid_email' };
+      await addSubscriber(ctx.db, {
+        email,
+        lang: args.lang === 'zh' ? 'zh' : 'en',
+        tz: isValidTimeZone(args.tz) ? args.tz : DEFAULT_TIMEZONE,
+      });
+      return { subscribed: true, email };
+    },
+  },
+  {
+    name: 'unsubscribe_daily_email',
+    description:
+      "Propose stopping the Daily Invitation email. Only the signed-in visitor's own address stops immediately; any other address is sent an unsubscribe link instead.",
+    kind: 'write',
+    auth: 'any',
+    params: {
+      email: { type: 'string', description: 'The address to stop.', required: true, maxLength: 254 },
+    },
+    normalize(args) {
+      return { email: String(args.email ?? '').trim().toLowerCase() };
+    },
+    summarize(args) {
+      return {
+        title: 'Stop the Daily Invitation',
+        fields: [
+          { label: 'Email', value: String(args.email) },
+          {
+            label: 'What happens',
+            value:
+              'If this is your own signed-in address it stops right away; otherwise an unsubscribe link is emailed to it.',
+          },
+        ],
+        confirmLabel: 'Unsubscribe',
+      };
+    },
+    async run(args, ctx) {
+      const email = String(args.email ?? '').trim().toLowerCase();
+      if (!EMAIL_RE.test(email)) return { error: 'invalid_email' };
+      // Chat is not proof that you own an address. Only the signed-in
+      // visitor's own address may be stopped from here; anyone else gets the
+      // same emailed link the newsletter footer carries. A guest has proved
+      // nothing at all, so they always get the link.
+      const owner = ctx.userId ? await getUserById(ctx.userId, ctx.db) : null;
+      if (owner?.email && owner.email.trim().toLowerCase() === email) {
+        await setStatus(ctx.db, email, 'unsubscribed');
+        return { applied: true, email };
+      }
+      await sendUnsubscribeLink(email, ctx.db, ctx.origin);
+      return { applied: false, emailed_link: true, email };
+    },
+  },
+  {
+    name: 'start_reading',
+    description:
+      'Propose receiving a scripture reading now, for a question the visitor has given. Confirming spends a reading from their daily quota (or a trial credit for the multi-verse layouts).',
+    kind: 'write',
+    auth: 'any',
+    params: {
+      question: { type: 'string', description: "The visitor's question, in their own words.", required: true, maxLength: 300 },
+      layout: { type: 'string', description: 'Which layout to use.', enum: ['single', '3card', 'celtic_cross'] },
+    },
+    normalize(args) {
+      const layout = typeof args.layout === 'string' && args.layout in SPREADS ? args.layout : 'single';
+      return { question: String(args.question ?? '').trim().slice(0, 300), layout };
+    },
+    summarize(args, ctx) {
+      const key = String(args.layout ?? 'single');
+      const spread = SPREADS[key] ?? SPREADS.single;
+      return {
+        title: 'Receive a reading',
+        fields: [
+          { label: 'Question', value: String(args.question) },
+          { label: 'Layout', value: spread.name[ctx.lang] },
+          {
+            label: 'Costs',
+            value: key === 'single' ? "one of today's readings" : 'one trial credit',
+          },
+        ],
+        confirmLabel: 'Receive',
+      };
+    },
+    async run(args, ctx) {
+      const outcome = await performDraw({
+        question: String(args.question ?? '').trim().slice(0, 300),
+        spreadKey: String(args.layout ?? 'single'),
+        lang: ctx.lang,
+        // The reading quota lives under usageSubject, not the chat visitor
+        // key: billing a draw anywhere else spends from a bucket the site
+        // itself never reads.
+        userId: ctx.usageSubject,
+        registered: ctx.registered,
+        ipAddress: null,
+      });
+      if (outcome.kind !== 'reading') {
+        return { error: outcome.kind === 'gated' ? 'registration_required' : outcome.reason };
+      }
+      return {
+        kind: 'reading',
+        readingId: outcome.readingId,
+        spreadKey: outcome.spreadKey,
+        question: String(args.question ?? ''),
+        verses: outcome.verses.map((v) => ({
+          reference: ctx.lang === 'zh' ? (v.refZh ?? v.refEn) : v.refEn,
+          position: v.position ?? '',
+          text: v.interp_text ?? '',
+        })),
+        summary: outcome.summary,
+        followUps: outcome.followUps,
+      };
+    },
+  },
+  {
+    name: 'open_billing',
+    description:
+      'Propose opening the Stripe billing portal, where the visitor can change or cancel their plan and see invoices. Only for someone who already has a subscription.',
+    kind: 'write',
+    auth: 'user',
+    params: {},
+    summarize() {
+      return {
+        title: 'Open your billing portal',
+        fields: [
+          { label: 'Opens', value: 'Stripe billing portal (new tab)' },
+          { label: 'Costs', value: 'nothing; no plan changes until you make them there' },
+        ],
+        confirmLabel: 'Open',
+      };
+    },
+    async run(_args, ctx) {
+      // auth: 'user' means the loop never offers this without a userId, and the
+      // id comes from the verified session cookie, never from the model.
+      if (!ctx.userId) return { error: 'sign_in_required', next: '/login' };
+      const sub = await getSubscription(ctx.userId);
+      if (!sub?.stripeCustomerId) return { error: 'no_subscription', next: '/pricing' };
+      const stripe = getStripeClient(env.STRIPE_SECRET_KEY as string);
+      // The account-wide default portal configuration is shared with other
+      // products, so use the Lectio-specific one when it is set - same as
+      // /api/stripe/portal.
+      const configuration = (env.STRIPE_PORTAL_CONFIG_ID as string | undefined) || undefined;
+      const portal = await stripe.billingPortal.sessions.create({
+        customer: sub.stripeCustomerId,
+        return_url: `${ctx.origin}/account`,
+        ...(configuration ? { configuration } : {}),
+      });
+      return { url: portal.url };
+    },
+  },
+];
+
+export const ASSISTANT_TOOLS: AssistantTool[] = [...readTools, ...writeTools];
 
 export function getTool(name: string): AssistantTool | null {
   return ASSISTANT_TOOLS.find((t) => t.name === name) ?? null;

@@ -15,10 +15,32 @@ vi.mock('../usage', () => ({
 }));
 vi.mock('../credits', () => ({ getCreditBalance: vi.fn(async () => ({ '3card': 3, celtic_cross: 1 })) }));
 vi.mock('../users', () => ({ getUserById: vi.fn(async () => ({ id: 'u1', email: 'reader@example.com', name: 'Reader' })) }));
+vi.mock('../draw', () => ({
+  performDraw: vi.fn(async () => ({
+    kind: 'reading',
+    readingId: 'rid-1',
+    spreadKey: 'single',
+    verses: [
+      {
+        refEn: 'John 15:5', refZh: '约翰福音 15:5',
+        position: 'The Word for Today', textEn: 'I am the vine',
+        interp_text: 'abide', tags: [],
+      },
+    ],
+    summary: 'stay close',
+    followUps: ['what holds you?'],
+  })),
+}));
+// The real sendUnsubscribeLink would reach Resend. What matters here is that a
+// non-owned address is left active, not what the mail body says.
+vi.mock('../unsubscribe', () => ({ sendUnsubscribeLink: vi.fn(async () => undefined) }));
 
 import { ASSISTANT_TOOLS, getTool, validateArgs, toolSchemasFor, type ToolContext } from '../assistantTools';
-import { ensureSubscriberTable, addSubscriber, resetSubscriberTableCache } from '../subscribers';
+import {
+  ensureSubscriberTable, addSubscriber, getSubscriber, resetSubscriberTableCache,
+} from '../subscribers';
 import { getTodayUsage } from '../usage';
+import { performDraw } from '../draw';
 
 async function ctx(overrides: Partial<ToolContext> = {}): Promise<ToolContext> {
   const db = new D1Memory() as unknown as D1Database;
@@ -74,8 +96,7 @@ describe('validateArgs', () => {
     expect(validateArgs(tool, {})).toEqual({ ok: false, error: expect.stringContaining('reading_id') });
   });
 
-  // TODO(task-5): re-enable once subscribe_daily_email exists in the registry.
-  it.skip('rejects a value outside an enum', () => {
+  it('rejects a value outside an enum', () => {
     const tool = getTool('subscribe_daily_email')!;
     const result = validateArgs(tool, { email: 'a@b.com', lang: 'fr', tz: 'UTC' });
     expect(result.ok).toBe(false);
@@ -135,5 +156,81 @@ describe('list_readings', () => {
       readings: Array<Record<string, unknown>>;
     };
     expect(rows.readings[0]).toMatchObject({ id: 7, question: 'What now?' });
+  });
+});
+
+describe('write tools', () => {
+  it('normalizes and summarizes an email subscription for the confirm card', async () => {
+    const c = await ctx();
+    const tool = getTool('subscribe_daily_email')!;
+    expect(tool.kind).toBe('write');
+    const validated = validateArgs(tool, { email: '  Reader@Example.COM ', lang: 'zh', tz: 'Nowhere/Nope' });
+    expect(validated.ok).toBe(true);
+    if (!validated.ok) return;
+    const args = tool.normalize!(validated.args, c);
+    expect(args.email).toBe('reader@example.com');
+    expect(args.tz).toBe('America/Los_Angeles'); // invalid zone falls back
+    const card = tool.summarize!(args, c);
+    expect(card.fields.map((f) => f.value)).toContain('reader@example.com');
+  });
+
+  it('subscribes when the card is redeemed', async () => {
+    const c = await ctx();
+    const tool = getTool('subscribe_daily_email')!;
+    await tool.run({ email: 'reader@example.com', lang: 'en', tz: 'UTC' }, c);
+    expect((await getSubscriber(c.db, 'reader@example.com'))?.status).toBe('active');
+  });
+
+  it('refuses to unsubscribe an address the visitor does not own', async () => {
+    const c = await ctx();
+    await addSubscriber(c.db, { email: 'someone@else.com', lang: 'en', tz: 'UTC' });
+    const out = (await getTool('unsubscribe_daily_email')!.run({ email: 'someone@else.com' }, c)) as Record<string, unknown>;
+    expect(out.applied).toBe(false);
+    expect(out.emailed_link).toBe(true);
+    expect((await getSubscriber(c.db, 'someone@else.com'))?.status).toBe('active');
+  });
+
+  it("unsubscribes the visitor's own address immediately", async () => {
+    const c = await ctx();
+    await addSubscriber(c.db, { email: 'reader@example.com', lang: 'en', tz: 'UTC' });
+    const out = (await getTool('unsubscribe_daily_email')!.run({ email: 'reader@example.com' }, c)) as Record<string, unknown>;
+    expect(out.applied).toBe(true);
+    expect((await getSubscriber(c.db, 'reader@example.com'))?.status).toBe('unsubscribed');
+  });
+
+  it('never applies an unsubscribe for a guest, who has proved nothing', async () => {
+    const c = await ctx({ userId: null, registered: false, visitorKey: 'a:x', usageSubject: 'a:x' });
+    await addSubscriber(c.db, { email: 'reader@example.com', lang: 'en', tz: 'UTC' });
+    const out = (await getTool('unsubscribe_daily_email')!.run({ email: 'reader@example.com' }, c)) as Record<string, unknown>;
+    expect(out.applied).toBe(false);
+    expect((await getSubscriber(c.db, 'reader@example.com'))?.status).toBe('active');
+  });
+
+  it('returns a reading summary from start_reading', async () => {
+    const out = (await getTool('start_reading')!.run(
+      { question: 'What should I attend to?', layout: 'single' }, await ctx()
+    )) as Record<string, unknown>;
+    expect(out).toMatchObject({ kind: 'reading', readingId: 'rid-1' });
+  });
+
+  it('bills a guest reading to the site usage subject, not the chat key', async () => {
+    // usage_daily rows are keyed by the site cookie; billing a draw to the
+    // assistant's a:<uuid> key spends from a bucket nothing else reads.
+    vi.mocked(performDraw).mockClear();
+    await getTool('start_reading')!.run(
+      { question: 'What now?', layout: 'single' },
+      await ctx({ userId: null, registered: false, visitorKey: 'a:x', usageSubject: 'anon-cookie-1' })
+    );
+    expect(vi.mocked(performDraw).mock.calls[0][0]).toMatchObject({ userId: 'anon-cookie-1' });
+  });
+
+  it('tells the visitor what a reading will cost on the confirm card', async () => {
+    const c = await ctx();
+    const tool = getTool('start_reading')!;
+    const args = tool.normalize!({ question: 'What now?', layout: 'celtic_cross' }, c);
+    const card = tool.summarize!(args, c);
+    const values = card.fields.map((f) => f.value).join(' | ');
+    expect(values).toContain('Deep Lectio');
+    expect(values).toMatch(/credit/);
   });
 });
