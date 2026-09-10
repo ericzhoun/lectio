@@ -1,7 +1,7 @@
 # Session-contextual Lectio Assistant (tool calling)
 
 Date: 2026-09-09
-Status: approved design, not yet implemented
+Status: implemented 2026-09-10
 
 ## Problem
 
