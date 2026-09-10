@@ -4,16 +4,24 @@ export const prerender = false;
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
 import { resolveLang } from '../../lib/i18n';
-import { resolveLocalDay, DAY_COOKIE } from '../../lib/localDay';
+import { resolveLocalDay, requestedDay, DAY_COOKIE } from '../../lib/localDay';
+import { hasLectionaryDay } from '../../lib/lectionary';
 import { ensureSession, getSession } from '../../lib/dailySession';
 import { guestReaderId } from '../../lib/guestSession';
 
 const lang = resolveLang(Astro);
-const day = resolveLocalDay(Astro);
+
+// A reading plan can open its own season: `/today?day=2026-12-01` walks that
+// day instead of this one. Only a day the lectionary actually covers is
+// honoured - anything else quietly becomes today rather than a broken walk.
+const asked = requestedDay(Astro);
+const chosen = asked && hasLectionaryDay(asked) ? asked : null;
+const day = chosen ?? resolveLocalDay(Astro);
 
 // Pin the day for the rest of this sitting, so crossing midnight mid-session
-// does not split a reader's words across two days. Six hours is longer than
-// any session and short enough that tomorrow starts fresh.
+// does not split a reader's words across two days, and so a chosen day stays
+// chosen across the six steps. Six hours is longer than any session and short
+// enough that tomorrow starts fresh.
 Astro.cookies.set(DAY_COOKIE, day, {
   path: '/',
   httpOnly: true,

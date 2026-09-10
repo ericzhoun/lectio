@@ -8,7 +8,7 @@ import { resolveMusic } from '../../lib/singingBible';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
 import { resolveLang } from '../../lib/i18n';
-import { resolveActiveDay } from '../../lib/localDay';
+import { resolveActiveDay, resolveLocalDay } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
 import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, type Step } from '../../lib/dailySteps';
@@ -26,6 +26,12 @@ const step: Step = stepParam;
 const lang = resolveLang(Astro);
 const day = resolveActiveDay(Astro);
 const entry = getLectionaryDay(day);
+// A walk opened from a reading plan is not today's; say so, so nobody wonders
+// why the reading does not match the date.
+const otherDay = day !== resolveLocalDay(Astro)
+  ? new Date(`${day}T00:00:00Z`).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US',
+      { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
+  : null;
 const passage = resolvePassage(focusReference(entry), lang);
 const music = passage ? resolveMusic(focusReference(entry)) : null;
 
@@ -118,7 +124,10 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
 
     <div class="ritual-body">
       <header>
-        <p class="day">{entry.title[lang]}</p>
+        <p class="day">
+          {entry.title[lang]}
+          {otherDay && <span class="day-away">{otherDay}</span>}
+        </p>
         <h1>{copy.name[lang]}</h1>
         <p class="prompt">{copy.prompt[lang]}</p>
         {stepAudio && (
@@ -676,6 +685,13 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     opacity: 0.6;
     margin: 0 0 0.4rem;
     letter-spacing: 0.03em;
+  }
+
+  /* The date of a walk that is not today's. */
+  .day-away::before {
+    content: '·';
+    margin: 0 0.4em;
+    opacity: 0.6;
   }
 
   .daily h1 {

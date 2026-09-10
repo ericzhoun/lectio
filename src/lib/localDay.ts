@@ -48,16 +48,25 @@ export function resolveLocalDay(astro: CookieContext, now: Date = new Date()): s
 /**
  * The day the reader is currently praying, which is not always today. Someone
  * who begins at 23:55 and reaches Oratio at 00:02 stays on the day they began;
- * otherwise their words would scatter across two sessions.
+ * otherwise their words would scatter across two sessions. A reader who opened
+ * a season's own day from a reading plan is likewise walking that day.
+ *
+ * The pin is server-set, httpOnly and short-lived, and /today re-pins to today
+ * whenever it is opened without a chosen day, so any well-formed pin is
+ * honoured: it can only ever be a day this reader deliberately opened.
  */
 export function resolveActiveDay(astro: CookieContext, now: Date = new Date()): string {
   const today = resolveLocalDay(astro, now);
   const pinned = astro.cookies.get(DAY_COOKIE)?.value;
-  if (!pinned || !DAY_RE.test(pinned)) return today;
-  // Honour a pin only for today or the day just past. Anything older is a
-  // stale cookie, and anything ahead is nonsense.
-  const yesterday = new Date(Date.parse(`${today}T00:00:00Z`) - 86_400_000)
-    .toISOString()
-    .slice(0, 10);
-  return pinned === today || pinned === yesterday ? pinned : today;
+  return pinned && DAY_RE.test(pinned) ? pinned : today;
+}
+
+/**
+ * A day the reader asked for by link (`/today?day=2026-12-01`), or null when
+ * none was asked for. Validity against the lectionary is the caller's call:
+ * this only guarantees the shape.
+ */
+export function requestedDay(astro: CookieContext): string | null {
+  const asked = astro.url?.searchParams.get('day');
+  return asked && DAY_RE.test(asked) ? asked : null;
 }

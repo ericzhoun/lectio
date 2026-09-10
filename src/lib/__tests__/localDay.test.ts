@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  isValidTimeZone, localDay, resolveLocalDay, resolveActiveDay,
+  isValidTimeZone, localDay, resolveLocalDay, resolveActiveDay, requestedDay,
   TIMEZONE_COOKIE, DAY_COOKIE,
 } from '../localDay';
 
@@ -13,6 +13,11 @@ const ctx = (tz?: string, pinnedDay?: string, queryTz?: string) => ({
     },
   },
   url: queryTz !== undefined ? new URL(`https://x.test/?tz=${encodeURIComponent(queryTz)}`) : undefined,
+});
+
+const dayQuery = (day: string) => ({
+  cookies: { get: () => undefined },
+  url: new URL(`https://x.test/today?day=${encodeURIComponent(day)}`),
 });
 
 describe('isValidTimeZone', () => {
@@ -76,14 +81,14 @@ describe('resolveActiveDay', () => {
     expect(resolveActiveDay(ctx('UTC', '2026-09-04'), now)).toBe('2026-09-04');
   });
 
-  it('ignores a pin older than yesterday', () => {
+  it('honours a past day a reader deliberately opened', () => {
     const now = new Date('2026-09-05T00:02:00Z');
-    expect(resolveActiveDay(ctx('UTC', '2026-08-01'), now)).toBe('2026-09-05');
+    expect(resolveActiveDay(ctx('UTC', '2026-08-01'), now)).toBe('2026-08-01');
   });
 
-  it('ignores a pin in the future', () => {
+  it('honours a season ahead, opened from a reading plan', () => {
     const now = new Date('2026-09-05T00:02:00Z');
-    expect(resolveActiveDay(ctx('UTC', '2026-12-25'), now)).toBe('2026-09-05');
+    expect(resolveActiveDay(ctx('UTC', '2026-12-25'), now)).toBe('2026-12-25');
   });
 
   it('ignores a malformed pin', () => {
@@ -94,5 +99,20 @@ describe('resolveActiveDay', () => {
   it('is the local day when nothing is pinned', () => {
     const now = new Date('2026-09-05T00:02:00Z');
     expect(resolveActiveDay(ctx('UTC', undefined), now)).toBe('2026-09-05');
+  });
+});
+
+describe('requestedDay', () => {
+  it('returns a well-formed day from the query', () => {
+    expect(requestedDay(dayQuery('2026-12-01'))).toBe('2026-12-01');
+  });
+
+  it('refuses anything that is not a plain date', () => {
+    expect(requestedDay(dayQuery('2026-13-45x'))).toBeNull();
+    expect(requestedDay(dayQuery("2026-12-01' OR 1=1"))).toBeNull();
+  });
+
+  it('is null when no day was asked for', () => {
+    expect(requestedDay(ctx('UTC'))).toBeNull();
   });
 });

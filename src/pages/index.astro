@@ -520,9 +520,11 @@ interface PlanView {
   progressPct: number;
   // The passage the season opens on: the focus reading of its first day.
   verseRef: string | null;
+  /** Where "walk this reading" goes: today, or the day the season begins. */
+  walkHref: string;
 }
 
-const PLAN_COPY: Array<Omit<PlanView, 'inSeason' | 'progressLabel' | 'progressPct' | 'verseRef'>> = [
+const PLAN_COPY: Array<Omit<PlanView, 'inSeason' | 'progressLabel' | 'progressPct' | 'verseRef' | 'walkHref'>> = [
   {
     season: 'advent', marker: 'I',
     name: lang === 'zh' ? '将临之光' : 'The Coming Light',
@@ -626,10 +628,13 @@ const plans: PlanView[] = PLAN_COPY.map((p) => {
   }
   // In season the walk is today's reading; otherwise the season's opening day.
   const verseDay = inSeason ? day : run?.start ?? null;
+  // /today walks whichever day it is handed, so an out-of-season plan opens on
+  // the day its season begins.
+  const walkHref = verseDay && verseDay !== day ? `/today?day=${verseDay}` : '/today';
   const verseRef = verseDay
     ? resolvePassage(focusReference(getLectionaryDay(verseDay)), lang)?.ref ?? null
     : null;
-  return { ...p, inSeason, progressLabel, progressPct, verseRef };
+  return { ...p, inSeason, progressLabel, progressPct, verseRef, walkHref };
 });
 
 // Assistant widget context: what reading is currently on screen (design:
@@ -1241,7 +1246,7 @@ const description = lang === 'zh'
                     )}
                   </div>
                 )}
-                <a class="plan-walk" href="/today">
+                <a class="plan-walk" href={plan.walkHref}>
                   {lang === 'zh' ? '走过这段诵读' : 'Walk through this reading'}
                   {plan.verseRef && <span class="plan-walk-ref">{plan.verseRef}</span>}
                 </a>
