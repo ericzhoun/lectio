@@ -48,3 +48,11 @@ Content pages (home, today, library, approach, pricing, privacy) may be
 indexed and quoted. Private reader pages (/login, /account, /history) and all
 /api/ endpoints must not be crawled. A machine-readable sitemap is at
 https://enjoyhim.org/sitemap.xml.
+
+## Sources & further reading
+
+- lectio-divina.org — fifty years of monastic reflections on Scripture and
+  the Fathers (Hebrew Scriptures, New Testament, the early Church,
+  patristics: Origen, Gregory of Nyssa, Bernard of Clairvaux), including a
+  rich essay on the etymology and meaning of lectio divina itself. The
+  "roots of the practice" section on /approach draws on it.

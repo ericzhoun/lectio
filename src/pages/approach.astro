@@ -146,6 +146,14 @@ const faqCopy = {
         a: '一种源自六世纪本笃会传统的基督徒祈祷读经方式：缓慢诵读一段简短经文（诵读），反复默想（默想），以祷告回应（祈祷），最后在静默中安息（默观）。',
       },
       {
+        q: '这个传统从哪里来？',
+        a: 'Lectio Divina 十分古老：早在三世纪，奥利振（Origen）已是这样读经的大师；它经尼撒的贵格利与圣伯尔纳铎的《雅歌》注释流传，再由本笃会修道传统融入日常生活。名字本身就是教导：lectio 源于 lego（拣选），divina 意为神圣的——一种被神圣启发的拣选。',
+      },
+      {
+        q: '哪里可以读到更深的默想？',
+        a: '修道院档案网站 lectio-divina.org 汇集了五十年的默想反思：从希伯来圣经、新约，到奥利振与尼撒的贵格利的《雅歌》注释。',
+      },
+      {
         q: 'Lectio 是占卜或算命吗？',
         a: '不是。Lectio 从不预言未来，也不提供占卜式解读。经文不预言你的明天；这个练习是带你把真实的问题带到经文面前，并停留在它所唤起的地方。',
       },
@@ -173,6 +181,14 @@ const faqCopy = {
       {
         q: 'What is Lectio Divina?',
         a: 'An ancient Christian prayer practice handed down from the sixth-century Benedictine tradition. A short passage is read slowly (lectio), reflected on (meditatio), responded to in prayer (oratio), and rested with in silence (contemplatio).',
+      },
+      {
+        q: 'Where does this practice come from?',
+        a: 'Lectio Divina is ancient: by the third century Origen was already its master, and monasticism carried it through Gregory of Nyssa\u2019s and Bernard of Clairvaux\u2019s commentaries into the rhythm of daily life. Even the name teaches \u2014 lectio comes from lego, to choose, and divina means divine: a divinely inspired choosing of the word God uses to speak.',
+      },
+      {
+        q: 'Where can I read deeper reflections?',
+        a: 'The monastic archive lectio-divina.org gathers fifty years of reflections on Scripture and the Fathers \u2014 from the Hebrew Scriptures and the Gospels to Origen\u2019s and Gregory of Nyssa\u2019s commentaries on the Song of Songs.',
       },
       {
         q: 'Is Lectio fortune-telling or divination?',
@@ -207,6 +223,51 @@ const faqSchema = {
     acceptedAnswer: { '@type': 'Answer', text: item.a },
   })),
 };
+
+// Roots of the practice — grounded in the monastic archive lectio-divina.org
+// (fifty years of reflections on Scripture and the Fathers). The short
+// quoted phrase is attributed in the text; all surrounding copy is original.
+const rootsCopy = {
+  zh: {
+    title: '这个传统的根',
+    cards: [
+      {
+        title: '“神圣的拣选”',
+        body: '这个名字本身就是一堂小课。Lectio 源自拉丁文 lego——挑选、拣选；而传统说的不是 sacra（圣的）阅读，而是 divina——神圣的阅读。正如修道院档案网站 lectio-divina.org 所说，这是一种“被神圣启发的拣选”：在上帝借以亲自说话的那句话、那个词上，被神圣地拣选。',
+      },
+      {
+        title: '古老而宽广的传承',
+        body: '这样的读经可以追溯到早期教会——三世纪的奥利振（Origen）已是其中的大师；它经尼撒的贵格利（Gregory of Nyssa）与圣伯尔纳铎（Bernard of Clairvaux）的《雅歌》注释流传下来，又由本笃会修道传统带进日常生活。',
+      },
+      {
+        title: '不为信息，而为相遇',
+        body: '古人这样读经，不是为了收集关于上帝的知识，而是为了遇见他——先与活的圣言接触，再停留在那份接触里。这就是为什么这个练习如此缓慢，为什么一节经文已经足够。',
+      },
+    ],
+    readingLabel: '延伸阅读',
+    reading: '想读得更深？lectio-divina.org 汇集了五十年的默想反思：希伯来圣经、新约、早期教会、奥利振与尼撒的贵格利的《雅歌》注释——一座修道传统的宝库。',
+  },
+  en: {
+    title: 'The roots of the practice',
+    cards: [
+      {
+        title: 'A divinely inspired choosing',
+        body: 'The name itself is a small teaching. Lectio comes from the Latin lego — to choose, to pick. And tradition speaks not of sacra (sacred) reading but of divina, divine reading: as the monastic archive lectio-divina.org puts it, “a kind of divinely inspired choosing” of a word or phrase through which God himself speaks.',
+      },
+      {
+        title: 'An old, wide lineage',
+        body: 'Reading Scripture this way runs back to the early Church — Origen in the third century was already its master — and flows through Gregory of Nyssa and Bernard of Clairvaux, whose Song of Songs commentaries remain classics of the practice. Monasticism carried it forward; Benedictines made it the rhythm of daily life.',
+      },
+      {
+        title: 'Not information, but contact',
+        body: 'The ancients read this way not to gather facts about God but to meet him — first to contact the living Word, and then to sustain that contact. That is why the practice is so slow, and why a single verse is enough.',
+      },
+    ],
+    readingLabel: 'Further reading',
+    reading: 'Want to go deeper? lectio-divina.org gathers fifty years of monastic reflections on Scripture and the Fathers — Hebrew Scriptures, New Testament, the early Church, and the Song of Songs commentaries of Origen and Gregory of Nyssa.',
+  },
+};
+const roots = rootsCopy[lang];
 ---
 <Layout title={t.title} description={t.description} lang={lang}>
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
@@ -235,6 +296,25 @@ const faqSchema = {
           <h3>{t.s2bTitle}</h3>
           <p>{t.s2b}</p>
         </div>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>{roots.title}</h2>
+      <div class="dt-grid">
+        {roots.cards.map((c) => (
+          <div class="dt-card">
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
+      </div>
+      <div class="dt-card dt-card-wide">
+        <h3>{roots.readingLabel}</h3>
+        <p>
+          {roots.reading}{' '}
+          <a href="https://www.lectio-divina.org/" target="_blank" rel="noopener">www.lectio-divina.org</a>
+        </p>
       </div>
     </section>
 
@@ -317,6 +397,7 @@ const faqSchema = {
     padding: 18px 20px; line-height: 1.75; color: var(--text); font-size: 15px;
   }
   .dt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .dt-card-wide { margin-top: 14px; }
   .dt-card {
     background: var(--panel); border: 1px solid var(--panel-border);
     border-radius: 10px; padding: 16px 18px;
