@@ -4,6 +4,12 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getLibraryVerses } from '../../lib/scripture';
 import { resolveLang } from '../../lib/i18n';
+import {
+  episodesForVerse,
+  getPodcastEpisodes,
+  PODCAST_ATTRIBUTION,
+  PODCAST_PAGE_URL,
+} from '../../lib/podcast';
 
 const { slug } = Astro.params;
 const lang = resolveLang(Astro);
@@ -20,6 +26,10 @@ const title = lang === 'zh'
 const description = lang === 'zh'
   ? `${verse.refZh}：${verse.textZh}`
   : `${verse.refEn}: ${verse.textEn}`;
+
+// Daily Lectio Divina podcast (Abiding Way Ministries) — episodes covering
+// this exact passage, streamed from the publisher's feed with permission.
+const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.refEn);
 ---
 <Layout title={title} description={description} lang={lang}>
   <script type="application/ld+json" set:html={JSON.stringify({
@@ -71,6 +81,26 @@ const description = lang === 'zh'
     <h3>{lang === 'zh' ? '主题' : 'Theme'}</h3>
     <p><span class="tag">{lang === 'zh' ? verse.themeZh : verse.themeEn}</span></p>
   </div>
+
+  {podcastEpisodes.length > 0 && (
+    <div class="meaning-block podcast-block">
+      <h3>{lang === 'zh' ? '本段经文的引导音频' : 'Guided audio for this passage'}</h3>
+      {podcastEpisodes.map((ep) => (
+        <div class="podcast-episode">
+          <audio controls preload="none" src={ep.audioUrl}></audio>
+          <p class="podcast-meta">
+            {ep.passage} · {ep.title} · {ep.duration}
+          </p>
+        </div>
+      ))}
+      <p class="podcast-attribution">
+        {PODCAST_ATTRIBUTION[lang]}{lang === 'zh' ? '（播客为英文）' : ''}
+        {' · '}
+        <a href={PODCAST_PAGE_URL} target="_blank" rel="noopener">abidingway.life</a>
+        {' · '}{lang === 'zh' ? '经许可使用' : 'Featured with permission'}
+      </p>
+    </div>
+  )}
 
   <p class="library-cta">
     <a class="upsell-button" href={`/?lang=${lang}`}>

@@ -4,6 +4,11 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getLibraryVerses } from '../../lib/scripture';
 import { resolveLang } from '../../lib/i18n';
+import {
+  getPodcastEpisodes,
+  PODCAST_ATTRIBUTION,
+  PODCAST_PAGE_URL,
+} from '../../lib/podcast';
 
 const url = Astro.url;
 const lang = resolveLang(Astro);
@@ -20,6 +25,11 @@ const title = lang === 'zh'
 const description = lang === 'zh'
   ? '浏览 Lectio 的完整经文库：旧约与新约的常用默想经文，附中英对照原文与主题。'
   : "Browse Lectio's full verse library: passages from the Old and New Testament for contemplative reading, with English and Chinese text and themes.";
+
+// Daily Lectio Divina podcast (Abiding Way Ministries) — featured by written
+// permission; episodes stream from the publisher's own feed.
+const podcastEpisodes = await getPodcastEpisodes(30);
+const latestEpisode = podcastEpisodes[0] ?? null;
 
 function filterHref(t: string) {
   return `?lang=${lang}&testament=${t}`;
@@ -38,6 +48,22 @@ function filterHref(t: string) {
   <div class="count">
     {lang === 'zh' ? `共 ${verses.length} 节经文` : `${verses.length} verse${verses.length !== 1 ? 's' : ''}`}
   </div>
+
+  {latestEpisode && (
+    <div class="podcast-card">
+      <h2 class="podcast-title">{lang === 'zh' ? '聆听 · 每日圣言诵读' : 'Listen · Daily Lectio Divina'}</h2>
+      <p class="podcast-passage">
+        {latestEpisode.passage} · {latestEpisode.title} · {latestEpisode.duration}
+      </p>
+      <audio controls preload="none" src={latestEpisode.audioUrl}></audio>
+      <p class="podcast-attribution">
+        {PODCAST_ATTRIBUTION[lang]}{lang === 'zh' ? '（播客为英文）' : ''}
+        {' · '}
+        <a href={PODCAST_PAGE_URL} target="_blank" rel="noopener">{lang === 'zh' ? '全部剧集' : 'All episodes'}</a>
+        {' · '}{lang === 'zh' ? '经许可使用' : 'Featured with permission'}
+      </p>
+    </div>
+  )}
 
   <div class="verse-grid">
     {verses.map((v) => (

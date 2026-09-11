@@ -56,3 +56,7 @@ https://enjoyhim.org/sitemap.xml.
   patristics: Origen, Gregory of Nyssa, Bernard of Clairvaux), including a
   rich essay on the etymology and meaning of lectio divina itself. The
   "roots of the practice" section on /approach draws on it.
+- abidingway.life/lectio-podcast — the Daily Lectio Divina podcast by Abiding
+  Way Ministries (Sharon Garlough Brown), featured in the verse library by
+  written permission: guided audio episodes stream from the publisher's feed
+  and are matched to library passages.

@@ -1488,3 +1488,14 @@ form p { margin-bottom: 10px; }
 }
 .sanctuary-footer a { color: var(--text-dim); text-decoration: none; }
 .sanctuary-footer a:hover { color: var(--text); }
+
+/* Podcast integration — Daily Lectio Divina (Abiding Way Ministries),
+   featured with written permission; episodes stream from the publisher. */
+.podcast-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: 10px; padding: 16px 18px; margin: 18px 0; }
+.podcast-card .podcast-title { margin: 0 0 6px; color: var(--gold); font-size: 15px; }
+.podcast-card .podcast-passage { margin: 0 0 10px; color: var(--text); font-size: 14px; }
+.podcast-card audio, .podcast-episode audio { width: 100%; margin-bottom: 8px; }
+.podcast-card .podcast-attribution, .podcast-block .podcast-attribution { margin: 0; font-size: 13px; color: var(--text-dim); }
+.podcast-block .podcast-episode { margin-bottom: 12px; }
+.podcast-block .podcast-episode:last-of-type { margin-bottom: 4px; }
+.podcast-block .podcast-meta { margin: 0; font-size: 13px; color: var(--text-dim); }
