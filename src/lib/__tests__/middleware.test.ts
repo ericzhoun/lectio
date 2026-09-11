@@ -189,3 +189,27 @@ describe('middleware cross-origin guard', () => {
     expect(response.status).toBe(403);
   });
 });
+
+describe('https enforcement', () => {
+  it('301s plain-http production requests to https, preserving path and query', async () => {
+    const response = (await onRequest(context('http://enjoyhim.org/pricing?lang=en'), async () =>
+      new Response('should not reach here')
+    )) as Response;
+    expect(response.status).toBe(301);
+    expect(response.headers.get('Location')).toBe('https://enjoyhim.org/pricing?lang=en');
+  });
+
+  it('leaves localhost http alone so local dev keeps working', async () => {
+    const next = vi.fn(async () => new Response('ok'));
+    const response = (await onRequest(context('http://localhost:4321/'), next)) as Response;
+    expect(response.status).toBe(200);
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('leaves https requests alone', async () => {
+    const next = vi.fn(async () => new Response('ok'));
+    const response = (await onRequest(context('https://enjoyhim.org/'), next)) as Response;
+    expect(response.status).toBe(200);
+    expect(next).toHaveBeenCalled();
+  });
+});

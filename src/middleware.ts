@@ -40,6 +40,25 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return crossOriginForbiddenResponse(context.request);
   }
 
+  // Enforce HTTPS: Google has indexed the http:// scheme, and without a
+  // redirect both schemes serve 200. Local dev (localhost/127.0.0.1) stays
+  // on http. The zone's Always-Use-HTTPS setting makes this redundant at
+  // the edge once enabled; the check costs nothing and also covers previews.
+  const host = context.url.host;
+  if (
+    context.url.protocol === 'http:' &&
+    !host.startsWith('localhost') &&
+    !host.startsWith('127.0.0.1') &&
+    !host.startsWith('[::1]')
+  ) {
+    return noStore(
+      new Response(null, {
+        status: 301,
+        headers: { Location: `https://${host}${context.url.pathname}${context.url.search}` },
+      }),
+    );
+  }
+
   // Normalize trailing slashes: /library/ and /library must not both serve 200
   // with their own self-canonical tag. Redirect once (308 preserves the method)
   // and leave API routes untouched.
