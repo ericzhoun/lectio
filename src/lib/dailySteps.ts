@@ -65,8 +65,8 @@ export const STEP_COPY: Record<Step, StepCopy> = {
   contemplatio: {
     name: { en: 'Contemplatio', zh: '默观' },
     prompt: {
-      en: 'Nothing more to do now. Rest here a while.',
-      zh: '现在无需再做什么。在这里安歇片刻。',
+      en: 'Nothing more to do now. Stop producing words and remain with God \u2014 the silence is not the destination; he is.',
+      zh: '现在无需再做什么。停止言语，停留在神面前——安静不是终点，神才是。',
     },
   },
   actio: {

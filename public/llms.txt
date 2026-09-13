@@ -3,16 +3,22 @@
 > Lectio is a bilingual (English / Chinese) web app for the daily Christian
 > practice of Lectio Divina — "divine reading." Each day it guides a reader
 > through a short lectionary scripture passage in four movements: Lectio
-> (reading), Meditatio (reflection), Oratio (response), and Contemplatio
-> (rest), and reads the passage aloud. It also offers a library of 101 Bible
+> (God addresses us through Scripture), Meditatio (attending and responding),
+> Oratio (speaking to God in prayer), and Contemplatio (remaining with God),
+> and reads the passage aloud. It also offers a library of 101 Bible
 > verses for reflection and an assistant that answers questions about
 > scripture and the practice.
 
 Lectio Divina is an ancient Christian prayer practice: a short passage is read
-slowly, reflected on, responded to in prayer, and then sat with in silence.
-Lectio (the app) never predicts the future and does not offer fortune-telling;
-its focus is on meeting the reader's real questions with scripture and gentle
-reflection.
+slowly, reflected on, responded to in prayer, and then rested with in God's
+presence. The goal of Lectio is not to get an answer from God, but to be with
+God; insight and guidance may arise within that relationship. A passage is an
+occasion to meet God through Scripture — never a claim that God specifically
+chose that verse to tell the reader what to do; discernment comes afterward,
+tested against the passage's context, the wider biblical witness, Christ, and
+Christian wisdom. Lectio (the app) never predicts the future and does not
+offer fortune-telling; its focus is on helping readers bring their real lives
+before God with scripture and gentle reflection.
 
 ## Main pages
 

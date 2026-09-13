@@ -711,7 +711,7 @@ const description = lang === 'zh'
       {lang === 'zh' ? '开始诵读' : 'Begin Reading'}
     </a>
     <p class="hero-alt">
-      <a href="#receive">{lang === 'zh' ? '或者，带着一个问题，领受一节经文' : 'Or bring a question and receive a verse'}</a>
+      <a href="#receive">{lang === 'zh' ? '或者，把你的生活带到神面前，领受一段经文' : 'Or bring your life before God and receive a passage'}</a>
     </p>
   </section>
 
@@ -722,26 +722,26 @@ const description = lang === 'zh'
     <h2 class="paths-title" id="paths-heading" data-reveal>{lang === 'zh' ? '四个动作' : 'The Four Movements'}</h2>
     <p class="paths-sub" data-reveal>
       {lang === 'zh'
-        ? '圣言诵读不是读法，而是走法——在一段经文里，四个不慌不忙的动作。'
-        : 'Lectio Divina is walked, not skimmed — four unhurried movements through one passage.'}
+        ? '圣言诵读不是读法，而是走法——在一段经文里，四个不慌不忙的动作。它的目标不是从神那里得到一个答案，而是与神同在；洞见与引导，可能在这份关系里发生。'
+        : 'Lectio Divina is walked, not skimmed \u2014 four unhurried movements through one passage. The goal is not to get an answer from God, but to be with God; insight and guidance may arise within that relationship.'}
     </p>
     <div class="paths-grid">
       {[
         {
           latin: 'Lectio', name: lang === 'zh' ? '读' : 'Read', anchor: 'lectio',
-          desc: lang === 'zh' ? '缓慢地读，直到有一个词亮起来。' : 'Read slowly, again and again, until a word shines.',
+          desc: lang === 'zh' ? '缓慢地读——神借着经文向你说话，直到有一个词亮起来。' : 'Read slowly \u2014 God addresses you through the passage \u2014 until a word shines.',
         },
         {
           latin: 'Meditatio', name: lang === 'zh' ? '想' : 'Reflect', anchor: 'meditatio',
-          desc: lang === 'zh' ? '停在那词上，让它触到你的生活。' : 'Chew on the word that stopped you; let it touch your day.',
+          desc: lang === 'zh' ? '停在那词上，让它在神面前照出你的渴望、恐惧与盼望。' : 'Dwell on the word that stopped you; let it expose your desires, fears, and hopes before God.',
         },
         {
           latin: 'Oratio', name: lang === 'zh' ? '应' : 'Respond', anchor: 'oratio',
-          desc: lang === 'zh' ? '把浮现的说回去——感谢、疑问、恳求，都算。' : 'Say back what surfaced — thanks, protest, plea, all honest.',
+          desc: lang === 'zh' ? '浮起的成为祷告——向神诚实地说出来。' : 'What surfaced becomes prayer \u2014 spoken honestly to God.',
         },
         {
           latin: 'Contemplatio', name: lang === 'zh' ? '息' : 'Rest', anchor: 'contemplatio',
-          desc: lang === 'zh' ? '放下言语，只是安静地待着。' : 'Set the words down. Sit with what has been given.',
+          desc: lang === 'zh' ? '放下言语，停留在神的同在里。' : 'Set the words down and remain with God. The silence is not the destination \u2014 he is.',
         },
       ].map((p, i) => (
         <a

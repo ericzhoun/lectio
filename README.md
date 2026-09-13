@@ -3,8 +3,11 @@
 An Astro (SSR, Cloudflare Workers adapter) web application for **Lectio Divina** — slow, prayerful
 scripture reading — with AI-assisted reflections from OpenAI's models.
 
-Lectio is contemplative reading, not divination. Verses arrive unchosen; the practice is to read
-them, reflect on what catches, respond honestly, and rest.
+Lectio is contemplative reading, not divination. The goal is not to get an answer from God, but to
+be with God; insight and guidance may arise within that relationship. A passage is an occasion to
+meet God through Scripture, never a claim that God chose it to tell the reader what to do. Verses
+arrive unchosen; the practice is to read them, reflect on what catches, respond to God honestly,
+and remain with him.
 
 ## Requirements
 
