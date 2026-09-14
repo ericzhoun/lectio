@@ -9,7 +9,12 @@ const { lang } = Astro.props;
   <LoginForm lang={lang} returnTo={Astro.url.pathname + Astro.url.search} headingId="login-overlay-title" />
 </dialog>
 <style>
-  dialog { width: min(460px, calc(100% - 32px)); max-height: calc(100dvh - 40px); padding: 0; border: 1px solid var(--panel-border); border-radius: 18px; background: var(--panel); color: var(--text); box-shadow: 0 24px 80px #0008; }
+  /* Pin the overlay to the viewport itself, not the document: a reader who
+     clicks "I already have an account" from the bottom of a long page must
+     find the dialog centered in what they can currently see. The UA default
+     only guarantees this where the top layer works, and overflow keeps the
+     whole form reachable when the viewport is shorter than the form. */
+  dialog { position: fixed; inset: 0; margin: auto; width: min(460px, calc(100% - 32px)); max-height: calc(100vh - 40px); max-height: calc(100dvh - 40px); overflow: auto; padding: 0; border: 1px solid var(--panel-border); border-radius: 18px; background: var(--panel); color: var(--text); box-shadow: 0 24px 80px #0008; }
   dialog::backdrop { background: rgb(7 10 20 / 65%); }
   dialog :global(.auth-card) { border: 0; margin: 0; padding: 36px 28px 24px; }
   .login-close { position: absolute; top: 8px; right: 12px; background: transparent; border: 0; color: var(--text-dim); font-size: 28px; cursor: pointer; }
