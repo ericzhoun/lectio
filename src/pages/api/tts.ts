@@ -1,18 +1,21 @@
 // src/pages/api/tts.ts
-// Reads the day's lectionary passage aloud. GET /api/tts?day=YYYY-MM-DD&lang=en
+// Reads the day's lectionary passage — or a verse-library passage — aloud.
+// GET /api/tts?day=YYYY-MM-DD&lang=en  or  GET /api/tts?ref=John%203:16&lang=zh
 // -> audio. English is synthesized on Workers AI, Chinese on OpenAI (see
 // src/lib/tts.ts for why), and both lose to a prebuilt clip when one exists.
 //
-// The caller names a day, never the text: synthesis costs money, so the set of
-// things this endpoint will ever say is the lectionary table and nothing else.
-// That also makes every response cacheable, and the same passage is read by
-// every reader of that day - so each one is synthesized once, globally.
+// The caller names a day or a deck reference, never the text: synthesis costs
+// money, so the set of things this endpoint will ever say is the lectionary
+// table plus the fixed verse deck and nothing else. That also makes every
+// response cacheable, and the same passage is read by every reader of that
+// day - so each one is synthesized once, globally.
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { audioR2Key, hasPrebuiltDayAudio, prebuiltDayAudioUrl, stepAudioUrl } from '../../lib/audio';
 import { isStep, STEP_COPY } from '../../lib/dailySteps';
 import { focusReference, getLectionaryDay, hasLectionaryDay } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
+import { getLibraryVerseByRef } from '../../lib/scripture';
 import { resolveTtsLang, sanitizeTtsText, synthesizeSpeech, type TtsAudio } from '../../lib/tts';
 
 export const prerender = false;
@@ -31,13 +34,21 @@ const json = (data: unknown, status: number) =>
 export const GET: APIRoute = async ({ url }) => {
   const day = url.searchParams.get('day') ?? '';
   const step = url.searchParams.get('step');
+  const ref = url.searchParams.get('ref');
   if (step !== null && !isStep(step)) return json({ error: 'unknown_step' }, 404);
-  if (step === null && (!DAY_RE.test(day) || !hasLectionaryDay(day))) return json({ error: 'unknown_day' }, 404);
+  // A deck ref is a fixed, public-domain text like a day's reading is, so it
+  // earns the same cacheable, synthesized-once treatment. An unknown ref is
+  // refused rather than read aloud.
+  const deckVerse = ref ? getLibraryVerseByRef(ref) : null;
+  if (ref !== null && !deckVerse) return json({ error: 'unknown_ref' }, 404);
+  if (step === null && !deckVerse && (!DAY_RE.test(day) || !hasLectionaryDay(day))) return json({ error: 'unknown_day' }, 404);
   const lang = resolveTtsLang(url.searchParams.get('lang'));
 
   const text = sanitizeTtsText(isStep(step)
     ? STEP_COPY[step].prompt[lang]
-    : resolvePassage(focusReference(getLectionaryDay(day)), lang)?.text);
+    : deckVerse
+      ? (lang === 'zh' ? deckVerse.textZh : deckVerse.textEn)
+      : resolvePassage(focusReference(getLectionaryDay(day)), lang)?.text);
   if (!text) return json({ error: 'no_passage' }, 404);
 
   // A prebuilt Chatterbox clip beats on-demand synthesis whenever it exists:
@@ -59,7 +70,10 @@ export const GET: APIRoute = async ({ url }) => {
   }
 
   // Normalized so 'lang=fr' and a missing lang share the 'en' entry.
-  const cacheKey = new Request(new URL(`/api/tts?${step === null ? `day=${day}` : `step=${step}`}&lang=${lang}`, url).toString());
+  const audioId = step !== null
+    ? `step=${step}`
+    : deckVerse ? `ref=${encodeURIComponent(deckVerse.refEn)}` : `day=${day}`;
+  const cacheKey = new Request(new URL(`/api/tts?${audioId}&lang=${lang}`, url).toString());
   const cache = (globalThis as { caches?: { default?: Cache } }).caches?.default;
   const hit = await cache?.match(cacheKey);
   if (hit) return hit;

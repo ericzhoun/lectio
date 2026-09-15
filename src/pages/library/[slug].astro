@@ -103,7 +103,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
   )}
 
   <p class="library-cta">
-    <a class="upsell-button" href={`/?lang=${lang}`}>
+    <a class="upsell-button" href={`/today?verse=${verse.slug}&lang=${lang}`}>
       {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
     </a>
   </p>

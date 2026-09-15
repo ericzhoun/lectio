@@ -8,9 +8,10 @@ import { resolveMusic } from '../../lib/singingBible';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
 import { resolveLang } from '../../lib/i18n';
-import { resolveActiveDay, resolveLocalDay } from '../../lib/localDay';
+import { resolveActiveDay, resolveLocalDay, isVerseDay, verseSlugOfDay } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
-import { resolvePassage } from '../../lib/passage';
+import { resolvePassage, type ResolvedPassage } from '../../lib/passage';
+import { getLibraryVerseBySlug } from '../../lib/scripture';
 import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, type Step } from '../../lib/dailySteps';
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
@@ -25,21 +26,40 @@ const step: Step = stepParam;
 
 const lang = resolveLang(Astro);
 const day = resolveActiveDay(Astro);
-const entry = getLectionaryDay(day);
+// A library walk (`verse:<slug>` pseudo-day) reads its own passage straight
+// from the verse deck; a dated walk reads the lectionary's focus. A stale
+// pseudo-day whose slug has left the deck returns to the start of /today
+// rather than rendering a broken walk.
+const libraryVerse = isVerseDay(day) ? getLibraryVerseBySlug(verseSlugOfDay(day)) : null;
+if (isVerseDay(day) && !libraryVerse) return Astro.redirect('/today');
+const lectionaryEntry = libraryVerse ? null : getLectionaryDay(day);
+const walkTitle = libraryVerse
+  ? (lang === 'zh' ? libraryVerse.refZh : libraryVerse.refEn)
+  : lectionaryEntry!.title[lang];
 // A walk opened from a reading plan is not today's; say so, so nobody wonders
-// why the reading does not match the date.
-const otherDay = day !== resolveLocalDay(Astro)
+// why the reading does not match the date. A library walk carries no date,
+// so there is nothing to wonder about.
+const otherDay = !libraryVerse && day !== resolveLocalDay(Astro)
   ? new Date(`${day}T00:00:00Z`).toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US',
       { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
   : null;
-const passage = resolvePassage(focusReference(entry), lang);
-const music = passage ? resolveMusic(focusReference(entry)) : null;
+const passage: ResolvedPassage | null = libraryVerse
+  ? {
+      ref: lang === 'zh' ? libraryVerse.refZh : libraryVerse.refEn,
+      text: lang === 'zh' ? libraryVerse.textZh : libraryVerse.textEn,
+    }
+  : resolvePassage(focusReference(lectionaryEntry!), lang);
+const music = passage
+  ? resolveMusic(libraryVerse ? libraryVerse.refEn : focusReference(lectionaryEntry!))
+  : null;
 
 // Resolve clips on the server: a manifest entry does not guarantee that the
 // deployed asset exists. The endpoint falls back to synthesis when missing.
 const stepAudioUrl = (_lang: typeof lang, s: Step) => `/api/tts?step=${s}&lang=${_lang}`;
 const stepAudio = stepAudioUrl(lang, step);
-const passageAudio = `/api/tts?day=${day}&lang=${lang}`;
+const passageAudio = libraryVerse
+  ? `/api/tts?ref=${encodeURIComponent(libraryVerse.refEn)}&lang=${lang}`
+  : `/api/tts?day=${day}&lang=${lang}`;
 
 // The guided-session playlist, only ever handed to the browser as URLs: the
 // six step prompts with the day's passage in the middle, separated by the
@@ -112,7 +132,7 @@ const advanceHref = next ? `/today/${next}` : '/today/amen';
 const continueLabel = lang === 'zh' ? '继续' : 'Continue';
 ---
 
-<Layout title={`${copy.name[lang]} · ${entry.title[lang]}`} lang={lang} noindex={true} chrome="minimal">
+<Layout title={`${copy.name[lang]} · ${walkTitle}`} lang={lang} noindex={true} chrome="minimal">
   <article class="daily ritual">
     <header class="ritual-top">
       <DailyProgress reached={reached} current={step} lang={lang} variant="dots" />
@@ -125,7 +145,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     <div class="ritual-body">
       <header>
         <p class="day">
-          {entry.title[lang]}
+          {walkTitle}
           {otherDay && <span class="day-away">{otherDay}</span>}
         </p>
         <h1>{copy.name[lang]}</h1>
@@ -220,7 +240,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
             <>
               <p class="ref">{passage.ref}</p>
               <p class="text">{passage.text}</p>
-              <button type="button" class="listen" data-listen data-day={day}
+              <button type="button" class="listen" data-listen data-day={day} data-audio={passageAudio}
                 aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
               >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
               <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
@@ -444,7 +464,8 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         listen.textContent = label.loading;
         try {
           // The prebuilt clip, when today has one; on-demand MeloTTS otherwise.
-          audio = new Audio(`/api/tts?day=${listen.dataset.day}&lang=${lang}`);
+          // Library walks carry their own audio URL (the deck ref, not a day).
+          audio = new Audio(listen.dataset.audio || `/api/tts?day=${listen.dataset.day}&lang=${lang}`);
           audio.addEventListener('ended', stop);
           await audio.play();
           listen.textContent = label.playing;

@@ -211,6 +211,16 @@ export function verseSlug(refEn: string): string {
 }
 
 /** The whole deck as browsable library entries, in canonical book order. */
+/** A library entry by its URL slug, or null when the slug is unknown. */
+export function getLibraryVerseBySlug(slug: string): LibraryVerse | null {
+  return getLibraryVerses().find((v) => v.slug === slug) ?? null;
+}
+
+/** A library entry by its English reference, or null when unknown. */
+export function getLibraryVerseByRef(refEn: string): LibraryVerse | null {
+  return getLibraryVerses().find((v) => v.refEn === refEn) ?? null;
+}
+
 export function getLibraryVerses(): LibraryVerse[] {
   return BIBLE_VERSES.map((v) => {
     const parsed = parseVerseRef(v.en.ref);

@@ -8,6 +8,8 @@ import { getReadingsForUser } from '../../lib/db';
 import { resolveLang } from '../../lib/i18n';
 import { listSessions } from '../../lib/dailySession';
 import { getLectionaryDay } from '../../lib/lectionary';
+import { isVerseDay, verseSlugOfDay } from '../../lib/localDay';
+import { getLibraryVerseBySlug } from '../../lib/scripture';
 
 const lang = resolveLang(Astro);
 
@@ -35,11 +37,20 @@ const days = await listSessions(userId);
       </p>
     )}
     <ul class="history-list">
-      {days.map((d) => (
+      {days.map((d) => {
+        // A library walk has a passage instead of a date; a stale slug falls
+        // back to the raw key rather than inventing a title.
+        const verse = isVerseDay(d.day) ? getLibraryVerseBySlug(verseSlugOfDay(d.day)) : null;
+        const label = verse
+          ? (lang === 'zh' ? verse.refZh : verse.refEn)
+          : isVerseDay(d.day) ? d.day : getLectionaryDay(d.day).title[lang];
+        return (
         <li>
-          <p class="history-date">{d.day}</p>
+          <p class="history-date">{verse
+            ? (lang === 'zh' ? '经文库诵读' : 'From the verse library')
+            : d.day}</p>
           <p class="history-question">
-            <a href={`/today/amen?day=${d.day}`}>{getLectionaryDay(d.day).title[lang]}</a>
+            <a href={`/today/amen?day=${d.day}`}>{label}</a>
           </p>
           <p class="history-verses">
             {d.completedAt
@@ -47,7 +58,8 @@ const days = await listSessions(userId);
               : (lang === 'zh' ? '未完成' : 'Unfinished')}
           </p>
         </li>
-      ))}
+        );
+      })}
     </ul>
   </section>
 

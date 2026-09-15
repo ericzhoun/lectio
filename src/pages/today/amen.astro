@@ -5,9 +5,10 @@ import Layout from '../../layouts/Layout.astro';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
 import { resolveLang } from '../../lib/i18n';
-import { resolveActiveDay } from '../../lib/localDay';
+import { resolveActiveDay, isVerseDay, verseSlugOfDay, DAY_RE, VERSE_DAY_RE } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
+import { getLibraryVerseBySlug } from '../../lib/scripture';
 import { STEP_COPY } from '../../lib/dailySteps';
 import { getSession, getStepEntries } from '../../lib/dailySession';
 import { guestReaderId } from '../../lib/guestSession';
@@ -21,15 +22,29 @@ const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSI
 // they just prayed is claimed onto the account they create.
 const readerId = userId ?? guestReaderId(Astro.locals.vid);
 
-// `day` reaches the database, so it is validated rather than trusted.
+// `day` reaches the database, so it is validated rather than trusted: a plain
+// date, or a verse pseudo-day from a library walk.
 const requested = Astro.url.searchParams.get('day');
-const day = /^\d{4}-\d{2}-\d{2}$/.test(requested ?? '') ? requested! : resolveActiveDay(Astro);
+const day = DAY_RE.test(requested ?? '') || VERSE_DAY_RE.test(requested ?? '')
+  ? requested!
+  : resolveActiveDay(Astro);
 
 const session = await getSession(readerId, day);
 if (!session) return Astro.redirect('/today');
 
-const entry = getLectionaryDay(day);
-const passage = resolvePassage(focusReference(entry), session.lang);
+// A library walk is named by its passage, not the church calendar. A stale
+// slug that has left the deck goes back to the start.
+const libraryVerse = isVerseDay(day) ? getLibraryVerseBySlug(verseSlugOfDay(day)) : null;
+if (isVerseDay(day) && !libraryVerse) return Astro.redirect('/today');
+const walkTitle = libraryVerse
+  ? (lang === 'zh' ? libraryVerse.refZh : libraryVerse.refEn)
+  : getLectionaryDay(day).title[lang];
+const passage = libraryVerse
+  ? {
+      ref: session.lang === 'zh' ? libraryVerse.refZh : libraryVerse.refEn,
+      text: session.lang === 'zh' ? libraryVerse.textZh : libraryVerse.textEn,
+    }
+  : resolvePassage(focusReference(getLectionaryDay(day)), session.lang);
 const entries = await getStepEntries(readerId, day);
 const finished = Boolean(session.completedAt);
 
@@ -37,7 +52,7 @@ const finished = Boolean(session.completedAt);
 const returnTo = encodeURIComponent(`/today/amen?day=${day}`);
 ---
 
-<Layout title={`${entry.title[lang]} · Amen`} lang={lang} noindex={true} chrome="minimal">
+<Layout title={`${walkTitle} · Amen`} lang={lang} noindex={true} chrome="minimal">
   <article class="amen ritual">
     <header class="ritual-top">
       <span class="daily-dots" aria-hidden="true">
@@ -49,7 +64,7 @@ const returnTo = encodeURIComponent(`/today/amen?day=${day}`);
 
     <div class="ritual-body">
       <header>
-        <p class="day">{entry.title[lang]}</p>
+        <p class="day">{walkTitle}</p>
         <h1>{finished ? 'Amen' : (lang === 'zh' ? '未完成' : 'Unfinished')}</h1>
         {passage && <p class="ref">{passage.ref}</p>}
       </header>

@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   isValidTimeZone, localDay, resolveLocalDay, resolveActiveDay, requestedDay,
+  isVerseDay, verseSlugOfDay,
   TIMEZONE_COOKIE, DAY_COOKIE,
 } from '../localDay';
 
@@ -91,6 +92,12 @@ describe('resolveActiveDay', () => {
     expect(resolveActiveDay(ctx('UTC', '2026-12-25'), now)).toBe('2026-12-25');
   });
 
+  it('honours a verse pseudo-day pinned by a library walk', () => {
+    const now = new Date('2026-09-05T00:02:00Z');
+    expect(resolveActiveDay(ctx('UTC', 'verse:2-corinthians-10-2-6'), now))
+      .toBe('verse:2-corinthians-10-2-6');
+  });
+
   it('ignores a malformed pin', () => {
     const now = new Date('2026-09-05T00:02:00Z');
     expect(resolveActiveDay(ctx('UTC', 'yesterday'), now)).toBe('2026-09-05');
@@ -114,5 +121,24 @@ describe('requestedDay', () => {
 
   it('is null when no day was asked for', () => {
     expect(requestedDay(ctx('UTC'))).toBeNull();
+  });
+});
+
+describe('verse pseudo-days', () => {
+  it('recognizes a slug-only pseudo-day', () => {
+    expect(isVerseDay('verse:2-corinthians-10-2-6')).toBe(true);
+    expect(isVerseDay('verse:john-3-16')).toBe(true);
+  });
+
+  it('refuses dates, junk, and path tricks', () => {
+    expect(isVerseDay('2026-09-05')).toBe(false);
+    expect(isVerseDay('verse:')).toBe(false);
+    expect(isVerseDay('verse:../etc/passwd')).toBe(false);
+    expect(isVerseDay('verse:John 3:16')).toBe(false);
+  });
+
+  it('extracts the slug, and nothing else', () => {
+    expect(verseSlugOfDay('verse:2-corinthians-10-2-6')).toBe('2-corinthians-10-2-6');
+    expect(verseSlugOfDay('2026-09-05')).toBe('');
   });
 });

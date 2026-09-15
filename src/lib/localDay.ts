@@ -8,6 +8,23 @@ export const DAY_COOKIE = 'daily_day';
 
 export const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
 
+/**
+ * A walk opened from the verse library is pinned to a passage, not a date:
+ * the session key is a pseudo-day like `verse:2-corinthians-10-2-6`. It rides
+ * the same tables and steps as a dated walk, but never collides with one.
+ */
+export const VERSE_DAY_PREFIX = 'verse:';
+export const VERSE_DAY_RE = /^verse:[a-z0-9-]+$/;
+
+export function isVerseDay(day: string): boolean {
+  return VERSE_DAY_RE.test(day);
+}
+
+/** The library slug inside a verse pseudo-day. Empty for anything else. */
+export function verseSlugOfDay(day: string): string {
+  return isVerseDay(day) ? day.slice(VERSE_DAY_PREFIX.length) : '';
+}
+
 export function isValidTimeZone(tz: unknown): tz is string {
   if (typeof tz !== 'string' || tz.length === 0) return false;
   try {
@@ -58,7 +75,9 @@ export function resolveLocalDay(astro: CookieContext, now: Date = new Date()): s
 export function resolveActiveDay(astro: CookieContext, now: Date = new Date()): string {
   const today = resolveLocalDay(astro, now);
   const pinned = astro.cookies.get(DAY_COOKIE)?.value;
-  return pinned && DAY_RE.test(pinned) ? pinned : today;
+  // A pin is honoured only in a shape this site sets: a date, or a verse
+  // pseudo-day from a library walk. Anything else falls back to today.
+  return pinned && (DAY_RE.test(pinned) || VERSE_DAY_RE.test(pinned)) ? pinned : today;
 }
 
 /**
