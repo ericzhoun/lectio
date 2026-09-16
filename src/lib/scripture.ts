@@ -99,7 +99,7 @@ export const BOOK_NR: Record<string, number> = {
   '1 Thessalonians': 52, '2 Thessalonians': 53, '1 Timothy': 54, '2 Timothy': 55, Titus: 56,
   Philemon: 57, Hebrews: 58, James: 59, '1 Peter': 60, '2 Peter': 61, '1 John': 62,
   '2 John': 63, '3 John': 64, Jude: 65, Revelation: 66,
-  // Absent from the 148-verse deck, but reached by the daily lectionary.
+  // Absent from the 151-verse deck, but reached by the daily lectionary.
   'Song of Solomon': 22, Habakkuk: 35, Haggai: 37,
 };
 

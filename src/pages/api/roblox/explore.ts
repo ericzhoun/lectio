@@ -1,6 +1,6 @@
 // src/pages/api/roblox/explore.ts
 // The world's Explore flow: entitlement -> record -> draw from the real
-// 148-verse deck -> AI reflection, exactly the site's reading pipeline.
+// 151-verse deck -> AI reflection, exactly the site's reading pipeline.
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { drawVerses } from '../../../lib/scripture';

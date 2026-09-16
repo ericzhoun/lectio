@@ -1,5 +1,5 @@
 -- LectioServer: bridges the world to the Lectio backend (enjoyhim.org).
--- Live mode: every feature is served by the site's API — the real 148-verse
+-- Live mode: every feature is served by the site's API — the real 151-verse
 -- deck, D1-enforced quotas and welcome credits, AI reflections, the AI
 -- assistant and the church-calendar lectionary. If HTTP is disabled or the
 -- backend is unreachable, the world falls back to the built-in VerseData
