@@ -135,6 +135,7 @@ const altLangUrl = lang === 'zh'
       <a href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}' style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '订阅' : 'Subscription'}</a>
       <a href="/library" style={isActive('/library') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '经文库' : 'Verse Library'}</a>
       <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
+      <a href="/about" style={isActive('/about') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '关于' : 'About'}</a>
       <a href="/privacy" style={isActive('/privacy') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '隐私' : 'Privacy'}</a>
       <a href={langSwitchHref(Astro, 'zh')} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>
       <a href={langSwitchHref(Astro, 'en')} style={lang === 'en' ? 'font-weight: bold;' : undefined}>English</a>

@@ -16,6 +16,7 @@ const t = {
   today: lang === 'zh' ? '今日' : 'Today',
   library: lang === 'zh' ? '经文库' : 'Verse Library',
   approach: lang === 'zh' ? '方法' : 'Approach',
+  about: lang === 'zh' ? '关于' : 'About',
   pricing: lang === 'zh' ? '订阅' : 'Subscription',
   privacy: lang === 'zh' ? '隐私' : 'Privacy',
   account: lang === 'zh' ? '账户' : 'Account',
@@ -23,6 +24,7 @@ const t = {
   hint: {
     library: lang === 'zh' ? '148 段经文' : '148 passages',
     approach: lang === 'zh' ? '什么是圣言诵读' : 'what is Lectio?',
+    about: lang === 'zh' ? '为什么叫 enjoyhim' : 'why "enjoy him"?',
     pricing: lang === 'zh' ? '首月免费' : 'first month free',
     privacy: lang === 'zh' ? '你的回应不被追踪' : 'your words stay yours',
   },
@@ -47,6 +49,7 @@ const loginHref = `/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.p
     </div>
     <a class="mn-row" href="/library"><span>{t.library}</span><span class="mn-hint">{t.hint.library}</span></a>
     <a class="mn-row" href="/approach"><span>{t.approach}</span><span class="mn-hint">{t.hint.approach}</span></a>
+    <a class="mn-row" href="/about"><span>{t.about}</span><span class="mn-hint">{t.hint.about}</span></a>
     <a class="mn-row" href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}'><span>{t.pricing}</span><span class="mn-hint">{t.hint.pricing}</span></a>
     <a class="mn-row" href="/privacy"><span>{t.privacy}</span><span class="mn-hint">{t.hint.privacy}</span></a>
     <a class="mn-row" href={langSwitchHref(Astro, 'zh')}>中文</a>

@@ -1,0 +1,207 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { resolveLang } from '../lib/i18n';
+
+const lang = resolveLang(Astro);
+
+const copy = {
+  zh: {
+    title: '关于 Lectio — 为什么叫 enjoyhim.org',
+    tagline: '完全地享受，就是荣耀 · 源自 C.S. 路易斯的发现',
+    description: '为什么 enjoyhim.org 叫"享受他"：C.S. 路易斯在 Reflections on the Psalms 中发现，赞美不仅表达享受，更使享受完全；神吩咐我们荣耀他，其实是在邀请我们享受他。',
+    intro: 'Lectio 是一个安静的角落，为古老的圣言诵读（Lectio Divina）而设——缓慢地、带着祷告读经。你带着一个真实的问题而来，领受一段不由你挑选的经文，在诵读、默想、祈祷、默观四个动作里停留在它里面。这一页讲述这个网站名字的由来：enjoyhim.org——它来自 C.S. 路易斯关于赞美与喜乐的一个发现，而那个发现恰好说明了我们为什么在这里慢慢地读经。',
+    s1: '这个名字的由来',
+    s1body: '《威斯敏斯特小要理问答》的第一问是：人生首要的目的是什么？答案的后半句是："并以他为乐，直到永远。"长久以来，这听起来像两件事——责任与喜乐——而且责任的那一半声音更大。是 C.S. 路易斯指出它们原是一件事。这个网站以答案的后半命名，因为那份"乐"才是重点：这里练习的目标，不是从神那里提取答案，而是享受神自己。',
+    s2: '路易斯的"绊脚石"',
+    s2body: '信主初期，路易斯一直过不去一件事：神竟然要求我们赞美他、吩咐我们归荣耀给他——这听起来像一位君王在讨要恭维。在 Reflections on the Psalms（《诗篇撷思》）里，他写下这个障碍如何消融：因为他终于注意到，赞美究竟是什么。关于赞美"最显而易见的事实"，竟"奇怪地逃过了"他的注意：',
+    quote1: '"我从未注意到，一切享受都会自发地满溢为赞美……这个世界响彻赞美——恋人为爱人赞美，读者为自己喜爱的诗人赞美，步行的人赞美乡野，打球的人赞美自己心爱的运动——赞美天气、美酒、佳肴、山峦、花朵、孩童。"',
+    quote2: '"赞美几乎可以说是内在健康所发出的声音。"',
+    s3: '赞美使享受完全',
+    s3body: '然后是更深的发现——赞美不是挂在喜乐之上的账单，而是喜乐的完成。恋人们不断告诉彼此对方有多美，不是为了恭维：欢乐若未曾表达，就还没有完全。',
+    quote3: '"我想，我们乐于赞美我们所享受的，因为赞美不仅表达享受，更使享受完全；它是享受命定的成全。"',
+    quoteKey: '《威斯敏斯特小要理问答》说，人生首要的目的，是"荣耀神，并以他为乐，直到永远"。但我们那时就会知道：这两件事原是一件事。完全地享受，就是荣耀。神在命令我们荣耀他的时候，是在邀请我们享受他。',
+    s4: '这如何塑造一个读经练习',
+    cards: [
+      {
+        title: '命令其实是邀请',
+        body: '神吩咐我们赞美他，不是在收集奉承。他是在把"至高的喜乐与丰盛的生命"递给我们。这个网站上的一切练习都由此而来：既然荣耀与享受原是一件事，那么缓慢读经就不是作业——而是喜乐的起点。',
+      },
+      {
+        title: '领受，而非提取',
+        body: '经文不由你挑选，这个练习也拒绝把它变成占卜的签。我们寻找的不是答案，而是一位主：所乐的是神自己，而不只是他的回答或恩赐。这也是"不是占卜"这条底线背后的神学。',
+      },
+      {
+        title: '赞美是健全心灵的声音',
+        body: '路易斯注意到：最谦卑、最平衡的心灵赞美最多，而"乖僻的、格格不入的、满腹牢骚的人赞美最少"。赞美是内在健康发出的声音——所以每一次诵读结束于安息和阿们，而不是分析。',
+      },
+    ],
+    s5: '写给读者的那节经文',
+    verse: '我因耶和华大大欢喜；我的心靠神快乐。因他以拯救为衣给我穿上，以公义为袍给我披上，好像新郎戴上华冠，又像新妇佩戴妆饰。',
+    verseRef: '以赛亚书 61:10（和合本）',
+    s6: '出处与致谢',
+    src1: 'C.S. Lewis, Reflections on the Psalms（New York: Harcourt, Brace & Co., 1958），pp. 93–97。本页所引路易斯的话皆出自此书。',
+    src2pre: '本页改写自 C.S. Lewis Institute 每月灵修刊物 "Reflections" 2012 年 5 月号，该期主题正是"赞美使享受完全"。',
+    src2link: '阅读原文',
+    src3pre: '想了解练习本身——四个动作、为什么不是占卜、一次诵读如何进行——请读',
+    src3link: '方法页',
+    src3post: '。',
+    cta: '理解这一切最自然的方式，是亲自在一段经文前坐下来。开始今日诵读——把升起的那一句赞美，当作享受正在说完它的话。',
+    ctaButton: '开始一次诵读',
+  },
+  en: {
+    title: 'About Lectio — Why "enjoyhim.org"?',
+    tagline: 'Fully to enjoy is to glorify · after a discovery by C.S. Lewis',
+    description: 'Why enjoyhim.org is named "enjoy him": C.S. Lewis\u2019s discovery in Reflections on the Psalms that praise not merely expresses but completes enjoyment \u2014 and that in commanding us to glorify him, God is inviting us to enjoy him.',
+    intro: 'Lectio is a quiet corner of the web for the ancient practice of Lectio Divina \u2014 slow, prayerful reading of scripture. You arrive with a real question, receive a passage you did not choose, and stay inside it through four movements: read, reflect, respond, rest. This page tells the story behind our name \u2014 enjoyhim.org \u2014 which comes from a discovery C.S. Lewis made about praise and joy, and about what God is actually inviting us into when he asks for our praise.',
+    s1: 'The name of this site',
+    s1body: 'The Westminster Shorter Catechism opens by asking what humanity\u2019s chief end is, and its answer ends: "\u2026and to enjoy him forever." For a long time that sounded like two different things \u2014 duty and delight \u2014 and, honestly, the duty half spoke louder. It was C.S. Lewis who showed that they are one thing. This site takes its name from the second half of that answer, because the delight is the point: the goal of the practice here is not to extract answers from God but to enjoy God himself.',
+    s2: 'Lewis\u2019s stumbling block',
+    s2body: 'Early in his Christian life, Lewis struggled with the idea that God demands our praise and commands us to give him glory \u2014 it sounded like a monarch soliciting compliments. In Reflections on the Psalms he describes how the objection dissolved, once he noticed what praise actually is. The most obvious fact about praise had, he wrote, "strangely escaped" him:',
+    quote1: '"I had never noticed that all enjoyment spontaneously overflows into praise\u2026 The world rings with praise \u2014 lovers praising their mistresses, readers their favourite poet, walkers praising the countryside, players praising their favourite game \u2014 praise of weather, wines, dishes, mountains, flowers, children."',
+    quote2: '"Praise almost seems to be inner health made audible."',
+    s3: 'Praise completes enjoyment',
+    s3body: 'Then came the deeper discovery \u2014 praise is not an invoice attached to joy; it is joy\u2019s completion. Lovers keep on telling one another how beautiful they are, and it is not out of compliment: the delight is incomplete till it is expressed.',
+    quote3: '"I think we delight to praise what we enjoy because the praise not merely expresses but completes the enjoyment; it is its appointed consummation."',
+    quoteKey: 'The Scotch catechism says that man\u2019s chief end is "to glorify God and enjoy Him forever." But we shall then know that these are the same thing. Fully to enjoy is to glorify. In commanding us to glorify Him, God is inviting us to enjoy Him.',
+    s4: 'How this shapes a reading practice',
+    cards: [
+      {
+        title: 'The command is an invitation',
+        body: 'When God commands our praise, he is not collecting flattery \u2014 he is offering "the supreme in joy and fullness of life." Everything on this site follows from that: if glorifying and enjoying are one thing, then reading scripture slowly is not homework. It is the beginning of delight.',
+      },
+      {
+        title: 'Receiving, not extracting',
+        body: 'The verses arrive unchosen, and the practice refuses to turn them into an oracle. What we seek is not an answer but a Person: the delight is in God himself, not merely in his answers or gifts. That is the theology underneath our "not divination" line.',
+      },
+      {
+        title: 'Praise is what whole hearts do',
+        body: 'Lewis noticed that the humblest, most balanced minds praised most, while "the cranks, misfits, and malcontents praised least." Praise is inner health made audible \u2014 so every reading here ends in rest and amen, not in analysis.',
+      },
+    ],
+    s5: 'The verse the issue ends with',
+    verse: 'I delight greatly in the LORD; my soul rejoices in my God. For he has clothed me with garments of salvation and arrayed me in a robe of his righteousness, as a bridegroom adorns his head like a priest, and as a bride adorns herself with her jewels.',
+    verseRef: 'Isaiah 61:10 (NIV)',
+    s6: 'Sources & acknowledgment',
+    src1: 'C.S. Lewis, Reflections on the Psalms (New York: Harcourt, Brace & Co., 1958), pp. 93\u201397. All Lewis quotations on this page come from there.',
+    src2pre: 'This page follows the C.S. Lewis Institute\u2019s monthly devotional "Reflections," May 2012 issue, which centres on this passage.',
+    src2link: 'Read the original',
+    src3pre: 'Curious about the practice itself \u2014 the four movements, why this is not divination, how a reading unfolds? Read the',
+    src3link: 'Approach page',
+    src3post: '.',
+    cta: 'The most natural way to understand any of this is to sit with a passage yourself. Begin today\u2019s reading \u2014 and treat whatever praise rises as the enjoyment finishing its sentence.',
+    ctaButton: 'Begin a reading',
+  },
+} as const;
+
+const t = copy[lang];
+---
+<Layout title={t.title} description={t.description} lang={lang}>
+  <div class="policy-page">
+    <div class="policy-head">
+      <img src="/logo.webp" alt="Lectio" class="site-logo" width="512" height="512" />
+      <h1>{t.title}</h1>
+      <p class="policy-updated">{t.tagline}</p>
+    </div>
+
+    <p class="policy-intro">{t.intro}</p>
+
+    <section class="policy-section">
+      <h2>{t.s1}</h2>
+      <p class="ab-thesis">{t.s1body}</p>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s2}</h2>
+      <p>{t.s2body}</p>
+      <blockquote class="ab-quote">{t.quote1}</blockquote>
+      <blockquote class="ab-quote">{t.quote2}</blockquote>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s3}</h2>
+      <p>{t.s3body}</p>
+      <blockquote class="ab-quote">{t.quote3}</blockquote>
+      <div class="ab-keyquote">
+        <p>{t.quoteKey}</p>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s4}</h2>
+      <div class="ab-grid">
+        {t.cards.map((c) => (
+          <div class="ab-card">
+            <h3>{c.title}</h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s5}</h2>
+      <div class="ab-verse">
+        <p class="ab-verse-text">{t.verse}</p>
+        <p class="ab-verse-ref">{t.verseRef}</p>
+      </div>
+    </section>
+
+    <section class="policy-section">
+      <h2>{t.s6}</h2>
+      <ul class="ab-sources">
+        <li>{t.src1}</li>
+        <li>
+          {t.src2pre}{' '}
+          <a href="https://www.cslewisinstitute.org/resources/reflections-may-2012/" target="_blank" rel="noopener">{t.src2link}</a>
+        </li>
+        <li>
+          {t.src3pre}{' '}
+          <a href="/approach">{t.src3link}</a>{t.src3post}
+        </li>
+      </ul>
+    </section>
+
+    <div class="upsell-cta">
+      <p class="upsell-message">{t.cta}</p>
+      <a class="upsell-button" href="/today">{t.ctaButton}</a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .ab-thesis {
+    background: var(--panel); border: 1px solid var(--gold); border-radius: 10px;
+    padding: 18px 20px; line-height: 1.75; color: var(--text); font-size: 15px;
+  }
+  .ab-quote {
+    margin: 14px 0 0; padding: 12px 18px;
+    border-left: 3px solid var(--gold);
+    background: var(--panel); border-radius: 0 10px 10px 0;
+    color: var(--text-dim); font-style: italic; font-size: 14.5px; line-height: 1.75;
+  }
+  .ab-quote + .ab-quote { margin-top: 10px; }
+  .ab-keyquote {
+    margin-top: 16px; padding: 20px 22px;
+    background: var(--panel); border: 1px solid var(--gold); border-radius: 10px;
+  }
+  .ab-keyquote p { margin: 0; color: var(--gold); font-size: 16.5px; line-height: 1.8; font-weight: 500; }
+  .ab-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .ab-card {
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .ab-card h3 { color: var(--gold); font-size: 15px; margin: 0 0 8px; }
+  .ab-card p { color: var(--text); font-size: 14px; line-height: 1.7; margin: 0; }
+  .ab-verse {
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; padding: 20px 22px; text-align: center;
+  }
+  .ab-verse-text { margin: 0; color: var(--text); font-size: 15.5px; line-height: 1.85; font-style: italic; }
+  .ab-verse-ref { margin: 10px 0 0; color: var(--gold); font-size: 13.5px; font-family: var(--font-ui); }
+  .ab-sources { margin: 0; padding-left: 20px; }
+  .ab-sources li { color: var(--text-dim); font-size: 14px; line-height: 1.75; margin-bottom: 8px; }
+  @media (max-width: 640px) {
+    .ab-grid { grid-template-columns: 1fr; }
+  }
+</style>
