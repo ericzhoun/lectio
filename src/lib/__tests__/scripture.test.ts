@@ -6,7 +6,7 @@ import {
 import { SPREADS } from '../reading';
 
 describe('scripture verse deck', () => {
-  it('has 148 unique English references', () => {
+  it('has 151 unique English references', () => {
     expect(BIBLE_VERSES).toHaveLength(151);
     const refs = new Set(BIBLE_VERSES.map((v) => v.en.ref));
     expect(refs.size).toBe(151);

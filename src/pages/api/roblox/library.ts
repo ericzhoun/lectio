@@ -1,5 +1,5 @@
 // src/pages/api/roblox/library.ts
-// The full 148-verse deck for the world's Verse Library wall, in canonical
+// The full 151-verse deck for the world's Verse Library wall, in canonical
 // book order with both languages and themes.
 import type { APIRoute } from 'astro';
 import { getLibraryVerses } from '../../../lib/scripture';
