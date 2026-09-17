@@ -2,6 +2,7 @@
 // Mobile shell (≤760px): sticky thumb bar + full-screen navigation sheet.
 // Desktop keeps .top-nav until the site-wide redesign adopts this component.
 import { langSwitchHref } from '../lib/i18n';
+import { safeAuthReturn } from '../lib/authReturn';
 import type { Lang } from '../lib/reading';
 
 interface Props {
@@ -29,7 +30,9 @@ const t = {
     privacy: lang === 'zh' ? '你的回应不被追踪' : 'your words stay yours',
   },
 };
-const loginHref = `/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`;
+// Never point an auth link back at an auth page: doing so nests returnTo on every
+// visit and creates an unbounded URL space for crawlers.
+const loginHref = `/login?lang=${lang}&returnTo=${encodeURIComponent(safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?lang=${lang}`))}`;
 ---
 <div class="mobile-nav">
   <nav class="mn-bar" aria-label={t.menu}>

@@ -1,12 +1,16 @@
 ---
 import LoginForm from './LoginForm.astro';
+import { safeAuthReturn } from '../lib/authReturn';
 import type { Lang } from '../lib/reading';
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
+// Never point an auth link back at an auth page: doing so nests returnTo on every
+// visit and creates an unbounded URL space for crawlers.
+const returnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?lang=${lang}`);
 ---
 <dialog id="login-overlay" aria-labelledby="login-overlay-title" data-lang={lang}>
   <button type="button" class="login-close" aria-label={lang === 'zh' ? '关闭' : 'Close'}>&times;</button>
-  <LoginForm lang={lang} returnTo={Astro.url.pathname + Astro.url.search} headingId="login-overlay-title" />
+  <LoginForm lang={lang} returnTo={returnTo} headingId="login-overlay-title" />
 </dialog>
 <style>
   /* Pin the overlay to the viewport itself, not the document: a reader who

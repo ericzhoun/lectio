@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../lib/session';
 import { langSwitchHref } from '../lib/i18n';
+import { safeAuthReturn } from '../lib/authReturn';
 import LoginOverlay from '../components/LoginOverlay.astro';
 import AssistantWidget from '../components/AssistantWidget.astro';
 import MobileNav from '../components/MobileNav.astro';
@@ -16,6 +17,10 @@ interface Props {
   chrome?: 'full' | 'minimal';
 }
 const { title, description = '', lang, noindex = false, chrome = 'full' } = Astro.props;
+
+// Never point an auth link back at an auth page: doing so nests returnTo on every
+// visit and creates an unbounded URL space for crawlers.
+const loginReturnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?lang=${lang}`);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
@@ -129,7 +134,7 @@ const altLangUrl = lang === 'zh'
       {userId ? (
         <a href="/account" style={isActive('/account') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '账户' : 'Account'}</a>
       ) : (
-        <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
+        <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(loginReturnTo)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
       )}
       <a href="/today" data-event="cta_click" data-event-props='{"slot":"nav_today"}' style={isActive('/today') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '今日' : 'Today'}</a>
       <a href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}' style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '订阅' : 'Subscription'}</a>

@@ -4,6 +4,7 @@ Allow: /
 
 # Private pages — not useful in search results
 Disallow: /login
+Disallow: /signup
 Disallow: /account
 Disallow: /history
 Disallow: /api/

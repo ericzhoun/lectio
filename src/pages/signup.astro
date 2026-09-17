@@ -69,7 +69,7 @@ const description = lang === 'zh'
   ? '免费注册即可每日 6 次经文默想，解锁圣言诵读与深度诵读布局，保存完整默想历史。'
   : 'Create a free account for 6 scripture readings a day, unlock the Lectio Divina and Deep Lectio layouts, and keep your full reading history.';
 ---
-<Layout title={title} description={description} lang={lang}>
+<Layout noindex title={title} description={description} lang={lang}>
   <div class="auth-page">
     <div class="auth-hero">
       <h1>{lang === 'zh' ? '开启你的圣言诵读' : 'Begin your Lectio practice'}</h1>
