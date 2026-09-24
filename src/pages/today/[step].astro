@@ -362,19 +362,23 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
 </Layout>
 
 <script>
+  // The live transport sits right after its pill, so the error line is looked
+  // up by class inside the same block rather than by sibling position.
   const audioError = (button: HTMLButtonElement) => {
-    let message = button.nextElementSibling;
-    if (!message?.classList.contains('audio-error')) {
+    const parent = button.parentNode;
+    if (!parent) return;
+    let message = parent.querySelector<HTMLElement>('.audio-error');
+    if (!message) {
       message = document.createElement('p');
       message.className = 'audio-error';
       message.setAttribute('role', 'status');
-      button.parentNode?.insertBefore(message, button.nextSibling);
+      parent.insertBefore(message, button.nextSibling);
     }
     message.textContent = document.documentElement.lang === 'zh'
       ? '音频暂时无法播放，请重试。' : 'Audio could not play. Please try again.';
   };
   const clearAudioError = (button: HTMLButtonElement) => {
-    if (button.nextElementSibling?.classList.contains('audio-error')) button.nextElementSibling.remove();
+    button.parentNode?.querySelector('.audio-error')?.remove();
   };
   // The breathing cross: three deep breaths across ten seconds — an Apple
   // Watch style moment in place of the old countdown — then the step is
@@ -432,92 +436,177 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       });
     });
 
-    // Read the passage aloud via the open-source MeloTTS model on Workers AI.
-    // The text itself stays server-side; the button only names the day.
-    const listen = reading.querySelector<HTMLButtonElement>('[data-listen]');
-    const lang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
-    if (listen?.dataset.day) {
-      const label = {
-        idle: lang === 'zh' ? '▶ 朗读' : '▶ Listen',
-        loading: lang === 'zh' ? '生成中…' : 'Loading…',
-        playing: lang === 'zh' ? '■ 停止' : '■ Stop',
-      };
-      let audio: HTMLAudioElement | null = null;
-      let objectUrl: string | null = null;
-      let loading = false;
-
-      const stop = () => {
-        audio?.pause();
-        audio = null;
-        if (objectUrl) URL.revokeObjectURL(objectUrl);
-        objectUrl = null;
-        listen.textContent = label.idle;
-      };
-
-      listen.addEventListener('click', async () => {
-        // Mid-playback, the button really is a stop button.
-        if (audio) return stop();
-        // A second click while the model is still working would buy a second clip.
-        if (loading) return;
-        loading = true;
-        clearAudioError(listen);
-        listen.textContent = label.loading;
-        try {
-          // The prebuilt clip, when today has one; on-demand MeloTTS otherwise.
-          // Library walks carry their own audio URL (the deck ref, not a day).
-          audio = new Audio(listen.dataset.audio || `/api/tts?day=${listen.dataset.day}&lang=${lang}`);
-          audio.addEventListener('ended', stop);
-          await audio.play();
-          listen.textContent = label.playing;
-          window.lectioTrack?.('audio_play', { player: 'passage', step: listen.dataset.day ?? '' });
-        } catch {
-          stop();
-          audioError(listen);
-        } finally {
-          loading = false;
-        }
-      });
-    }
   }
 
-  // The rest of the players. `lang` above is scoped to the reading block.
+  // Every Listen pill hands over to a small transport while its clip plays:
+  // pause/resume, ten seconds back, ten seconds on, stop. Stop — or the clip
+  // ending — gives the pill back, so a reader can listen again without a reload.
   const uiLang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
-  const clipLabels = (idle: string) => ({
-    idle,
-    loading: uiLang === 'zh' ? '生成中…' : 'Loading…',
-    playing: uiLang === 'zh' ? '■ 停止' : '■ Stop',
-  });
+  const SKIP_SECONDS = 10;
 
-  // Shared button contract with the passage Listen button: click plays, click
-  // again stops, a second click while loading does nothing.
-  const clipPlayer = (button: HTMLButtonElement, load: string | (() => Promise<string>), idle: string): void => {
-    const label = clipLabels(idle);
+  const formatTime = (seconds: number): string => {
+    const total = Number.isFinite(seconds) && seconds > 0 ? Math.floor(seconds) : 0;
+    return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+  };
+
+  const transportPlayer = (
+    button: HTMLButtonElement,
+    load: () => Promise<string>,
+    idle: string,
+    onPlay: () => void,
+  ): void => {
+    const zh = uiLang === 'zh';
+    const copy = {
+      ready: idle,
+      loading: zh ? '生成中…' : 'Loading…',
+      player: zh ? '音频播放器' : 'Audio player',
+      progress: zh ? '播放进度' : 'Progress',
+      pause: zh ? '暂停' : 'Pause',
+      play: zh ? '继续' : 'Resume',
+      back: zh ? '后退 10 秒' : 'Rewind 10 seconds',
+      forward: zh ? '前进 10 秒' : 'Forward 10 seconds',
+      stop: zh ? '停止' : 'Stop',
+    };
+
+    const transportButton = (glyph: string, label: string, extra = ''): HTMLButtonElement => {
+      const el = document.createElement('button');
+      el.type = 'button';
+      el.className = extra ? `audio-player-btn ${extra}` : 'audio-player-btn';
+      el.textContent = glyph;
+      el.setAttribute('aria-label', label);
+      el.title = label;
+      return el;
+    };
+
+    const back = transportButton('↺10', copy.back);
+    const toggle = transportButton('❚❚', copy.pause, 'audio-player-toggle');
+    const forward = transportButton('10↻', copy.forward);
+    const halt = transportButton('■', copy.stop);
+
+    const controls = document.createElement('span');
+    controls.className = 'audio-player-controls';
+    controls.appendChild(back);
+    controls.appendChild(toggle);
+    controls.appendChild(forward);
+    controls.appendChild(halt);
+
+    const bar = document.createElement('span');
+    bar.className = 'audio-player-bar';
+    bar.setAttribute('role', 'progressbar');
+    bar.setAttribute('aria-label', copy.progress);
+    bar.setAttribute('aria-valuemin', '0');
+    bar.setAttribute('aria-valuemax', '100');
+    bar.setAttribute('aria-valuenow', '0');
+    const fill = document.createElement('span');
+    fill.className = 'audio-player-fill';
+    bar.appendChild(fill);
+
+    const clock = document.createElement('span');
+    clock.className = 'audio-player-time';
+
+    const meter = document.createElement('span');
+    meter.className = 'audio-player-meter';
+    meter.appendChild(bar);
+    meter.appendChild(clock);
+
+    const player = document.createElement('span');
+    player.className = 'audio-player';
+    player.hidden = true;
+    player.setAttribute('role', 'group');
+    player.setAttribute('aria-label', copy.player);
+    player.appendChild(controls);
+    player.appendChild(meter);
+    button.insertAdjacentElement('afterend', player);
+
     let audio: HTMLAudioElement | null = null;
     let objectUrl: string | null = null;
     let loading = false;
-    const stop = () => {
-      audio?.pause();
-      audio = null;
-      if (objectUrl) URL.revokeObjectURL(objectUrl);
-      objectUrl = null;
-      button.textContent = label.idle;
+
+    const paint = (): void => {
+      const duration = audio && Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 0;
+      const at = audio?.currentTime ?? 0;
+      const ratio = duration ? Math.min(1, at / duration) : 0;
+      fill.style.width = `${(ratio * 100).toFixed(2)}%`;
+      bar.setAttribute('aria-valuenow', String(Math.round(ratio * 100)));
+      clock.textContent = duration ? `${formatTime(at)} / ${formatTime(duration)}` : formatTime(at);
     };
+
+    const setToggle = (playing: boolean): void => {
+      const label = playing ? copy.pause : copy.play;
+      toggle.textContent = playing ? '❚❚' : '▶';
+      toggle.setAttribute('aria-label', label);
+      toggle.title = label;
+    };
+
+    // Hand the pill back: the clip stops, the object URL is released, the
+    // transport is hidden again — and the reader can listen a second time.
+    const release = (): void => {
+      const clip = audio;
+      audio = null;
+      clip?.pause();
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+        objectUrl = null;
+      }
+      player.hidden = true;
+      button.hidden = false;
+      button.textContent = copy.ready;
+      setToggle(false);
+      fill.style.width = '0';
+      clock.textContent = '';
+      bar.setAttribute('aria-valuenow', '0');
+    };
+
+    back.addEventListener('click', () => {
+      const clip = audio;
+      if (!clip) return;
+      clip.currentTime = Math.max(0, clip.currentTime - SKIP_SECONDS);
+      paint();
+    });
+
+    forward.addEventListener('click', () => {
+      const clip = audio;
+      if (!clip) return;
+      const end = Number.isFinite(clip.duration) && clip.duration > 0 ? Math.max(0, clip.duration - 0.25) : Infinity;
+      clip.currentTime = Math.min(end, clip.currentTime + SKIP_SECONDS);
+      paint();
+    });
+
+    toggle.addEventListener('click', () => {
+      const clip = audio;
+      if (!clip) return;
+      // A pause mid-clip is not a stop: the clip keeps its place.
+      if (clip.paused) void clip.play().catch(() => { /* the pill reports failures */ });
+      else clip.pause();
+    });
+
+    halt.addEventListener('click', release);
+
     button.addEventListener('click', async () => {
-      if (audio) return stop();
-      if (loading) return;
+      if (loading || audio) return;
       loading = true;
       clearAudioError(button);
-      button.textContent = label.loading;
+      button.textContent = copy.loading;
       try {
-        const src = typeof load === 'string' ? load : await load();
+        const src = await load();
         if (src.startsWith('blob:')) objectUrl = src;
-        audio = new Audio(src);
-        audio.addEventListener('ended', stop);
-        await audio.play();
-        button.textContent = label.playing;
-        window.lectioTrack?.('audio_play', { player: 'clip', clip: button.dataset.clip ?? '' });
+        const clip = new Audio(src);
+        clip.addEventListener('ended', release);
+        clip.addEventListener('timeupdate', paint);
+        clip.addEventListener('loadedmetadata', paint);
+        clip.addEventListener('play', () => setToggle(true));
+        clip.addEventListener('pause', () => setToggle(false));
+        audio = clip;
+        await clip.play();
+        // The pill steps aside; the transport takes its place and its focus.
+        button.hidden = true;
+        player.hidden = false;
+        setToggle(true);
+        paint();
+        if (document.activeElement === button || document.activeElement === document.body) toggle.focus();
+        onPlay();
       } catch {
-        stop();
+        release();
         audioError(button);
       } finally {
         loading = false;
@@ -528,13 +617,32 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
   // Step guidance clips, prebuilt and committed under /audio/steps/.
   document.querySelectorAll<HTMLButtonElement>('[data-clip]').forEach((btn) => {
     const src = btn.dataset.clip;
-    if (src) clipPlayer(btn, src, uiLang === 'zh' ? '▶ 引导' : '▶ Guidance');
+    if (!src) return;
+    transportPlayer(btn, async () => src, uiLang === 'zh' ? '▶ 引导' : '▶ Guidance', () => {
+      window.lectioTrack?.('audio_play', { player: 'clip', clip: btn.dataset.clip ?? '' });
+    });
+  });
+
+  // The passage aloud, read by the open-source MeloTTS model on Workers AI —
+  // the prebuilt clip when today has one, on-demand synthesis otherwise. The
+  // text itself stays server-side; the button only names the day. Library
+  // walks carry their own audio URL (the deck ref, not a day).
+  document.querySelectorAll<HTMLButtonElement>('.reading [data-listen]').forEach((btn) => {
+    if (!btn.dataset.day) return;
+    transportPlayer(
+      btn,
+      async () => btn.dataset.audio || `/api/tts?day=${btn.dataset.day}&lang=${uiLang}`,
+      uiLang === 'zh' ? '▶ 朗读' : '▶ Listen',
+      () => {
+        window.lectioTrack?.('audio_play', { player: 'passage', step: btn.dataset.day ?? '' });
+      },
+    );
   });
 
   // The model's reply, spoken only from what is already stored in D1 for this
   // reader's day and step - never from request text.
   document.querySelectorAll<HTMLButtonElement>('[data-reply]').forEach((btn) => {
-    clipPlayer(
+    transportPlayer(
       btn,
       async () => {
         const res = await fetch('/api/reflection-tts', {
@@ -546,6 +654,9 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         return URL.createObjectURL(await res.blob());
       },
       uiLang === 'zh' ? '▶ 听回复' : '▶ Reply',
+      () => {
+        window.lectioTrack?.('audio_play', { player: 'clip', clip: btn.dataset.clip ?? '' });
+      },
     );
   });
 
@@ -782,6 +893,87 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     /* Buttons don't inherit color by default — without this the label
        stays browser-black on the vespers (dark) background. */
     color: inherit;
+  }
+
+  /* Hidden must win: `.listen` and `.audio-player` set their own display. */
+  .listen[hidden],
+  .audio-player[hidden] {
+    display: none;
+  }
+
+  /* The transport a Listen pill hands over to while its clip plays. */
+  .audio-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: 20rem;
+    margin: 0 auto;
+  }
+
+  .audio-player-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  /* Two classes deep so the transport outranks `.writing button`. */
+  .audio-player .audio-player-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 0.5rem;
+    background: none;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 999px;
+    color: inherit;
+    font: inherit;
+    font-size: 0.85rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .audio-player .audio-player-btn:hover {
+    border-color: currentColor;
+  }
+
+  .audio-player .audio-player-toggle {
+    min-width: 52px;
+  }
+
+  .audio-player-meter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .audio-player-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 999px;
+    background: rgba(128, 128, 128, 0.3);
+    overflow: hidden;
+  }
+
+  .audio-player-fill {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: currentColor;
+    opacity: 0.65;
+    transition: width 0.2s linear;
+  }
+
+  .audio-player-time {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.6;
+    white-space: nowrap;
   }
 
   .controls button {
