@@ -4,6 +4,7 @@ import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../lib/session';
 import { langSwitchHref } from '../lib/i18n';
 import { safeAuthReturn } from '../lib/authReturn';
+import { canonicalHref, hreflangAlternates, SITE_URL } from '../lib/seo';
 import LoginOverlay from '../components/LoginOverlay.astro';
 import AssistantWidget from '../components/AssistantWidget.astro';
 import MobileNav from '../components/MobileNav.astro';
@@ -25,24 +26,18 @@ const loginReturnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?l
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
 
-// Canonical URL: strip query params (including ?lang=) so search engines
-// see one URL per piece of content.
-const siteUrl = 'https://enjoyhim.org';
-const canonicalPath = Astro.url.pathname;
-const canonicalUrl = lang === 'zh'
-  ? `${siteUrl}${canonicalPath}?lang=zh`
-  : `${siteUrl}${canonicalPath}`;
+// Canonical URL: each language variant self-canonicalizes — the bare path is
+// the English page and ?lang=zh is the Chinese page. Canonicalizing one
+// language onto the other makes Google treat those pages as designated
+// alternates and skip indexing them ("Alternate page with proper canonical
+// tag" in Search Console). The decision reads the URL's own ?lang= param, not
+// the cookie-resolved lang, since crawlers send no cookies.
+const canonicalUrl = canonicalHref(Astro.url.pathname, Astro.url.searchParams.get('lang'));
+const alternates = hreflangAlternates(Astro.url.pathname);
 
 // Active-page highlight (same bold treatment as the language links below).
 const path = Astro.url.pathname;
 const isActive = (p: string) => path === p || path.startsWith(`${p}/`);
-
-// Alternate language URL (for hreflang): en → bare path, zh → ?lang=zh,
-// matching the canonical scheme above.
-const altLang: Lang = lang === 'zh' ? 'en' : 'zh';
-const altLangUrl = lang === 'zh'
-  ? `${siteUrl}${canonicalPath}`
-  : `${siteUrl}${canonicalPath}?lang=zh`;
 ---
 <!DOCTYPE html>
 <html lang={lang}>
@@ -82,11 +77,9 @@ const altLangUrl = lang === 'zh'
   <title>{title}</title>
   {description && <meta name="description" content={description} />}
 
-  <!-- SEO: canonical + hreflang (avoid duplicate content across lang variants) -->
+  <!-- SEO: canonical + hreflang (each language variant is its own canonical) -->
   <link rel="canonical" href={canonicalUrl} />
-  <link rel="alternate" hreflang={lang} href={canonicalUrl} />
-  <link rel="alternate" hreflang={altLang} href={altLangUrl} />
-  <link rel="alternate" hreflang="x-default" href={`${siteUrl}${canonicalPath}`} />
+  {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
   <!-- SEO: opt out of indexing for private pages -->
   {noindex && <meta name="robots" content="noindex, nofollow" />}
 
@@ -95,7 +88,7 @@ const altLangUrl = lang === 'zh'
   <meta property="og:title" content={title} />
   {description && <meta property="og:description" content={description} />}
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+  <meta property="og:image" content={`${SITE_URL}/og-image.png`} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content={lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Lectio Divina scripture reflection'} />
@@ -107,7 +100,7 @@ const altLangUrl = lang === 'zh'
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   {description && <meta name="twitter:description" content={description} />}
-  <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
+  <meta name="twitter:image" content={`${SITE_URL}/og-image.png`} />
   <meta name="twitter:image:alt" content={lang === 'zh' ? 'Lectio 圣言诵读 — 每日经文默想' : 'Lectio — Daily Lectio Divina scripture reflection'} />
 
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -122,8 +115,8 @@ const altLangUrl = lang === 'zh'
     "@type": "Organization",
     "name": "Lectio",
     "alternateName": "Lectio 圣言诵读",
-    "url": siteUrl,
-    "logo": `${siteUrl}/logo.webp`,
+    "url": SITE_URL,
+    "logo": `${SITE_URL}/logo.webp`,
     "description": "Daily Lectio Divina scripture reflection in English and Chinese.",
   })} />
 </head>
