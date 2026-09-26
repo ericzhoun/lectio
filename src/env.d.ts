@@ -10,6 +10,9 @@ declare namespace Cloudflare {
     // R2 store for prebuilt TTS clips. Keys are the site path minus the
     // leading "audio/" and are gated by the manifests (see src/lib/audio.ts).
     AUDIO: import('@cloudflare/workers-types').R2Bucket;
+    // Hourly cron-refreshed podcast feed (src/lib/podcast.ts). Page renders
+    // read this instead of fetching the publisher's RSS themselves.
+    PODCAST_KV: import('@cloudflare/workers-types').KVNamespace;
     SESSION_SECRET: string;
     STRIPE_SECRET_KEY: string;
     STRIPE_WEBHOOK_SECRET: string;

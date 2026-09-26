@@ -19,6 +19,14 @@
 			"database_id": "b31145ba-04a6-4fc9-bc01-744f1224e3d8"
 		}
 	],
+	// Hourly refresh of the publisher's podcast feed, stored for the site's
+	// SSR Worker to read (see src/lib/podcast.ts's refreshPodcastFeed).
+	"kv_namespaces": [
+		{
+			"binding": "PODCAST_KV",
+			"id": "36aced3bd1a94c4780ce32769a6299cd"
+		}
+	],
 	"observability": {
 		"enabled": true
 	},

@@ -42,6 +42,12 @@
 		{
 			"binding": "SESSION",
 			"id": "f8cfe6b42b2c473587f061c683777705"
+		},
+		// Hourly cron-refreshed copy of the publisher's podcast feed, so page
+		// renders never fetch the RSS themselves (see src/lib/podcast.ts).
+		{
+			"binding": "PODCAST_KV",
+			"id": "36aced3bd1a94c4780ce32769a6299cd"
 		}
 	],
 	"routes": [

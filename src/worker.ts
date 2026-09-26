@@ -7,9 +7,15 @@
 // needs. All the actual decisions live in src/lib/sendDaily.ts, which is
 // where the tests point.
 import { sendDailyInvitations } from './lib/sendDaily';
+import { refreshPodcastFeed } from './lib/podcast';
 
 export default {
   async scheduled(_controller: ScheduledController, env: any, ctx: ExecutionContext) {
+    // Refresh the podcast feed into KV on every tick (it runs hourly), so
+    // page renders read KV instead of fetching the publisher's feed on the
+    // request path. Independent of the mail configuration below.
+    ctx.waitUntil(refreshPodcastFeed(env.PODCAST_KV));
+
     const apiKey = env.RESEND_API_KEY as string | undefined;
     const tokenSecret = env.MAIL_TOKEN_SECRET as string | undefined;
     if (!apiKey || !tokenSecret) {
