@@ -3,6 +3,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { getLibraryVerses } from '../../lib/scripture';
+import { chapterContextForRef, relatedByBook } from '../../lib/verseContext';
 import { resolveLang } from '../../lib/i18n';
 import {
   episodesForVerse,
@@ -26,6 +27,17 @@ const title = lang === 'zh'
 const description = lang === 'zh'
   ? `${verse.refZh}：${verse.textZh}`
   : `${verse.refEn}: ${verse.textEn}`;
+
+// The passage inside its chapter (±6 neighbouring verses, from the same
+// public-domain data the reading flow uses), so a visitor arriving from a
+// verse lookup can read what comes before and after. Null for the two deck
+// verses whose chapter data is absent — that section is then skipped.
+const chapterContext = chapterContextForRef(verse.refEn, verse.refZh);
+
+// Other deck verses from the same book — an onward path into the library for
+// visitors and crawlers. Empty for books the deck covers only once.
+const relatedVerses = relatedByBook(verse.refEn, 6);
+const bookLabelZh = verse.refZh.match(/^(\S+) /)?.[1] ?? '';
 
 // Daily Lectio Divina podcast (Abiding Way Ministries) — episodes covering
 // this exact passage, streamed from the publisher's feed with permission.
@@ -82,6 +94,41 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
     <p><span class="tag">{lang === 'zh' ? verse.themeZh : verse.themeEn}</span></p>
   </div>
 
+  {chapterContext && (
+    <div class="meaning-block">
+      <h3>
+        {lang === 'zh'
+          ? `${chapterContext.bookZh} ${chapterContext.chapter} 章 · 上下文`
+          : `${chapterContext.bookEn} ${chapterContext.chapter} — in context`}
+      </h3>
+      {chapterContext.startsOpen && <p class="context-edge" aria-hidden="true">…</p>}
+      <div class="context-verses">
+        {chapterContext.verses.map((v) => (
+          <p class={v.isFocus ? 'context-verse is-focus' : 'context-verse'}>
+            <sup>{v.num}</sup>{lang === 'zh' ? v.textZh : v.textEn}
+          </p>
+        ))}
+      </div>
+      {chapterContext.endsOpen && <p class="context-edge" aria-hidden="true">…</p>}
+    </div>
+  )}
+
+  {relatedVerses.length > 0 && (
+    <div class="meaning-block">
+      <h3>{lang === 'zh' ? `更多${bookLabelZh}经文` : `More from ${verse.bookEn}`}</h3>
+      <ul class="related-verses">
+        {relatedVerses.map((v) => (
+          <li>
+            <a href={`/library/${v.slug}?lang=${lang}`}>
+              <span class="related-ref">{lang === 'zh' ? v.refZh : v.refEn}</span>
+              <span class="tag">{lang === 'zh' ? v.themeZh : v.themeEn}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
   {podcastEpisodes.length > 0 && (
     <div class="meaning-block podcast-block">
       <h3>{lang === 'zh' ? '本段经文的引导音频' : 'Guided audio for this passage'}</h3>
@@ -108,3 +155,21 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
     </a>
   </p>
 </Layout>
+
+<style>
+  /* Chapter window around the verse: the searched verse stands out, the
+     neighbours recede. */
+  .context-verses { margin-top: 4px; }
+  .context-verse { margin: 0 0 6px; font-size: 15px; line-height: 1.75; color: var(--text-dim); }
+  .context-verse sup { font-size: 11px; color: var(--gold); margin-right: 6px; font-family: var(--font-ui); }
+  .context-verse.is-focus { color: var(--text); border-left: 3px solid var(--gold); padding-left: 10px; }
+  .context-edge { margin: 0 0 6px; color: var(--text-dim); text-align: center; }
+
+  /* Onward links: other verses from the same book. */
+  .related-verses { list-style: none; margin: 0; padding: 0; }
+  .related-verses li { margin-bottom: 10px; }
+  .related-verses li:last-child { margin-bottom: 0; }
+  .related-verses a { text-decoration: none; }
+  .related-verses a:hover .related-ref { text-decoration: underline; }
+  .related-ref { color: var(--accent-ink); margin-right: 8px; }
+</style>
