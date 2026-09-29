@@ -5,7 +5,7 @@
 > through a short lectionary scripture passage in four movements: Lectio
 > (God addresses us through Scripture), Meditatio (attending and responding),
 > Oratio (speaking to God in prayer), and Contemplatio (remaining with God),
-> and reads the passage aloud. It also offers a library of 101 Bible
+> and reads the passage aloud. It also offers a library of 157 Bible
 > verses for reflection and an assistant that answers questions about
 > scripture and the practice.
 
@@ -27,9 +27,11 @@ before God with scripture and gentle reflection.
 - [Today](https://enjoyhim.org/today): walk the church calendar's passage
   for today, one step at a time (Lectio, Meditatio, Oratio, Contemplatio),
   with audio narration.
-- [Verse Library](https://enjoyhim.org/library): 101 Bible verses with
+- [Verse Library](https://enjoyhim.org/library): 157 Bible verses with
   bilingual text and reflection themes. Each verse has its own page, e.g.
   [Psalm 23:1](https://enjoyhim.org/library/psalm-23-1).
+- [Topics](https://enjoyhim.org/topics): the verse library grouped by theme —
+  anxiety, hope, the love of God, faith, wisdom, rest, and more.
 - [Approach](https://enjoyhim.org/approach): what Lectio Divina is, what
   it is not, and how this app practices it.
 - [Pricing](https://enjoyhim.org/pricing): guests get 3 Daily Word readings

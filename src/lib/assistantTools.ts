@@ -178,7 +178,7 @@ const readTools: AssistantTool[] = [
   {
     name: 'list_verses',
     description:
-      'Search the Lectio verse library (148 passages) by reference or theme. Use it to ground any answer about which passages the site contains.',
+      'Search the Lectio verse library (157 passages) by reference or theme. Use it to ground any answer about which passages the site contains.',
     kind: 'read',
     auth: 'any',
     params: {

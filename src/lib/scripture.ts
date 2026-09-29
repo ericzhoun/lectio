@@ -99,7 +99,7 @@ export const BOOK_NR: Record<string, number> = {
   '1 Thessalonians': 52, '2 Thessalonians': 53, '1 Timothy': 54, '2 Timothy': 55, Titus: 56,
   Philemon: 57, Hebrews: 58, James: 59, '1 Peter': 60, '2 Peter': 61, '1 John': 62,
   '2 John': 63, '3 John': 64, Jude: 65, Revelation: 66,
-  // Absent from the 151-verse deck, but reached by the daily lectionary.
+  // Absent from the 157-verse deck, but reached by the daily lectionary.
   'Song of Solomon': 22, Habakkuk: 35, Haggai: 37,
 };
 
@@ -848,5 +848,34 @@ export const BIBLE_VERSES: BibleVerse[] = [
   {
     en: { ref: 'Romans 1:17', text: "For in it is revealed God's righteousness from faith to faith. As it is written, 'But the righteous shall live by faith.'", theme: 'The just live by faith' },
     zh: { ref: '罗马书 1:17', text: '因为神的义正在这福音上显明出来；这义是本于信，以至于信。如经上所记：义人必因信得生。', theme: '义人因信得生' },
+  },
+  // ---- Deck expansion (2026-09) --------------------------------------------
+  // High-demand references the original deck did not carry. Texts follow the
+  // deck's normalized style (World English Bible / 和合本, both public domain;
+  // no 或译 notes or quote brackets in the Chinese). The chapter data keeps
+  // the full source text for the context sections.
+  {
+    en: { ref: 'Genesis 1:1', text: 'In the beginning, God created the heavens and the earth.', theme: 'Creation' },
+    zh: { ref: '创世记 1:1', text: '起初，神创造天地。', theme: '创造' },
+  },
+  {
+    en: { ref: 'Psalm 46:10', text: 'Be still, and know that I am God. I will be exalted among the nations. I will be exalted in the earth.', theme: 'Be still' },
+    zh: { ref: '诗篇 46:10', text: '你们要休息，要知道我是神！我必在外邦中被尊崇，在遍地上也被尊崇。', theme: '安静知道' },
+  },
+  {
+    en: { ref: 'John 14:6', text: "Jesus said to him, 'I am the way, the truth, and the life. No one comes to the Father, except through me.'", theme: 'The Way, the Truth, the Life' },
+    zh: { ref: '约翰福音 14:6', text: '耶稣说：我就是道路、真理、生命；若不藉着我，没有人能到父那里去。', theme: '道路真理生命' },
+  },
+  {
+    en: { ref: 'Matthew 28:19', text: 'Go, and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.', theme: 'Make disciples' },
+    zh: { ref: '马太福音 28:19', text: '所以，你们要去，使万民作我的门徒，奉父、子、圣灵的名给他们施洗。', theme: '使万民作门徒' },
+  },
+  {
+    en: { ref: 'Romans 6:23', text: 'For the wages of sin is death, but the free gift of God is eternal life in Christ Jesus our Lord.', theme: 'The gift of God' },
+    zh: { ref: '罗马书 6:23', text: '因为罪的工价乃是死；惟有神的恩赐，在我们的主基督耶稣里，乃是永生。', theme: '神的恩赐' },
+  },
+  {
+    en: { ref: 'John 10:10', text: 'The thief only comes to steal, kill, and destroy. I came that they may have life, and may have it abundantly.', theme: 'Life in abundance' },
+    zh: { ref: '约翰福音 10:10', text: '盗贼来，无非要偷窃，杀害，毁坏；我来了，是要叫羊得生命，并且得的更丰盛。', theme: '丰盛的生命' },
   },
 ];

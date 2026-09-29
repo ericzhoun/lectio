@@ -4,6 +4,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getLibraryVerses } from '../../lib/scripture';
 import { chapterContextForRef, relatedByBook } from '../../lib/verseContext';
+import { topicsForVerse } from '../../lib/topics';
 import { resolveLang } from '../../lib/i18n';
 import {
   episodesForVerse,
@@ -30,14 +31,17 @@ const description = lang === 'zh'
 
 // The passage inside its chapter (±6 neighbouring verses, from the same
 // public-domain data the reading flow uses), so a visitor arriving from a
-// verse lookup can read what comes before and after. Null for the two deck
-// verses whose chapter data is absent — that section is then skipped.
+// verse lookup can read what comes before and after. Every deck verse
+// resolves today; the section is skipped only when chapter data is absent.
 const chapterContext = chapterContextForRef(verse.refEn, verse.refZh);
 
 // Other deck verses from the same book — an onward path into the library for
 // visitors and crawlers. Empty for books the deck covers only once.
 const relatedVerses = relatedByBook(verse.refEn, 6);
 const bookLabelZh = verse.refZh.match(/^(\S+) /)?.[1] ?? '';
+
+// Topic pages this verse appears in, linking the page into the themed hubs.
+const verseTopics = topicsForVerse(verse.refEn);
 
 // Daily Lectio Divina podcast (Abiding Way Ministries) — episodes covering
 // this exact passage, streamed from the publisher's feed with permission.
@@ -129,6 +133,17 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
     </div>
   )}
 
+  {verseTopics.length > 0 && (
+    <div class="meaning-block">
+      <h3>{lang === 'zh' ? '相关主题' : 'Related topics'}</h3>
+      <p class="verse-topics">
+        {verseTopics.map((t) => (
+          <a href={`/topics/${t.slug}?lang=${lang}`}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
+        ))}
+      </p>
+    </div>
+  )}
+
   {podcastEpisodes.length > 0 && (
     <div class="meaning-block podcast-block">
       <h3>{lang === 'zh' ? '本段经文的引导音频' : 'Guided audio for this passage'}</h3>
@@ -172,4 +187,13 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
   .related-verses a { text-decoration: none; }
   .related-verses a:hover .related-ref { text-decoration: underline; }
   .related-ref { color: var(--accent-ink); margin-right: 8px; }
+
+  /* Topic chips: the hubs this verse belongs to. */
+  .verse-topics { margin: 0; }
+  .verse-topics a {
+    display: inline-block; margin: 0 8px 8px 0; text-decoration: none;
+    background: var(--pill-bg); color: var(--text-dim); font-size: 12px;
+    font-family: var(--font-ui); padding: 4px 11px; border-radius: 999px;
+  }
+  .verse-topics a:hover { color: var(--text); }
 </style>

@@ -3,6 +3,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { getLibraryVerses } from '../../lib/scripture';
+import { TOPICS } from '../../lib/topics';
 import { resolveLang } from '../../lib/i18n';
 import {
   getPodcastEpisodes,
@@ -65,6 +66,14 @@ function filterHref(t: string) {
     </div>
   )}
 
+  <div class="topic-strip">
+    <span class="topic-strip-label">{lang === 'zh' ? '按主题浏览' : 'Browse by topic'}</span>
+    {TOPICS.map((t) => (
+      <a href={`/topics/${t.slug}?lang=${lang}`}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
+    ))}
+    <a class="topic-strip-all" href={`/topics?lang=${lang}`}>{lang === 'zh' ? '全部主题' : 'All topics →'}</a>
+  </div>
+
   <div class="verse-grid">
     {verses.map((v) => (
       <a class="verse-grid-item" href={`/library/${v.slug}?lang=${lang}`}>
@@ -78,3 +87,19 @@ function filterHref(t: string) {
     ))}
   </div>
 </Layout>
+
+<style>
+  /* Topic strip: the themed entry points into the library. */
+  .topic-strip { margin: 16px 0 4px; }
+  .topic-strip-label {
+    display: block; font-size: 12.5px; font-family: var(--font-ui);
+    color: var(--text-dim); margin-bottom: 8px;
+  }
+  .topic-strip a {
+    display: inline-block; margin: 0 8px 8px 0; text-decoration: none;
+    background: var(--pill-bg); color: var(--text-dim); font-size: 12px;
+    font-family: var(--font-ui); padding: 4px 11px; border-radius: 999px;
+  }
+  .topic-strip a:hover { color: var(--text); }
+  .topic-strip .topic-strip-all { background: transparent; border: 1px solid var(--panel-border); }
+</style>

@@ -40,20 +40,14 @@ describe('chapterContextForRef', () => {
     expect(second.isRangeStart).toBe(false);
   });
 
-  it('returns null for the two deck verses without chapter data', () => {
-    expect(chapterContextForRef('Proverbs 30:8-9', '箴言 30:8-9')).toBeNull();
-    expect(chapterContextForRef('2 Corinthians 10:2-6', '哥林多后书 10:2-6')).toBeNull();
+  it('returns null for malformed references or unknown books', () => {
+    expect(chapterContextForRef('Hezekiah 3:1', 'x')).toBeNull();
+    expect(chapterContextForRef('Not a reference', 'x')).toBeNull();
   });
 
-  it('covers every other deck verse', () => {
-    const gaps = new Set(['Proverbs 30:8-9', '2 Corinthians 10:2-6']);
+  it('covers every deck verse with chapter data', () => {
     for (const v of getLibraryVerses()) {
-      const ctx = chapterContextForRef(v.refEn, v.refZh);
-      if (gaps.has(v.refEn)) {
-        expect(ctx).toBeNull();
-      } else {
-        expect(ctx, v.refEn).not.toBeNull();
-      }
+      expect(chapterContextForRef(v.refEn, v.refZh), v.refEn).not.toBeNull();
     }
   });
 });

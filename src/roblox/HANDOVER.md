@@ -117,11 +117,11 @@ game server calls the site API over HTTPS with `HttpService`; readers are keyed
 | World feature | Backend endpoint | What it uses |
 |---|---|---|
 | State / usage counters | `POST /api/roblox/state` | daily quota 3/day anon → 6/day registered |
-| Explore (1 / 3 / 10 verses) | `POST /api/roblox/explore` | the real 151-verse deck, `generateInterpretation` AI reflection per verse + summary, welcome credits for Divina/Deep |
+| Explore (1 / 3 / 10 verses) | `POST /api/roblox/explore` | the real 157-verse deck, `generateInterpretation` AI reflection per verse + summary, welcome credits for Divina/Deep |
 | Register free | `POST /api/roblox/register` | grants 6/day + 3× Divina + 1× Deep credits (idempotent) |
 | Today's reading | `POST /api/roblox/today` | the BCP Daily Office lectionary, focus passage resolved verse-by-verse in WEB + 和合本 |
 | Lectio Assistant | `POST /api/roblox/assistant` | the site's AI assistant (same prompt/grounding/quota), non-streaming, aware of the on-screen reading |
-| Verse Library | `POST /api/roblox/library` | the whole 151-verse deck in canonical book order |
+| Verse Library | `POST /api/roblox/library` | the whole 157-verse deck in canonical book order |
 
 All requests carry the shared secret in the `X-Lectio-Key` header; the backend
 compares it against the `ROBLOX_API_KEY` secret (constant-time). Unset key on

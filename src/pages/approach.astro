@@ -361,6 +361,9 @@ const roots = rootsCopy[lang];
           </tr>
         ))}
       </table>
+      <p class="topic-links">
+        {lang === 'zh' ? '按主题浏览：' : 'Browse by topic: '}<a href={`/topics/work?lang=${lang}`}>{lang === 'zh' ? '工作与呼召' : 'Work and calling'}</a> · <a href={`/topics/relationships?lang=${lang}`}>{lang === 'zh' ? '关系与家庭' : 'Relationships'}</a> · <a href={`/topics/rest?lang=${lang}`}>{lang === 'zh' ? '安息与安静' : 'Rest'}</a> · <a href={`/topics/faith?lang=${lang}`}>{lang === 'zh' ? '信心与信靠' : 'Faith'}</a>
+      </p>
     </section>
 
     <section class="policy-section">
@@ -431,4 +434,7 @@ const roots = rootsCopy[lang];
   @media (max-width: 640px) {
     .dt-grid { grid-template-columns: 1fr; }
   }
+  .topic-links { font-size: 14px; color: var(--text-dim); margin-top: 10px; }
+  .topic-links a { color: var(--accent-ink); text-decoration: none; }
+  .topic-links a:hover { text-decoration: underline; }
 </style>

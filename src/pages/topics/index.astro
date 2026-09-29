@@ -1,0 +1,75 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { TOPICS } from '../../lib/topics';
+import { resolveLang } from '../../lib/i18n';
+
+const lang = resolveLang(Astro);
+
+const title = lang === 'zh'
+  ? '经文主题 — 按主题浏览经文'
+  : 'Bible Verses by Topic — Lectio';
+const description = lang === 'zh'
+  ? '按主题浏览 Lectio 经文库：忧虑与平安、盼望与安慰、神的爱、信心、智慧、安息等主题，附中英对照经文与默想主题。'
+  : "Browse Lectio's verse library by topic: anxiety, hope, the love of God, faith, wisdom, rest, and more — bilingual scripture with reflection themes.";
+
+const topicCards = TOPICS.map((t) => ({
+  slug: t.slug,
+  name: lang === 'zh' ? t.nameZh : t.nameEn,
+  desc: lang === 'zh' ? t.descZh : t.descEn,
+  count: t.refs.length,
+}));
+---
+<Layout title={title} description={description} lang={lang}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": title,
+    "description": description,
+    "inLanguage": lang === 'zh' ? 'zh' : 'en',
+    "isPartOf": { "@type": "WebSite", "name": "Lectio", "url": "https://enjoyhim.org" }
+  })}>
+  </script>
+
+  <a class="back-link" href={`/library?lang=${lang}`}>&larr; {lang === 'zh' ? '返回经文库' : 'Back to Library'}</a>
+
+  <header>
+    <h1>{lang === 'zh' ? '经文主题' : 'Verses by Topic'}</h1>
+    <p class="topic-intro">
+      {lang === 'zh'
+        ? '按主题浏览：每一个主题聚集一组相关的经文，可以慢慢读、反复默想。'
+        : 'Browse the library by theme — each topic gathers passages for slow reading and reflection.'}
+    </p>
+  </header>
+
+  <div class="topic-grid">
+    {topicCards.map((t) => (
+      <a class="topic-card" href={`/topics/${t.slug}?lang=${lang}`}>
+        <h2 class="topic-card-name">{t.name}</h2>
+        <p class="topic-card-desc">{t.desc}</p>
+        <span class="topic-card-count">{lang === 'zh' ? `${t.count} 节经文` : `${t.count} verses`}</span>
+      </a>
+    ))}
+  </div>
+</Layout>
+
+<style>
+  .topic-intro { color: var(--text-dim); }
+  .topic-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px; margin: 18px 0;
+  }
+  .topic-card {
+    display: block; background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; padding: 16px 18px; text-decoration: none; color: var(--text);
+    box-shadow: var(--shadow-soft);
+  }
+  .topic-card:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
+  .topic-card-name { margin: 0 0 6px; font-size: 17px; color: var(--gold); }
+  .topic-card-desc { margin: 0 0 10px; font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
+  .topic-card-count {
+    font-size: 12px; font-family: var(--font-ui); color: var(--text-dim);
+    background: var(--pill-bg); padding: 3px 11px; border-radius: 999px;
+  }
+</style>

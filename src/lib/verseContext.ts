@@ -64,7 +64,7 @@ export function chapterKeyForRef(refEn: string): string | null {
 /**
  * Embed the referenced verse (or range) in its chapter with ±`windowSize`
  * neighbouring verses. Returns null when the reference is malformed or the
- * chapter is absent from bibleChapters.json (two deck verses lack data).
+ * chapter is absent from bibleChapters.json.
  */
 export function chapterContextForRef(
   refEn: string,

@@ -16,12 +16,18 @@ const SITE = 'https://enjoyhim.org';
 // /signup is intentionally absent: the page is noindex + robots.txt-disallowed
 // (auth page), and listing it in the sitemap makes Google report
 // "Submitted URL blocked by robots.txt" / "Excluded by noindex" contradictions.
-const STATIC_PATHS = ['/', '/pricing', '/library', '/approach', '/about', '/privacy'];
+const STATIC_PATHS = ['/', '/pricing', '/library', '/topics', '/approach', '/about', '/privacy'];
 
 // Extract English verse references from scripture.ts (the BIBLE_VERSES export).
 const deckSrc = readFileSync(resolve(ROOT, 'src/lib/scripture.ts'), 'utf-8');
 const deckBlock = deckSrc.slice(deckSrc.indexOf('export const BIBLE_VERSES'));
 const verseRefs = [...deckBlock.matchAll(/en:\s*\{\s*ref:\s*'([^']+)'/g)].map((m) => m[1]);
+
+// Topic slugs from topics.ts. Plain regex rather than an import: this script
+// runs on bare node before the TypeScript build, and mirrors the established
+// extraction pattern used for the deck above.
+const topicsSrc = readFileSync(resolve(ROOT, 'src/lib/topics.ts'), 'utf-8');
+const topicSlugs = [...topicsSrc.matchAll(/slug:\s*'([a-z0-9-]+)'/g)].map((m) => m[1]);
 
 // Mirror the slug logic from src/lib/scripture.ts -> verseSlug()
 function verseSlug(refEn) {
@@ -63,6 +69,11 @@ for (const ref of verseRefs) {
   const meta = { changefreq: 'monthly', priority: '0.6', lastmod: today };
   entries.push(urlEntry(p, 'en', meta), urlEntry(p, 'zh', meta));
 }
+for (const slug of topicSlugs) {
+  const p = `/topics/${slug}`;
+  const meta = { changefreq: 'weekly', priority: '0.7', lastmod: today };
+  entries.push(urlEntry(p, 'en', meta), urlEntry(p, 'zh', meta));
+}
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -73,4 +84,4 @@ ${entries.join('\n')}
 
 const outPath = resolve(ROOT, 'public/sitemap.xml');
 writeFileSync(outPath, xml, 'utf-8');
-console.log(`✓ sitemap.xml generated → ${outPath} (${entries.length} URLs)`);
+console.log(`✓ sitemap.xml generated → ${outPath} (${entries.length} URLs: ${STATIC_PATHS.length} static × 2 + ${verseRefs.length} verses × 2 + ${topicSlugs.length} topics × 2)`);

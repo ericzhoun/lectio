@@ -1,0 +1,110 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { TOPICS, getTopicBySlug, topicVerses } from '../../lib/topics';
+import { resolveLang } from '../../lib/i18n';
+
+const { slug } = Astro.params;
+const lang = resolveLang(Astro);
+
+const topic = getTopicBySlug(slug ?? '');
+
+if (!topic) {
+  return new Response(null, { status: 404 });
+}
+
+const verses = topicVerses(topic);
+const otherTopics = TOPICS.filter((t) => t.slug !== topic.slug);
+const name = lang === 'zh' ? topic.nameZh : topic.nameEn;
+const description = lang === 'zh' ? topic.descZh : topic.descEn;
+
+const title = lang === 'zh'
+  ? `关于${topic.nameZh}的经文 — 圣言诵读`
+  : `Bible Verses about ${topic.nameEn} — Lectio`;
+---
+<Layout title={title} description={description} lang={lang}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": name,
+    "description": description,
+    "inLanguage": lang === 'zh' ? 'zh' : 'en',
+    "isPartOf": { "@type": "WebSite", "name": "Lectio", "url": "https://enjoyhim.org" }
+  })}>
+  </script>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://enjoyhim.org/" },
+      { "@type": "ListItem", "position": 2, "name": lang === 'zh' ? '经文主题' : 'Topics', "item": "https://enjoyhim.org/topics" },
+      { "@type": "ListItem", "position": 3, "name": name }
+    ]
+  })}>
+  </script>
+
+  <a class="back-link" href={`/topics?lang=${lang}`}>&larr; {lang === 'zh' ? '返回主题' : 'Back to Topics'}</a>
+
+  <header>
+    <h1>{name}</h1>
+    <p class="topic-desc">{description}</p>
+  </header>
+
+  <div class="verse-grid">
+    {verses.map((v) => (
+      <a class="verse-grid-item" href={`/library/${v.slug}?lang=${lang}`}>
+        <h3 class="verse-ref">
+          {lang === 'zh' ? v.refZh : v.refEn}
+          <span class="verse-ref-alt">{lang === 'zh' ? v.refEn : v.refZh}</span>
+        </h3>
+        <blockquote class="verse-text">{lang === 'zh' ? v.textZh : v.textEn}</blockquote>
+        <span class="tag">{lang === 'zh' ? v.themeZh : v.themeEn}</span>
+      </a>
+    ))}
+  </div>
+
+  <p class="library-cta">
+    <a class="upsell-button" href={`/today?lang=${lang}`}>
+      {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
+    </a>
+  </p>
+
+  <nav class="topic-more" aria-label={lang === 'zh' ? '其他主题' : 'More topics'}>
+    <h2>{lang === 'zh' ? '其他主题' : 'More topics'}</h2>
+    <p class="topic-chips">
+      {otherTopics.map((t) => (
+        <a href={`/topics/${t.slug}?lang=${lang}`}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
+      ))}
+    </p>
+  </nav>
+</Layout>
+
+<style>
+  .topic-desc { color: var(--text-dim); max-width: 640px; }
+
+  /* Cards for the topic's verses — the library index leaves its grid to the
+     site's global look, but a topic page is self-contained, so it carries its
+     own card styling. */
+  .verse-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px; margin: 18px 0;
+  }
+  .verse-grid-item {
+    display: block; background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; padding: 14px 16px; text-decoration: none; color: var(--text);
+    box-shadow: var(--shadow-soft);
+  }
+  .verse-grid-item:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
+  .verse-grid-item .verse-text { margin: 0 0 10px; }
+
+  .topic-more { margin-top: 26px; }
+  .topic-more h2 { font-size: 16px; color: var(--gold); margin: 0 0 10px; }
+  .topic-chips { margin: 0; }
+  .topic-chips a {
+    display: inline-block; margin: 0 8px 8px 0; text-decoration: none;
+    background: var(--pill-bg); color: var(--text-dim); font-size: 12px;
+    font-family: var(--font-ui); padding: 4px 11px; border-radius: 999px;
+  }
+  .topic-chips a:hover { color: var(--text); }
+</style>

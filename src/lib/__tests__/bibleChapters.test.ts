@@ -11,6 +11,7 @@ const chapters = bibleChapters as Record<string, { en: string[]; zh: string[] }>
 
 /** One repaired verse per shape of the defect, keyed '<bookNumber>:<chapter>'. */
 const REPAIRED: ReadonlyArray<[string, number, string]> = [
+  ['40:28', 19, 'Go, and make disciples of all nations'], // Matthew 28:19
   ['40:5', 18, 'one smallest letter or one tiny pen stroke'], // Matthew 5:18
   ['40:24', 34, 'this generation will not pass away'], //        Matthew 24:34
   ['40:27', 46, 'lima sabachthani?'], //                         Matthew 27:46
