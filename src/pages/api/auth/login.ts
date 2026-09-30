@@ -30,7 +30,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
   const token = await createSessionToken(userId, env.SESSION_SECRET);
   cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });
-  await trackServerEvent({ name: 'login_success', cookies, userId });
+  await trackServerEvent({ name: 'login_success', cookies, userId, request });
   if (json) return Response.json({ returnTo });
   return redirect(returnTo, 303);
 };

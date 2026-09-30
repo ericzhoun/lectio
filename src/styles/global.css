@@ -1135,6 +1135,28 @@ form p { margin-bottom: 10px; }
 .hero-alt a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid rgba(102, 116, 74, 0.4); }
 .hero-alt a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
+/* The way back into a walk already going today: quieter than the primary
+   CTA on purpose — it sits above it, but reads as a note, not a button. */
+.continue-walk {
+  display: inline-block;
+  margin: 0 0 14px;
+  font-family: var(--font-ui);
+  font-size: 14.5px;
+  color: var(--accent-ink);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(102, 116, 74, 0.4);
+  padding-bottom: 1px;
+}
+.continue-walk:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+.walked-today {
+  margin: 0 0 14px;
+  font-size: 14.5px;
+  color: var(--text-dim);
+}
+.walked-today a { color: var(--accent-ink); text-decoration: none; border-bottom: 1px solid rgba(102, 116, 74, 0.4); }
+.walked-today a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
 /* A thin gold rule that separates the sanctuary sections. */
 .rule {
   width: 72px;
@@ -1391,6 +1413,10 @@ form p { margin-bottom: 10px; }
   margin: 0 auto;
   text-align: center;
 }
+/* The compact variant rides inside the walk's amen page: same content,
+   trimmed spacing so it reads as part of the ritual, not a new section. */
+.invitation-compact { padding: 30px 0 10px; margin-top: 10px; border-top: 1px solid rgba(128, 128, 128, 0.25); }
+.invitation-compact .invitation-sub { margin-bottom: 20px; }
 .invitation-title { font-size: clamp(26px, 4vw, 34px); color: var(--gold); margin: 10px 0 8px; }
 .invitation-sub { color: var(--text-dim); font-style: italic; margin: 0 0 30px; line-height: 1.8; }
 .invite-form {

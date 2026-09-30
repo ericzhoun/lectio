@@ -45,7 +45,9 @@ function readVariantCookie(): Record<string, string> {
 function flush(): void {
   if (!queue.length) return;
   const batch = queue.splice(0, queue.length);
-  const body = JSON.stringify({ events: batch });
+  // document.referrer rides at the batch level: it is the same for every
+  // event in the page, and the beacon's own Referer header cannot carry it.
+  const body = JSON.stringify({ events: batch, referrer: document.referrer || null });
   try {
     if (navigator.sendBeacon?.('/api/analytics/collect', new Blob([body], { type: 'application/json' }))) {
       return;

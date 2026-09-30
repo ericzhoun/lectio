@@ -13,6 +13,9 @@ interface Row {
   lang: string | null;
   variants: string;
   props: string | null;
+  referrer: string | null;
+  ua: string | null;
+  country: string | null;
 }
 
 function makeDb() {
@@ -21,9 +24,12 @@ function makeDb() {
 
 async function insertedRows(db: D1Memory): Promise<Row[]> {
   return db
-    .prepare('SELECT name, visitor_id, path, lang, variants, props FROM analytics_events')
+    .prepare('SELECT name, visitor_id, path, lang, variants, props, referrer, ua, country FROM analytics_events')
     .all() as unknown as Promise<Row[]>;
 }
+
+const HUMAN_UA =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
 
 describe('ingestClientEvents', () => {
   it('stores a valid batch', async () => {
@@ -35,7 +41,6 @@ describe('ingestClientEvents', () => {
           name: 'audio_play',
           path: '/today/lectio',
           lang: 'en',
-          variants: { signup_cta_copy: 'invitation' },
           props: { player: 'clip', clip: 'lectio' },
         },
       ],
@@ -44,8 +49,52 @@ describe('ingestClientEvents', () => {
     const rows = await insertedRows(db);
     expect(rows).toHaveLength(2);
     expect(rows[0].name).toBe('page_view');
-    expect(JSON.parse(rows[1].variants)).toEqual({ signup_cta_copy: 'invitation' });
     expect(JSON.parse(rows[1].props ?? 'null')).toEqual({ player: 'clip', clip: 'lectio' });
+  });
+
+  it('keeps the request context alongside the events', async () => {
+    const db = makeDb();
+    const count = await ingestClientEvents(
+      asD1(db),
+      'visitor-1',
+      { events: [{ name: 'page_view', path: '/library' }] },
+      { referrer: 'https://www.google.com/', ua: HUMAN_UA, country: 'US' }
+    );
+    expect(count).toBe(1);
+    const [row] = await insertedRows(db);
+    expect(row.referrer).toBe('https://www.google.com/');
+    expect(row.ua).toBe(HUMAN_UA);
+    expect(row.country).toBe('US');
+  });
+
+  it('refuses a whole batch from a known crawler', async () => {
+    const db = makeDb();
+    // A human batch first, so the table exists and the refusal is proven
+    // against real rows rather than a missing table.
+    await ingestClientEvents(
+      asD1(db),
+      'visitor-1',
+      { events: [{ name: 'page_view', path: '/library' }] },
+      { ua: HUMAN_UA }
+    );
+    const count = await ingestClientEvents(
+      asD1(db),
+      'visitor-2',
+      { events: [{ name: 'page_view', path: '/' }, { name: 'page_view', path: '/library' }] },
+      { ua: 'Mozilla/5.0 (compatible; HeadlessChrome/120.0; +http://crawler.example/bot)' }
+    );
+    expect(count).toBe(0);
+    const rows = await insertedRows(db);
+    expect(rows).toHaveLength(1);
+    expect(rows[0].visitor_id).toBe('visitor-1');
+  });
+
+  it('treats a missing UA as unknown, not bot (legacy callers send no context)', async () => {
+    const db = makeDb();
+    const count = await ingestClientEvents(asD1(db), 'visitor-1', {
+      events: [{ name: 'page_view' }],
+    });
+    expect(count).toBe(1);
   });
 
   it('rejects unknown event names', async () => {

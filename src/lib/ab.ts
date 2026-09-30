@@ -14,12 +14,10 @@ export interface Experiment {
 }
 
 export const EXPERIMENTS: Record<string, Experiment> = {
-  // Starter test: does an invitation-shaped signup CTA outperform the plain
-  // "sign up" link in the auth card? Variants render in LoginForm.astro.
-  signup_cta_copy: {
-    variants: ['control', 'invitation'],
-    traffic: 1,
-  },
+  // signup_cta_copy (invitation vs plain link) ran September 2026 and was
+  // retired without a verdict: at ~250 visitors the click-rate gap was noise.
+  // Re-running it as copy-only made no sense at this traffic; test placement
+  // instead if the question comes back. See memory/2026-09-30.md.
 };
 
 const MAX_TRAFFIC = 1;

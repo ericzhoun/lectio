@@ -12,11 +12,12 @@ import { resolveActiveDay, resolveLocalDay, isVerseDay, verseSlugOfDay } from '.
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage, type ResolvedPassage } from '../../lib/passage';
 import { getLibraryVerseBySlug } from '../../lib/scripture';
-import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, type Step } from '../../lib/dailySteps';
+import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, TOTAL_WALK_MINUTES, type Step } from '../../lib/dailySteps';
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
 } from '../../lib/dailySession';
 import { guestReaderId } from '../../lib/guestSession';
+import { isLikelyBotUa } from '../../lib/botFilter';
 import { handleStepSubmit, STEP_TEXT_MAX_CHARS } from '../../lib/dailySubmit';
 import type { WritingStep } from '../../lib/dailyReflection';
 
@@ -94,9 +95,15 @@ const readerId = userId ?? guestReaderId(Astro.locals.vid);
 
 const isWriting = (WRITING_STEPS as readonly Step[]).includes(step);
 
-const session = await getSession(readerId, day)
-  ?? await ensureSession(readerId, day, lang, env.DB);
-let reached: Step = session.reachedStep;
+// Same crawler gate as /today: a bot gets the page rendered but never gets a
+// session row or a step advance written on its behalf.
+const isBot = isLikelyBotUa(Astro.request.headers.get('user-agent'));
+
+const session = isBot
+  ? null
+  : await getSession(readerId, day)
+    ?? await ensureSession(readerId, day, lang, env.DB);
+let reached: Step = session?.reachedStep ?? 'silencio';
 // No jumping ahead: nobody lands on Oratio without having read.
 if (!canOpenStep(reached, step)) return Astro.redirect(`/today/${reached}`);
 
@@ -118,9 +125,18 @@ const priorText = (s: Step) => entries.find((e) => e.step === s)?.userText ?? ''
 const myEntry = entries.find((e) => e.step === step) ?? null;
 const saved = Astro.url.searchParams.get('saved') === '1';
 
+// The actio-to-draw handoff: the one thing they will do today becomes the
+// question the verse draw answers on the homepage. Collapsed to one line and
+// capped, since it rides in a URL.
+let actioQuestion: string | null = null;
+if (step === 'actio' && myEntry?.userText) {
+  const oneLine = myEntry.userText.replace(/\s+/g, ' ').trim();
+  actioQuestion = oneLine.length > 120 ? `${oneLine.slice(0, 120)}…` : oneLine;
+}
+
 // Arriving at a silent step is all it takes to have taken it. A writing step
 // advances on submit instead, which handleStepSubmit does.
-if (!isWriting) {
+if (!isWriting && !isBot) {
   await advanceTo(readerId, day, step);
   const refreshed = await getSession(readerId, day);
   reached = refreshed?.reachedStep ?? reached;
@@ -137,7 +153,9 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     <header class="ritual-top">
       <DailyProgress reached={reached} current={step} lang={lang} variant="dots" />
       <span class="ritual-count">
-        {lang === 'zh' ? `第 ${stepIndex(step) + 1} 步，共 6 步` : `Step ${stepIndex(step) + 1} of 6`}
+        {lang === 'zh'
+          ? `第 ${stepIndex(step) + 1} 步，共 6 步 · 约 ${copy.minutes} 分钟`
+          : `Step ${stepIndex(step) + 1} of 6 · ~${copy.minutes} min`}
       </span>
       <a class="ritual-exit" href="/" aria-label={lang === 'zh' ? '返回首页' : 'Back to home'}>✕</a>
     </header>
@@ -150,6 +168,13 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         </p>
         <h1>{copy.name[lang]}</h1>
         <p class="prompt">{copy.prompt[lang]}</p>
+        {step === 'silencio' && (
+          <p class="walk-length">
+            {lang === 'zh'
+              ? `整场诵读共 6 步，约 ${TOTAL_WALK_MINUTES} 分钟——可以随时停下，已写下的会替你保留。`
+              : `Six steps, about ${TOTAL_WALK_MINUTES} minutes in all. Stop anytime — what you have written is kept for you.`}
+          </p>
+        )}
         {stepAudio && (
           <button type="button" class="listen" data-clip={stepAudio}
             aria-label={lang === 'zh' ? '朗读引导语' : 'Listen to the guidance'}
@@ -336,6 +361,19 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
                 <p class="error">{lang === 'zh' ? '请先写下一点什么。' : 'Write something first.'}</p>
               )}
             </form>
+          )}
+
+          {/* The walk's last step hands off to the draw: the resolution they
+              just written becomes the question a received verse answers. The
+              homepage keeps its own, fuller entry to the same feature. */}
+          {step === 'actio' && saved && actioQuestion && (
+            <a
+              class="actio-draw"
+              href={`/?question=${encodeURIComponent(actioQuestion)}&lang=${lang}`}
+              data-event="cta_click" data-event-props='{"slot":"actio_draw"}'
+            >
+              {lang === 'zh' ? '把今天这一步带到神面前 — 领受一节经文' : 'Bring this step to God — receive a verse for it'}
+            </a>
           )}
         </section>
       )}
@@ -839,6 +877,14 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     line-height: 1.6;
   }
 
+  .walk-length {
+    font-size: 0.82rem;
+    opacity: 0.55;
+    margin: 0.9rem auto 0;
+    max-width: 30rem;
+    line-height: 1.6;
+  }
+
   .text {
     font-size: calc(1.05rem * var(--reading-scale, 1));
     line-height: 1.9;
@@ -1099,6 +1145,22 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     color: var(--terracotta);
     font-size: 0.9rem;
   }
+
+  /* The quiet handoff from the last step to the verse draw. */
+  .actio-draw {
+    display: block;
+    margin: 1.75rem auto 0;
+    max-width: 26rem;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.4);
+    padding-bottom: 2px;
+  }
+
+  .actio-draw:hover { border-color: currentColor; }
 
   .advance {
     display: inline-block;

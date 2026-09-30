@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import Layout from '../layouts/Layout.astro';
+import InviteForm from '../components/InviteForm.astro';
 import { SPREADS, DEFAULT_QUESTIONS, type Lang } from '../lib/reading';
 import {
   PENDING_DRAW_COOKIE, createPendingDrawToken, verifyPendingDrawToken,
@@ -26,6 +27,10 @@ import { resolveLang } from '../lib/i18n';
 import { getLectionaryDay, focusReference } from '../lib/lectionary';
 import { resolvePassage } from '../lib/passage';
 import { resolveLocalDay } from '../lib/localDay';
+import { getSession } from '../lib/dailySession';
+import { guestReaderId } from '../lib/guestSession';
+import { isLikelyBotUa } from '../lib/botFilter';
+import { STEP_COPY, stepIndex } from '../lib/dailySteps';
 import lectionaryDays from '../lib/lectionaryDays.json';
 
 const url = Astro.url;
@@ -450,6 +455,19 @@ const resultCount = verses?.length ?? 0;
 const day = resolveLocalDay(Astro);
 const entry = getLectionaryDay(day);
 
+// A reader with a walk already going today gets a way back into it, not a
+// generic hero. One read by primary key; guests included, since their rows
+// ride the visitor id and move onto the account they create later. Crawlers
+// skip the lookup: the homepage is indexed, and their session never exists.
+const heroReaderId = loggedInUserId ?? guestReaderId(Astro.locals.vid);
+const todayWalk = isLikelyBotUa(Astro.request.headers.get('user-agent'))
+  ? null
+  : await getSession(heroReaderId, day);
+const continueWalk = todayWalk && !todayWalk.completedAt
+  ? { step: todayWalk.reachedStep, n: stepIndex(todayWalk.reachedStep) + 1 }
+  : null;
+const walkedToday = Boolean(todayWalk?.completedAt);
+
 // Short, contemplative excerpt for the hero slides.
 const excerpt = (text: string, max: number): string => {
   if (text.length <= max) return text;
@@ -706,6 +724,20 @@ const description = lang === 'zh'
         ))}
       </div>
     </div>
+
+    {continueWalk && (
+      <a class="continue-walk" href="/today" data-event="cta_click" data-event-props='{"slot":"hero_continue"}'>
+        {lang === 'zh'
+          ? `继续今天的诵读 · 第 ${continueWalk.n} 步「${STEP_COPY[continueWalk.step].name.zh}」`
+          : `Continue today's walk — step ${continueWalk.n} of 6, ${STEP_COPY[continueWalk.step].name.en}`}
+      </a>
+    )}
+    {walkedToday && (
+      <p class="walked-today">
+        {lang === 'zh' ? '今天已经走过一遍——愿它陪你走进夜里。' : 'You have walked today. May it stay with you into the evening.'}
+        <a href={`/today/amen?day=${day}`}>{lang === 'zh' ? '回顾今天' : 'Revisit it'}</a>
+      </p>
+    )}
 
     <a class="begin-cta" href="/today" data-event="cta_click" data-event-props='{"slot":"hero_begin"}'>
       {lang === 'zh' ? '开始诵读' : 'Begin Reading'}
@@ -1260,43 +1292,7 @@ const description = lang === 'zh'
 
   <hr class="rule" />
 
-  <section class="invitation-section" aria-labelledby="invitation-heading">
-    <p class="smallcaps" data-reveal>{lang === 'zh' ? '每日一句' : 'The Daily Invitation'}</p>
-    <h2 class="invitation-title" id="invitation-heading" data-reveal>
-      {lang === 'zh' ? '清晨的一句话' : 'One Verse with Your Morning'}
-    </h2>
-    <p class="invitation-sub" data-reveal>
-      {lang === 'zh'
-        ? '每个清晨，一节安静的经文抵达你的信箱。没有推送，没有打卡——只有一句话，陪你安坐。'
-        : 'Each morning, one quiet verse in your inbox. No noise, no streaks — only a word to sit with.'}
-    </p>
-    <form class="invite-form" id="invite-form" data-reveal>
-      <input
-        class="invite-input"
-        type="email"
-        name="email"
-        required
-        autocomplete="email"
-        aria-label={lang === 'zh' ? '电子邮箱' : 'Email address'}
-        placeholder={lang === 'zh' ? '你的邮箱' : 'your@email'}
-      />
-      <button class="invite-button" type="submit">
-        {lang === 'zh' ? '接受邀请' : 'Receive it'}
-      </button>
-    </form>
-    <p class="invite-error" id="invite-error" hidden>
-      {lang === 'zh' ? '这个邮箱看起来不太对——再看一眼？' : 'That address does not look right — one more look?'}
-    </p>
-    <div class="invite-success" id="invite-success" hidden>
-      {lang === 'zh'
-        ? '已经记下你了。明早见——愿第一缕光里有一句话等你。'
-        : 'You are on the list. See you at morning light — may a word be waiting.'}
-    </div>
-    <p class="invite-note">
-      {lang === 'zh' ? '每天最多一封，随时可退订。参见' : 'At most one email a day; unsubscribe anytime. See our '}
-      <a href="/privacy">{lang === 'zh' ? '隐私说明' : 'privacy note'}</a>.
-    </p>
-  </section>
+  <InviteForm lang={lang} />
 
   <footer class="sanctuary-footer">
     <p>
@@ -1473,43 +1469,6 @@ const description = lang === 'zh'
     if (result) {
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       result.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-    }
-
-    // ---- The Daily Invitation: one quiet POST, no redirect ----
-    const inviteForm = document.getElementById('invite-form') as HTMLFormElement | null;
-    if (inviteForm) {
-      const errorNote = document.getElementById('invite-error');
-      const successNote = document.getElementById('invite-success');
-      inviteForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const input = inviteForm.querySelector<HTMLInputElement>('input[name="email"]');
-        const email = input?.value.trim() ?? '';
-        const lang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
-        // So the invitation arrives in this reader's morning, not ours.
-        let tz = '';
-        try {
-          tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
-        } catch {
-          tz = '';
-        }
-        errorNote?.setAttribute('hidden', '');
-        try {
-          const res = await fetch('/api/daily-invitation', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, lang, tz }),
-          });
-          const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
-          if (res.ok && data?.ok) {
-            inviteForm.setAttribute('hidden', '');
-            successNote?.removeAttribute('hidden');
-          } else {
-            errorNote?.removeAttribute('hidden');
-          }
-        } catch {
-          errorNote?.removeAttribute('hidden');
-        }
-      });
     }
   </script>
 </Layout>

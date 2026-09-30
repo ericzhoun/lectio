@@ -48,4 +48,10 @@ describe('STEP_COPY', () => {
       expect(STEP_COPY[step].prompt.zh, step).toBeTruthy();
     }
   });
+
+  it('estimates a positive duration for every step', () => {
+    for (const step of STEP_ORDER) {
+      expect(STEP_COPY[step].minutes, step).toBeGreaterThan(0);
+    }
+  });
 });

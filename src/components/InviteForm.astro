@@ -1,0 +1,91 @@
+---
+// The Daily Invitation signup, shared by the homepage and the end of the
+// walk (amen). One quiet POST to /api/daily-invitation; no redirect, no
+// page reload — the form hands the reader their confirmation inline.
+import type { Lang } from '../lib/reading';
+
+interface Props {
+  lang: Lang;
+  /** Optional small-caps eyebrow above the title (homepage shows its own). */
+  compact?: boolean;
+}
+const { lang, compact = false } = Astro.props;
+---
+---
+
+<section class={`invitation-section${compact ? ' invitation-compact' : ''}`} aria-labelledby="invitation-heading">
+  {!compact && <p class="smallcaps" data-reveal>{lang === 'zh' ? '每日一句' : 'The Daily Invitation'}</p>}
+  <h2 class="invitation-title" id="invitation-heading" data-reveal>
+    {lang === 'zh' ? '清晨的一句话' : 'One Verse with Your Morning'}
+  </h2>
+  <p class="invitation-sub" data-reveal>
+    {lang === 'zh'
+      ? '每个清晨，一节安静的经文抵达你的信箱。没有推送，没有打卡——只有一句话，陪你安坐。'
+      : 'Each morning, one quiet verse in your inbox. No noise, no streaks — only a word to sit with.'}
+  </p>
+  <form class="invite-form" id="invite-form" data-reveal>
+    <input
+      class="invite-input"
+      type="email"
+      name="email"
+      required
+      autocomplete="email"
+      aria-label={lang === 'zh' ? '电子邮箱' : 'Email address'}
+      placeholder={lang === 'zh' ? '你的邮箱' : 'your@email'}
+    />
+    <button class="invite-button" type="submit">
+      {lang === 'zh' ? '接受邀请' : 'Receive it'}
+    </button>
+  </form>
+  <p class="invite-error" id="invite-error" hidden>
+    {lang === 'zh' ? '这个邮箱看起来不太对——再看一眼？' : 'That address does not look right — one more look?'}
+  </p>
+  <div class="invite-success" id="invite-success" hidden>
+    {lang === 'zh'
+      ? '已经记下你了。明早见——愿第一缕光里有一句话等你。'
+      : 'You are on the list. See you at morning light — may a word be waiting.'}
+  </div>
+  <p class="invite-note">
+    {lang === 'zh' ? '每天最多一封，随时可退订。参见' : 'At most one email a day; unsubscribe anytime. See our '}
+    <a href="/privacy">{lang === 'zh' ? '隐私说明' : 'privacy note'}</a>.
+  </p>
+</section>
+
+<script>
+  // ---- The Daily Invitation: one quiet POST, no redirect ----
+  const inviteForm = document.getElementById('invite-form') as HTMLFormElement | null;
+  if (inviteForm) {
+    const errorNote = document.getElementById('invite-error');
+    const successNote = document.getElementById('invite-success');
+    inviteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = inviteForm.querySelector<HTMLInputElement>('input[name="email"]');
+      const email = input?.value.trim() ?? '';
+      const lang = document.documentElement.lang === 'zh' ? 'zh' : 'en';
+      // So the invitation arrives in this reader's morning, not ours.
+      let tz = '';
+      try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
+      } catch {
+        tz = '';
+      }
+      errorNote?.setAttribute('hidden', '');
+      try {
+        const res = await fetch('/api/daily-invitation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, lang, tz }),
+        });
+        const data = (await res.json().catch(() => null)) as { ok?: boolean } | null;
+        if (res.ok && data?.ok) {
+          inviteForm.setAttribute('hidden', '');
+          successNote?.removeAttribute('hidden');
+        } else {
+          errorNote?.removeAttribute('hidden');
+        }
+      } catch {
+        errorNote?.removeAttribute('hidden');
+      }
+    });
+  }
+</script>

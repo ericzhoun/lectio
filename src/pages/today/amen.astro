@@ -12,6 +12,7 @@ import { getLibraryVerseBySlug } from '../../lib/scripture';
 import { STEP_COPY } from '../../lib/dailySteps';
 import { getSession, getStepEntries } from '../../lib/dailySession';
 import { guestReaderId } from '../../lib/guestSession';
+import InviteForm from '../../components/InviteForm.astro';
 
 const lang = resolveLang(Astro);
 const sessionCookie = Astro.cookies.get('session')?.value;
@@ -90,8 +91,8 @@ const returnTo = encodeURIComponent(`/today/amen?day=${day}`);
           <h2>{lang === 'zh' ? '留下这次诵读' : 'Keep this reading'}</h2>
           <p>
             {lang === 'zh'
-              ? '如果你想保存自己的诵读记录，方便日后回顾，请免费注册一个账户。今天写下的内容会一并保存。'
-              : 'If you would like to store your reading history for future reference, please register an account for free. Today’s words come with you.'}
+              ? '你今天写下的每一句都已为你暂存。注册一个免费账号，它们就永远属于你——往后的每一天也会一起留下来。'
+              : 'Every word you wrote on this walk is saved for now. Create a free account and they stay yours — this day and every day that follows.'}
           </p>
           <a class="keep-action" href={`/signup?lang=${lang}&returnTo=${returnTo}`}>
             {lang === 'zh' ? '免费注册' : 'Create a free account'}
@@ -101,6 +102,11 @@ const returnTo = encodeURIComponent(`/today/amen?day=${day}`);
           </a>
         </section>
       )}
+
+      {/* A finished walk is the moment a daily practice becomes a habit — the
+          one place to offer the morning email without competing asks. Guests
+          see the register card above instead; two asks would split them. */}
+      {userId && <InviteForm lang={lang} compact={true} />}
     </div>
 
     <nav class="action-bar">

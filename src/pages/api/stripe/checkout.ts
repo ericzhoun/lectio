@@ -47,7 +47,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect, url }) => {
     success_url: `${url.origin}/account?checkout=success`,
     cancel_url: `${url.origin}/pricing?checkout=cancelled`,
   });
-  await trackServerEvent({ name: 'checkout_start', cookies, userId, props: { tier, billing } });
+  await trackServerEvent({ name: 'checkout_start', cookies, userId, props: { tier, billing }, request });
 
   return redirect(checkoutSession.url ?? '/pricing');
 };

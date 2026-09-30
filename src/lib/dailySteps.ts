@@ -31,7 +31,15 @@ export function progressPercent(reached: Step): number {
 export interface StepCopy {
   name: Record<Lang, string>;
   prompt: Record<Lang, string>;
+  /** Rough minutes this step takes, self-paced — shown so a newcomer knows the cost before starting. */
+  minutes: number;
 }
+
+/**
+ * The whole walk, self-paced. Roughly the guided session's length (its pauses
+ * alone run six minutes) plus writing time at the three reflection steps.
+ */
+export const TOTAL_WALK_MINUTES = 15;
 
 export const STEP_COPY: Record<Step, StepCopy> = {
   silencio: {
@@ -40,6 +48,7 @@ export const STEP_COPY: Record<Step, StepCopy> = {
       en: 'Be still. Let the noise settle before you read.',
       zh: '安静下来。在诵读之前，让心中的喧嚣沉淀。',
     },
+    minutes: 1,
   },
   lectio: {
     name: { en: 'Lectio', zh: '诵读' },
@@ -47,6 +56,7 @@ export const STEP_COPY: Record<Step, StepCopy> = {
       en: 'Read it slowly, twice. There is no hurry.',
       zh: '慢慢地读两遍。不用急。',
     },
+    minutes: 3,
   },
   meditatio: {
     name: { en: 'Meditatio', zh: '默想' },
@@ -54,6 +64,7 @@ export const STEP_COPY: Record<Step, StepCopy> = {
       en: 'What word or phrase caught you?',
       zh: '哪一个词、哪一句话触动了你？',
     },
+    minutes: 3,
   },
   oratio: {
     name: { en: 'Oratio', zh: '祈祷' },
@@ -61,6 +72,7 @@ export const STEP_COPY: Record<Step, StepCopy> = {
       en: 'What do you want to say to God about it?',
       zh: '关于这句话，你想对神说什么？',
     },
+    minutes: 3,
   },
   contemplatio: {
     name: { en: 'Contemplatio', zh: '默观' },
@@ -68,6 +80,7 @@ export const STEP_COPY: Record<Step, StepCopy> = {
       en: 'Nothing more to do now. Stop producing words and remain with God \u2014 the silence is not the destination; he is.',
       zh: '现在无需再做什么。停止言语，停留在神面前——安静不是终点，神才是。',
     },
+    minutes: 3,
   },
   actio: {
     name: { en: 'Actio', zh: '践行' },
@@ -75,5 +88,6 @@ export const STEP_COPY: Record<Step, StepCopy> = {
       en: 'One thing you will do today.',
       zh: '今天你要做的一件事。',
     },
+    minutes: 2,
   },
 };

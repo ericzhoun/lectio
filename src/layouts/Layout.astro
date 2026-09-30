@@ -6,7 +6,6 @@ import { langSwitchHref } from '../lib/i18n';
 import { safeAuthReturn } from '../lib/authReturn';
 import { canonicalHref, hreflangAlternates, SITE_URL } from '../lib/seo';
 import LoginOverlay from '../components/LoginOverlay.astro';
-import AssistantWidget from '../components/AssistantWidget.astro';
 import MobileNav from '../components/MobileNav.astro';
 import type { Lang } from '../lib/reading';
 
@@ -182,6 +181,9 @@ const isActive = (p: string) => path === p || path.startsWith(`${p}/`);
   </script>
   <script src="../scripts/analytics.ts"></script>
   <script src="../scripts/authPosition.ts"></script>
-  <AssistantWidget lang={lang} loggedIn={!!userId} />
+  {/* The assistant widget was unmounted in September 2026: seven messages in
+      three weeks of traffic, and it cluttered every page. The component, the
+      /api/assistant routes, and the per-page context JSON all remain, so
+      re-enabling it is a one-line mount. See memory/2026-09-30.md. */}
 </body>
 </html>

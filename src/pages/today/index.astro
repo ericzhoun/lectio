@@ -9,6 +9,7 @@ import { hasLectionaryDay } from '../../lib/lectionary';
 import { ensureSession, getSession } from '../../lib/dailySession';
 import { guestReaderId } from '../../lib/guestSession';
 import { getLibraryVerseBySlug } from '../../lib/scripture';
+import { isLikelyBotUa } from '../../lib/botFilter';
 
 const lang = resolveLang(Astro);
 
@@ -44,8 +45,13 @@ const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSI
 // the visitor id and claimed by the account they create at the end.
 const readerId = userId ?? guestReaderId(Astro.locals.vid);
 
+// A crawler has no cookies and never runs the page script: without this gate
+// every crawl of /today minted a fresh guest row in daily_sessions — they
+// outnumbered real readers roughly ten to one before it existed.
+const isBot = isLikelyBotUa(Astro.request.headers.get('user-agent'));
+
 const existing = await getSession(readerId, day);
-if (!existing) await ensureSession(readerId, day, lang, env.DB);
+if (!existing && !isBot) await ensureSession(readerId, day, lang, env.DB);
 
 // A finished day opens at its summary rather than starting over.
 if (existing?.completedAt) return Astro.redirect('/today/amen');

@@ -6,11 +6,12 @@ import { env } from 'cloudflare:workers';
 import type { D1Database } from '@cloudflare/workers-types';
 import { addSubscriber, ensureSubscriberTable } from '../../lib/subscribers';
 import { DEFAULT_TIMEZONE } from '../../lib/mailSchedule';
+import { trackServerEvent } from '../../lib/analytics';
 
 // Deliberately plain: an address, not a profile.
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   let email = '';
   let lang: 'en' | 'zh' = 'en';
   let tz = DEFAULT_TIMEZONE;
@@ -41,6 +42,11 @@ export const POST: APIRoute = async ({ request }) => {
     console.error('daily-invitation: store failed:', e);
     return new Response(JSON.stringify({ ok: false, error: 'storage' }), { status: 500 });
   }
+
+  // Counted like any other conversion: the empty invitations table hid the
+  // loop's top of funnel until this existed. No userId — the visitor id
+  // already identifies the reader, and analytics stays free of addresses.
+  await trackServerEvent({ name: 'invite_subscribed', cookies, request });
 
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
