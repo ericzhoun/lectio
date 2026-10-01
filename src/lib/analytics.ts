@@ -51,8 +51,10 @@ export type ClientEventName = (typeof CLIENT_EVENT_NAMES)[number];
 
 // Events fired by server routes, where the outcome is actually known.
 // invite_subscribed: the daily-invitation email list gained a reader.
+// login_failure: wrong credentials on the email path — a run of these on real
+// accounts is how a login-flow bug announces itself.
 export const SERVER_EVENT_NAMES = [
-  'signup_success', 'login_success', 'checkout_start', 'invite_subscribed',
+  'signup_success', 'login_success', 'checkout_start', 'invite_subscribed', 'login_failure',
 ] as const;
 
 export type EventProps = Record<string, string | number | boolean | null>;

@@ -13,7 +13,7 @@ import {
   fetchGoogleUserInfo,
 } from '../../../../lib/google';
 import { upsertGoogleUser } from '../../../../lib/users';
-import { createSessionToken } from '../../../../lib/session';
+import { createSessionToken, SESSION_COOKIE_MAX_AGE } from '../../../../lib/session';
 import { safeAuthReturn } from '../../../../lib/authReturn';
 import { claimGuestWalk } from '../../../../lib/dailySession';
 import { guestReaderId } from '../../../../lib/guestSession';
@@ -83,7 +83,7 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
     if (vid) await claimGuestWalk(guestReaderId(vid), id);
 
     const token = await createSessionToken(id, env.SESSION_SECRET);
-    cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });
+    cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true, maxAge: SESSION_COOKIE_MAX_AGE });
     return redirect(returnTo);
   } catch (err) {
     console.error('Google OAuth callback failed:', err);

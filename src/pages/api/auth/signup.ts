@@ -2,7 +2,7 @@
 import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { createUser } from '../../../lib/users';
-import { createSessionToken } from '../../../lib/session';
+import { createSessionToken, SESSION_COOKIE_MAX_AGE } from '../../../lib/session';
 import { resolveLang } from '../../../lib/i18n';
 import { safeAuthReturn } from '../../../lib/authReturn';
 import { trackServerEvent } from '../../../lib/analytics';
@@ -33,7 +33,7 @@ export const POST: APIRoute = async ({ request, url, cookies, redirect }) => {
   if (vid) await claimGuestWalk(guestReaderId(vid), result.id);
 
   const token = await createSessionToken(result.id, env.SESSION_SECRET);
-  cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true });
+  cookies.set('session', token, { path: '/', httpOnly: true, sameSite: 'lax', secure: true, maxAge: SESSION_COOKIE_MAX_AGE });
   await trackServerEvent({ name: 'signup_success', cookies, userId: result.id, request });
   return redirect(returnTo, 303);
 };

@@ -8,7 +8,10 @@ vi.mock('../google', () => ({
   fetchGoogleUserInfo: async () => ({ googleId: 'test', email: 'test@example.test', emailVerified: true }),
 }));
 vi.mock('../users', () => ({ upsertGoogleUser: async () => ({ id: 'user' }) }));
-vi.mock('../session', () => ({ createSessionToken: async () => 'session-token' }));
+vi.mock('../session', () => ({
+  createSessionToken: async () => 'session-token',
+  SESSION_COOKIE_MAX_AGE: 60 * 60 * 24 * 365,
+}));
 import { GET as start } from '../../pages/api/auth/google/start';
 import { GET as callback } from '../../pages/api/auth/google/callback';
 

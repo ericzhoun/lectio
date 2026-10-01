@@ -1,7 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('cloudflare:workers', () => ({ env: { SESSION_SECRET: 'test-secret' } }));
 vi.mock('../users', () => ({ verifyUserCredentials: vi.fn() }));
-vi.mock('../session', () => ({ createSessionToken: vi.fn().mockResolvedValue('signed-session') }));
+vi.mock('../session', () => ({
+  createSessionToken: vi.fn().mockResolvedValue('signed-session'),
+  SESSION_COOKIE_MAX_AGE: 60 * 60 * 24 * 365,
+}));
 vi.mock('../dailySession', () => ({ claimGuestWalk: vi.fn() }));
 import { verifyUserCredentials } from '../users';
 import { claimGuestWalk } from '../dailySession';

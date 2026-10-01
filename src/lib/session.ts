@@ -17,10 +17,17 @@ export async function hmacKey(secret: string): Promise<CryptoKey> {
   );
 }
 
+// A returning reader who has to sign in again on every visit just doesn't
+// come back — the session outlives the browser (cookie maxAge) and the token
+// inside it matches. One year, stateless HMAC: there is no server-side
+// revocation, so rotating SESSION_SECRET is the only kill switch.
+export const SESSION_TTL_SECONDS = 60 * 60 * 24 * 365;
+export const SESSION_COOKIE_MAX_AGE = SESSION_TTL_SECONDS;
+
 export async function createSessionToken(
   userId: string,
   secret: string,
-  ttlSeconds = 60 * 60 * 24 * 30
+  ttlSeconds = SESSION_TTL_SECONDS
 ): Promise<string> {
   if (!secret) throw new Error('SESSION_SECRET is required');
   const expiry = Math.floor(Date.now() / 1000) + ttlSeconds;
