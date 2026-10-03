@@ -101,10 +101,13 @@ describe('page-level quality', () => {
   });
 
   it('has no doubled words in the English reflections', () => {
+    // "the need need not mean" is grammatical (noun + verb phrase), not a typo,
+    // so it is excluded exactly as the build gate excludes it.
     const doubled: string[] = [];
     for (const verse of DECK) {
       for (const { question, interpretation } of interpretationsForVerse(verse.slug, 'en')) {
-        const hit = interpretation.text.match(/\b([A-Za-z]{3,})\s+\1\b/i);
+        const withoutLegit = interpretation.text.replace(/\bneed need not\b/gi, ' ');
+        const hit = withoutLegit.match(/\b([A-Za-z]{3,})\s+\1\b/i);
         if (hit) doubled.push(`${verse.slug}/${question.slug}: "${hit[0]}"`);
       }
     }
@@ -136,6 +139,68 @@ describe('page-level quality', () => {
       }
     }
     expect(bad).toEqual([]);
+  });
+
+  it('never starts an English sentence lowercase', () => {
+    const bad: string[] = [];
+    for (const verse of DECK) {
+      for (const { question, interpretation } of interpretationsForVerse(verse.slug, 'en')) {
+        const parts = interpretation.text.trim().split(/(?<=[.?!])\s+/);
+        for (let i = 1; i < parts.length; i++) {
+          if (/^[a-z]/.test(parts[i]!)) {
+            bad.push(`${verse.slug}/${question.slug}: "${parts[i]!.slice(0, 30)}…"`);
+            break;
+          }
+        }
+      }
+    }
+    expect(bad).toEqual([]);
+  });
+
+  // The corpus-wide skew: every reflection ends in a question, and if almost
+  // all of them open with the same few words the whole library reads as one
+  // template. Caps are deliberately loose — they catch a return to the old
+  // distribution (English "What" was 360/628, Chinese 此刻 189/628), not the
+  // ordinary concentration any body of prose has.
+  it('does not let one closing-question opener dominate the corpus', () => {
+    const caps = { en: 130, zh: 110 };
+    for (const lang of ['en', 'zh'] as const) {
+      const openings = new Map<string, number>();
+      for (const verse of DECK) {
+        for (const { interpretation } of interpretationsForVerse(verse.slug, lang)) {
+          const text = interpretation.text.trim();
+          if (!/[?\uff1f]$/.test(text)) continue;
+          const last = text.split(/(?<=[.?!])\s+|(?<=[\u3002\uff01\uff1f])/).filter((s) => s.trim()).pop() ?? '';
+          const clean = last.replace(/^[\s"'\u201c\u2018([\u300c\u300e]+/, '');
+          const opener = lang === 'zh' ? clean.slice(0, 2) : (clean.split(/\s+/)[0] ?? '').toLowerCase();
+          openings.set(opener, (openings.get(opener) ?? 0) + 1);
+        }
+      }
+      const worst = [...openings.entries()].sort((a, b) => b[1] - a[1])[0];
+      expect(worst, `${lang} closing openers`).toBeDefined();
+      expect(worst![1], `${lang} worst closer "${worst![0]}" (${worst![1]} cells)`).toBeLessThanOrEqual(caps[lang]);
+    }
+  });
+
+  // Openings should vary across the corpus too. This is a loose ceiling: any
+  // body of prose repeats common phrasings, so it only catches a return to the
+  // old clustering ("fear can" appeared 10 times, "pressure at" 8).
+  it('does not cluster openings corpus-wide', () => {
+    for (const lang of ['en', 'zh'] as const) {
+      const seen = new Map<string, number>();
+      for (const verse of DECK) {
+        for (const { interpretation } of interpretationsForVerse(verse.slug, lang)) {
+          const clean = interpretation.text.replace(/^[\s"'\u201c\u2018([\u300c\u300e]+/, '').trim();
+          const key = lang === 'zh'
+            ? clean.replace(/[\s\u3000]/g, '').slice(0, 4)
+            : clean.split(/\s+/).slice(0, 2).join(' ').toLowerCase();
+          seen.set(key, (seen.get(key) ?? 0) + 1);
+        }
+      }
+      const worst = [...seen.entries()].sort((a, b) => b[1] - a[1])[0];
+      // No single 2-word / 4-character opening should dominate the corpus.
+      expect(worst![1], `${lang} opening "${worst![0]}"`).toBeLessThanOrEqual(24);
+    }
   });
 });
 
