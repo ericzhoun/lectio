@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "prebuild": "node scripts/check-node.mjs && node scripts/build-lectionary.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-og-image.mjs",
+    "prebuild": "node scripts/check-node.mjs && node scripts/check-verse-interpretations.mjs && node scripts/build-lectionary.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-og-image.mjs",
     "build": "astro build",
     "deploy": "npm run build && node scripts/check-build-output.mjs && wrangler deploy && wrangler deploy -c dist/lectio_daily_invitation_cron/wrangler.json",
     "preview": "astro preview",
@@ -15,6 +15,8 @@
     "og": "node scripts/generate-og-image.mjs",
     "test": "vitest run",
     "tts:steps": "tsx scripts/tts/steps.mts",
+    "interpretations:generate": "tsx scripts/generate-verse-interpretations.mts",
+    "interpretations:check": "node scripts/check-verse-interpretations.mjs",
     "tts:passages": "tsx scripts/tts/passages.mts",
     "music:download": "tsx scripts/download-daily-music.mts",
     "music:text": "node scripts/fetch-singing-texts.mjs",

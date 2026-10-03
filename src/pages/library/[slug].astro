@@ -2,10 +2,19 @@
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
+import { env } from 'cloudflare:workers';
 import { getLibraryVerses } from '../../lib/scripture';
 import { chapterContextForRef, relatedByBook } from '../../lib/verseContext';
 import { topicsForVerse } from '../../lib/topics';
 import { resolveLang } from '../../lib/i18n';
+import { verifySessionToken } from '../../lib/session';
+import { canDraw } from '../../lib/entitlements';
+import { performDraw } from '../../lib/draw';
+import { isLikelyBotUa } from '../../lib/botFilter';
+import {
+  interpretationsForVerse,
+  versesForQuestion,
+} from '../../lib/verseInterpretations';
 import {
   episodesForVerse,
   getPodcastEpisodes,
@@ -43,6 +52,99 @@ const bookLabelZh = verse.refZh.match(/^(\S+) /)?.[1] ?? '';
 // Topic pages this verse appears in, linking the page into the themed hubs.
 const verseTopics = topicsForVerse(verse.refEn);
 
+// The reader's-question entry point. A visitor landing here from a question-shaped
+// search ("what does the bible say about pressure at work") should find that
+// question answered on this page, not only a passage to look at. Each typical
+// question gets this verse's own written reflection; the form below hands the
+// reader's own words to a Lectio reading answered by this same passage.
+const questionEntries = interpretationsForVerse(verse.slug, lang);
+const questionLinks = questionEntries.map((entry) => ({
+  entry,
+  others: versesForQuestion(entry.question.slug, lang, verse.slug, 3),
+}));
+
+// The reader's own question, answered here rather than somewhere else. The
+// reading flow normally draws a passage at random; someone who arrives on this
+// page is already sitting with one, so the drawn verse is pinned to it. That
+// keeps the promise the form makes. Handling it on this page (instead of
+// handing off to the home page) means the answer appears where the question
+// was asked, and the visitor never loses the passage they were reading.
+const sessionCookie = Astro.cookies.get('session')?.value;
+const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
+
+// A crawler never submits this form, but a POST costs a model call and a quota
+// unit, so nothing runs for a request that identifies itself as a bot.
+const isBot = isLikelyBotUa(Astro.request.headers.get('user-agent'));
+
+let askedQuestion = '';
+let askedReflection: { text: string; summary: string; followUps: string[] } | null = null;
+let askedError: 'empty' | 'quota' | 'failed' | null = null;
+
+if (Astro.request.method === 'POST' && !isBot) {
+  const form = await Astro.request.formData();
+  // Capped: this rides into a model prompt and a log row, and a question is a
+  // sentence or two, not an essay.
+  askedQuestion = String(form.get('question') ?? '').trim().slice(0, 400);
+
+  if (!askedQuestion) {
+    askedError = 'empty';
+  } else {
+    // Anonymous readers get the same cookie identity the home page uses, so
+    // their daily allowance is shared across both entry points rather than
+    // doubling.
+    let anonId = Astro.cookies.get('user_id')?.value;
+    if (!anonId) {
+      anonId = crypto.randomUUID();
+      Astro.cookies.set('user_id', anonId, { path: '/', httpOnly: true, sameSite: 'lax' });
+    }
+    const subject = userId ?? anonId;
+    const registered = userId !== null;
+    const entitlement = await canDraw(subject, 'single', registered);
+
+    if (!entitlement.ok) {
+      askedError = 'quota';
+    } else {
+      const ipHeader = Astro.request.headers.get('x-forwarded-for');
+      const ipAddress = ipHeader
+        ? ipHeader.split(',')[0].trim()
+        : Astro.request.headers.get('cf-connecting-ip');
+      const outcome = await performDraw({
+        question: askedQuestion,
+        spreadKey: 'single',
+        lang,
+        userId: subject,
+        registered,
+        ipAddress,
+        pinnedRef: verse.refEn,
+      });
+      if (outcome.kind === 'reading') {
+        const text = outcome.verses[0]?.interp_text ?? '';
+        // generateInterpretation reports a failure by returning an error string
+        // as the summary with empty card text. Showing that to a reader would
+        // leak an internal message (an API key problem, a rate limit) into a
+        // page whose whole purpose is contemplative reading, so a failure is
+        // rendered as the gentle retry note instead.
+        if (text.trim()) {
+          askedReflection = {
+            text,
+            summary: /^Error generating interpretation/i.test(outcome.summary) ? '' : outcome.summary,
+            followUps: outcome.followUps,
+          };
+        } else {
+          askedError = 'failed';
+        }
+      } else if (outcome.kind === 'gated') {
+        // Anonymous multi-verse gating cannot happen here: this form always
+        // asks for the single layout, which anonymous readers may use. Treat
+        // any other outcome as the quota wall rather than failing silently.
+        askedError = 'quota';
+      } else {
+        askedError = 'failed';
+      }
+    }
+  }
+}
+
 // Daily Lectio Divina podcast (Abiding Way Ministries) — episodes covering
 // this exact passage, streamed from the publisher's feed with permission.
 const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.refEn);
@@ -60,6 +162,19 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
       "alternateName": verse.refZh,
       "description": verse.themeEn
     },
+    ...(questionEntries.length
+      ? {
+          "@type": ["Article", "FAQPage"],
+          "mainEntity": questionEntries.map(({ question, interpretation }) => ({
+            "@type": "Question",
+            "name": lang === 'zh' ? question.questionZh : question.questionEn,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": interpretation.text,
+            },
+          })),
+        }
+      : {}),
     "isPartOf": {
       "@type": "WebSite",
       "name": "Lectio",
@@ -97,6 +212,123 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
     <h3>{lang === 'zh' ? '主题' : 'Theme'}</h3>
     <p><span class="tag">{lang === 'zh' ? verse.themeZh : verse.themeEn}</span></p>
   </div>
+
+  {questionEntries.length > 0 && (
+    <section class="questions-block" aria-labelledby="questions-heading">
+      <h2 class="questions-heading" id="questions-heading">
+        {lang === 'zh' ? '带着问题来读这段经文' : 'Bring a question to this passage'}
+      </h2>
+      <p class="questions-intro">
+        {lang === 'zh'
+          ? '很多人是从一个真实的问题搜到这里来的。以下是这段经文对这些常见问题的默想——它不是命运的答案，而是一个可以坐下来慢慢读的邀请。'
+          : 'Many readers arrive here from a real question. These are reflections for how this passage speaks to the questions people bring most often — not an answer about what will happen, but an invitation to sit with it slowly.'}
+      </p>
+
+      <nav class="questions-toc" aria-label={lang === 'zh' ? '常见问题' : 'Common questions'}>
+        {questionEntries.map(({ question }) => (
+          <a href={`#${question.slug}`}>{lang === 'zh' ? question.questionZh : question.questionEn}</a>
+        ))}
+      </nav>
+
+      {questionLinks.map(({ entry, others }) => (
+        <article class="question-entry" id={entry.question.slug}>
+          <h3 class="question-text">{lang === 'zh' ? entry.question.questionZh : entry.question.questionEn}</h3>
+          <p class="question-interpretation">{entry.interpretation.text}</p>
+          <p class="question-carry">
+            <span class="carry-label">{lang === 'zh' ? '带走一句' : 'Carry this'}</span>
+            {entry.interpretation.carry}
+          </p>
+          {others.length > 0 && (
+            <p class="question-others">
+              <span class="others-label">
+                {lang === 'zh' ? '同一问题上其他经文' : 'Other passages for this question'}
+              </span>
+              {others.map((v, i) => (
+                <>
+                  {i > 0 && ' · '}
+                  <a href={`/library/${v.slug}?lang=${lang}`}>{lang === 'zh' ? v.refZh : v.refEn}</a>
+                </>
+              ))}
+            </p>
+          )}
+        </article>
+      ))}
+
+      <div class="own-question">
+        <h3>{lang === 'zh' ? '换一个你自己的问题' : 'Have a different question?'}</h3>
+        <p class="own-question-note">
+          {lang === 'zh'
+            ? `写下你此刻真正的问题，Lectio 会以${verse.refZh}这段经文回答它。`
+            : `Write what you are actually carrying right now, and Lectio will answer it with this passage — ${verse.refEn}.`}
+        </p>
+        <form method="post" class="own-question-form">
+          <label class="own-question-label" for="own-question-input">
+            {lang === 'zh' ? '你的问题' : 'Your question'}
+          </label>
+          <input
+            id="own-question-input"
+            type="text"
+            name="question"
+            required
+            maxlength="400"
+            value={askedQuestion}
+            placeholder={lang === 'zh' ? '我想探索的问题是' : 'I want to explore'}
+          />
+          <button type="submit" class="upsell-button" data-event="cta_click" data-event-props='{"slot":"library_own_question"}'>
+            {lang === 'zh' ? '以这段经文回答我的问题' : 'Answer my question with this passage'}
+          </button>
+        </form>
+
+        {askedError === 'empty' && (
+          <p class="own-question-error">
+            {lang === 'zh' ? '请先写下你的问题。' : 'Please write your question first.'}
+          </p>
+        )}
+        {askedError === 'quota' && (
+          <p class="own-question-error">
+            {lang === 'zh'
+              ? '今天的次数已经用完了。经文仍然在这里，可以慢慢读；也可以订阅后在更长的时间里继续。'
+              : 'You have used today\u2019s readings. The passage is still here to read slowly \u2014 subscribe to keep going day after day.'}
+          </p>
+        )}
+        {askedError === 'failed' && (
+          <p class="own-question-error">
+            {lang === 'zh'
+              ? '这次没能生成默想。经文仍然在这里；稍后再试一次也可以。'
+              : 'That reflection could not be written just now. The passage is still here \u2014 try again in a moment.'}
+          </p>
+        )}
+        {askedReflection && (
+          <div class="own-question-answer">
+            <p class="own-question-echo">&ldquo;{askedQuestion}&rdquo;</p>
+            {askedReflection.text && <p class="own-question-text">{askedReflection.text}</p>}
+            {askedReflection.summary && <p class="own-question-summary">{askedReflection.summary}</p>}
+            {askedReflection.followUps.length > 0 && (
+              <div class="own-question-followups">
+                <span class="followups-label">{lang === 'zh' ? '也许你还想问' : 'You might also ask'}</span>
+                {askedReflection.followUps.map((q) => (
+                  <p class="own-question-followup">{q}</p>
+                ))}
+              </div>
+            )}
+            <p class="own-question-alt">
+              <a href={`/today?verse=${verse.slug}&lang=${lang}`}>
+                {lang === 'zh' ? '把这个问题带进六步诵读 →' : 'Walk this passage through the six steps of Lectio →'}
+              </a>
+            </p>
+          </div>
+        )}
+
+        {!askedReflection && (
+          <p class="own-question-alt">
+            <a href={`/today?verse=${verse.slug}&lang=${lang}`}>
+              {lang === 'zh' ? '或者：以这段经文走一遍圣言诵读的六个步骤 →' : 'Or walk this passage through the six steps of Lectio →'}
+            </a>
+          </p>
+        )}
+      </div>
+    </section>
+  )}
 
   {chapterContext && (
     <div class="meaning-block">
@@ -176,6 +408,68 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
      neighbours recede. */
   .context-verses { margin-top: 4px; }
   .context-verse { margin: 0 0 6px; font-size: 15px; line-height: 1.75; color: var(--text-dim); }
+  /* Reader-question block: the reason a question-shaped search lands here.
+     Reads as prose, not as a FAQ widget — one question, its reflection, and
+     the line worth carrying. */
+  .questions-block {
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; padding: 18px; margin-bottom: 15px;
+    box-shadow: var(--shadow-soft);
+  }
+  .questions-heading { margin: 0 0 8px; color: var(--gold); font-size: 19px; }
+  .questions-intro { margin: 0 0 14px; color: var(--text-dim); font-size: 14.5px; line-height: 1.7; max-width: 680px; }
+  .questions-toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .questions-toc a {
+    text-decoration: none; background: var(--pill-bg); color: var(--text-dim);
+    font-size: 12.5px; font-family: var(--font-ui); padding: 5px 12px; border-radius: 999px;
+  }
+  .questions-toc a:hover { color: var(--text); }
+
+  .question-entry { padding: 16px 0; border-top: 1px solid var(--panel-border); scroll-margin-top: 80px; }
+  .question-entry:first-of-type { border-top: none; padding-top: 4px; }
+  .question-text { margin: 0 0 10px; font-size: 16.5px; color: var(--accent-ink); }
+  .question-interpretation { margin: 0 0 12px; font-size: 15.5px; line-height: 1.8; }
+  .question-carry {
+    margin: 0 0 10px; padding-left: 12px; border-left: 3px solid var(--gold);
+    font-style: italic; color: var(--text-dim); font-size: 15px;
+  }
+  .carry-label {
+    display: block; font-style: normal; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold); font-family: var(--font-ui);
+    margin-bottom: 2px;
+  }
+  .question-others { margin: 0; font-size: 13px; font-family: var(--font-ui); color: var(--text-dim); }
+  .others-label { margin-right: 8px; }
+  .question-others a { color: var(--accent-ink); text-decoration: none; }
+  .question-others a:hover { text-decoration: underline; }
+
+  /* The reader's own question: the reverse of the home page's flow, answered
+     by the verse already on screen. */
+  .own-question { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--panel-border); }
+  .own-question h3 { margin: 0 0 6px; color: var(--gold); font-size: 16px; }
+  .own-question-note { margin: 0 0 12px; color: var(--text-dim); font-size: 14px; line-height: 1.65; max-width: 640px; }
+  .own-question-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .own-question-label { font-size: 12px; font-family: var(--font-ui); color: var(--text-dim); }
+  .own-question-form input[type="text"] {
+    flex: 1 1 260px; min-width: 200px; padding: 10px 12px;
+    border: 1px solid var(--panel-border); border-radius: 8px;
+    background: var(--bg); color: var(--text); font-family: inherit; font-size: 15px;
+  }
+  .own-question-form .upsell-button { border: none; cursor: pointer; font-family: var(--font-ui); }
+  .own-question-error { margin: 12px 0 0; color: var(--terracotta); font-size: 14px; }
+  .own-question-answer { margin-top: 18px; padding: 16px; background: var(--bg); border-radius: 8px; }
+  .own-question-echo { margin: 0 0 10px; font-style: italic; color: var(--text-dim); }
+  .own-question-text { margin: 0 0 10px; font-size: 15.5px; line-height: 1.8; }
+  .own-question-summary { margin: 0 0 12px; font-size: 15px; line-height: 1.75; color: var(--text-dim); }
+  .own-question-followups { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--panel-border); }
+  .followups-label {
+    display: block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); font-family: var(--font-ui); margin-bottom: 6px;
+  }
+  .own-question-followup { margin: 0 0 6px; font-size: 14.5px; color: var(--text-dim); }
+  .own-question-alt { margin: 12px 0 0; font-size: 13px; font-family: var(--font-ui); }
+  .own-question-alt a { color: var(--accent-ink); text-decoration: none; }
+  .own-question-alt a:hover { text-decoration: underline; }
   .context-verse sup { font-size: 11px; color: var(--gold); margin-right: 6px; font-family: var(--font-ui); }
   .context-verse.is-focus { color: var(--text); border-left: 3px solid var(--gold); padding-left: 10px; }
   .context-edge { margin: 0 0 6px; color: var(--text-dim); text-align: center; }

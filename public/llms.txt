@@ -28,8 +28,11 @@ before God with scripture and gentle reflection.
   for today, one step at a time (Lectio, Meditatio, Oratio, Contemplatio),
   with audio narration.
 - [Verse Library](https://enjoyhim.org/library): 157 Bible verses with
-  bilingual text and reflection themes. Each verse has its own page, e.g.
-  [Psalm 23:1](https://enjoyhim.org/library/psalm-23-1).
+  bilingual text, reflection themes, and a written reflection for each of the
+  common questions readers arrive with — pressure at work, loving better in a
+  relationship, what to let go of, and finding stillness. Each verse has its
+  own page, e.g. [Psalm 23:1](https://enjoyhim.org/library/psalm-23-1), and
+  each page also takes the reader's own question.
 - [Topics](https://enjoyhim.org/topics): the verse library grouped by theme —
   anxiety, hope, the love of God, faith, wisdom, rest, and more.
 - [Approach](https://enjoyhim.org/approach): what Lectio Divina is, what
