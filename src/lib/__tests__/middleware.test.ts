@@ -247,6 +247,16 @@ describe('?lang=en retirement', () => {
     expect(response.headers.get('Location')).toBe('/about');
   });
 
+  it('strips any non-zh lang value, not just en', async () => {
+    const response = (await onRequest(context('https://enjoyhim.org/about?lang=fr'), async () =>
+      new Response('should not reach here')
+    )) as Response;
+    expect(response.status).toBe(301);
+    expect(response.headers.get('Location')).toBe('/about');
+    // No cookie is set for stray values - only the known English alias gets one.
+    expect(response.headers.get('Set-Cookie')).toBeNull();
+  });
+
   it('leaves ?lang=zh untouched', async () => {
     const next = vi.fn(async () => new Response('ok'));
     const response = (await onRequest(context('https://enjoyhim.org/pricing?lang=zh'), next)) as Response;

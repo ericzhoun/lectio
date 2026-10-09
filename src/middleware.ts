@@ -75,14 +75,17 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // Retire ?lang=en (Oct 2026 indexing fix): every English page also existed
   // under ?lang=en, so Google filed each twin as "Alternate page with proper
   // canonical tag" and skipped 146 pages. Each canonical already points at
-  // the bare URL; now the URL itself consolidates with a 301. The language
-  // cookie is set first, so a reader who followed a legacy ?lang=en link
-  // still lands in English; crawlers ignore cookies and only see the 301
-  // onto the canonical. The lang value is matched case-insensitively; GET/HEAD
-  // only, since a 301 on a POST would be rewritten to GET by user agents.
-  const langParam = context.url.searchParams.get('lang')?.toLowerCase();
+  // the bare URL; now the URL itself consolidates with a 301. Any lang value
+  // other than zh is non-canonical (see canonicalHref in lib/seo.ts), so it
+  // is stripped here too. The language cookie is set first, so a reader who
+  // followed a legacy ?lang=en link still lands in English; crawlers ignore
+  // cookies and only see the 301 onto the canonical. GET/HEAD only, since a
+  // 301 on a POST would be rewritten to GET by user agents.
+  const rawLangParam = context.url.searchParams.get('lang');
+  const langParam = rawLangParam?.toLowerCase();
   if (
-    langParam === 'en' &&
+    rawLangParam !== null &&
+    langParam !== 'zh' &&
     !pathname.startsWith('/api/') &&
     (context.request.method === 'GET' || context.request.method === 'HEAD')
   ) {
@@ -92,7 +95,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
       Location: `${target.pathname}${target.search}`,
       'Cache-Control': 'private, no-store',
     });
-    headers.append('Set-Cookie', `lang=en; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=${ONE_YEAR_SECONDS}`);
+    if (langParam === 'en') {
+      headers.append('Set-Cookie', `lang=en; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=${ONE_YEAR_SECONDS}`);
+    }
     return new Response(null, { status: 301, headers });
   }
 
