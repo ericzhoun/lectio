@@ -15,7 +15,9 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const form = await request.formData();
   const email = String(form.get('email') ?? '').trim().toLowerCase();
   const password = String(form.get('password') ?? '');
-  const lang = form.get('lang') === 'en' ? 'en' : 'zh';
+  // English is the canonical default now that English links are bare (they no
+  // longer carry ?lang=en); only an explicit zh flips the error-page language.
+  const lang = form.get('lang') === 'zh' ? 'zh' : 'en';
   const returnTo = safeAuthReturn(form.get('returnTo'), langHref('/', lang));
   const json = request.headers.get('accept')?.includes('application/json');
 

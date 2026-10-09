@@ -22,7 +22,10 @@ import { guestReaderId } from '../../../../lib/guestSession';
 export const prerender = false;
 
 export const GET: APIRoute = async ({ url, cookies, redirect }) => {
-  const lang = cookies.get('oauth_lang')?.value === 'en' ? 'en' : 'zh';
+  // English is the canonical default (English links no longer carry ?lang=en);
+  // a zh reader's flow always carries the explicit lang through the start
+  // route's oauth_lang cookie.
+  const lang = cookies.get('oauth_lang')?.value === 'zh' ? 'zh' : 'en';
   const returnTo = safeAuthReturn(cookies.get('oauth_return')?.value, langHref('/', lang));
   const fail = (code: string) => redirect(`/login?${new URLSearchParams({ error: code, lang, returnTo })}`);
 
