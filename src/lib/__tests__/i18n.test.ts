@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveLang, langSwitchHref } from '../i18n';
+import { resolveLang, langSwitchHref, langHref } from '../i18n';
 
 interface CookieOp {
   name: string;
@@ -66,16 +66,49 @@ describe('resolveLang', () => {
   });
 });
 
-describe('langSwitchHref', () => {
-  it('sets lang on the current path', () => {
-    const { astro } = makeAstro({}, { lang: 'zh' });
-    astro.url = new URL('https://example.com/pricing');
-    expect(langSwitchHref(astro, 'en')).toBe('/pricing?lang=en');
+describe('langHref', () => {
+  it('leaves English links bare (the canonical form)', () => {
+    expect(langHref('/pricing', 'en')).toBe('/pricing');
+    expect(langHref('/?new=1', 'en')).toBe('/?new=1');
   });
 
-  it('preserves other query params and replaces an existing lang', () => {
-    const { astro } = makeAstro({ lang: 'zh', suit: 'cups' });
+  it('keeps ?lang=zh on Chinese links', () => {
+    expect(langHref('/pricing', 'zh')).toBe('/pricing?lang=zh');
+    expect(langHref('/library?card=moon', 'zh')).toBe('/library?lang=zh&card=moon');
+  });
+
+  it('replaces an existing lang param instead of duplicating it', () => {
+    expect(langHref('/library?lang=en', 'en')).toBe('/library');
+    expect(langHref('/library?lang=en', 'zh')).toBe('/library?lang=zh');
+  });
+
+  it('keeps the fragment after the query', () => {
+    expect(langHref('/library?card=moon#x', 'zh')).toBe('/library?lang=zh&card=moon#x');
+  });
+});
+
+describe('langSwitchHref', () => {
+  it('links to the Chinese page with ?lang=zh', () => {
+    const { astro } = makeAstro({});
+    astro.url = new URL('https://example.com/pricing');
+    expect(langSwitchHref(astro, 'zh', 'en')).toBe('/pricing?lang=zh');
+  });
+
+  it('links English back to the bare URL from an English page', () => {
+    const { astro } = makeAstro({});
+    astro.url = new URL('https://example.com/pricing');
+    expect(langSwitchHref(astro, 'en', 'en')).toBe('/pricing');
+  });
+
+  it('keeps one ?lang=en link on a Chinese page so the switch still flips the cookie', () => {
+    const { astro } = makeAstro({});
     astro.url = new URL('https://example.com/library?suit=cups&lang=zh');
-    expect(langSwitchHref(astro, 'en')).toBe('/library?suit=cups&lang=en');
+    expect(langSwitchHref(astro, 'en', 'zh')).toBe('/library?suit=cups&lang=en');
+  });
+
+  it('preserves other query params when switching to Chinese', () => {
+    const { astro } = makeAstro({});
+    astro.url = new URL('https://example.com/library?suit=cups');
+    expect(langSwitchHref(astro, 'zh', 'en')).toBe('/library?suit=cups&lang=zh');
   });
 });

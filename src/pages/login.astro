@@ -3,13 +3,13 @@ export const prerender = false;
 import LoginForm from '../components/LoginForm.astro';
 import { safeAuthReturn } from '../lib/authReturn';
 import Layout from '../layouts/Layout.astro';
-import { resolveLang } from '../lib/i18n';
+import { resolveLang, langHref } from '../lib/i18n';
 
 const url = Astro.url;
 const lang = resolveLang(Astro);
 const error = url.searchParams.get('error');
 
-const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), `/?lang=${lang}`);
+const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), langHref('/', lang));
 
 ---
 <Layout title={lang === 'zh' ? '登录 — Lectio' : 'Log In — Lectio'} noindex lang={lang}>

@@ -7,7 +7,7 @@ import ReadingMusic from '../../components/ReadingMusic.astro';
 import { resolveMusic } from '../../lib/singingBible';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
-import { resolveLang } from '../../lib/i18n';
+import { resolveLang, langHref } from '../../lib/i18n';
 import { resolveActiveDay, resolveLocalDay, isVerseDay, verseSlugOfDay } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage, type ResolvedPassage } from '../../lib/passage';
@@ -369,7 +369,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
           {step === 'actio' && saved && actioQuestion && (
             <a
               class="actio-draw"
-              href={`/?question=${encodeURIComponent(actioQuestion)}&lang=${lang}`}
+              href={langHref(`/?question=${encodeURIComponent(actioQuestion)}`, lang)}
               data-event="cta_click" data-event-props='{"slot":"actio_draw"}'
             >
               {lang === 'zh' ? '把今天这一步带到神面前 — 领受一节经文' : 'Bring this step to God — receive a verse for it'}

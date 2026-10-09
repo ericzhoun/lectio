@@ -4,7 +4,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
-import { resolveLang } from '../../lib/i18n';
+import { resolveLang, langHref } from '../../lib/i18n';
 import { resolveActiveDay, isVerseDay, verseSlugOfDay, DAY_RE, VERSE_DAY_RE } from '../../lib/localDay';
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
@@ -94,10 +94,10 @@ const returnTo = encodeURIComponent(`/today/amen?day=${day}`);
               ? '你今天写下的每一句都已为你暂存。注册一个免费账号，它们就永远属于你——往后的每一天也会一起留下来。'
               : 'Every word you wrote on this walk is saved for now. Create a free account and they stay yours — this day and every day that follows.'}
           </p>
-          <a class="keep-action" href={`/signup?lang=${lang}&returnTo=${returnTo}`}>
+          <a class="keep-action" href={langHref(`/signup?returnTo=${returnTo}`, lang)}>
             {lang === 'zh' ? '免费注册' : 'Create a free account'}
           </a>
-          <a class="keep-secondary" href={`/login?lang=${lang}&returnTo=${returnTo}`}>
+          <a class="keep-secondary" href={langHref(`/login?returnTo=${returnTo}`, lang)}>
             {lang === 'zh' ? '我已有账户' : 'I already have an account'}
           </a>
         </section>

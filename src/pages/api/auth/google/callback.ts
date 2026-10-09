@@ -15,6 +15,7 @@ import {
 import { upsertGoogleUser } from '../../../../lib/users';
 import { createSessionToken, SESSION_COOKIE_MAX_AGE } from '../../../../lib/session';
 import { safeAuthReturn } from '../../../../lib/authReturn';
+import { langHref } from '../../../../lib/i18n';
 import { claimGuestWalk } from '../../../../lib/dailySession';
 import { guestReaderId } from '../../../../lib/guestSession';
 
@@ -22,7 +23,7 @@ export const prerender = false;
 
 export const GET: APIRoute = async ({ url, cookies, redirect }) => {
   const lang = cookies.get('oauth_lang')?.value === 'en' ? 'en' : 'zh';
-  const returnTo = safeAuthReturn(cookies.get('oauth_return')?.value, `/?lang=${lang}`);
+  const returnTo = safeAuthReturn(cookies.get('oauth_return')?.value, langHref('/', lang));
   const fail = (code: string) => redirect(`/login?${new URLSearchParams({ error: code, lang, returnTo })}`);
 
   const clearOAuthCookies = () => {

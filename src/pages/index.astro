@@ -23,7 +23,7 @@ import {
 } from '../lib/entitlements';
 import { getCreditBalance } from '../lib/credits';
 import { getTodayUsage } from '../lib/usage';
-import { resolveLang } from '../lib/i18n';
+import { resolveLang, langHref } from '../lib/i18n';
 import { getLectionaryDay, focusReference } from '../lib/lectionary';
 import { resolvePassage } from '../lib/passage';
 import { resolveLocalDay } from '../lib/localDay';
@@ -930,7 +930,7 @@ const description = lang === 'zh'
         <li>{lang === 'zh' ? '圣言诵读（三节经文）体验额度 ×3' : 'Lectio Divina (3 verses) trial credits ×3'}</li>
         <li>{lang === 'zh' ? '深度诵读（十节经文）体验额度 ×1' : 'Deep Lectio (10 verses) trial credit ×1'}</li>
       </ul>
-      <a class="upsell-button" href={`/signup?lang=${lang}`}>
+      <a class="upsell-button" href={langHref('/signup', lang)}>
         {lang === 'zh' ? '立即免费注册' : 'Create free account'}
       </a>
     </div>
@@ -955,11 +955,11 @@ const description = lang === 'zh'
       </p>
       <div class="upsell-actions">
         {!registered && upsellReason !== 'no_credits' && (
-          <a class="upsell-button" href={`/signup?lang=${lang}`}>
+          <a class="upsell-button" href={langHref('/signup', lang)}>
             {lang === 'zh' ? '免费注册' : 'Sign up free'}
           </a>
         )}
-        <a class={`upsell-button ${!registered ? 'upsell-button-secondary' : ''}`} href={`/pricing?lang=${lang}`}>
+        <a class={`upsell-button ${!registered ? 'upsell-button-secondary' : ''}`} href={langHref('/pricing', lang)}>
           {lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}
         </a>
       </div>
@@ -1048,7 +1048,7 @@ const description = lang === 'zh'
                 : 'Your free trial credits are used up — subscribe to reflect on this reading.'}
             </p>
             <div class="upsell-actions">
-              <a class="upsell-button" href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}</a>
+              <a class="upsell-button" href={langHref('/pricing', lang)}>{lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}</a>
             </div>
           </>
         )}
@@ -1061,7 +1061,7 @@ const description = lang === 'zh'
                 : "You've used today's readings — come back tomorrow to reflect on this one."}
             </p>
             <div class="upsell-actions">
-              <a class="upsell-button" href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '升级立即解读' : 'Upgrade to interpret now'}</a>
+              <a class="upsell-button" href={langHref('/pricing', lang)}>{lang === 'zh' ? '升级立即解读' : 'Upgrade to interpret now'}</a>
             </div>
           </>
         )}
@@ -1084,12 +1084,12 @@ const description = lang === 'zh'
                 : 'Your verses are saved — upgrade to Pro to reflect on this reading.'}
             </p>
             <div class="upsell-actions">
-              <a class="upsell-button" href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}</a>
+              <a class="upsell-button" href={langHref('/pricing', lang)}>{lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}</a>
             </div>
           </>
         )}
         {pendingGateState.gate === 'action' && (
-          <p class="gate-redraw"><a href={`/?lang=${lang}`}>{lang === 'zh' ? '重新领受' : 'Read again'}</a></p>
+          <p class="gate-redraw"><a href={langHref('/', lang)}>{lang === 'zh' ? '重新领受' : 'Read again'}</a></p>
         )}
       </section>
 
@@ -1105,8 +1105,8 @@ const description = lang === 'zh'
               <li>{lang === 'zh' ? '注册即送体验额度：圣言诵读 ×3、深度诵读 ×1' : 'Welcome credits: Lectio Divina ×3, Deep Lectio ×1'}</li>
               <li>{lang === 'zh' ? '每日经文默想 3 → 6 次' : 'Daily Word readings: 3 → 6 per day'}</li>
             </ul>
-            <a class="upsell-button" href={`/signup?lang=${lang}`}>{lang === 'zh' ? '免费注册，查看默想' : 'Sign up free to reveal'}</a>
-            <a class="upsell-button upsell-button-secondary" href={`/login?lang=${lang}`}>{lang === 'zh' ? '已有账号，登录' : 'Log in'}</a>
+            <a class="upsell-button" href={langHref('/signup', lang)}>{lang === 'zh' ? '免费注册，查看默想' : 'Sign up free to reveal'}</a>
+            <a class="upsell-button upsell-button-secondary" href={langHref('/login', lang)}>{lang === 'zh' ? '已有账号，登录' : 'Log in'}</a>
             <button type="button" class="gate-modal-later" id="gate-modal-later">{lang === 'zh' ? '稍后再说' : 'Maybe later'}</button>
           </div>
         </div>
@@ -1128,7 +1128,7 @@ const description = lang === 'zh'
           {lang === 'zh' ? `${verses.length} 节经文` : `${verses.length} verse${verses.length !== 1 ? 's' : ''}`}
         </p>
         <p class="result-again">
-          <a href={`/?new=1&lang=${lang}`}>{lang === 'zh' ? '重新领受' : 'Read again'}</a>
+          <a href={langHref('/?new=1', lang)}>{lang === 'zh' ? '重新领受' : 'Read again'}</a>
         </p>
       </div>
       <section>

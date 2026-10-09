@@ -6,7 +6,7 @@ import { env } from 'cloudflare:workers';
 import { getLibraryVerses } from '../../lib/scripture';
 import { chapterContextForRef, relatedByBook } from '../../lib/verseContext';
 import { topicsForVerse } from '../../lib/topics';
-import { resolveLang } from '../../lib/i18n';
+import { resolveLang, langHref } from '../../lib/i18n';
 import { verifySessionToken } from '../../lib/session';
 import { canDraw } from '../../lib/entitlements';
 import { performDraw } from '../../lib/draw';
@@ -193,7 +193,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
   })}>
   </script>
 
-  <a class="back-link" href={`/library?lang=${lang}`}>&larr; {lang === 'zh' ? '返回经文库' : 'Back to Library'}</a>
+  <a class="back-link" href={langHref('/library', lang)}>&larr; {lang === 'zh' ? '返回经文库' : 'Back to Library'}</a>
 
   <header>
     <h1>{lang === 'zh' ? verse.refZh : verse.refEn}</h1>
@@ -246,7 +246,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
               {others.map((v, i) => (
                 <>
                   {i > 0 && ' · '}
-                  <a href={`/library/${v.slug}?lang=${lang}`}>{lang === 'zh' ? v.refZh : v.refEn}</a>
+                  <a href={langHref(`/library/${v.slug}`, lang)}>{lang === 'zh' ? v.refZh : v.refEn}</a>
                 </>
               ))}
             </p>
@@ -312,7 +312,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
               </div>
             )}
             <p class="own-question-alt">
-              <a href={`/today?verse=${verse.slug}&lang=${lang}`}>
+              <a href={langHref(`/today?verse=${verse.slug}`, lang)}>
                 {lang === 'zh' ? '把这个问题带进六步诵读 →' : 'Walk this passage through the six steps of Lectio →'}
               </a>
             </p>
@@ -321,7 +321,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
 
         {!askedReflection && (
           <p class="own-question-alt">
-            <a href={`/today?verse=${verse.slug}&lang=${lang}`}>
+            <a href={langHref(`/today?verse=${verse.slug}`, lang)}>
               {lang === 'zh' ? '或者：以这段经文走一遍圣言诵读的六个步骤 →' : 'Or walk this passage through the six steps of Lectio →'}
             </a>
           </p>
@@ -355,7 +355,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
       <ul class="related-verses">
         {relatedVerses.map((v) => (
           <li>
-            <a href={`/library/${v.slug}?lang=${lang}`}>
+            <a href={langHref(`/library/${v.slug}`, lang)}>
               <span class="related-ref">{lang === 'zh' ? v.refZh : v.refEn}</span>
               <span class="tag">{lang === 'zh' ? v.themeZh : v.themeEn}</span>
             </a>
@@ -370,7 +370,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
       <h3>{lang === 'zh' ? '相关主题' : 'Related topics'}</h3>
       <p class="verse-topics">
         {verseTopics.map((t) => (
-          <a href={`/topics/${t.slug}?lang=${lang}`}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
+          <a href={langHref(`/topics/${t.slug}`, lang)}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
         ))}
       </p>
     </div>
@@ -397,7 +397,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
   )}
 
   <p class="library-cta">
-    <a class="upsell-button" href={`/today?verse=${verse.slug}&lang=${lang}`}>
+    <a class="upsell-button" href={langHref(`/today?verse=${verse.slug}`, lang)}>
       {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
     </a>
   </p>

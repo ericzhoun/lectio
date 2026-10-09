@@ -1,7 +1,7 @@
 ---
 // Mobile shell (≤760px): sticky thumb bar + full-screen navigation sheet.
 // Desktop keeps .top-nav until the site-wide redesign adopts this component.
-import { langSwitchHref } from '../lib/i18n';
+import { langSwitchHref, langHref } from '../lib/i18n';
 import { safeAuthReturn } from '../lib/authReturn';
 import type { Lang } from '../lib/reading';
 
@@ -32,7 +32,7 @@ const t = {
 };
 // Never point an auth link back at an auth page: doing so nests returnTo on every
 // visit and creates an unbounded URL space for crawlers.
-const loginHref = `/login?lang=${lang}&returnTo=${encodeURIComponent(safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?lang=${lang}`))}`;
+const loginHref = langHref(`/login?returnTo=${encodeURIComponent(safeAuthReturn(Astro.url.pathname + Astro.url.search, langHref('/', lang)))}`, lang);
 ---
 <div class="mobile-nav">
   <nav class="mn-bar" aria-label={t.menu}>
@@ -55,8 +55,8 @@ const loginHref = `/login?lang=${lang}&returnTo=${encodeURIComponent(safeAuthRet
     <a class="mn-row" href="/about"><span>{t.about}</span><span class="mn-hint">{t.hint.about}</span></a>
     <a class="mn-row" href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}'><span>{t.pricing}</span><span class="mn-hint">{t.hint.pricing}</span></a>
     <a class="mn-row" href="/privacy"><span>{t.privacy}</span><span class="mn-hint">{t.hint.privacy}</span></a>
-    <a class="mn-row" href={langSwitchHref(Astro, 'zh')}>中文</a>
-    <a class="mn-row" href={langSwitchHref(Astro, 'en')}>English</a>
+    <a class="mn-row" href={langSwitchHref(Astro, 'zh', lang)}>中文</a>
+    <a class="mn-row" href={langSwitchHref(Astro, 'en', lang)}>English</a>
     <a class="mn-row" href={loggedIn ? '/account' : loginHref}>{loggedIn ? t.account : t.login}</a>
   </div>
 </div>

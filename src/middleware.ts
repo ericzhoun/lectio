@@ -6,6 +6,7 @@ import { assignVariants, serializeVariantCookie } from './lib/ab';
 import { crossOriginForbiddenResponse, isForbiddenCrossOriginRequest } from './lib/originCheck';
 
 const TWO_YEARS = 60 * 60 * 24 * 365 * 2;
+const ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
 // Every HTML response is personalized from cookies (lang, session, A/B
 // variants), and redirects like /today -> /today/<step> depend on per-reader
@@ -69,6 +70,30 @@ export const onRequest = defineMiddleware(async (context, next) => {
       status: 308,
       headers: { Location: `${stripped}${context.url.search}` },
     }));
+  }
+
+  // Retire ?lang=en (Oct 2026 indexing fix): every English page also existed
+  // under ?lang=en, so Google filed each twin as "Alternate page with proper
+  // canonical tag" and skipped 146 pages. Each canonical already points at
+  // the bare URL; now the URL itself consolidates with a 301. The language
+  // cookie is set first, so a reader who followed a legacy ?lang=en link
+  // still lands in English; crawlers ignore cookies and only see the 301
+  // onto the canonical. The lang value is matched case-insensitively; GET/HEAD
+  // only, since a 301 on a POST would be rewritten to GET by user agents.
+  const langParam = context.url.searchParams.get('lang')?.toLowerCase();
+  if (
+    langParam === 'en' &&
+    !pathname.startsWith('/api/') &&
+    (context.request.method === 'GET' || context.request.method === 'HEAD')
+  ) {
+    const target = new URL(context.url);
+    target.searchParams.delete('lang');
+    const headers = new Headers({
+      Location: `${target.pathname}${target.search}`,
+      'Cache-Control': 'private, no-store',
+    });
+    headers.append('Set-Cookie', `lang=en; Path=/; HttpOnly; SameSite=Lax; Secure; Max-Age=${ONE_YEAR_SECONDS}`);
+    return new Response(null, { status: 301, headers });
   }
 
   const cookies = context.cookies;

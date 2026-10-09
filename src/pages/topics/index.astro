@@ -3,7 +3,7 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { TOPICS } from '../../lib/topics';
-import { resolveLang } from '../../lib/i18n';
+import { resolveLang, langHref } from '../../lib/i18n';
 
 const lang = resolveLang(Astro);
 
@@ -32,7 +32,7 @@ const topicCards = TOPICS.map((t) => ({
   })}>
   </script>
 
-  <a class="back-link" href={`/library?lang=${lang}`}>&larr; {lang === 'zh' ? '返回经文库' : 'Back to Library'}</a>
+  <a class="back-link" href={langHref('/library', lang)}>&larr; {lang === 'zh' ? '返回经文库' : 'Back to Library'}</a>
 
   <header>
     <h1>{lang === 'zh' ? '经文主题' : 'Verses by Topic'}</h1>
@@ -45,7 +45,7 @@ const topicCards = TOPICS.map((t) => ({
 
   <div class="topic-grid">
     {topicCards.map((t) => (
-      <a class="topic-card" href={`/topics/${t.slug}?lang=${lang}`}>
+      <a class="topic-card" href={langHref(`/topics/${t.slug}`, lang)}>
         <h2 class="topic-card-name">{t.name}</h2>
         <p class="topic-card-desc">{t.desc}</p>
         <span class="topic-card-count">{lang === 'zh' ? `${t.count} 节经文` : `${t.count} verses`}</span>

@@ -1,12 +1,13 @@
 ---
 import LoginForm from './LoginForm.astro';
 import { safeAuthReturn } from '../lib/authReturn';
+import { langHref } from '../lib/i18n';
 import type { Lang } from '../lib/reading';
 interface Props { lang: Lang; }
 const { lang } = Astro.props;
 // Never point an auth link back at an auth page: doing so nests returnTo on every
 // visit and creates an unbounded URL space for crawlers.
-const returnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?lang=${lang}`);
+const returnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, langHref('/', lang));
 ---
 <dialog id="login-overlay" aria-labelledby="login-overlay-title" data-lang={lang}>
   <button type="button" class="login-close" aria-label={lang === 'zh' ? '关闭' : 'Close'}>&times;</button>
@@ -37,11 +38,11 @@ const returnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?lang=$
       if (url.origin !== location.origin || url.pathname !== '/login') return;
       event.preventDefault();
       const returnTo = ['/login', '/signup'].includes(location.pathname)
-        ? new URLSearchParams(location.search).get('returnTo') || `/?lang=${dialog.dataset.lang}`
+        ? new URLSearchParams(location.search).get('returnTo') || (dialog.dataset.lang === 'zh' ? '/?lang=zh' : '/')
         : location.pathname + location.search + location.hash;
       (form.elements.namedItem('returnTo') as HTMLInputElement).value = returnTo;
       for (const [selector, path] of [['[data-auth-google]', '/api/auth/google/start'], ['[data-auth-signup]', '/signup']]) {
-        dialog.querySelector<HTMLAnchorElement>(selector)!.href = `${path}?${new URLSearchParams({ lang: dialog.dataset.lang!, returnTo })}`;
+        dialog.querySelector<HTMLAnchorElement>(selector)!.href = `${path}?${new URLSearchParams({ ...(dialog.dataset.lang === 'zh' ? { lang: 'zh' } : {}), returnTo })}`;
       }
       error.hidden = true;
       if (!dialog.open) {

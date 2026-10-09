@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { createUser } from '../../../lib/users';
 import { createSessionToken, SESSION_COOKIE_MAX_AGE } from '../../../lib/session';
-import { resolveLang } from '../../../lib/i18n';
+import { resolveLang, langHref } from '../../../lib/i18n';
 import { safeAuthReturn } from '../../../lib/authReturn';
 import { trackServerEvent } from '../../../lib/analytics';
 import { claimGuestWalk } from '../../../lib/dailySession';
@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request, url, cookies, redirect }) => {
   const password = String(form.get('password') ?? '');
 
   const lang = form.get('lang') === 'en' ? 'en' : resolveLang({ url, cookies });
-  const returnTo = safeAuthReturn(form.get('returnTo'), `/?lang=${lang}`);
+  const returnTo = safeAuthReturn(form.get('returnTo'), langHref('/', lang));
 
   if (!email || password.length < 8) {
     return redirect(`/signup?${new URLSearchParams({ error: 'invalid', lang, returnTo })}`, 303);

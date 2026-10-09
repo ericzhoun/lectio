@@ -9,14 +9,14 @@ import { getCreditBalance } from '../lib/credits';
 import { getTodayUsage } from '../lib/usage';
 import { getUserById } from '../lib/users';
 import { getReadingCtaState } from '../lib/cta';
-import { resolveLang } from '../lib/i18n';
+import { resolveLang, langHref } from '../lib/i18n';
 
 const url = Astro.url;
 const lang = resolveLang(Astro);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
-if (!userId) return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`);
+if (!userId) return Astro.redirect(langHref(`/login?returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`, lang));
 
 const user = await getUserById(userId);
 const isGoogleUser = Boolean(user?.googleId);
@@ -43,7 +43,7 @@ const fmtDate = (iso: string | null | undefined): string => {
           ? '🎉 注册成功！每日经文默想已升至 6 次，圣言诵读 ×3、深度诵读 ×1 体验额度已到账'
           : '🎉 Account created! Daily Word readings are now 6/day, and your trial credits (Lectio Divina ×3, Deep Lectio ×1) are ready.'}
       </p>
-      <a class="reading-cta-button" href={`/?lang=${lang}`}>
+      <a class="reading-cta-button" href={langHref('/', lang)}>
         {lang === 'zh' ? '开始第一次解读' : 'Start your first reading'}
       </a>
     </div>
@@ -60,7 +60,7 @@ const fmtDate = (iso: string | null | undefined): string => {
             ? '今日次数已用完 — 订阅后可继续解读'
             : "You've used today's draws — subscribe to keep going"}
         </p>
-        <a class="reading-cta-button" href={`/pricing?lang=${lang}`}>
+        <a class="reading-cta-button" href={langHref('/pricing', lang)}>
           {lang === 'zh' ? '查看订阅方案' : 'See subscription plans'}
         </a>
       </>
@@ -80,7 +80,7 @@ const fmtDate = (iso: string | null | undefined): string => {
               : `Plus trial credits: Lectio Divina ×${creditBalance['3card']} · Deep Lectio ×${creditBalance.celtic_cross}`}
           </p>
         )}
-        <a class="reading-cta-button" href={`/?lang=${lang}`}>
+        <a class="reading-cta-button" href={langHref('/', lang)}>
           {lang === 'zh' ? '开始解读' : 'Start your reading'}
         </a>
       </>
@@ -164,13 +164,13 @@ const fmtDate = (iso: string | null | undefined): string => {
     </dl>
 
     <div class="profile-actions">
-      <a class="explore-button" href={`/?lang=${lang}`}>{lang === 'zh' ? '开始解读' : 'Start reading'}</a>
+      <a class="explore-button" href={langHref('/', lang)}>{lang === 'zh' ? '开始解读' : 'Start reading'}</a>
       {tier !== 'free' && (
         <form method="post" action="/api/stripe/portal">
           <button type="submit" class="explore-button">{lang === 'zh' ? '管理订阅' : 'Manage subscription'}</button>
         </form>
       )}
-      <a class="explore-button" href={`/history?lang=${lang}`}>{lang === 'zh' ? '查看历史记录' : 'View history'}</a>
+      <a class="explore-button" href={langHref('/history', lang)}>{lang === 'zh' ? '查看历史记录' : 'View history'}</a>
       <button type="button" id="theme-toggle" class="theme-toggle"></button>
       <form method="post" action="/api/auth/logout">
         <button type="submit" class="reset-button">{lang === 'zh' ? '登出' : 'Log out'}</button>

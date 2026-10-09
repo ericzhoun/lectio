@@ -213,3 +213,62 @@ describe('https enforcement', () => {
     expect(next).toHaveBeenCalled();
   });
 });
+
+// Every English page used to exist twice: at the bare URL and at ?lang=en,
+// which Google filed as "Alternate page with proper canonical tag" for 146
+// pages and refused to index. The canonical always pointed at the bare URL;
+// this redirect makes the URL itself consolidate, and the Set-Cookie keeps a
+// reader who followed a legacy ?lang=en link in English. See memory/2026-10-09.
+describe('?lang=en retirement', () => {
+  it('301s an English query-param URL onto the canonical path and remembers the choice', async () => {
+    const response = (await onRequest(context('https://enjoyhim.org/pricing?lang=en'), async () =>
+      new Response('should not reach here')
+    )) as Response;
+    expect(response.status).toBe(301);
+    expect(response.headers.get('Location')).toBe('/pricing');
+    expect(response.headers.get('Set-Cookie')).toContain('lang=en');
+    expect(response.headers.get('Cache-Control')).toBe('private, no-store');
+  });
+
+  it('preserves other query params while dropping lang', async () => {
+    const response = (await onRequest(
+      context('https://enjoyhim.org/library?testament=old&lang=en'),
+      async () => new Response('should not reach here')
+    )) as Response;
+    expect(response.status).toBe(301);
+    expect(response.headers.get('Location')).toBe('/library?testament=old');
+  });
+
+  it('matches the lang param name case-insensitively', async () => {
+    const response = (await onRequest(context('https://enjoyhim.org/about?lang=EN'), async () =>
+      new Response('should not reach here')
+    )) as Response;
+    expect(response.status).toBe(301);
+    expect(response.headers.get('Location')).toBe('/about');
+  });
+
+  it('leaves ?lang=zh untouched', async () => {
+    const next = vi.fn(async () => new Response('ok'));
+    const response = (await onRequest(context('https://enjoyhim.org/pricing?lang=zh'), next)) as Response;
+    expect(response.status).toBe(200);
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('leaves /api routes alone so /api/tts?lang=en keeps working', async () => {
+    const next = vi.fn(async () => new Response('ok'));
+    await onRequest(context('https://enjoyhim.org/api/tts?step=lectio&lang=en'), next);
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('does not redirect POSTs (a 301 on a POST would be rewritten to GET)', async () => {
+    const next = vi.fn(async () => new Response('ok'));
+    await onRequest(
+      context('https://enjoyhim.org/?lang=en', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', Origin: 'https://enjoyhim.org' },
+      }),
+      next
+    );
+    expect(next).toHaveBeenCalled();
+  });
+});
