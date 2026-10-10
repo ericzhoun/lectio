@@ -15,21 +15,21 @@ describe('canOpenStep', () => {
   });
 
   it('permits exactly one step ahead, so the walk can proceed', () => {
-    expect(canOpenStep('silencio', 'lectio')).toBe(true);
     expect(canOpenStep('lectio', 'meditatio')).toBe(true);
+    expect(canOpenStep('meditatio', 'oratio')).toBe(true);
   });
 
   it('refuses jumping further ahead', () => {
     expect(canOpenStep('lectio', 'oratio')).toBe(false);
     expect(canOpenStep('lectio', 'actio')).toBe(false);
-    expect(canOpenStep('silencio', 'meditatio')).toBe(false);
+    expect(canOpenStep('lectio', 'contemplatio')).toBe(false);
   });
 });
 
 describe('ensureSession', () => {
-  it('creates a session at silencio', async () => {
+  it('creates a session at lectio, the first step of the walk', async () => {
     const s = await ensureSession('u1', '2026-09-04', 'en', db);
-    expect(s.reachedStep).toBe('silencio');
+    expect(s.reachedStep).toBe('lectio');
     expect(s.completedAt).toBeNull();
     expect(s.lang).toBe('en');
   });

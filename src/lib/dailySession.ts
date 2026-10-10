@@ -9,7 +9,7 @@ const CREATE_SESSIONS_SQL = `CREATE TABLE IF NOT EXISTS daily_sessions (
   user_id TEXT NOT NULL,
   day TEXT NOT NULL,
   lang TEXT NOT NULL,
-  reached_step TEXT NOT NULL DEFAULT 'silencio',
+  reached_step TEXT NOT NULL DEFAULT 'lectio',
   completed_at DATETIME,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (user_id, day)
@@ -59,9 +59,10 @@ export interface StepEntry {
  * A reader may revisit any step they have reached, and take the next one.
  *
  * Allowing exactly one step ahead is what lets the walk proceed at all: a
- * silent step records its arrival, so without this nobody could ever move past
- * Silencio. It still refuses a jump to Oratio from Lectio, because a writing
- * step advances `reached` only when something is actually written.
+ * writing step advances `reached` only when something is actually written, so
+ * without this nobody could ever move past Lectio's "one step ahead" — which
+ * is exactly the room the walk needs. It still refuses a jump to Oratio from
+ * Lectio.
  */
 export function canOpenStep(reached: Step, requested: Step): boolean {
   return stepIndex(requested) <= stepIndex(reached) + 1;
@@ -93,9 +94,11 @@ export async function ensureSession(
   await ensureTables(db);
   // The language is pinned at creation: switching mid-session would strand the
   // reader's own words beside a different translation.
+  // The walk opens at Lectio: the first session row is already at the first
+  // step, so arriving at /today lands on the reading itself.
   await db
     .prepare(
-      `INSERT INTO daily_sessions (user_id, day, lang, reached_step) VALUES (?, ?, ?, 'silencio')
+      `INSERT INTO daily_sessions (user_id, day, lang, reached_step) VALUES (?, ?, ?, 'lectio')
        ON CONFLICT(user_id, day) DO NOTHING`
     )
     .bind(userId, day, lang)

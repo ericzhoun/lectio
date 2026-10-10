@@ -313,7 +313,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
             )}
             <p class="own-question-alt">
               <a href={langHref(`/today?verse=${verse.slug}`, lang)}>
-                {lang === 'zh' ? '把这个问题带进六步诵读 →' : 'Walk this passage through the six steps of Lectio →'}
+                {lang === 'zh' ? '把这个问题带进五步诵读 →' : 'Walk this passage through the five steps of Lectio →'}
               </a>
             </p>
           </div>
@@ -322,7 +322,7 @@ const podcastEpisodes = episodesForVerse(await getPodcastEpisodes(100), verse.re
         {!askedReflection && (
           <p class="own-question-alt">
             <a href={langHref(`/today?verse=${verse.slug}`, lang)}>
-              {lang === 'zh' ? '或者：以这段经文走一遍圣言诵读的六个步骤 →' : 'Or walk this passage through the six steps of Lectio →'}
+              {lang === 'zh' ? '或者：以这段经文走一遍圣言诵读的五个步骤 →' : 'Or walk this passage through the five steps of Lectio →'}
             </a>
           </p>
         )}

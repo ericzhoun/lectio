@@ -57,7 +57,7 @@ export function hasLectionaryDay(day: string): boolean {
   return Object.prototype.hasOwnProperty.call(TABLE, day);
 }
 
-/** The single passage the six steps walk. */
+/** The single passage the five steps walk. */
 export function focusReference(day: LectionaryDay): string {
   return day.readings[day.focus] ?? day.readings.gospel;
 }

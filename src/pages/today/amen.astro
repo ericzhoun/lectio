@@ -9,7 +9,7 @@ import { resolveActiveDay, isVerseDay, verseSlugOfDay, DAY_RE, VERSE_DAY_RE } fr
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage } from '../../lib/passage';
 import { getLibraryVerseBySlug } from '../../lib/scripture';
-import { STEP_COPY } from '../../lib/dailySteps';
+import { STEP_COPY, STEP_ORDER } from '../../lib/dailySteps';
 import { getSession, getStepEntries } from '../../lib/dailySession';
 import { guestReaderId } from '../../lib/guestSession';
 import InviteForm from '../../components/InviteForm.astro';
@@ -57,8 +57,7 @@ const returnTo = encodeURIComponent(`/today/amen?day=${day}`);
   <article class="amen ritual">
     <header class="ritual-top">
       <span class="daily-dots" aria-hidden="true">
-        <span class="ddot done"></span><span class="ddot done"></span><span class="ddot done"></span>
-        <span class="ddot done"></span><span class="ddot done"></span><span class="ddot done"></span>
+        {STEP_ORDER.map((s) => <span class="ddot done"></span>)}
       </span>
       <a class="ritual-exit" href="/" aria-label={lang === 'zh' ? '返回首页' : 'Back to the home page'}>✕</a>
     </header>

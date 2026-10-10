@@ -12,7 +12,7 @@ import { resolveActiveDay, resolveLocalDay, isVerseDay, verseSlugOfDay } from '.
 import { getLectionaryDay, focusReference } from '../../lib/lectionary';
 import { resolvePassage, type ResolvedPassage } from '../../lib/passage';
 import { getLibraryVerseBySlug } from '../../lib/scripture';
-import { isStep, nextStep, STEP_COPY, WRITING_STEPS, stepIndex, TOTAL_WALK_MINUTES, type Step } from '../../lib/dailySteps';
+import { isStep, nextStep, STEP_COPY, STEP_ORDER, WRITING_STEPS, stepIndex, TOTAL_WALK_MINUTES, type Step } from '../../lib/dailySteps';
 import {
   ensureSession, getSession, advanceTo, canOpenStep, getStepEntries,
 } from '../../lib/dailySession';
@@ -63,10 +63,10 @@ const passageAudio = libraryVerse
   : `/api/tts?day=${day}&lang=${lang}`;
 
 // The guided-session playlist, only ever handed to the browser as URLs: the
-// six step prompts with the day's passage in the middle, separated by the
-// page's own silences.
+// five step prompts with the day's passage in the middle, separated by the
+// page's own silences. It hangs off Lectio, which is where the walk now opens.
 const guidedItems: { label: string; src: string; pauseSeconds: number }[] = [];
-if (step === 'silencio') {
+if (step === 'lectio') {
   const say = (s: Step | 'passage', src: string | null, pauseSeconds: number) => {
     if (!src) return;
     guidedItems.push({
@@ -75,7 +75,6 @@ if (step === 'silencio') {
       pauseSeconds,
     });
   };
-  say('silencio', stepAudioUrl(lang, 'silencio'), 50);
   say('lectio', stepAudioUrl(lang, 'lectio'), 6);
   say('passage', passage ? passageAudio : null, 10);
   say('meditatio', stepAudioUrl(lang, 'meditatio'), 90);
@@ -83,7 +82,7 @@ if (step === 'silencio') {
   say('contemplatio', stepAudioUrl(lang, 'contemplatio'), 110);
   say('actio', stepAudioUrl(lang, 'actio'), 0);
 }
-const guidedAvailable = guidedItems.length === 7;
+const guidedAvailable = guidedItems.length === 6;
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
@@ -103,7 +102,7 @@ const session = isBot
   ? null
   : await getSession(readerId, day)
     ?? await ensureSession(readerId, day, lang, env.DB);
-let reached: Step = session?.reachedStep ?? 'silencio';
+let reached: Step = session?.reachedStep ?? 'lectio';
 // No jumping ahead: nobody lands on Oratio without having read.
 if (!canOpenStep(reached, step)) return Astro.redirect(`/today/${reached}`);
 
@@ -154,8 +153,8 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
       <DailyProgress reached={reached} current={step} lang={lang} variant="dots" />
       <span class="ritual-count">
         {lang === 'zh'
-          ? `第 ${stepIndex(step) + 1} 步，共 6 步 · 约 ${copy.minutes} 分钟`
-          : `Step ${stepIndex(step) + 1} of 6 · ~${copy.minutes} min`}
+          ? `第 ${stepIndex(step) + 1} 步，共 ${STEP_ORDER.length} 步 · 约 ${copy.minutes} 分钟`
+          : `Step ${stepIndex(step) + 1} of ${STEP_ORDER.length} · ~${copy.minutes} min`}
       </span>
       <a class="ritual-exit" href="/" aria-label={lang === 'zh' ? '返回首页' : 'Back to home'}>✕</a>
     </header>
@@ -168,11 +167,13 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         </p>
         <h1>{copy.name[lang]}</h1>
         <p class="prompt">{copy.prompt[lang]}</p>
-        {step === 'silencio' && (
+        {/* The walk opens here now, so the length of the whole sitting is said
+            once, at the top, before anything is asked for. */}
+        {step === 'lectio' && (
           <p class="walk-length">
             {lang === 'zh'
-              ? `整场诵读共 6 步，约 ${TOTAL_WALK_MINUTES} 分钟——可以随时停下，已写下的会替你保留。`
-              : `Six steps, about ${TOTAL_WALK_MINUTES} minutes in all. Stop anytime — what you have written is kept for you.`}
+              ? `整场诵读共 ${STEP_ORDER.length} 步，约 ${TOTAL_WALK_MINUTES} 分钟——可以随时停下，已写下的会替你保留。`
+              : `${STEP_ORDER.length} steps, about ${TOTAL_WALK_MINUTES} minutes in all. Stop anytime — what you have written is kept for you.`}
           </p>
         )}
         {stepAudio && (
@@ -182,80 +183,25 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
         )}
       </header>
 
-      {/* The Word stays in view through every movement after the opening
-          silence, so a reader never has to leave their step to find it again. */}
-      {step !== 'silencio' && step !== 'lectio' && passage && (
+      {/* The Word stays in view through every movement after Lectio, so a
+          reader never has to leave their step to find it again. */}
+      {step !== 'lectio' && passage && (
         <p class="text passage-again">
           {passage.text}
           <span class="passage-ref">{passage.ref}</span>
         </p>
       )}
 
-      {step === 'silencio' && (
-        <section class="silence">
-          <div class="breath" data-breath>
-            <svg class="breath-svg" viewBox="0 0 240 240" aria-hidden="true" focusable="false">
-              <defs>
-                <radialGradient id="breath-glow" cx="50%" cy="36%" r="62%">
-                  <stop offset="0%" class="breath-stop-a"></stop>
-                  <stop offset="58%" class="breath-stop-b"></stop>
-                  <stop offset="100%" class="breath-stop-c"></stop>
-                </radialGradient>
-                <radialGradient id="breath-halo-grad">
-                  <stop offset="0%" class="breath-halo-a"></stop>
-                  <stop offset="72%" class="breath-halo-b"></stop>
-                  <stop offset="100%" class="breath-halo-c"></stop>
-                </radialGradient>
-                <mask id="breath-cross-mask">
-                  <rect x="107" y="38" width="26" height="164" rx="9" fill="#fff"></rect>
-                  <rect x="57" y="77" width="126" height="26" rx="9" fill="#fff"></rect>
-                </mask>
-                <filter id="breath-soften" x="-60%" y="-60%" width="220%" height="220%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="2" seed="11" result="waver">
-                    <animate
-                      attributeName="baseFrequency"
-                      values="0.022;0.04;0.022"
-                      dur="11s"
-                      repeatCount="indefinite"
-                      calcMode="spline"
-                      keySplines="0.42 0 0.58 1;0.42 0 0.58 1"
-                    ></animate>
-                  </feTurbulence>
-                  <feDisplacementMap in="SourceGraphic" in2="waver" scale="10" result="displaced"></feDisplacementMap>
-                  <feGaussianBlur in="displaced" stdDeviation="7"></feGaussianBlur>
-                </filter>
-              </defs>
-              <circle class="breath-halo" cx="120" cy="120" r="90" fill="url(#breath-halo-grad)"></circle>
-              <g class="breath-cross-glow" filter="url(#breath-soften)">
-                <rect x="107" y="38" width="26" height="164" rx="9"></rect>
-                <rect x="57" y="77" width="126" height="26" rx="9"></rect>
-              </g>
-              <rect class="breath-cross" x="57" y="38" width="126" height="164" fill="url(#breath-glow)" mask="url(#breath-cross-mask)"></rect>
-            </svg>
-            <p class="breath-hint" aria-live="polite"></p>
-          </div>
-          <div class="bell-row">
-            <button type="button" class="bell-toggle" id="bell-toggle" aria-pressed="false">
-              <span class="bell-icon" aria-hidden="true">🔔</span>
-              <span id="bell-label">{lang === 'zh' ? '开场钟声 · 关' : 'Opening bell · off'}</span>
-            </button>
-          </div>
-          {guidedAvailable && (
-            <div class="guided">
-              <button type="button" class="listen" data-guided={JSON.stringify(guidedItems)}
-                aria-label={lang === 'zh' ? '播放整场引导音频' : 'Play the whole guided session'}
-              >{lang === 'zh' ? '▶ 整场引导' : '▶ Guided session'}</button>
-              <p class="guided-now" data-guided-now hidden aria-live="polite"></p>
-              <p class="guided-hint">
-                {lang === 'zh' ? '依次朗读六个步骤与经文，之间留出安歇的时间。' : 'Reads the six steps and the passage aloud, with rests between.'}
-              </p>
-            </div>
-          )}
-        </section>
-      )}
-
       {step === 'lectio' && (
         <section class="reading">
+          {/* The opening movement leads with the sung passage: the Word heard
+              before it is read. */}
+          {passage && music && (
+            <div class="opening">
+              <ReadingMusic clip={music} lang={lang} />
+            </div>
+          )}
+
           <div class="controls" role="group" aria-label={lang === 'zh' ? '字体大小' : 'Text size'}>
             <button type="button" data-scale="-1" aria-label={lang === 'zh' ? '缩小字体' : 'Smaller text'}>A-</button>
             <button type="button" data-scale="0" aria-label={lang === 'zh' ? '默认字体' : 'Default text size'}>A</button>
@@ -269,12 +215,31 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
                 aria-label={lang === 'zh' ? '朗读经文' : 'Listen to the passage'}
               >{lang === 'zh' ? '▶ 朗读' : '▶ Listen'}</button>
               <p class="twice">{lang === 'zh' ? '请再读一遍。' : 'Now read it a second time.'}</p>
-              {music && <ReadingMusic clip={music} lang={lang} />}
             </>
           ) : (
             <p class="text">
               {lang === 'zh' ? '今天的经文暂时无法显示。' : "Today's passage could not be loaded."}
             </p>
+          )}
+
+          <div class="bell-row">
+            <button type="button" class="bell-toggle" id="bell-toggle" aria-pressed="false">
+              <span class="bell-icon" aria-hidden="true">🔔</span>
+              <span id="bell-label">{lang === 'zh' ? '开场钟声 · 关' : 'Opening bell · off'}</span>
+            </button>
+          </div>
+          {guidedAvailable && (
+            <div class="guided">
+              <button type="button" class="listen" data-guided={JSON.stringify(guidedItems)}
+                aria-label={lang === 'zh' ? '播放整场引导音频' : 'Play the whole guided session'}
+              >{lang === 'zh' ? '▶ 整场引导' : '▶ Guided session'}</button>
+              <p class="guided-now" data-guided-now hidden aria-live="polite"></p>
+              <p class="guided-hint">
+                {lang === 'zh'
+                  ? '依次朗读每个步骤与经文，之间留出安歇的时间。'
+                  : `Reads the ${STEP_ORDER.length} steps and the passage aloud, with rests between.`}
+              </p>
+            </div>
           )}
         </section>
       )}
@@ -380,9 +345,6 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     </div>
 
     <div class="action-bar">
-      {step === 'silencio' && (
-        <a class="advance bar-action" href={advanceHref}>{lang === 'zh' ? '开始' : 'Begin'}</a>
-      )}
       {step === 'lectio' && (
         <a class="advance bar-action ready" href={advanceHref}>{continueLabel}</a>
       )}
@@ -698,7 +660,7 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     );
   });
 
-  // The whole guided session: the six prompts and the passage, in order, with
+  // The whole guided session: the five prompts and the passage, in order, with
   // rests between. It never navigates - the reader walks the pages themselves.
   const guided = document.querySelector<HTMLButtonElement>('[data-guided]');
   const guidedNow = document.querySelector<HTMLElement>('[data-guided-now]');
@@ -1034,7 +996,12 @@ const continueLabel = lang === 'zh' ? '继续' : 'Continue';
     min-height: 44px;
   }
 
-  .silence,
+  /* The opening movement: the sung passage leads the page, so it sits at the
+     very top of the reading with nothing between it and the passage below. */
+  .opening {
+    margin-bottom: 0.5rem;
+  }
+
   .rest {
     text-align: center;
     padding: 2rem 0;

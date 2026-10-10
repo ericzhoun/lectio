@@ -2,10 +2,15 @@
 import type { Lang } from './reading';
 
 export type Step =
-  | 'silencio' | 'lectio' | 'meditatio' | 'oratio' | 'contemplatio' | 'actio';
+  'lectio' | 'meditatio' | 'oratio' | 'contemplatio' | 'actio';
 
+/**
+ * The walk opens at Lectio. It used to open with a timed Silencio, which asked
+ * for a minute of stillness before a word had been read; the reading now opens
+ * the sitting itself, so nobody has to be talked into the quiet first.
+ */
 export const STEP_ORDER = [
-  'silencio', 'lectio', 'meditatio', 'oratio', 'contemplatio', 'actio',
+  'lectio', 'meditatio', 'oratio', 'contemplatio', 'actio',
 ] as const satisfies readonly Step[];
 
 /** The steps that take the reader's own words. Contemplatio is deliberately absent. */
@@ -37,19 +42,11 @@ export interface StepCopy {
 
 /**
  * The whole walk, self-paced. Roughly the guided session's length (its pauses
- * alone run six minutes) plus writing time at the three reflection steps.
+ * alone run several minutes) plus writing time at the three reflection steps.
  */
-export const TOTAL_WALK_MINUTES = 15;
+export const TOTAL_WALK_MINUTES = 14;
 
 export const STEP_COPY: Record<Step, StepCopy> = {
-  silencio: {
-    name: { en: 'Silencio', zh: '静默' },
-    prompt: {
-      en: 'Be still. Let the noise settle before you read.',
-      zh: '安静下来。在诵读之前，让心中的喧嚣沉淀。',
-    },
-    minutes: 1,
-  },
   lectio: {
     name: { en: 'Lectio', zh: '诵读' },
     prompt: {

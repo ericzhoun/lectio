@@ -4,10 +4,14 @@ import {
 } from '../dailySteps';
 
 describe('step order', () => {
-  it('runs the six movements in order', () => {
+  it('runs the five movements in order, opening at lectio', () => {
     expect(STEP_ORDER).toEqual([
-      'silencio', 'lectio', 'meditatio', 'oratio', 'contemplatio', 'actio',
+      'lectio', 'meditatio', 'oratio', 'contemplatio', 'actio',
     ]);
+  });
+
+  it('no longer carries silencio', () => {
+    expect(STEP_ORDER).not.toContain('silencio');
   });
 
   it('takes writing at exactly three steps, and never at contemplatio', () => {
@@ -26,7 +30,7 @@ describe('isStep', () => {
 
 describe('nextStep', () => {
   it('advances through the list and ends at null', () => {
-    expect(nextStep('silencio')).toBe('lectio');
+    expect(nextStep('lectio')).toBe('meditatio');
     expect(nextStep('contemplatio')).toBe('actio');
     expect(nextStep('actio')).toBeNull();
   });
@@ -34,7 +38,7 @@ describe('nextStep', () => {
 
 describe('progressPercent', () => {
   it('starts above zero and ends at one hundred', () => {
-    expect(progressPercent('silencio')).toBe(17);
+    expect(progressPercent('lectio')).toBe(20);
     expect(progressPercent('actio')).toBe(100);
   });
 });
