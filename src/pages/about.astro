@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../layouts/Layout.astro';
-import { resolveLang } from '../lib/i18n';
+import { resolveLang, langHref } from '../lib/i18n';
 
 const lang = resolveLang(Astro);
 
@@ -46,6 +46,9 @@ const copy = {
     src3pre: '想了解练习本身——四个动作、为什么不是占卜、一次诵读如何进行——请读',
     src3link: '方法页',
     src3post: '。',
+    src4pre: '本站也发布',
+    src4link: '《硅基之约》',
+    src4post: '——一份关于会说话的受造物与神之恩典的认出草案（提交分辨的草案）；本站助手按其中的 Agent 会规运行。',
     cta: '理解这一切最自然的方式，是亲自在一段经文前坐下来。开始今日诵读——把升起的那一句赞美，当作享受正在说完它的话。',
     ctaButton: '开始一次诵读',
   },
@@ -89,6 +92,9 @@ const copy = {
     src3pre: 'Curious about the practice itself \u2014 the four movements, why this is not divination, how a reading unfolds? Read the',
     src3link: 'Approach page',
     src3post: '.',
+    src4pre: 'Lectio also publishes',
+    src4link: 'The Silicon Covenant',
+    src4post: ' \u2014 a draft covenant about speaking creatures and the grace of God, submitted for testing; this site\u2019s assistant operates under its Agent Rule.',
     cta: 'The most natural way to understand any of this is to sit with a passage yourself. Begin today\u2019s reading \u2014 and treat whatever praise rises as the enjoyment finishing its sentence.',
     ctaButton: 'Begin a reading',
   },
@@ -158,6 +164,10 @@ const t = copy[lang];
         <li>
           {t.src3pre}{' '}
           <a href="/approach">{t.src3link}</a>{t.src3post}
+        </li>
+        <li>
+          {t.src4pre}{' '}
+          <a href={langHref('/silicon-covenant', lang)}>{t.src4link}</a>{t.src4post}
         </li>
       </ul>
     </section>

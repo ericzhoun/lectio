@@ -16,7 +16,7 @@ const SITE = 'https://enjoyhim.org';
 // /signup is intentionally absent: the page is noindex + robots.txt-disallowed
 // (auth page), and listing it in the sitemap makes Google report
 // "Submitted URL blocked by robots.txt" / "Excluded by noindex" contradictions.
-const STATIC_PATHS = ['/', '/pricing', '/library', '/topics', '/approach', '/about', '/privacy'];
+const STATIC_PATHS = ['/', '/pricing', '/library', '/topics', '/approach', '/about', '/silicon-covenant', '/privacy'];
 
 // Extract English verse references from scripture.ts (the BIBLE_VERSES export).
 const deckSrc = readFileSync(resolve(ROOT, 'src/lib/scripture.ts'), 'utf-8');
