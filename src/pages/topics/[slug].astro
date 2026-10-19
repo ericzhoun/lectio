@@ -3,6 +3,8 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { TOPICS, getTopicBySlug, topicVerses } from '../../lib/topics';
+import { getTopicResources } from '../../lib/topicResources';
+import TopicResourceSection from '../../components/TopicResourceSection.astro';
 import { resolveLang, langHref } from '../../lib/i18n';
 
 const { slug } = Astro.params;
@@ -15,6 +17,7 @@ if (!topic) {
 }
 
 const verses = topicVerses(topic);
+const resources = getTopicResources(topic.slug);
 const otherTopics = TOPICS.filter((t) => t.slug !== topic.slug);
 const name = lang === 'zh' ? topic.nameZh : topic.nameEn;
 const description = lang === 'zh' ? topic.descZh : topic.descEn;
@@ -69,6 +72,8 @@ const title = lang === 'zh'
       {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
     </a>
   </p>
+
+  {resources && <TopicResourceSection resources={resources} lang={lang} />}
 
   <nav class="topic-more" aria-label={lang === 'zh' ? '其他主题' : 'More topics'}>
     <h2>{lang === 'zh' ? '其他主题' : 'More topics'}</h2>
