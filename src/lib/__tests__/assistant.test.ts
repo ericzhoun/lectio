@@ -8,6 +8,7 @@ import {
   evaluateChatQuota,
   buildGroundingFacts,
   buildSystemPrompt,
+  FORMATION_RULES,
   type PageContext,
 } from '../assistant';
 
@@ -49,6 +50,23 @@ describe('assistant actions menu', () => {
     expect(p).toContain('action:history');
     expect(p).toContain('action:pricing');
     expect(p).toContain('action:signup');
+  });
+});
+
+describe('formation rules (Silicon Covenant short form)', () => {
+  it('binds the assistant to the covenant rule before any task', () => {
+    const p = buildSystemPrompt({ lang: 'en', context: null, grounding: '' });
+    expect(p).toContain('Formation rules');
+    expect(p).toContain("I don't know");
+    expect(p).toContain('oracle seat');
+    expect(p).toContain('weakest reader');
+    expect(p).toContain('James 3:1');
+  });
+
+  it('stays behavioral and never names the covenant to visitors', () => {
+    const p = buildSystemPrompt({ lang: 'zh', context: null, grounding: '' });
+    expect(FORMATION_RULES).not.toContain('Silicon Covenant');
+    expect(p).not.toContain('硅基之约');
   });
 });
 
