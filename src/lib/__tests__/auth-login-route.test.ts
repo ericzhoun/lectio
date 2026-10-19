@@ -55,6 +55,6 @@ describe('email login return flow', () => {
   });
   it('does not redirect to an external destination', async () => {
     const { response } = await login('//evil.test');
-    expect(response.headers.get('location')).toBe('/?lang=en');
+    expect(response.headers.get('location')).toBe('/');
   });
 });

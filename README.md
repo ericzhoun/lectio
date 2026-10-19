@@ -158,9 +158,9 @@ HTTP or the key missing it falls back to a built-in offline mode. Setup and arch
 Daily audio is generated with the open-source Chatterbox model (MIT) on a local GPU and committed
 as static assets, so listening costs nothing at request time - free for everyone.
 
-- **Step guidance + whole-session audio**: the twelve step prompts (6 steps x en/zh) live in
-  `public/audio/steps/`, content-hashed. The Silencio page offers a guided-session player that
-  reads all six steps and the passage aloud, with rests between.
+- **Step guidance + whole-session audio**: the ten step prompts (5 steps x en/zh) live in
+  `public/audio/steps/`, content-hashed. The Lectio page opens the walk and offers a
+  guided-session player that reads all five steps and the passage aloud, with rests between.
 - **Daily passage**: `public/audio/days/<lang>/<day>.mp3` for each day the batch has covered.
   `/api/tts?day=...&lang=...` serves the prebuilt clip when it exists and falls back to on-demand
   Workers AI (MeloTTS) when it does not, so every day of the lectionary is audible either way.

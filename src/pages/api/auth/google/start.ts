@@ -5,14 +5,17 @@ import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { buildGoogleAuthUrl, generateOAuthState } from '../../../../lib/google';
 import { safeAuthReturn } from '../../../../lib/authReturn';
+import { resolveLang, langHref } from '../../../../lib/i18n';
 
 export const prerender = false;
 
 export const GET: APIRoute = async ({ url, cookies, redirect }) => {
   const clientId = env.GOOGLE_CLIENT_ID;
   const clientSecret = env.GOOGLE_CLIENT_SECRET;
-  const lang = url.searchParams.get('lang') === 'en' ? 'en' : 'zh';
-  const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), `/?lang=${lang}`);
+  // English links carry no lang param (English is the canonical bare URL),
+  // so resolve like the rest of the site: ?lang=zh > lang cookie > 'en'.
+  const lang = resolveLang({ url, cookies });
+  const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), langHref('/', lang));
   if (!clientId || !clientSecret) {
     return redirect(`/login?${new URLSearchParams({ error: 'config', lang, returnTo })}`);
   }

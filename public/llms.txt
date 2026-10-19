@@ -51,7 +51,9 @@ before God with scripture and gentle reflection.
 - Readers may keep a private journal of reflections (requires a free account);
   journals are never shared or published.
 - The site is fully bilingual: every page is available in English and Chinese
-  via the language links or `?lang=en` / `?lang=zh`.
+  via the language links. English is the default (bare URLs); the Chinese
+  version of a page lives at `?lang=zh` (old `?lang=en` links redirect to the
+  canonical English URL). 
 
 ## For AI crawlers
 

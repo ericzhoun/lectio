@@ -88,4 +88,12 @@ describe('renderDailyEmail', () => {
     expect(mail!.html).toContain(`tz=${encodeURIComponent('Asia/Shanghai')}`);
     expect(mail!.text).toContain(`tz=${encodeURIComponent('Asia/Shanghai')}`);
   });
+
+  it('links to today without ?lang=en (English is the canonical bare URL); zh keeps lang=zh', () => {
+    const en = renderDailyEmail('2026-09-09', 'en', LINK, 'UTC');
+    expect(en!.text).not.toContain('lang=en');
+    expect(en!.html).not.toContain('lang=en');
+    const zh = renderDailyEmail('2026-09-09', 'zh', LINK, 'UTC');
+    expect(zh!.text).toContain('lang=zh');
+  });
 });

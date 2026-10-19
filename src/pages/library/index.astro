@@ -4,7 +4,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getLibraryVerses } from '../../lib/scripture';
 import { TOPICS } from '../../lib/topics';
-import { resolveLang } from '../../lib/i18n';
+import { resolveLang, langHref } from '../../lib/i18n';
 import {
   getPodcastEpisodes,
   PODCAST_ATTRIBUTION,
@@ -33,7 +33,7 @@ const podcastEpisodes = await getPodcastEpisodes(30);
 const latestEpisode = podcastEpisodes[0] ?? null;
 
 function filterHref(t: string) {
-  return `?lang=${lang}&testament=${t}`;
+  return langHref(`?testament=${t}`, lang);
 }
 ---
 <Layout title={title} description={description} lang={lang}>
@@ -69,14 +69,14 @@ function filterHref(t: string) {
   <div class="topic-strip">
     <span class="topic-strip-label">{lang === 'zh' ? '按主题浏览' : 'Browse by topic'}</span>
     {TOPICS.map((t) => (
-      <a href={`/topics/${t.slug}?lang=${lang}`}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
+      <a href={langHref(`/topics/${t.slug}`, lang)}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
     ))}
-    <a class="topic-strip-all" href={`/topics?lang=${lang}`}>{lang === 'zh' ? '全部主题' : 'All topics →'}</a>
+    <a class="topic-strip-all" href={langHref('/topics', lang)}>{lang === 'zh' ? '全部主题' : 'All topics →'}</a>
   </div>
 
   <div class="verse-grid">
     {verses.map((v) => (
-      <a class="verse-grid-item" href={`/library/${v.slug}?lang=${lang}`}>
+      <a class="verse-grid-item" href={langHref(`/library/${v.slug}`, lang)}>
         <h3 class="verse-ref">
           {lang === 'zh' ? v.refZh : v.refEn}
           <span class="verse-ref-alt">{lang === 'zh' ? v.refEn : v.refZh}</span>

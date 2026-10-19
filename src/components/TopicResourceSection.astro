@@ -1,0 +1,177 @@
+---
+// Renders a topic's curated external resources (src/lib/topicResources.ts)
+// beneath the topic's verse grid and reading CTA. Bilingual like the rest of
+// the topics pages: every string is picked per lang at render time.
+import type { Lang } from '../lib/reading';
+import { linkHref, type TopicResources } from '../lib/topicResources';
+
+interface Props {
+  resources: TopicResources;
+  lang: Lang;
+}
+
+const { resources: r, lang } = Astro.props;
+const zh = lang === 'zh';
+const orgHref = zh ? r.orgUrlZh : r.orgUrl;
+---
+
+<section class="resource-section" aria-label={zh ? '职场事工资源' : 'Workplace ministry resources'}>
+  <h2 class="resource-heading">
+    {zh ? r.headingZh : r.headingEn}
+    <span class="resource-heading-rule"></span>
+  </h2>
+
+  <p class="resource-org">
+    <a href={orgHref} target="_blank" rel="noopener">{zh ? r.orgNameZh : r.orgNameEn}</a>
+    <span class="resource-org-tagline">{zh ? r.orgTaglineZh : r.orgTaglineEn}</span>
+  </p>
+
+  {(zh ? r.introZh : r.introEn).map((paragraph) => (
+    <p class="resource-intro">{paragraph}</p>
+  ))}
+
+  <div class="resource-vm">
+    <div class="vm-card">
+      <h3>{zh ? '异象' : 'Vision'}</h3>
+      <p>{zh ? r.visionZh : r.visionEn}</p>
+    </div>
+    <div class="vm-card">
+      <h3>{zh ? '使命' : 'Mission'}</h3>
+      <p>{zh ? r.missionZh : r.missionEn}</p>
+    </div>
+  </div>
+
+  <h3 class="resource-sub">{zh ? r.themesTitleZh : r.themesTitleEn}</h3>
+  <ul class="resource-themes">
+    {r.themes.map((theme) => (
+      <li>
+        <a href={linkHref(theme, lang)} target="_blank" rel="noopener">
+          {zh ? theme.textZh : theme.textEn}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <h3 class="resource-sub">{zh ? r.linksTitleZh : r.linksTitleEn}</h3>
+  <div class="resource-links">
+    {r.links.map((link) => (
+      <a class="resource-link" href={linkHref(link, lang)} target="_blank" rel="noopener">
+        <span class="resource-link-label">{zh ? link.labelZh : link.labelEn}</span>
+        <span class="resource-link-note">{zh ? link.noteZh : link.noteEn}</span>
+      </a>
+    ))}
+  </div>
+
+  <p class="resource-attribution">{zh ? r.attributionZh : r.attributionEn}</p>
+</section>
+
+<style>
+  /* A quiet panel, one step warmer than the verse cards, so the section reads
+     as an invitation to go deeper rather than another list of verses. */
+  .resource-section {
+    margin: 30px 0 8px;
+    padding: 22px 24px 18px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .resource-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 12px;
+    font-size: 19px;
+    color: var(--gold);
+  }
+  .resource-heading-rule { flex: 1; height: 1px; background: var(--panel-border); }
+
+  .resource-org { margin: 0 0 10px; font-family: var(--font-ui); font-size: 13.5px; }
+  .resource-org a { color: var(--text); font-weight: 600; text-decoration: none; }
+  .resource-org a:hover { color: var(--gold); }
+  .resource-org-tagline { margin-left: 10px; color: var(--text-dim); }
+
+  .resource-intro {
+    margin: 0 0 10px;
+    max-width: 680px;
+    color: var(--text-dim);
+    line-height: 1.75;
+    font-size: 14.5px;
+  }
+
+  .resource-vm {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 14px 0 4px;
+  }
+  .vm-card {
+    background: var(--bg-wash);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 12px 15px;
+  }
+  .vm-card h3 {
+    margin: 0 0 6px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: var(--font-ui);
+  }
+  .vm-card p { margin: 0; font-size: 13.5px; line-height: 1.7; color: var(--text); }
+
+  .resource-sub {
+    margin: 20px 0 10px;
+    font-size: 15px;
+    color: var(--gold);
+  }
+
+  .resource-themes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 6px 18px;
+  }
+  .resource-themes li { position: relative; padding-left: 16px; line-height: 1.6; }
+  .resource-themes li::before {
+    content: '·';
+    position: absolute;
+    left: 2px;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .resource-themes a { text-decoration: none; color: var(--text); font-size: 14px; }
+  .resource-themes a:hover { color: var(--gold); }
+
+  .resource-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+  }
+  .resource-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--bg-wash);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    text-decoration: none;
+  }
+  .resource-link:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
+  .resource-link-label { color: var(--text); font-size: 14px; font-weight: 600; }
+  .resource-link-note { color: var(--text-dim); font-size: 12.5px; line-height: 1.55; }
+
+  .resource-attribution {
+    margin: 18px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--panel-border);
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+</style>

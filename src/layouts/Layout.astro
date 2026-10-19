@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../lib/session';
-import { langSwitchHref } from '../lib/i18n';
+import { langSwitchHref, langHref } from '../lib/i18n';
 import { safeAuthReturn } from '../lib/authReturn';
 import { canonicalHref, hreflangAlternates, SITE_URL } from '../lib/seo';
 import LoginOverlay from '../components/LoginOverlay.astro';
@@ -20,7 +20,8 @@ const { title, description = '', lang, noindex = false, chrome = 'full' } = Astr
 
 // Never point an auth link back at an auth page: doing so nests returnTo on every
 // visit and creates an unbounded URL space for crawlers.
-const loginReturnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, `/?lang=${lang}`);
+const loginReturnTo = safeAuthReturn(Astro.url.pathname + Astro.url.search, langHref('/', lang));
+const loginHref = langHref(`/login?returnTo=${encodeURIComponent(loginReturnTo)}`, lang);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
@@ -126,7 +127,7 @@ const isActive = (p: string) => path === p || path.startsWith(`${p}/`);
       {userId ? (
         <a href="/account" style={isActive('/account') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '账户' : 'Account'}</a>
       ) : (
-        <a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(loginReturnTo)}`} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
+        <a href={loginHref} style={isActive('/login') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '登录' : 'Log in'}</a>
       )}
       <a href="/today" data-event="cta_click" data-event-props='{"slot":"nav_today"}' style={isActive('/today') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '今日' : 'Today'}</a>
       <a href="/pricing" data-event="cta_click" data-event-props='{"slot":"nav_pricing"}' style={isActive('/pricing') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '订阅' : 'Subscription'}</a>
@@ -134,8 +135,8 @@ const isActive = (p: string) => path === p || path.startsWith(`${p}/`);
       <a href="/approach" style={isActive('/approach') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '方法' : 'Approach'}</a>
       <a href="/about" style={isActive('/about') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '关于' : 'About'}</a>
       <a href="/privacy" style={isActive('/privacy') ? 'font-weight: bold;' : undefined}>{lang === 'zh' ? '隐私' : 'Privacy'}</a>
-      <a href={langSwitchHref(Astro, 'zh')} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>
-      <a href={langSwitchHref(Astro, 'en')} style={lang === 'en' ? 'font-weight: bold;' : undefined}>English</a>
+      <a href={langSwitchHref(Astro, 'zh', lang)} style={lang === 'zh' ? 'font-weight: bold;' : undefined}>中文</a>
+      <a href={langSwitchHref(Astro, 'en', lang)} style={lang === 'en' ? 'font-weight: bold;' : undefined}>English</a>
     </div>
   )}
   {chrome === 'full' && <MobileNav lang={lang} loggedIn={!!userId} />}

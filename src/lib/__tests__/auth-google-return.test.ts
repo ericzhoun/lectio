@@ -39,4 +39,20 @@ describe('Google return destination', () => {
     }
     expect(values.has('oauth_return')).toBe(false);
   });
+
+  it('defaults the OAuth language to English when the link carries no lang (English links are bare)', async () => {
+    const values = new Map<string, string>();
+    const cookies = {
+      set: (key: string, value: string) => values.set(key, value),
+      get: (key: string) => values.has(key) ? { value: values.get(key)! } : undefined,
+      delete: (key: string) => values.delete(key),
+    };
+    const redirect = (location: string) => new Response(null, { status: 302, headers: { Location: location } });
+    await start({
+      url: new URL('https://example.test/api/auth/google/start?returnTo=%2Fpricing'),
+      cookies, redirect,
+    } as any);
+    expect(values.get('oauth_lang')).toBe('en');
+    expect(values.get('oauth_return')).toBe('/pricing');
+  });
 });

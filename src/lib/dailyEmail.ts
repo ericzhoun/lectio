@@ -70,8 +70,10 @@ export function renderDailyEmail(
   // The reader's own zone travels with the link: a click carries no cookie,
   // so without this a reader whose local day has already rolled past UTC's
   // (e.g. Asia/Shanghai at 06:00 local, still yesterday in UTC) would land on
-  // a day different from the one this email just printed.
-  const todayUrl = `${SITE_ORIGIN}/today?lang=${lang}&tz=${encodeURIComponent(tz)}`;
+  // a day different from the one this email just printed. Only Chinese
+  // carries an explicit lang (English is the default and the canonical form;
+  // ?lang=en links now 301 to the bare URL — see src/middleware.ts).
+  const todayUrl = `${SITE_ORIGIN}/today?${lang === 'zh' ? 'lang=zh&' : ''}tz=${encodeURIComponent(tz)}`;
 
   const subject = `${title} - ${passage.ref}`;
 

@@ -5,7 +5,7 @@ import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../../lib/session';
 import { resolveTier } from '../../lib/entitlements';
 import { getReadingsForUser } from '../../lib/db';
-import { resolveLang } from '../../lib/i18n';
+import { resolveLang, langHref } from '../../lib/i18n';
 import { listSessions } from '../../lib/dailySession';
 import { getLectionaryDay } from '../../lib/lectionary';
 import { isVerseDay, verseSlugOfDay } from '../../lib/localDay';
@@ -15,7 +15,7 @@ const lang = resolveLang(Astro);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
-if (!userId) return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`);
+if (!userId) return Astro.redirect(langHref(`/login?returnTo=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`, lang));
 
 const tier = await resolveTier(userId);
 
@@ -71,7 +71,7 @@ const days = await listSessions(userId);
           ? '经文解读的历史记录属于付费方案。'
           : 'Draw history is part of the paid plans.'}
         {' '}
-        <a href={`/pricing?lang=${lang}`}>{lang === 'zh' ? '查看订阅' : 'See subscription'}</a>
+        <a href={langHref('/pricing', lang)}>{lang === 'zh' ? '查看订阅' : 'See subscription'}</a>
       </p>
     ) : (
       <>

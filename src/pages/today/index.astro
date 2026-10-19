@@ -29,7 +29,7 @@ const day = verseDay ?? chosen ?? resolveLocalDay(Astro);
 
 // Pin the day for the rest of this sitting, so crossing midnight mid-session
 // does not split a reader's words across two days, and so a chosen day stays
-// chosen across the six steps. Six hours is longer than any session and short
+// chosen across all five steps. Six hours is longer than any session and short
 // enough that tomorrow starts fresh.
 Astro.cookies.set(DAY_COOKIE, day, {
   path: '/',
@@ -56,5 +56,5 @@ if (!existing && !isBot) await ensureSession(readerId, day, lang, env.DB);
 // A finished day opens at its summary rather than starting over.
 if (existing?.completedAt) return Astro.redirect('/today/amen');
 
-return Astro.redirect(`/today/${existing?.reachedStep ?? 'silencio'}`);
+return Astro.redirect(`/today/${existing?.reachedStep ?? 'lectio'}`);
 ---

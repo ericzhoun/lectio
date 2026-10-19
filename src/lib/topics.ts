@@ -115,8 +115,8 @@ export const TOPICS: readonly Topic[] = [
     slug: 'work',
     nameEn: 'Work and Calling',
     nameZh: '工作与呼召',
-    descEn: 'Diligence, purpose, integrity, and committing your plans to God.',
-    descZh: '殷勤、目标、正直，并把手中的计划交托给神。',
+    descEn: 'Diligence, purpose, integrity, and committing your plans to God — with workplace-ministry resources from Called To Work.',
+    descZh: '殷勤、目标、正直，把手中的计划交托给神——附「职场使命」（Called To Work）的职场事工资源。',
     refs: [
       'Ecclesiastes 3:1', 'Philippians 4:13', 'Proverbs 16:9', 'Colossians 3:23-24',
       '1 Corinthians 10:31', 'Matthew 5:16', 'Galatians 6:9', 'Luke 14:28',

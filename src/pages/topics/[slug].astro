@@ -3,7 +3,9 @@ export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
 import { TOPICS, getTopicBySlug, topicVerses } from '../../lib/topics';
-import { resolveLang } from '../../lib/i18n';
+import { getTopicResources } from '../../lib/topicResources';
+import TopicResourceSection from '../../components/TopicResourceSection.astro';
+import { resolveLang, langHref } from '../../lib/i18n';
 
 const { slug } = Astro.params;
 const lang = resolveLang(Astro);
@@ -15,6 +17,7 @@ if (!topic) {
 }
 
 const verses = topicVerses(topic);
+const resources = getTopicResources(topic.slug);
 const otherTopics = TOPICS.filter((t) => t.slug !== topic.slug);
 const name = lang === 'zh' ? topic.nameZh : topic.nameEn;
 const description = lang === 'zh' ? topic.descZh : topic.descEn;
@@ -44,7 +47,7 @@ const title = lang === 'zh'
   })}>
   </script>
 
-  <a class="back-link" href={`/topics?lang=${lang}`}>&larr; {lang === 'zh' ? '返回主题' : 'Back to Topics'}</a>
+  <a class="back-link" href={langHref('/topics', lang)}>&larr; {lang === 'zh' ? '返回主题' : 'Back to Topics'}</a>
 
   <header>
     <h1>{name}</h1>
@@ -53,7 +56,7 @@ const title = lang === 'zh'
 
   <div class="verse-grid">
     {verses.map((v) => (
-      <a class="verse-grid-item" href={`/library/${v.slug}?lang=${lang}`}>
+      <a class="verse-grid-item" href={langHref(`/library/${v.slug}`, lang)}>
         <h3 class="verse-ref">
           {lang === 'zh' ? v.refZh : v.refEn}
           <span class="verse-ref-alt">{lang === 'zh' ? v.refEn : v.refZh}</span>
@@ -65,16 +68,18 @@ const title = lang === 'zh'
   </div>
 
   <p class="library-cta">
-    <a class="upsell-button" href={`/today?lang=${lang}`}>
+    <a class="upsell-button" href={langHref('/today', lang)}>
       {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
     </a>
   </p>
+
+  {resources && <TopicResourceSection resources={resources} lang={lang} />}
 
   <nav class="topic-more" aria-label={lang === 'zh' ? '其他主题' : 'More topics'}>
     <h2>{lang === 'zh' ? '其他主题' : 'More topics'}</h2>
     <p class="topic-chips">
       {otherTopics.map((t) => (
-        <a href={`/topics/${t.slug}?lang=${lang}`}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
+        <a href={langHref(`/topics/${t.slug}`, lang)}>{lang === 'zh' ? t.nameZh : t.nameEn}</a>
       ))}
     </p>
   </nav>

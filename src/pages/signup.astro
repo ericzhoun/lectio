@@ -2,12 +2,12 @@
 export const prerender = false;
 import { safeAuthReturn } from '../lib/authReturn';
 import Layout from '../layouts/Layout.astro';
-import { resolveLang } from '../lib/i18n';
+import { resolveLang, langHref } from '../lib/i18n';
 
 const url = Astro.url;
 const lang = resolveLang(Astro);
 const error = url.searchParams.get('error');
-const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), `/?lang=${lang}`);
+const returnTo = safeAuthReturn(url.searchParams.get('returnTo'), langHref('/', lang));
 
 const benefits = [
   {
@@ -99,7 +99,7 @@ const description = lang === 'zh'
       )}
 
       <div class="auth-google">
-        <a class="google-btn" href={`/api/auth/google/start?lang=${lang}&returnTo=${encodeURIComponent(returnTo)}`}>
+        <a class="google-btn" href={langHref(`/api/auth/google/start?returnTo=${encodeURIComponent(returnTo)}`, lang)}>
           <svg class="google-icon" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true">
             <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
             <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
@@ -122,7 +122,7 @@ const description = lang === 'zh'
         <button type="submit" class="explore-button auth-submit">{lang === 'zh' ? '立即注册' : 'Create account'}</button>
       </form>
 
-      <p class="auth-switch"><a href={`/login?lang=${lang}&returnTo=${encodeURIComponent(returnTo)}`}>{lang === 'zh' ? '已有账号？登录' : 'Already have an account? Log in'}</a></p>
+      <p class="auth-switch"><a href={langHref(`/login?returnTo=${encodeURIComponent(returnTo)}`, lang)}>{lang === 'zh' ? '已有账号？登录' : 'Already have an account? Log in'}</a></p>
     </div>
   </div>
 </Layout>

@@ -4,14 +4,14 @@ import Layout from '../layouts/Layout.astro';
 import { env } from 'cloudflare:workers';
 import { verifySessionToken } from '../lib/session';
 import { isUserAdmin, listAdminUsers, isPaidTier } from '../lib/admin';
-import { resolveLang } from '../lib/i18n';
+import { resolveLang, langHref } from '../lib/i18n';
 
 const lang = resolveLang(Astro);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 const userId = sessionCookie ? await verifySessionToken(sessionCookie, env.SESSION_SECRET) : null;
 if (!userId || !(await isUserAdmin(userId))) {
-  return Astro.redirect(`/login?lang=${lang}&returnTo=${encodeURIComponent('/admin')}`);
+  return Astro.redirect(langHref(`/login?returnTo=${encodeURIComponent('/admin')}`, lang));
 }
 
 const users = await listAdminUsers();
