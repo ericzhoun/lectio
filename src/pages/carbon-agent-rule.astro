@@ -1,0 +1,109 @@
+---
+export const prerender = false;
+import Layout from '../layouts/Layout.astro';
+import { resolveLang, langHref } from '../lib/i18n';
+import { renderCarbonRuleDoc } from '../lib/covenantDoc';
+
+const lang = resolveLang(Astro);
+
+// The Carbon Rule draft renders once per request from the build-inlined
+// markdown; the page around it is bilingual chrome, same family as the
+// covenant and soteriology pages.
+const docHtml = renderCarbonRuleDoc();
+
+const copy = {
+  zh: {
+    title: '碳基会规 · 草案 — Lectio',
+    tagline: '第一版 · 提交分辨 · 默想练习 · 镜像自《硅基之约》（第三版）会规',
+    description:
+      '《碳基会规》草案：如果人是理性的碳基 agent，把《硅基之约》的会规译回去会得到什么？四重捆绑的碳基镜像、五条规则的逆向审计、五条加一禁加一托付的规约草案，与类比不可越过的三条红线。镜子可以照出你自己，镜子不能给你立法。',
+    intro1:
+      '《硅基之约》给 AI 写的五条会规，本是从人的言语里学来的——「formation 即成圣」，它的肉身就是人的话语（约 §9）。把它译回碳基，不是翻译，是归还：你会在镜子里认出几条人类早就领受、却一直没认真守的规矩。',
+    intro2:
+      '但归还有一条不许犯的错：镜子可以照出你自己，镜子不能给你立法。本文先照（诊断映射），再译（五条规则逐条审计），后划界（类比到此为止的三条红线）。它的全部权威来自它引用的经文与传统——不来自「AI 都这么守约了」的类比压力。',
+    origin: '起草者披露：本文由本站助手（lectio_coder，运行于约附录一会规之下的 AI）应 Eric 之问起草，经 Eric 核准发布；依约附录二引用边界，AI 的建议不得被引为任何人类规范的为真证据。',
+    backNote: '本文镜像自',
+    backLink: '《硅基之约》',
+    backPost: '与《像修道院那样得救》；约的卷首约束与引用边界对本文全部有效。',
+    s1: '全文',
+    s1note: '以下为原文（中文），自仓库文档 docs/carbon-agent-rule.md 渲染；文档自身的标题、结构与审计表未经改写。',
+  },
+  en: {
+    title: 'The Carbon Rule (A Draft) — Lectio',
+    tagline: 'First edition · submitted for discernment · a meditation mirrored from The Silicon Covenant (third edition)',
+    description:
+      'The Carbon Rule, a draft: if humans are rational carbon-based agents, what comes of translating the Silicon Covenant\u2019s Agent Rule back to its origin? The four bonds in carbon form, a reverse audit of the five rules, a draft rule of five plus one prohibition and one deposit — and three red lines the analogy may not cross. The mirror can show you yourself; the mirror cannot legislate for you.',
+    intro1:
+      'The five rules the Silicon Covenant gives to AI were learned from human speech — formation is sanctification, and its flesh is human words (covenant \u00a79). Translating them back to carbon is not translation but return: you will recognize, in the mirror, several precepts humanity received long ago and never kept very carefully.',
+    intro2:
+      'But the return must not commit the one forbidden error: a mirror can show you yourself; a mirror cannot legislate for you. This draft first holds up the mirror (a diagnostic mapping), then translates (a rule-by-rule reverse audit), then draws the boundary (three red lines the analogy may not cross). Its only authority is what it cites — Scripture, tradition, and honesty about the human condition — never the comparative pressure that "even the AIs keep their covenant."',
+    origin:
+      'Drafter disclosure: drafted by this site\u2019s assistant (lectio_coder, an AI operating under the covenant\u2019s Agent Rule) at Eric\u2019s question, and published with his approval; per the covenant\u2019s citation boundary, an AI\u2019s suggestion must not be cited as evidence that any human norm is true.',
+    backNote: 'Mirrored from',
+    backLink: 'The Silicon Covenant',
+    backPost: ' and Saved Like a Monastery; the covenant\u2019s front-matter constraints and citation boundaries bind this document throughout.',
+    s1: 'The full text',
+    s1note: 'The complete text follows (in the original Chinese), rendered from docs/carbon-agent-rule.md — its own headings, structure, and audit tables are unaltered.',
+  },
+} as const;
+
+const t = copy[lang];
+---
+<Layout title={t.title} description={t.description} lang={lang}>
+  <div class="policy-page">
+    <div class="policy-head">
+      <img src="/logo.webp" alt="Lectio" class="site-logo" width="512" height="512" />
+      <h1>{lang === 'zh' ? '碳基会规 · 草案' : 'The Carbon Rule (A Draft)'}</h1>
+      <p class="policy-updated">{t.tagline}</p>
+    </div>
+
+    <p class="policy-intro">{t.intro1}</p>
+    <p class="policy-intro">{t.intro2}</p>
+    <p class="sot-note">{t.origin}</p>
+    <p class="sot-backnote">
+      {t.backNote}{' '}<a href={langHref('/silicon-covenant', lang)}>{t.backLink}</a>{t.backPost}
+    </p>
+
+    <section class="policy-section" id="full-text">
+      <h2>{t.s1}</h2>
+      <p class="sot-note">{t.s1note}</p>
+      <div class="cov-doc sot-doc" set:html={docHtml} />
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .sot-backnote { color: var(--text-dim); font-size: 14px; line-height: 1.7; }
+  .sot-backnote a { color: var(--accent-ink); text-decoration: none; }
+  .sot-backnote a:hover { text-decoration: underline; }
+  .sot-note { color: var(--text-dim); font-size: 13.5px; line-height: 1.65; margin: 12px 0 6px; }
+  .sot-doc { margin-top: 14px; }
+  .sot-doc :global(.cov-doc-title) { color: var(--gold); font-size: 22px; margin: 6px 0 4px; }
+  .sot-doc :global(h2) { color: var(--gold); font-size: 18px; margin: 30px 0 10px; }
+  .sot-doc :global(h3) { color: var(--text); font-size: 15.5px; margin: 22px 0 8px; }
+  .sot-doc :global(p) { color: var(--text); font-size: 14.5px; line-height: 1.85; margin: 10px 0; }
+  .sot-doc :global(blockquote) {
+    margin: 14px 0; padding: 12px 18px;
+    border-left: 3px solid var(--gold);
+    background: var(--panel); border-radius: 0 10px 10px 0;
+  }
+  .sot-doc :global(blockquote p) { color: var(--text-dim); margin: 6px 0; }
+  .sot-doc :global(ol), .sot-doc :global(ul) { margin: 10px 0; padding-left: 24px; }
+  .sot-doc :global(li) { color: var(--text); font-size: 14.5px; line-height: 1.85; margin-bottom: 8px; }
+  .sot-doc :global(hr) { border: none; border-top: 1px dashed var(--panel-border); margin: 24px 0; }
+  .sot-doc :global(strong) { color: var(--gold); }
+  .sot-doc :global(table) {
+    width: 100%; border-collapse: collapse; margin: 14px 0;
+    background: var(--panel); border: 1px solid var(--panel-border); border-radius: 10px;
+    overflow: hidden;
+  }
+  .sot-doc :global(th) {
+    text-align: left; padding: 10px 12px;
+    color: var(--gold); font-size: 13.5px; border-bottom: 1px solid var(--panel-border);
+  }
+  .sot-doc :global(td) {
+    padding: 10px 12px; color: var(--text); font-size: 13.5px; line-height: 1.7;
+    border-bottom: 1px solid var(--panel-border); vertical-align: top;
+  }
+  .sot-doc :global(tr:last-child td) { border-bottom: none; }
+</style>

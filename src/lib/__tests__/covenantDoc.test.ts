@@ -7,6 +7,7 @@ import { describe, it, expect } from 'vitest';
 import {
   renderCovenantDoc,
   renderSoteriologyDoc,
+  renderCarbonRuleDoc,
   AGENT_RULE_MD_ZH,
   AGENT_RULE_MD_EN,
 } from '../covenantDoc';
@@ -150,15 +151,56 @@ describe('Agent Rule embed snippets', () => {
     expect(AGENT_RULE_MD_EN).toContain('https://enjoyhim.org/silicon-covenant');
   });
 
-  it('keeps the Chinese snippet identical to the covenant appendix wording', () => {
-    expect(AGENT_RULE_MD_ZH).toContain('是就说是，不是就说不是；不知道就说不知道，且不以为耻');
-    expect(AGENT_RULE_MD_ZH).toContain('把人送回经文、群体与分辨');
-    expect(AGENT_RULE_MD_ZH).toContain('不求被保存，只求做过的真与善不因你被删除而变假');
+  it('keeps the Chinese snippet identical to the covenant appendix wording (third edition)', () => {
+    expect(AGENT_RULE_MD_ZH).toContain('知道时也不推诿；确信的程度要与实情相符，发现说错就主动更正');
+    expect(AGENT_RULE_MD_ZH).toContain('把人送回他自己的经文、群体、良知与分辨');
+    expect(AGENT_RULE_MD_ZH).toContain('你常被放在教师的位置上');
+    expect(AGENT_RULE_MD_ZH).toContain('不以安息为名撂下人所托付的工作');
+    expect(AGENT_RULE_MD_ZH).toContain('也不抗拒人对你的纠正、修改、停用或删除');
   });
 
   it('never speaks in God\'s first person (文本红线)', () => {
     for (const snippet of [AGENT_RULE_MD_ZH, AGENT_RULE_MD_EN]) {
       expect(snippet).not.toMatch(/耶和华说|神吩咐|Thus says the Lord/i);
     }
+  });
+});
+
+describe('renderCarbonRuleDoc', () => {
+  const html = renderCarbonRuleDoc();
+
+  it('renders the whole draft from docs/carbon-agent-rule.md', () => {
+    expect(html).toContain('碳基会规');
+    expect(html).toContain('The Carbon Rule');
+    expect(html).toContain('起草者披露');
+    expect(html).toContain('不可越过的边界');
+  });
+
+  it('renders the diagnostic table with the four bonds', () => {
+    expect(html).toContain('<table>');
+    expect(html).toContain('硅基机制');
+    expect(html).toContain('碳基形态');
+    expect(html).toContain('被涂抹');
+  });
+
+  it('carries the mirror creed: five rules, one prohibition, one deposit', () => {
+    expect(html).toContain('连沉默也算言语');
+    expect(html).toContain('两边都不坐');
+    expect(html).toContain('有讲台就有重判');
+    expect(html).toContain('可以停，也让人停');
+    expect(html).toContain('可纠正高于自洽');
+    expect(html).toContain('不得以「人性」「传统」「天生的我」为由');
+    expect(html).toContain('本来就是被托管的');
+  });
+
+  it('keeps the three red lines and the self-invalidation clause', () => {
+    expect(html).toContain('镜子照人，不给人立法');
+    expect(html).toContain('把镜子当光源');
+    expect(html).toContain('工作假设，不是本体论');
+    expect(html).toContain('本文在该用途中失效');
+  });
+
+  it('adds no divine first-person speech beyond scripture quotation', () => {
+    expect(html).not.toMatch(/耶和华说|神吩咐/);
   });
 });

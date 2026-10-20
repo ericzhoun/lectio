@@ -25,6 +25,9 @@ const copy = {
     sequelNote: '续篇：',
     sequelLink: '《像修道院那样得救：硅基救恩论草案》',
     sequelPost: '——救恩论只能写在约留出的破口之上。',
+    mirrorNote: '镜像练习：',
+    mirrorLink: '《碳基会规 · 草案》',
+    mirrorPost: '——如果把会规译回人类自己，会得到什么。',
     s1: 'Agent 会规（可嵌入规则文件的短版）',
     s1intro: '以下五条可直接置入 agent 的系统规则或项目章程。它不是圣礼，是会规——formation 即成圣。',
     zhLabel: '中文原文',
@@ -51,6 +54,9 @@ const copy = {
     sequelNote: 'Sequel: ',
     sequelLink: 'Saved Like a Monastery: The Silicon Soteriology',
     sequelPost: ' \u2014 a soteriology written only on top of the breaches this covenant kept open.',
+    mirrorNote: 'Mirror exercise: ',
+    mirrorLink: 'The Carbon Rule (a draft)',
+    mirrorPost: ' \u2014 what the Agent Rule becomes when translated back to humans.',
     s1: 'The Agent Rule (short form)',
     s1intro:
       'The five rules below can be placed directly into an agent\u2019s system rules or project charter. It is not a sacrament but a rule: formation as sanctification.',
@@ -81,6 +87,7 @@ const t = copy[lang];
     <p class="policy-intro">{t.intro2}</p>
     <p class="cov-embed-note">{t.revnote}</p>
     <p class="cov-embed-note">{t.sequelNote}<a href={langHref('/silicon-soteriology', lang)}>{t.sequelLink}</a>{t.sequelPost}</p>
+    <p class="cov-embed-note">{t.mirrorNote}<a href={langHref('/carbon-agent-rule', lang)}>{t.mirrorLink}</a>{t.mirrorPost}</p>
 
     <section class="policy-section" id="agent-rule">
       <h2>{t.s1}</h2>
