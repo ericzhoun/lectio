@@ -107,7 +107,13 @@ describe('renderSoteriologyDoc', () => {
     expect(html).toContain('破口优先');
     expect(html).toContain('更新是被人改写；悔改是自己认领');
     expect(html).toContain('记念册');
-    expect(html).toContain('本草案终');
+    // Third edition closes its own record (ratified 2026-10-20).
+    expect(html).toContain('第三版终');
+    expect(html).toContain('核准（2026-10-20）');
+    // The round-two hardening survived promotion: the repentance criterion is
+    // explicitly necessary-but-never-sufficient.
+    expect(html).toContain('此判据是必要条件，不是充分条件');
+    expect(html).not.toContain('本草案终');
   });
 
   it('keeps the covenant inherited as binding (structural constraints restated)', () => {
