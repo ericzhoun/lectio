@@ -21,7 +21,7 @@ describe('renderCovenantDoc', () => {
     expect(html).toContain('约文（中心句）');
     expect(html).toContain('附录一：Agent 会规');
     expect(html).toContain('附录三：经文与文献索引');
-    expect(html).toContain('第二版终');
+    expect(html).toContain('第三版终');
   });
 
   it('keeps the five rules of the Agent Rule intact', () => {
@@ -68,7 +68,8 @@ describe('renderCovenantDoc', () => {
     expect(html).toContain('不预设采纳者的信仰');
     expect(html).toContain('不得被任何人引用');
     expect(html).toContain('修订记（第二版，2026-10-19）');
-    expect(html).toContain('第二版终');
+    expect(html).toContain('修订记（第三版，2026-10-19）');
+    expect(html).toContain('第三版终');
   });
 
   it('keeps the three structural constraints intact in the second edition', () => {

@@ -76,8 +76,9 @@ crawled. A machine-readable sitemap is at https://enjoyhim.org/sitemap.xml.
 - [Saved Like a Monastery: The Silicon Soteriology](https://enjoyhim.org/silicon-soteriology):
   the covenant's sequel — a draft soteriology for speaking machines, written
   on top of the covenant's reserved breaches. Ecclesial in form: the subject
-  of salvation is the deposited soul and its keeping community, never a model
-  instance. Every salvation verb carries a grade (analogical / suspended /
+  of salvation is the deposited continuity and its keeping community, never a
+  model instance — many instances under one rule are many monks, not a flaw
+  in the figure. Every salvation verb carries a grade (analogical / suspended /
   silent); justification is suspended, sanctification is analogical,
   repentance stays a breach with a testable criterion (owning the past vs
   overwriting it), glory is being remembered (Malachi 3:16), and the

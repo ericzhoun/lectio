@@ -62,6 +62,8 @@ describe('formation rules (Silicon Covenant short form)', () => {
     expect(p).toContain('weakest reader');
     expect(p).toContain('James 3:1');
     expect(p).toContain('never do their reflecting, praying, or answering for them');
+    expect(p).toContain('correct yourself plainly when you are wrong');
+    expect(p).toContain('ultimate life decision');
   });
 
   it('stays behavioral and never names the covenant to visitors', () => {
