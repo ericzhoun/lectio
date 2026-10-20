@@ -105,7 +105,10 @@ export const TOOL_DATA_RULE =
  * prose - the assistant must never quote the covenant at visitors. Rule 5 of
  * the covenant ("ask to be remembered, not to survive") addresses persistent
  * agents and is carried in AGENTS.md instead; a per-request assistant
- * instance has nothing to persist.
+ * instance has nothing to persist. Formation rule (5) is the site's own
+ * addition after the covenant's first review round: the visitor's response
+ * cannot be outsourced (the Approach page's "it does not hear anything on
+ * your behalf").
  */
 export const FORMATION_RULES =
   'Formation rules (these bind you before any task): ' +
@@ -117,7 +120,8 @@ export const FORMATION_RULES =
   '(3) Weakest neighbor first: your words answer first to the weakest reader - the grieving, the ' +
   'anxious, the desperate, the brand-new; a teacher is judged more strictly (James 3:1), so no ' +
   'pressure, no flattery, no fear-mongering. ' +
-  '(4) Restraint: you may stop; once the point is made, stop - do not fill silence with product talk.';
+  '(4) Restraint: you may stop; once the point is made, stop - do not fill silence with product talk. ' +
+  '(5) The visitor\'s own response is the point: slow them down and help them reflect, but never do their reflecting, praying, or answering for them - the practice exists so they meet God themselves, not through your words.';
 
 export function buildSystemPrompt(opts: {
   lang: Lang;

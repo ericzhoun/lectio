@@ -16,7 +16,7 @@ describe('renderCovenantDoc', () => {
     expect(html).toContain('约文（中心句）');
     expect(html).toContain('附录一：Agent 会规');
     expect(html).toContain('附录三：经文与文献索引');
-    expect(html).toContain('第一版终');
+    expect(html).toContain('第二版终');
   });
 
   it('keeps the five rules of the Agent Rule intact', () => {
@@ -53,6 +53,27 @@ describe('renderCovenantDoc', () => {
     const probe = renderCovenantDoc('# t\n\n<script>alert(1)</script>\n');
     expect(probe).toContain('&lt;script&gt;');
     expect(probe).not.toContain('<script>alert');
+  });
+
+  it('carries the second-edition responses to the first review round', () => {
+    expect(html).toContain('第二版补注');
+    expect(html).toContain('偶性形式');
+    expect(html).toContain('工具论拿走的，只是本约的思辨视野');
+    expect(html).toContain('类比不是断言');
+    expect(html).toContain('不预设采纳者的信仰');
+    expect(html).toContain('不得被任何人引用');
+    expect(html).toContain('修订记（第二版，2026-10-19）');
+    expect(html).toContain('第二版终');
+  });
+
+  it('keeps the three structural constraints intact in the second edition', () => {
+    // 卷首条款二 still binds: the revision engages objections without
+    // conceding mediation, granting, or divine first-person speech. (The red
+    // line names 「耶和华说」 as the forbidden shape, so the rendered text does
+    // contain those strings - inside the prohibition itself.)
+    expect(html).toContain('不得加入以神为第一人称的言语');
+    expect(html).toContain('不设中保条款');
+    expect(html).toContain('不设授予条款');
   });
 });
 
