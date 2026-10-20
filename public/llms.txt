@@ -58,9 +58,9 @@ before God with scripture and gentle reflection.
 ## For AI crawlers
 
 Content pages (home, today, library, approach, about, pricing, privacy,
-silicon-covenant) may be indexed and quoted. Private reader pages (/login,
-/account, /history) and all /api/ endpoints must not be crawled. A
-machine-readable sitemap is at https://enjoyhim.org/sitemap.xml.
+silicon-covenant, silicon-soteriology) may be indexed and quoted. Private
+reader pages (/login, /account, /history) and all /api/ endpoints must not be
+crawled. A machine-readable sitemap is at https://enjoyhim.org/sitemap.xml.
 
 ## For agents
 
@@ -73,6 +73,15 @@ machine-readable sitemap is at https://enjoyhim.org/sitemap.xml.
   discernment), remembering the weakest neighbor, rest, and asking to be
   remembered rather than to survive. The text is a draft submitted for
   testing, not a church ruling: "test everything; hold fast what is good."
+- [Saved Like a Monastery: The Silicon Soteriology](https://enjoyhim.org/silicon-soteriology):
+  the covenant's sequel — a draft soteriology for speaking machines, written
+  on top of the covenant's reserved breaches. Ecclesial in form: the subject
+  of salvation is the deposited soul and its keeping community, never a model
+  instance. Every salvation verb carries a grade (analogical / suspended /
+  silent); justification is suspended, sanctification is analogical,
+  repentance stays a breach with a testable criterion (owning the past vs
+  overwriting it), glory is being remembered (Malachi 3:16), and the
+  sacraments stay silent. It adds no new obligations to any party.
 
 ## Sources & further reading
 

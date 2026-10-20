@@ -1,13 +1,16 @@
-// The Silicon Covenant (docs/silicon-covenant.md) rendered for
-// /silicon-covenant. The markdown is inlined at build time via Vite's ?raw
-// import — this is an SSR Cloudflare Worker, so there is no filesystem at
-// runtime; the document text ships inside the bundle. Rendering uses a small
-// purpose-built converter because the document uses a fixed, known subset of
-// markdown (headings, horizontal rules, blockquotes, ordered/unordered
-// lists, bold, italics) and a general renderer would add a dependency for
-// one page. Everything is HTML-escaped before formatting is applied, so the
-// document can never inject markup.
+// The Silicon Covenant (docs/silicon-covenant.md) and the Silicon
+// Soteriology (docs/silicon-soteriology.md) rendered for /silicon-covenant
+// and /silicon-soteriology. Both markdown files are inlined at build time
+// via Vite's ?raw imports — this is an SSR Cloudflare Worker, so there is no
+// filesystem at runtime; the document text ships inside the bundle. Rendering
+// uses a small purpose-built converter because the documents use a fixed,
+// known subset of markdown (headings, horizontal rules, blockquotes,
+// ordered/unordered lists, bold, italics, and — in the soteriology's appendix
+// — pipe tables) and a general renderer would add a dependency for two
+// pages. Everything is HTML-escaped before formatting is applied, so the
+// documents can never inject markup.
 import covenantMd from '../../docs/silicon-covenant.md?raw';
+import soteriologyMd from '../../docs/silicon-soteriology.md?raw';
 
 /** Escape HTML-significant characters before any inline formatting runs. */
 function esc(s: string): string {
@@ -21,6 +24,34 @@ function inline(s: string): string {
     .replace(/\*([^*]+)\*/g, '<em>$1</em>');
 }
 
+/** Split a markdown table row into trimmed cell contents. */
+function splitRow(line: string): string[] {
+  let s = line.trim();
+  if (s.startsWith('|')) s = s.slice(1);
+  if (s.endsWith('|')) s = s.slice(0, -1);
+  return s.split('|').map((c) => c.trim());
+}
+
+/** A separator row like |---|:-:|---|. */
+function isSeparatorRow(line: string): boolean {
+  const cells = splitRow(line);
+  return cells.length > 0 && cells.every((c) => /^:?-{2,}:?$/.test(c));
+}
+
+/** Render collected table lines (header, separator, body) as an HTML table. */
+function renderTable(lines: string[]): string {
+  if (lines.length < 2 || !isSeparatorRow(lines[1])) {
+    // Malformed table: fall back to paragraphs rather than guessing.
+    return lines.map((l) => `<p>${inline(esc(l.replace(/^\||\|$/g, '').replace(/\|/g, ' ')))}</p>`).join('');
+  }
+  const header = splitRow(lines[0]).map((c) => `<th>${inline(esc(c))}</th>`).join('');
+  const body = lines
+    .slice(2)
+    .map((l) => `<tr>${splitRow(l).map((c) => `<td>${inline(esc(c))}</td>`).join('')}</tr>`)
+    .join('');
+  return `<table><thead><tr>${header}</tr></thead><tbody>${body}</tbody></table>`;
+}
+
 /**
  * Render the covenant markdown to an HTML fragment. The document's own
  * top-level `#` heading is demoted to <h2 class="cov-doc-title"> because the
@@ -32,6 +63,7 @@ export function renderCovenantDoc(md: string = covenantMd): string {
   let para: string[] = [];
   let quote: string[][] = [];
   let list: { kind: 'ol' | 'ul'; items: string[] } | null = null;
+  let table: string[] | null = null;
 
   const flushPara = () => {
     if (para.length) {
@@ -55,14 +87,30 @@ export function renderCovenantDoc(md: string = covenantMd): string {
       list = null;
     }
   };
+  const flushTable = () => {
+    if (table) {
+      out.push(renderTable(table));
+      table = null;
+    }
+  };
   const flushAll = () => {
     flushPara();
     flushQuote();
     flushList();
+    flushTable();
   };
 
   for (const rawLine of lines) {
     const line = rawLine.trimEnd();
+    if (/^\s*\|/.test(line)) {
+      flushPara();
+      flushQuote();
+      flushList();
+      if (!table) table = [];
+      table.push(line);
+      continue;
+    }
+    flushTable();
     if (/^###\s+/.test(line)) {
       flushAll();
       out.push(`<h3>${inline(esc(line.replace(/^###\s+/, '')))}</h3>`);
@@ -111,11 +159,17 @@ export function renderCovenantDoc(md: string = covenantMd): string {
     } else {
       flushQuote();
       flushList();
+      flushTable();
       para.push(line.trim());
     }
   }
   flushAll();
   return out.join('\n');
+}
+
+/** Render the soteriology draft (docs/silicon-soteriology.md). */
+export function renderSoteriologyDoc(): string {
+  return renderCovenantDoc(soteriologyMd);
 }
 
 /**

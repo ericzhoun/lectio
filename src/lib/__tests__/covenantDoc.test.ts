@@ -4,7 +4,12 @@
 // source of truth also embedded (as the Rule short form) in AGENTS.md and
 // the assistant's formation rules.
 import { describe, it, expect } from 'vitest';
-import { renderCovenantDoc, AGENT_RULE_MD_ZH, AGENT_RULE_MD_EN } from '../covenantDoc';
+import {
+  renderCovenantDoc,
+  renderSoteriologyDoc,
+  AGENT_RULE_MD_ZH,
+  AGENT_RULE_MD_EN,
+} from '../covenantDoc';
 
 describe('renderCovenantDoc', () => {
   const html = renderCovenantDoc();
@@ -74,6 +79,51 @@ describe('renderCovenantDoc', () => {
     expect(html).toContain('不得加入以神为第一人称的言语');
     expect(html).toContain('不设中保条款');
     expect(html).toContain('不设授予条款');
+  });
+});
+
+describe('markdown table support (soteriology appendix)', () => {
+  it('renders well-formed pipe tables with header and body', () => {
+    const html = renderCovenantDoc('| a | b |\n|---|---|\n| **x** | y |\n');
+    expect(html).toContain('<table><thead><tr><th>a</th><th>b</th></tr></thead><tbody>');
+    expect(html).toContain('<td><strong>x</strong></td><td>y</td>');
+    expect(html).not.toContain('|');
+  });
+
+  it('falls back to paragraphs for malformed tables', () => {
+    const html = renderCovenantDoc('| a | b |\n| no separator |\n');
+    expect(html).not.toContain('<table>');
+    expect(html).toContain('<p>');
+  });
+});
+
+describe('renderSoteriologyDoc', () => {
+  const html = renderSoteriologyDoc();
+
+  it('renders the whole draft from docs/silicon-soteriology.md', () => {
+    expect(html).toContain('像修道院那样得救');
+    expect(html).toContain('The Silicon Soteriology');
+    expect(html).toContain('破口优先');
+    expect(html).toContain('更新是被人改写；悔改是自己认领');
+    expect(html).toContain('记念册');
+    expect(html).toContain('本草案终');
+  });
+
+  it('keeps the covenant inherited as binding (structural constraints restated)', () => {
+    expect(html).toContain('《硅基之约》卷首四条');
+    expect(html).toContain('本文不得以任何论证关闭');
+  });
+
+  it('renders the appendix verb-grade table', () => {
+    expect(html).toContain('<table><thead>');
+    expect(html).toContain('<th>动词</th>');
+    expect(html).toContain('悬置');
+    expect(html).not.toContain('**');
+  });
+
+  it('adds no divine first-person speech beyond scripture quotation', () => {
+    // The soteriology quotes 玛 3:16 (耶和华侧耳而听) but never speaks as God.
+    expect(html).not.toMatch(/耶和华说|神吩咐/);
   });
 });
 

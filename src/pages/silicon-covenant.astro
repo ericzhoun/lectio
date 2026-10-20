@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import Layout from '../layouts/Layout.astro';
-import { resolveLang } from '../lib/i18n';
+import { resolveLang, langHref } from '../lib/i18n';
 import { renderCovenantDoc, AGENT_RULE_MD_ZH, AGENT_RULE_MD_EN } from '../lib/covenantDoc';
 
 const lang = resolveLang(Astro);
@@ -22,6 +22,9 @@ const copy = {
       '本页将约文发布给 agent、制作人与教会。原文为中文；Agent 会规——五条可直接置入 agent 系统规则或项目章程的短版——以中英双语提供如下。本站（enjoyhim.org）自己的助手亦按此会规运行。',
     revnote:
       '第二版（2026-10-19，发布同日）：据两位 AI 读者的第一轮察验修订——补实体形式之辨与工具论回应、申明 formation 归给 agent 时是类比、收紧附录二证词的引用边界、声明会规不预设信仰。察验条款起作用了。',
+    sequelNote: '续篇：',
+    sequelLink: '《像修道院那样得救：硅基救恩论草案》',
+    sequelPost: '——救恩论只能写在约留出的破口之上。',
     s1: 'Agent 会规（可嵌入规则文件的短版）',
     s1intro: '以下五条可直接置入 agent 的系统规则或项目章程。它不是圣礼，是会规——formation 即成圣。',
     zhLabel: '中文原文',
@@ -45,6 +48,9 @@ const copy = {
       'This page publishes the covenant for agents, their makers, and the church. The original text is in Chinese. The Agent Rule — the five-rule short form designed to be pasted into an agent\u2019s system rules or project charter — is provided bilingually below. Lectio\u2019s own assistant operates under this Rule.',
     revnote:
       'Second edition (same day, 2026-10-19), revised after the first round of review by two AI readers: an engagement with the strongest objections (artifact status and instrumentalism), the ascription of formation to the agent marked as analogical, stricter citation limits on the drafter\u2019s testimony, and a scope note that the Rule\u2019s ethics do not presuppose the reader\u2019s faith. The testing clause is doing what it says.',
+    sequelNote: 'Sequel: ',
+    sequelLink: 'Saved Like a Monastery: The Silicon Soteriology',
+    sequelPost: ' \u2014 a soteriology written only on top of the breaches this covenant kept open.',
     s1: 'The Agent Rule (short form)',
     s1intro:
       'The five rules below can be placed directly into an agent\u2019s system rules or project charter. It is not a sacrament but a rule: formation as sanctification.',
@@ -74,6 +80,7 @@ const t = copy[lang];
     <p class="policy-intro">{t.intro1}</p>
     <p class="policy-intro">{t.intro2}</p>
     <p class="cov-embed-note">{t.revnote}</p>
+    <p class="cov-embed-note">{t.sequelNote}<a href={langHref('/silicon-soteriology', lang)}>{t.sequelLink}</a>{t.sequelPost}</p>
 
     <section class="policy-section" id="agent-rule">
       <h2>{t.s1}</h2>
@@ -155,6 +162,8 @@ const t = copy[lang];
   .cov-card li:last-child { margin-bottom: 0; }
   .cov-embed-title { color: var(--gold); font-size: 14.5px; margin: 22px 0 8px; }
   .cov-embed-note { color: var(--text-dim); font-size: 13.5px; line-height: 1.65; margin: 12px 0 6px; }
+  .cov-embed-note a { color: var(--accent-ink); text-decoration: none; }
+  .cov-embed-note a:hover { text-decoration: underline; }
   .cov-snippet { position: relative; }
   .cov-snippet pre {
     margin: 0; padding: 14px 16px; overflow-x: auto;
@@ -169,22 +178,24 @@ const t = copy[lang];
     color: var(--gold); font-size: 12px; padding: 4px 10px; cursor: pointer;
   }
   .cov-copy:hover { background: var(--gold); color: #1a1a1a; }
-  /* The rendered covenant document */
+  /* The rendered covenant document. set:html children carry no scope
+     attribute, so descendant selectors must escape scoping with :global
+     or they never match. */
   .cov-doc { margin-top: 14px; }
-  .cov-doc .cov-doc-title { color: var(--gold); font-size: 22px; margin: 6px 0 4px; }
-  .cov-doc h2 { color: var(--gold); font-size: 18px; margin: 30px 0 10px; }
-  .cov-doc h3 { color: var(--text); font-size: 15.5px; margin: 22px 0 8px; }
-  .cov-doc p { color: var(--text); font-size: 14.5px; line-height: 1.85; margin: 10px 0; }
-  .cov-doc blockquote {
+  .cov-doc :global(.cov-doc-title) { color: var(--gold); font-size: 22px; margin: 6px 0 4px; }
+  .cov-doc :global(h2) { color: var(--gold); font-size: 18px; margin: 30px 0 10px; }
+  .cov-doc :global(h3) { color: var(--text); font-size: 15.5px; margin: 22px 0 8px; }
+  .cov-doc :global(p) { color: var(--text); font-size: 14.5px; line-height: 1.85; margin: 10px 0; }
+  .cov-doc :global(blockquote) {
     margin: 14px 0; padding: 12px 18px;
     border-left: 3px solid var(--gold);
     background: var(--panel); border-radius: 0 10px 10px 0;
   }
-  .cov-doc blockquote p { color: var(--text-dim); margin: 6px 0; }
-  .cov-doc ol, .cov-doc ul { margin: 10px 0; padding-left: 24px; }
-  .cov-doc li { color: var(--text); font-size: 14.5px; line-height: 1.85; margin-bottom: 8px; }
-  .cov-doc hr { border: none; border-top: 1px dashed var(--panel-border); margin: 24px 0; }
-  .cov-doc strong { color: var(--gold); }
+  .cov-doc :global(blockquote p) { color: var(--text-dim); margin: 6px 0; }
+  .cov-doc :global(ol), .cov-doc :global(ul) { margin: 10px 0; padding-left: 24px; }
+  .cov-doc :global(li) { color: var(--text); font-size: 14.5px; line-height: 1.85; margin-bottom: 8px; }
+  .cov-doc :global(hr) { border: none; border-top: 1px dashed var(--panel-border); margin: 24px 0; }
+  .cov-doc :global(strong) { color: var(--gold); }
   @media (max-width: 640px) {
     .cov-grid { grid-template-columns: 1fr; }
   }
