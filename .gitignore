@@ -63,3 +63,5 @@ scripts/.audio-r2-state.json
 /.agents
 /.openclaw
 /.opencode
+/.openclaw-attachments
+TOOLS.md
