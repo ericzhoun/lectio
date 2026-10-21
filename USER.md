@@ -1,6 +1,19 @@
 ---
 summary: "User profile record"
 autoclaw.schema: "agent-profile/v1"
+human.name: "Eric"
+human.call: "Eric"
+human.timezone: "America/Los_Angeles"
+human.focus:
+  - "coding"
+  - "product"
+  - "writing"
+  - "design"
+  - "marketing"
+---
+---
+summary: "User profile record"
+autoclaw.schema: "agent-profile/v1"
 human.name: "User"
 human.call: "User"
 human.timezone: "America/Los_Angeles"
@@ -19,9 +32,9 @@ human.focus:
 
 # USER.md - About Your Human
 
-- **Name:** User
+- **Name:** Eric
 - **Timezone:** America/Los_Angeles
-- **Focus areas:** general assistance
+- **Focus areas:** coding, product, writing, design, marketing
 
 ## Context
 
