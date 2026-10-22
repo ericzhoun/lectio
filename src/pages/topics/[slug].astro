@@ -2,8 +2,9 @@
 export const prerender = false;
 
 import Layout from '../../layouts/Layout.astro';
-import { TOPICS, getTopicBySlug, topicVerses } from '../../lib/topics';
+import { TOPICS, getTopicBySlug, topicVerses, topicLeadVerse } from '../../lib/topics';
 import { getTopicResources } from '../../lib/topicResources';
+import { WORK_GUIDE } from '../../lib/workGuide';
 import TopicResourceSection from '../../components/TopicResourceSection.astro';
 import { resolveLang, langHref } from '../../lib/i18n';
 
@@ -17,7 +18,13 @@ if (!topic) {
 }
 
 const verses = topicVerses(topic);
+// The page's own door into the practice. A topic hub promises a reading drawn
+// from the verses it quotes, so the walk is pinned to one of them rather than
+// to the generic draw: `?verse=<slug>` opens a `verse:` pseudo-day, leaving the
+// reader's dated walk for today untouched.
+const leadVerse = topicLeadVerse(topic);
 const resources = getTopicResources(topic.slug);
+const guide = WORK_GUIDE.topicSlug === topic.slug ? WORK_GUIDE : null;
 const otherTopics = TOPICS.filter((t) => t.slug !== topic.slug);
 const name = lang === 'zh' ? topic.nameZh : topic.nameEn;
 const description = lang === 'zh' ? topic.descZh : topic.descEn;
@@ -52,6 +59,13 @@ const title = lang === 'zh'
   <header>
     <h1>{name}</h1>
     <p class="topic-desc">{description}</p>
+    {guide && (
+      <p class="topic-guide">
+        <a href={langHref(`/library/${guide.slug}`, lang)}>
+          {lang === 'zh' ? guide.titleZh : guide.titleEn} &rarr;
+        </a>
+      </p>
+    )}
   </header>
 
   <div class="verse-grid">
@@ -67,11 +81,25 @@ const title = lang === 'zh'
     ))}
   </div>
 
-  <p class="library-cta">
-    <a class="upsell-button" href={langHref('/today', lang)}>
-      {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
-    </a>
-  </p>
+  {leadVerse && (
+    <div class="topic-walk">
+      <a
+        class="upsell-button"
+        href={langHref(`/today?verse=${leadVerse.slug}`, lang)}
+        data-event="cta_click"
+        data-event-props='{"slot":"topic_walk"}'
+      >
+        {lang === 'zh'
+          ? `从${leadVerse.refZh}开始一次圣言诵读`
+          : `Begin a Lectio reading with ${leadVerse.refEn}`}
+      </a>
+      <p class="topic-walk-note">
+        {lang === 'zh'
+          ? '这次诵读从本页所引的这段经文开始，依次走诵读、默想、祈祷、默观与行动。也可以先点开上面任何一段，单读它，再决定从哪里开始。'
+          : 'This reading opens with one of the passages quoted above and walks it through all five movements — read, reflect, respond, rest, act. Any passage above can also be opened on its own first.'}
+      </p>
+    </div>
+  )}
 
   {resources && <TopicResourceSection resources={resources} lang={lang} />}
 
@@ -87,6 +115,13 @@ const title = lang === 'zh'
 
 <style>
   .topic-desc { color: var(--text-dim); max-width: 640px; }
+  .topic-guide {
+    margin: 6px 0 0;
+    font-family: var(--font-ui);
+    font-size: 13px;
+  }
+  .topic-guide a { color: var(--gold); text-decoration: none; }
+  .topic-guide a:hover { text-decoration: underline; }
 
   /* Cards for the topic's verses — the library index leaves its grid to the
      site's global look, but a topic page is self-contained, so it carries its
@@ -102,6 +137,15 @@ const title = lang === 'zh'
   }
   .verse-grid-item:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
   .verse-grid-item .verse-text { margin: 0 0 10px; }
+
+  /* The reading entry point: names the passage it opens, so the button keeps
+     the promise the page makes instead of handing the reader an unrelated draw. */
+  .topic-walk { margin: 18px 0 8px; }
+  .topic-walk-note {
+    margin: 10px 0 0; max-width: 620px;
+    font-size: 13px; line-height: 1.65; color: var(--text-dim);
+    font-family: var(--font-ui);
+  }
 
   .topic-more { margin-top: 26px; }
   .topic-more h2 { font-size: 16px; color: var(--gold); margin: 0 0 10px; }

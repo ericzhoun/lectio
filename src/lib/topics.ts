@@ -115,12 +115,15 @@ export const TOPICS: readonly Topic[] = [
     slug: 'work',
     nameEn: 'Work and Calling',
     nameZh: '工作与呼召',
-    descEn: 'Diligence, purpose, integrity, and committing your plans to God — with workplace-ministry resources from Called To Work.',
-    descZh: '殷勤、目标、正直，把手中的计划交托给神——附「职场使命」（Called To Work）的职场事工资源。',
+    descEn: 'Diligence, purpose, integrity, and committing your plans to God — with workplace-ministry resources from Called To Work and a reading guide on creativity and calling.',
+    descZh: '殷勤、目标、正直，把手中的计划交托给神——附「职场使命」（Called To Work）的职场事工资源，以及关于创造力与呼召的阅读指南。',
     refs: [
-      'Ecclesiastes 3:1', 'Philippians 4:13', 'Proverbs 16:9', 'Colossians 3:23-24',
-      '1 Corinthians 10:31', 'Matthew 5:16', 'Galatians 6:9', 'Luke 14:28',
-      'Proverbs 21:5', 'Ephesians 5:15-16', 'Micah 6:8', 'Proverbs 16:3',
+      'Genesis 1:26-28', 'Genesis 2:15', 'Exodus 31:1-5', 'Psalm 100:3', 'John 5:17',
+      '1 Thessalonians 4:11-12', 'Ephesians 4:28', 'Colossians 3:23-24', '1 Corinthians 10:31',
+      'Micah 6:8', 'Proverbs 16:9', 'Proverbs 16:3', 'Proverbs 21:5', 'Luke 14:28',
+      'Ephesians 5:15-16', 'Ecclesiastes 3:1', 'Galatians 6:9', 'Philippians 4:13',
+      'Genesis 3:17-19', 'James 5:1-6', 'Hebrews 4:9-10', '1 Corinthians 15:58',
+      'Revelation 21:24-26', 'Matthew 5:16',
     ],
   },
   {
@@ -201,6 +204,18 @@ export function topicVerses(topic: Topic): LibraryVerse[] {
   return topic.refs
     .map((ref) => getLibraryVerseByRef(ref))
     .filter((v): v is LibraryVerse => v !== null);
+}
+
+/**
+ * The passage a topic page's Lectio entry opens: the topic's first passage in
+ * editorial order. Pin the walk to it (`/today?verse=<slug>`) instead of
+ * sending the reader to the generic draw, so the reading begun from a topic
+ * page is one of the verses that page quotes — and so a reader who comes back
+ * resumes that walk rather than starting an unrelated one. Null only when none
+ * of the topic's refs resolve, which the unit tests rule out.
+ */
+export function topicLeadVerse(topic: Topic): LibraryVerse | null {
+  return topicVerses(topic)[0] ?? null;
 }
 
 /** Topics that include a given deck reference. */

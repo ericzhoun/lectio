@@ -441,6 +441,10 @@ export const BIBLE_VERSES: BibleVerse[] = [
     zh: { ref: '雅各书 1:2-3', text: '我的弟兄们，你们落在百般试炼中，都要以为大喜乐；因为知道你们的信心经过试验，就生忍耐。', theme: '试炼喜乐' },
   },
   {
+    en: { ref: '1 Corinthians 10:13', text: 'No temptation has taken you except what is common to man. God is faithful, who will not allow you to be tempted above what you are able, but will with the temptation also make the way of escape, that you may be able to endure it.', theme: 'A way through' },
+    zh: { ref: '哥林多前书 10:13', text: '你们所遇见的试探，无非是人所能受的。神是信实的，必不叫你们受试探过于所能受的；在受试探的时候，总要给你们开一条出路，叫你们能忍受得住。', theme: '试探中的出路' },
+  },
+  {
     en: { ref: 'Psalm 126:5', text: 'Those who sow in tears will reap in joy.', theme: 'Sowing and reaping' },
     zh: { ref: '诗篇 126:5', text: '流泪撒种的，必欢呼收割。', theme: '流泪撒种' },
   },
@@ -507,6 +511,54 @@ export const BIBLE_VERSES: BibleVerse[] = [
   {
     en: { ref: '1 Corinthians 10:31', text: 'Whether you eat or drink, or whatever you do, do all to the glory of God.', theme: "For God's glory" },
     zh: { ref: '哥林多前书 10:31', text: '你们或吃或喝，无论做什么，都要为荣耀神而行。', theme: '荣耀而行' },
+  },
+  {
+    en: { ref: 'Genesis 1:26-28', text: "God said, 'Let us make man in our image, after our likeness: and let them have dominion over the fish of the sea, and over the birds of the sky, and over the livestock, and over all the earth, and over every creeping thing that creeps on the earth.' God created man in his own image. In God's image he created him; male and female he created them. God blessed them. God said to them, 'Be fruitful, multiply, fill the earth, and subdue it. Have dominion over the fish of the sea, over the birds of the sky, and over every living thing that moves on the earth.'", theme: 'Image and dominion' },
+    zh: { ref: '创世记 1:26-28', text: '神说：我们要照着我们的形像、按着我们的样式造人，使他们管理海里的鱼、空中的鸟、地上的牲畜，和全地，并地上所爬的一切昆虫。神就照着自己的形像造人，乃是照着他的形像造男造女。神就赐福给他们，又对他们说：要生养众多，遍满地面，治理这地，也要管理海里的鱼、空中的鸟，和地上各样行动的活物。', theme: '形像与治理' },
+  },
+  {
+    en: { ref: 'Genesis 2:15', text: 'The LORD God took the man, and put him into the garden of Eden to cultivate and keep it.', theme: 'Work before the fall' },
+    zh: { ref: '创世记 2:15', text: '耶和华神将那人安置在伊甸园，使他修理，看守。', theme: '堕落前的工作' },
+  },
+  {
+    en: { ref: 'Exodus 31:1-5', text: "The LORD spoke to Moses, saying, 'Behold, I have called by name Bezalel the son of Uri, the son of Hur, of the tribe of Judah: and I have filled him with the Spirit of God, in wisdom, and in understanding, and in knowledge, and in all kinds of workmanship, to devise skillful works, to work in gold, and in silver, and in brass, and in cutting of stones for setting, and in carving of wood, to work in all kinds of workmanship.'", theme: 'Spirit-filled craft' },
+    zh: { ref: '出埃及记 31:1-5', text: '耶和华晓谕摩西说：看哪，犹大支派中，户珥的孙子、乌利的儿子比撒列，我已经题他的名召他。我也以我的灵充满了他，使他有智慧，有聪明，有知识，能做各样的工，能想出巧工，用金、银、铜制造各物，又能刻宝石，可以镶嵌，能雕刻木头，能做各样的工。', theme: '圣灵与巧工' },
+  },
+  {
+    en: { ref: 'Psalm 100:3', text: 'Know that the LORD, he is God. It is he who has made us, and we are his. We are his people, and the sheep of his pasture.', theme: 'Made and kept' },
+    zh: { ref: '诗篇 100:3', text: '你们当晓得耶和华是神！我们是他造的，也是属他的；我们是他的民，也是他草场的羊。', theme: '受造与归属' },
+  },
+  {
+    en: { ref: 'John 5:17', text: "But Jesus answered them, 'My Father is still working, so I am working, too.'", theme: 'The working God' },
+    zh: { ref: '约翰福音 5:17', text: '耶稣就对他们说：我父做事直到如今，我也做事。', theme: '做工的神' },
+  },
+  {
+    en: { ref: '1 Thessalonians 4:11-12', text: 'and that you make it your ambition to lead a quiet life, and to do your own business, and to work with your own hands, even as we instructed you; that you may walk properly toward those who are outside, and may have need of nothing.', theme: 'Quiet, faithful work' },
+    zh: { ref: '帖撒罗尼迦前书 4:11-12', text: '又要立志作安静人，办自己的事，亲手做工，正如我们从前所吩咐你们的，叫你们可以向外人行事端正，自己也就没有甚么缺乏了。', theme: '安静做工' },
+  },
+  {
+    en: { ref: 'Ephesians 4:28', text: 'Let him who stole steal no more; but rather let him labor, working with his hands the thing that is good, that he may have something to give to him who has need.', theme: 'Work that gives' },
+    zh: { ref: '以弗所书 4:28', text: '从前偷窃的，不要再偷；总要劳力，亲手做正经事，就可有余分给那缺少的人。', theme: '劳力为分享' },
+  },
+  {
+    en: { ref: 'Genesis 3:17-19', text: "To Adam he said, 'Because you have listened to your wife's voice, and ate from the tree, about which I commanded you, saying, \"You shall not eat of it,\" the ground is cursed for your sake. You will eat from it with much labor all the days of your life. It will yield thorns and thistles to you; and you will eat the herb of the field. By the sweat of your face will you eat bread until you return to the ground, for out of it you were taken. For you are dust, and to dust you shall return.'", theme: 'Thorns and toil' },
+    zh: { ref: '创世记 3:17-19', text: '又对亚当说：你既听从妻子的话，吃了我所吩咐你不可吃的那树上的果子，地必为你的缘故受咒诅；你必终身劳苦才能从地里得吃的。地必给你长出荆棘和蒺藜来；你也要吃田间的菜蔬。你必汗流满面才得糊口，直到你归了土，因为你是从土而出的。你本是尘土，仍要归于尘土。', theme: '荆棘与劳苦' },
+  },
+  {
+    en: { ref: 'James 5:1-6', text: "Come now, you rich, weep and howl for your miseries that are coming on you. Your riches are corrupted and your garments are moth-eaten. Your gold and your silver are corroded, and their corrosion will be for a testimony against you, and will eat your flesh like fire. You have laid up your treasure in the last days. Behold, the wages of the laborers who mowed your fields, which you have kept back by fraud, cry out, and the cries of those who reaped have entered into the ears of the Lord of Armies. You have lived delicately on the earth, and taken your pleasure. You have nourished your hearts as in a day of slaughter. You have condemned, you have murdered the righteous one. He doesn't resist you.", theme: 'Wages that cry out' },
+    zh: { ref: '雅各书 5:1-6', text: '嗐！你们这些富足人哪，应当哭泣、号啕，因为将有苦难临到你们身上。你们的财物坏了，衣服也被虫子咬了。你们的金银都长了銹；那锈要证明你们的不是，又要吃你们的肉，如同火烧。你们在这末世只知积攒钱财。工人给你们收割庄稼，你们亏欠他们的工钱，这工钱有声音呼叫，并且那收割之人的冤声已经入了万军之主的耳了。你们在世上享美福，好宴乐，当宰杀的日子竟娇养你们的心。你们定了义人的罪，把他杀害，他也不抵挡你们。', theme: '工价的呼声' },
+  },
+  {
+    en: { ref: 'Hebrews 4:9-10', text: 'There remains therefore a Sabbath rest for the people of God. For he who has entered into his rest has himself also rested from his works, as God did from his.', theme: 'Sabbath rest' },
+    zh: { ref: '希伯来书 4:9-10', text: '这样看来，必另有一安息日的安息为神的子民存留。因为那进入安息的，乃是歇了自己的工，正如神歇了他的工一样。', theme: '安息的应许' },
+  },
+  {
+    en: { ref: '1 Corinthians 15:58', text: "Therefore, my beloved brothers, be steadfast, immovable, always abounding in the Lord's work, because you know that your labor is not in vain in the Lord.", theme: 'Labor not in vain' },
+    zh: { ref: '哥林多前书 15:58', text: '所以，我亲爱的弟兄们，你们务要坚固，不可摇动，常常竭力多做主工；因为知道，你们的劳苦在主里面不是徒然的。', theme: '劳苦不徒然' },
+  },
+  {
+    en: { ref: 'Revelation 21:24-26', text: 'The nations will walk in its light. The kings of the earth bring the glory and honor of the nations into it. Its gates will in no way be shut by day (for there will be no night there), and they shall bring the glory and the honor of the nations into it so that they may enter.', theme: 'Glory brought in' },
+    zh: { ref: '启示录 21:24-26', text: '列国要在城的光里行走；地上的君王必将自己的荣耀归与那城。城门白昼总不关闭，在那里原没有黑夜。人必将列国的荣耀、尊贵归与那城。', theme: '列国的荣耀' },
   },
   {
     en: { ref: 'Galatians 5:22-23', text: 'The fruit of the Spirit is love, joy, peace, patience, kindness, goodness, faith, gentleness, and self-control. Against such things there is no law.', theme: 'Fruit of the Spirit' },

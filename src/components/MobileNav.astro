@@ -3,6 +3,7 @@
 // Desktop keeps .top-nav until the site-wide redesign adopts this component.
 import { langSwitchHref, langHref } from '../lib/i18n';
 import { safeAuthReturn } from '../lib/authReturn';
+import { getLibraryVerses } from '../lib/scripture';
 import type { Lang } from '../lib/reading';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
   loggedIn: boolean;
 }
 const { lang, loggedIn } = Astro.props;
+const verseCount = getLibraryVerses().length;
 
 const t = {
   menu: lang === 'zh' ? '菜单' : 'Menu',
@@ -23,7 +25,7 @@ const t = {
   account: lang === 'zh' ? '账户' : 'Account',
   login: lang === 'zh' ? '登录' : 'Log in',
   hint: {
-    library: lang === 'zh' ? '157 段经文' : '157 passages',
+    library: lang === 'zh' ? `${verseCount} 段经文` : `${verseCount} passages`,
     approach: lang === 'zh' ? '什么是圣言诵读' : 'what is Lectio?',
     about: lang === 'zh' ? '为什么叫 enjoyhim' : 'what is "enjoyhim"?',
     pricing: lang === 'zh' ? '首月免费' : 'first month free',

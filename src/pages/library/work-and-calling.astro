@@ -1,0 +1,209 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { getLibraryVerseByRef, type LibraryVerse } from '../../lib/scripture';
+import { guideRefs, WORK_GUIDE } from '../../lib/workGuide';
+import { resolveLang, langHref } from '../../lib/i18n';
+
+const lang = resolveLang(Astro);
+const zh = lang === 'zh';
+const guide = WORK_GUIDE;
+
+const title = zh
+  ? `${guide.titleZh} — 经文库阅读指南`
+  : `${guide.titleEn} — a Library Reading Guide`;
+const description = zh ? guide.standfirstZh : guide.standfirstEn;
+
+/** Resolve a list of deck refs to library entries, dropping any unknown one. */
+function resolveRefs(refs: readonly string[]): LibraryVerse[] {
+  return refs
+    .map((ref) => getLibraryVerseByRef(ref))
+    .filter((v): v is LibraryVerse => v !== null);
+}
+
+const readingList = resolveRefs(guideRefs(guide));
+const topicHref = guide.topicSlug ? langHref(`/topics/${guide.topicSlug}`, lang) : null;
+---
+<Layout title={title} description={description} lang={lang}>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": zh ? guide.titleZh : guide.titleEn,
+    "description": description,
+    "inLanguage": zh ? 'zh' : 'en',
+    "isPartOf": {
+      "@type": "CollectionPage",
+      "name": zh ? '经文库' : 'Verse Library',
+      "url": `https://enjoyhim.org${langHref('/library', lang)}`
+    },
+    "about": { "@type": "Thing", "name": zh ? '工作与呼召' : 'Work and calling' }
+  })}>
+  </script>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://enjoyhim.org/" },
+      { "@type": "ListItem", "position": 2, "name": zh ? '经文库' : 'Library', "item": `https://enjoyhim.org${langHref('/library', lang)}` },
+      { "@type": "ListItem", "position": 3, "name": zh ? guide.titleZh : guide.titleEn }
+    ]
+  })}>
+  </script>
+
+  <a class="back-link" href={langHref('/library', lang)}>&larr; {zh ? '返回经文库' : 'Back to the Library'}</a>
+
+  <article class="guide">
+    <header class="guide-head">
+      <p class="kicker">{zh ? '阅读指南' : 'Reading guide'}</p>
+      <h1>{zh ? guide.titleZh : guide.titleEn}</h1>
+      <p class="standfirst">{zh ? guide.standfirstZh : guide.standfirstEn}</p>
+    </header>
+
+    {guide.sections.map((section) => {
+      const refs = resolveRefs(section.refs);
+      return (
+        <section class="guide-section">
+          <p class="kicker">{zh ? section.kickerZh : section.kickerEn}</p>
+          <h2>{zh ? section.headingZh : section.headingEn}</h2>
+          {(zh ? section.paragraphsZh : section.paragraphsEn).map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+          {refs.length > 0 && (
+            <p class="ref-row">
+              <span class="ref-label">{zh ? '读' : 'Read'}</span>
+              {refs.map((v) => (
+                <a href={langHref(`/library/${v.slug}`, lang)}>{zh ? v.refZh : v.refEn}</a>
+              ))}
+            </p>
+          )}
+        </section>
+      );
+    })}
+
+    <section class="guide-section">
+      <p class="kicker">{zh ? '综合' : 'Synthesis'}</p>
+      <h2>{zh ? guide.thesisHeadingZh : guide.thesisHeadingEn}</h2>
+      <div class="theses">
+        {guide.theses.map((thesis, i) => {
+          const refs = resolveRefs(thesis.refs);
+          return (
+            <div class="thesis">
+              <span class="thesis-num">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{zh ? thesis.titleZh : thesis.titleEn}</h3>
+              <p>{zh ? thesis.bodyZh : thesis.bodyEn}</p>
+              {refs.length > 0 && (
+                <p class="ref-row">
+                  {refs.map((v) => (
+                    <a href={langHref(`/library/${v.slug}`, lang)}>{zh ? v.refZh : v.refEn}</a>
+                  ))}
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    <section class="guide-closing">
+      {(zh ? guide.closingZh : guide.closingEn).map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </section>
+
+    <section class="guide-section">
+      <h2>{zh ? guide.readingListHeadingZh : guide.readingListHeadingEn}</h2>
+      <div class="reading-grid">
+        {readingList.map((v) => (
+          <a class="reading-card" href={langHref(`/library/${v.slug}`, lang)}>
+            <h3>{zh ? v.refZh : v.refEn}</h3>
+            <blockquote>{zh ? v.textZh : v.textEn}</blockquote>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <p class="guide-cta">
+      <a class="upsell-button" href={langHref('/today', lang)}>
+        {zh ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
+      </a>
+      {topicHref && (
+        <a class="guide-topic-link" href={topicHref}>
+          {zh ? '浏览「工作与呼召」主题经文 →' : 'Browse the Work and Calling verses →'}
+        </a>
+      )}
+    </p>
+  </article>
+</Layout>
+
+<style>
+  .guide { max-width: 760px; margin: 0 auto; }
+
+  .guide-head { margin-bottom: 8px; }
+  .kicker {
+    margin: 0 0 6px;
+    font-family: var(--font-ui);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .guide-head h1 { margin: 0 0 10px; font-size: clamp(26px, 4vw, 34px); line-height: 1.25; }
+  .standfirst { color: var(--text-dim); font-size: 15.5px; line-height: 1.8; margin: 0 0 8px; }
+
+  .guide-section { margin: 34px 0; }
+  .guide-section h2 { margin: 0 0 14px; font-size: 21px; color: var(--gold); }
+  .guide-section p { line-height: 1.85; margin: 0 0 14px; }
+
+  .ref-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+  .ref-label {
+    font-family: var(--font-ui); font-size: 12px; color: var(--text-dim);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .ref-row a {
+    display: inline-block; text-decoration: none; background: var(--pill-bg);
+    color: var(--text-dim); font-size: 12.5px; font-family: var(--font-ui);
+    padding: 3px 10px; border-radius: 999px;
+  }
+  .ref-row a:hover { color: var(--text); }
+
+  .theses {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .thesis {
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; padding: 16px 18px 12px; box-shadow: var(--shadow-soft);
+  }
+  .thesis-num {
+    font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.12em;
+    color: var(--gold);
+  }
+  .thesis h3 { margin: 4px 0 8px; font-size: 17px; }
+  .thesis p { font-size: 14.5px; line-height: 1.75; margin: 0 0 10px; }
+
+  .guide-closing {
+    margin: 30px 0; padding: 18px 22px;
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; box-shadow: var(--shadow-soft);
+  }
+  .guide-closing p { margin: 0 0 12px; line-height: 1.85; }
+  .guide-closing p:last-child { margin-bottom: 0; color: var(--text-dim); }
+
+  .reading-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .reading-card {
+    display: block; background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 10px; padding: 14px 16px; text-decoration: none; color: var(--text);
+    box-shadow: var(--shadow-soft);
+  }
+  .reading-card:hover { box-shadow: var(--shadow-lift); transform: translateY(-2px); }
+  .reading-card h3 { margin: 0 0 8px; font-size: 15px; color: var(--gold); }
+  .reading-card blockquote { margin: 0; font-size: 13.5px; line-height: 1.7; color: var(--text-dim); }
+
+  .guide-cta { margin: 34px 0 10px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .guide-topic-link { color: var(--text-dim); font-size: 13.5px; font-family: var(--font-ui); text-decoration: none; }
+  .guide-topic-link:hover { color: var(--gold); }
+</style>

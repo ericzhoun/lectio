@@ -6,10 +6,10 @@ import {
 import { SPREADS } from '../reading';
 
 describe('scripture verse deck', () => {
-  it('has 157 unique English references', () => {
-    expect(BIBLE_VERSES).toHaveLength(157);
+  it('has 170 unique English references', () => {
+    expect(BIBLE_VERSES).toHaveLength(170);
     const refs = new Set(BIBLE_VERSES.map((v) => v.en.ref));
-    expect(refs.size).toBe(157);
+    expect(refs.size).toBe(170);
   });
 
   it('includes the 2026-09 expansion references', () => {
@@ -44,7 +44,7 @@ describe('drawVerses', () => {
   });
 
   it('clamps the count to the deck size', () => {
-    expect(drawVerses(200)).toHaveLength(157);
+    expect(drawVerses(200)).toHaveLength(170);
   });
 
   it('carries through both languages and themes', () => {

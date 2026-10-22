@@ -79,7 +79,7 @@ sign-in fails at the last step without it.
 ## Project structure
 
 - `src/lib/reading.ts` — languages, layouts (Daily Word / Lectio Divina / Deep Lectio), starter questions
-- `src/lib/scripture.ts` — the 157-verse deck, draw + rebuild logic, chapter-context pages, verse library helpers
+- `src/lib/scripture.ts` — the verse deck, draw + rebuild logic, chapter-context pages, verse library helpers
 - `src/lib/bibleChapters.json` — chapter context text (WEB + 和合本, both public domain)
 - `scripts/fetch-bible-context.mjs` — regenerates `bibleChapters.json` from api.getbible.net; run it
   after adding deck verses, then re-run `npm test`

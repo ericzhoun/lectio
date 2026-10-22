@@ -66,6 +66,17 @@ function filterHref(t: string) {
     </div>
   )}
 
+  <a class="guide-card" href={langHref('/library/work-and-calling', lang)}>
+    <p class="guide-kicker">{lang === 'zh' ? '阅读指南' : 'Reading guide'}</p>
+    <h2 class="guide-title">{lang === 'zh' ? '工作与呼召：马克思说对了什么' : 'Work and Calling: What Marx Got Right'}</h2>
+    <p class="guide-desc">
+      {lang === 'zh'
+        ? '马克思说，自由而有创造性的劳动才是人之所以为人的本质。圣经比想象中更同意，然后又走得更远——关于工作、创造力、异化与安息。'
+        : 'Marx argued that free, creative work is what makes us human. Scripture agrees more than you might expect — and then goes further.'}
+    </p>
+    <span class="guide-more">{lang === 'zh' ? '读这份指南 →' : 'Read the guide →'}</span>
+  </a>
+
   <div class="topic-strip">
     <span class="topic-strip-label">{lang === 'zh' ? '按主题浏览' : 'Browse by topic'}</span>
     {TOPICS.map((t) => (
@@ -89,6 +100,23 @@ function filterHref(t: string) {
 </Layout>
 
 <style>
+  /* Reading-guide card: the one piece of long-form editorial in the library. */
+  .guide-card {
+    display: block; text-decoration: none; color: var(--text);
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px; padding: 16px 20px; margin: 18px 0 6px;
+    box-shadow: var(--shadow-soft);
+  }
+  .guide-card:hover { box-shadow: var(--shadow-lift); }
+  .guide-kicker {
+    margin: 0 0 4px; font-family: var(--font-ui); font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold);
+  }
+  .guide-title { margin: 0 0 6px; font-size: 19px; }
+  .guide-desc { margin: 0 0 8px; color: var(--text-dim); font-size: 13.5px; line-height: 1.7; max-width: 620px; }
+  .guide-more { font-family: var(--font-ui); font-size: 12.5px; color: var(--gold); }
+
   /* Topic strip: the themed entry points into the library. */
   .topic-strip { margin: 16px 0 4px; }
   .topic-strip-label {

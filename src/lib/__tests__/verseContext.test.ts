@@ -56,7 +56,7 @@ describe('relatedByBook', () => {
   it('lists other verses from the same book in chapter/verse order', () => {
     const related = relatedByBook('James 1:3');
     expect(related.map((v) => v.refEn)).toEqual([
-      'James 1:2-3', 'James 1:5', 'James 1:22', 'James 2:17', 'James 3:17',
+      'James 1:2-3', 'James 1:5', 'James 1:22', 'James 2:17', 'James 3:17', 'James 5:1-6',
     ]);
   });
 
