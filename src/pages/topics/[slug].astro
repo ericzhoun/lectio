@@ -89,14 +89,14 @@ const title = lang === 'zh'
         data-event="cta_click"
         data-event-props='{"slot":"topic_walk"}'
       >
-        {lang === 'zh'
-          ? `从${leadVerse.refZh}开始一次圣言诵读`
-          : `Begin a Lectio reading with ${leadVerse.refEn}`}
+        {lang === 'zh' ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
       </a>
       <p class="topic-walk-note">
-        {lang === 'zh'
-          ? '这次诵读从本页所引的这段经文开始，依次走诵读、默想、祈祷、默观与行动。也可以先点开上面任何一段，单读它，再决定从哪里开始。'
-          : 'This reading opens with one of the passages quoted above and walks it through all five movements — read, reflect, respond, rest, act. Any passage above can also be opened on its own first.'}
+        {lang === 'zh' ? (
+          <>这次诵读从 <strong>{leadVerse.refZh}</strong> 开始，并一直停在这段经文里，走完诵读、默想、祈祷、默观与行动五个步骤。上面每一段经文也各有自己的页面，想从别处开始也可以。</>
+        ) : (
+          <>This reading opens with <strong>{leadVerse.refEn}</strong> and stays with it through all five movements — read, reflect, respond, rest, act. Every verse above also has its own page, if you would rather begin there.</>
+        )}
       </p>
     </div>
   )}
@@ -146,6 +146,7 @@ const title = lang === 'zh'
     font-size: 13px; line-height: 1.65; color: var(--text-dim);
     font-family: var(--font-ui);
   }
+  .topic-walk-note strong { color: var(--gold); font-weight: 600; }
 
   .topic-more { margin-top: 26px; }
   .topic-more h2 { font-size: 16px; color: var(--gold); margin: 0 0 10px; }

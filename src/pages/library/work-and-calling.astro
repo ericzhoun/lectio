@@ -23,6 +23,10 @@ function resolveRefs(refs: readonly string[]): LibraryVerse[] {
 }
 
 const readingList = resolveRefs(guideRefs(guide));
+// The guide's own door into the practice: pinned to a passage the guide
+// actually cites, so the reading it opens is one of these verses rather than
+// an unrelated draw from the whole deck (same rule as the topic pages).
+const leadVerse = readingList[0] ?? null;
 const topicHref = guide.topicSlug ? langHref(`/topics/${guide.topicSlug}`, lang) : null;
 ---
 <Layout title={title} description={description} lang={lang}>
@@ -124,9 +128,16 @@ const topicHref = guide.topicSlug ? langHref(`/topics/${guide.topicSlug}`, lang)
     </section>
 
     <p class="guide-cta">
-      <a class="upsell-button" href={langHref('/today', lang)}>
-        {zh ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
-      </a>
+      {leadVerse && (
+        <a
+          class="upsell-button"
+          href={langHref(`/today?verse=${leadVerse.slug}`, lang)}
+          data-event="cta_click"
+          data-event-props='{"slot":"guide_walk"}'
+        >
+          {zh ? '开始一次圣言诵读' : 'Begin a Lectio reading'}
+        </a>
+      )}
       {topicHref && (
         <a class="guide-topic-link" href={topicHref}>
           {zh ? '浏览「工作与呼召」主题经文 →' : 'Browse the Work and Calling verses →'}

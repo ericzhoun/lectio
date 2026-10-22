@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { TOPICS, getTopicBySlug, topicVerses, topicsForVerse } from '../topics';
+import { TOPICS, getTopicBySlug, topicVerses, topicLeadVerse, topicsForVerse } from '../topics';
 import { getLibraryVerseByRef } from '../scripture';
 
 describe('TOPICS', () => {
@@ -37,6 +37,24 @@ describe('topicVerses', () => {
     expect(verses).toHaveLength(topic.refs.length);
     expect(verses.map((v) => v.refEn)).toEqual([...topic.refs]);
     expect(verses[0]!.slug).toBe('philippians-4-6-7');
+  });
+});
+
+describe('topicLeadVerse', () => {
+  it('gives every topic a deck passage to open the walk with', () => {
+    for (const t of TOPICS) {
+      const lead = topicLeadVerse(t);
+      expect(lead, t.slug).not.toBeNull();
+      // The page puts this slug into `/today?verse=`, so it must be URL-safe.
+      expect(lead!.slug).toMatch(/^[a-z0-9-]+$/);
+      expect(lead!.refEn).toBe(t.refs[0]);
+    }
+  });
+
+  it('opens the beginnings topic on Genesis 1:1', () => {
+    const topic = getTopicBySlug('beginnings');
+    if (!topic) throw new Error('expected the beginnings topic');
+    expect(topicLeadVerse(topic)?.slug).toBe('genesis-1-1');
   });
 });
 
